@@ -1,6 +1,6 @@
 ﻿using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.Day01
+namespace Ujeby.AoC.App.Day00
 {
 	internal class Sample : ProblemBase
 	{

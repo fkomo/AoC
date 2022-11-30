@@ -25,8 +25,8 @@ namespace Ujeby.AoC.Common
 				var answer = SolveProblem();
 
 				DebugLine($"Solved in { sw.Elapsed.TotalMilliseconds }ms");
-				DebugLine($"Part1 answer = { answer.Item1 }({(Solution1.HasValue ? Solution1.Value.ToString() : "?")})");
-				DebugLine($"Part2 answer = { answer.Item2 }({(Solution2.HasValue ? Solution2.Value.ToString() : "?")})");
+				DebugLine(AnswerMessage(1, answer.Item1, Solution1));
+				DebugLine(AnswerMessage(2, answer.Item2, Solution2));
 
 				result = true;
 
@@ -50,6 +50,19 @@ namespace Ujeby.AoC.Common
 			return result;
 		}
 
+		private string AnswerMessage(int part, long answer, long? solution)
+		{
+			var answerMessage = $"Part{part} answer = { answer }";
+
+			if (solution.HasValue && solution.Value != answer)
+				answerMessage += $" [!= {solution.Value}]";
+			
+			else if (!solution.HasValue)
+				answerMessage += $" [?]";
+
+			return answerMessage;
+		}
+
 		protected abstract (long, long) SolveProblem();
 
 		public static void DebugLine(string message = null)
@@ -63,6 +76,13 @@ namespace Ujeby.AoC.Common
 		{
 			return File.ReadLines(Path.Combine(WorkingDir, $"{inputName}.txt"))
 				.ToArray();
+		}
+
+		protected string ReadInputLine(int lineNumber, string inputName = "input")
+		{
+			return File.ReadLines(Path.Combine(WorkingDir, $"{inputName}.txt"))
+				.Skip(lineNumber)
+				.FirstOrDefault();
 		}
 	}
 }

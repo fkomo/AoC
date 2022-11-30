@@ -19,7 +19,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="Day01\input.txt">
+	  <None Remove="Day00\input.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Day00\input.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>

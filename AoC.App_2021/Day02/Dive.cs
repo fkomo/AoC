@@ -6,8 +6,6 @@ namespace Ujeby.AoC.App.Day02
 	{
 		protected override (long, long) SolveProblem()
 		{
-			long result1 = 0;
-			long result2 = 0;
 			var input = ReadInputLines();
 			DebugLine($"{ input.Length } commands");
 
@@ -25,7 +23,7 @@ namespace Ujeby.AoC.App.Day02
 				}
 			}
 
-			result1 = position * depth;
+			long result1 = position * depth;
 
 			depth = 0;
 			position = 0;
@@ -47,7 +45,7 @@ namespace Ujeby.AoC.App.Day02
 				}
 			}
 
-			result2 = position * depth;
+			long result2 = position * depth;
 
 			return (result1, result2);
 		}
