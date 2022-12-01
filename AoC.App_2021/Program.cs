@@ -11,7 +11,7 @@ namespace Ujeby.AoC.App
 				new Day01.SonarSweep() { SolutionPart1 = 1226, SolutionPart2 = 1252 },
 				new Day02.Dive() { SolutionPart1 = 1868935, SolutionPart2 = 1965970888 },
 				new Day03.BinaryDiagnostic() { SolutionPart1 = 2250414, SolutionPart2 = 6085575 },
-				new Day04.GiantSquid() { SolutionPart1 = null, SolutionPart2 = null },
+				new Day04.GiantSquid() { SolutionPart1 = 10680, SolutionPart2 = 31892 },
 
 				// TODO 2021
 			});
