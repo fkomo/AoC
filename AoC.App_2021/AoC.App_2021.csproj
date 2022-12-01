@@ -7,9 +7,27 @@
 		<!--<Nullable>enable</Nullable>-->
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<Configurations>Debug;Release;Debug.Sample</Configurations>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample|AnyCPU'">
+	  <DefineConstants>$(DefineConstants)TRACE;_DEBUG_SAMPLE</DefineConstants>
+	  <Optimize>False</Optimize>
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Day01\input.sample.txt" />
+	  <None Remove="Day02\input.sample.txt" />
+	  <None Remove="Day06\input.sample.txt" />
+	  <None Remove="Day06\input.txt" />
 	  <None Remove="Day05\input.sample.txt" />
 	  <None Remove="Day05\input.txt" />
 	  <None Remove="Day04\input.sample.txt" />
@@ -21,6 +39,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Day01\input.sample.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Day02\input.sample.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Day06\input.sample.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Day06\input.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="Day05\input.sample.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>

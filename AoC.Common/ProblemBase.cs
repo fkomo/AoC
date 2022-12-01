@@ -72,15 +72,25 @@ namespace Ujeby.AoC.Common
 
 		protected string WorkingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
 
-		protected string[] ReadInputLines(string inputName = "input")
+		protected string[] ReadInputLines()
 		{
-			return File.ReadLines(Path.Combine(WorkingDir, $"{inputName}.txt"))
+#if _DEBUG_SAMPLE
+			var inputName = $"input.sample.txt";
+#else
+			var inputName = $"input.txt";
+#endif
+			return File.ReadLines(Path.Combine(WorkingDir, inputName))
 				.ToArray();
 		}
 
-		protected string ReadInputLine(int lineNumber, string inputName = "input")
+		protected string ReadInputLine(int lineNumber = 0)
 		{
-			return File.ReadLines(Path.Combine(WorkingDir, $"{inputName}.txt"))
+#if _DEBUG_SAMPLE
+			var inputName = $"input.sample.txt";
+#else
+			var inputName = $"input.txt";
+#endif
+			return File.ReadLines(Path.Combine(WorkingDir, inputName))
 				.Skip(lineNumber)
 				.FirstOrDefault();
 		}

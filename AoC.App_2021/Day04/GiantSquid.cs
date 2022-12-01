@@ -26,7 +26,7 @@ namespace Ujeby.AoC.App.Day04
 							bingoSets[bs][bsn] = -1;
 					}
 
-					if (Win(bingoSets[bs]))
+					if (CheckBingo(bingoSets[bs]))
 					{
 						result1 = n * bingoSets[bs].Where(n => n > 0).Sum();
 						break;
@@ -53,7 +53,7 @@ namespace Ujeby.AoC.App.Day04
 							bingoSets[bs][bsn] = -1;
 					}
 
-					if (Win(bingoSets[bs]))
+					if (CheckBingo(bingoSets[bs]))
 					{
 						result2 = n * bingoSets[bs].Where(n => n > 0).Sum();
 						bingoSets[bs] = null;
@@ -84,7 +84,7 @@ namespace Ujeby.AoC.App.Day04
 			return bingoSets;
 		}
 
-		private static bool Win(int[] bingoSet)
+		private static bool CheckBingo(int[] bingoSet)
 		{
 			if (bingoSet.Count(n => n == -1) < 5)
 				return false;

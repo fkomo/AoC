@@ -6,8 +6,6 @@ namespace Ujeby.AoC.App.Day03
 	{
 		protected override (long, long) SolveProblem()
 		{
-			long result1 = 0;
-			long result2 = 0;
 			var input = ReadInputLines()
 				.Select(s => Convert.ToInt32(s, 2)).ToArray();
 			DebugLine($"{ input.Length } diagnostic reports");
@@ -26,7 +24,7 @@ namespace Ujeby.AoC.App.Day03
 				shift <<= 1;
 			}
 			var epsilonRate = ~gammaRate & inputMask;
-			result1 = gammaRate * epsilonRate;
+			var result1 = gammaRate * epsilonRate;
 
 			// part2
 			var tmpInput = input;
@@ -45,7 +43,7 @@ namespace Ujeby.AoC.App.Day03
 			}
 			var co2ScrubberRating = tmpInput.Single();
 
-			result2 = oxygenGeneratorRating * co2ScrubberRating;
+			var result2 = oxygenGeneratorRating * co2ScrubberRating;
 
 			return (result1, result2);
 		}

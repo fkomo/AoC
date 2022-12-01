@@ -23,30 +23,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Day02\**" />
-		<Compile Remove="Day03\**" />
-		<EmbeddedResource Remove="Day02\**" />
-		<EmbeddedResource Remove="Day03\**" />
-		<None Remove="Day02\**" />
-		<None Remove="Day03\**" />
+		<ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Day01\input.sample.txt" />
-		<None Remove="Day01\input.txt" />
+		<None Remove="Day00\input.sample.txt" />
+		<None Remove="Day00\input.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Day01\input.sample.txt">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="Day01\input.txt">
+		<Content Include="Day00\input.sample.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
+		<Content Include="Day00\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 </Project>

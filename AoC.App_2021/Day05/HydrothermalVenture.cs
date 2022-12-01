@@ -20,9 +20,7 @@ namespace Ujeby.AoC.App.Day05
 
 		protected override (long, long) SolveProblem()
 		{
-			string inputName = "input";
-			//var inputName = "input.sample";
-			var input = ReadInputLines(inputName);
+			var input = ReadInputLines();
 			DebugLine($"{ input.Length } lines");
 
 			var size = new Point();
@@ -79,8 +77,7 @@ namespace Ujeby.AoC.App.Day05
 						map[line.Item1.Y * size.X + x]++;
 				}
 			}
-			if (inputName == "input.sample")
-				DrawMap(map, size); 
+			DrawMap(map, size); 
 			long result1 = map.Count(p => p > 1);
 			
 			// part2
@@ -100,8 +97,7 @@ namespace Ujeby.AoC.App.Day05
 						map[y * size.X + x]++;
 				}
 			}
-			if (inputName == "input.sample")
-				DrawMap(map, size);
+			DrawMap(map, size);
 			long result2 = map.Count(p => p > 1);
 
 			return (result1, result2);
@@ -109,6 +105,7 @@ namespace Ujeby.AoC.App.Day05
 
 		private void DrawMap(int[] map, Point size)
 		{
+#if _DEBUG_SAMPLE
 			for (var y = 0; y < size.Y; y++)
 			{
 				var mapLine = string.Empty;
@@ -118,6 +115,7 @@ namespace Ujeby.AoC.App.Day05
 				DebugLine(mapLine);
 			}
 			DebugLine();
+#endif
 		}
 	}
 }
