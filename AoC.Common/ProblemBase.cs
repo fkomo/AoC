@@ -24,7 +24,7 @@ namespace Ujeby.AoC.Common
 
 				var answer = SolveProblem();
 
-				DebugLine($"Solved in { sw.Elapsed.TotalMilliseconds }ms");
+				DebugLine($"Solved in { sw.Elapsed }");
 				DebugLine(AnswerMessage(1, answer.Item1, SolutionPart1));
 				DebugLine(AnswerMessage(2, answer.Item2, SolutionPart2));
 

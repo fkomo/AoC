@@ -8,7 +8,7 @@ namespace Ujeby.AoC.App
 		{
 			AdventOfCode.Run("https://adventofcode.com/2022", new ISolvable[]
 			{
-				new Day01.CalorieCounting() { SolutionPart1 = 66306, SolutionPart2 = 195292 },
+				new Day01.CalorieCounting()			{ SolutionPart1 = 66306,	SolutionPart2 = 195292 },
 
 				// TODO 2022
 			});

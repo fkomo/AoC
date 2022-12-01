@@ -4,9 +4,6 @@ namespace Ujeby.AoC.App.Day06
 {
 	internal class Lanternfish : ProblemBase
 	{
-		int _maxArraySize = 1024*1024*1024;
-		byte NO_FISH = 0xff;
-
 		protected override (long, long) SolveProblem()
 		{
 			var input = ReadInputLine().Split(',').Select(s => byte.Parse(s)).ToArray();
@@ -32,6 +29,9 @@ namespace Ujeby.AoC.App.Day06
 			// part2
 
 			// +++ naive approach (for sample ~25Gb mem and a lot! of cpu time) :D
+
+			//long _maxArraySize = 1024 * 1024 * 1024;
+			//byte NO_FISH = 0xff;
 
 			//var fishGroup = new List<byte[]>();
 			//fishGroup.Add(fish.ToArray());
