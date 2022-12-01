@@ -21,14 +21,4 @@
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG_SAMPLE</DefineConstants>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<None Remove="Day00\input.txt" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="Day00\input.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
 </Project>
