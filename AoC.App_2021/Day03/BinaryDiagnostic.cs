@@ -15,6 +15,7 @@ namespace Ujeby.AoC.App.Day03
 			var bitCount = ReadInputLine(0).Length;
 			var inputMask = (long)Math.Pow(2, bitCount) - 1;
 
+			// part1
 			var shift = 1;
 			var gammaRate = 0;
 			for (var i = bitCount - 1; i >= 0; i--)
@@ -27,6 +28,7 @@ namespace Ujeby.AoC.App.Day03
 			var epsilonRate = ~gammaRate & inputMask;
 			result1 = gammaRate * epsilonRate;
 
+			// part2
 			var tmpInput = input;
 			for (shift = bitCount - 1; tmpInput.Length > 1 && shift >= 0; shift--)
 			{

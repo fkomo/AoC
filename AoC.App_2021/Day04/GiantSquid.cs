@@ -31,6 +31,10 @@ namespace Ujeby.AoC.App.Day04
 			}
 			DebugLine($"{ bingoSets.Count } bingo sets");
 
+			// part1
+
+			// part2
+
 			return (result1, result2);
 		}
 	}

@@ -11,10 +11,12 @@ namespace Ujeby.AoC.App.Day01
 			var input = ReadInputLines();
 			DebugLine($"{ input.Length } depth measurements");
 
+			// part1
 			for (var i = 1; i < input.Length; i++)
 				if (int.Parse(input[i - 1]) < int.Parse(input[i]))
 					result1++;
 
+			// part2
 			for (var i = 0; i < input.Length - 3; i++)
 			{
 				var sum1 = 

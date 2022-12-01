@@ -9,6 +9,7 @@ namespace Ujeby.AoC.App.Day02
 			var input = ReadInputLines();
 			DebugLine($"{ input.Length } commands");
 
+			// part1
 			long depth = 0;
 			long position = 0;
 			foreach (var command in input)
@@ -25,6 +26,7 @@ namespace Ujeby.AoC.App.Day02
 
 			long result1 = position * depth;
 
+			// part2
 			depth = 0;
 			position = 0;
 			long aim = 0;

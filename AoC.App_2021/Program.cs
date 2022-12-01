@@ -8,12 +8,10 @@ namespace Ujeby.AoC.App
 		{
 			AdventOfCode.Run("https://adventofcode.com/2021", new ISolvable[]
 			{
-				//new Day00.Sample() { Solution1 = null, Solution2 = null },
-				
-				new Day01.SonarSweep() { Solution1 = 1226, Solution2 = 1252 },
-				new Day02.Dive() { Solution1 = 1868935, Solution2 = 1965970888 },
-				new Day03.BinaryDiagnostic() { Solution1 = 2250414, Solution2 = 6085575 },
-				new Day04.GiantSquid() { Solution1 = null, Solution2 = null },
+				new Day01.SonarSweep() { SolutionPart1 = 1226, SolutionPart2 = 1252 },
+				new Day02.Dive() { SolutionPart1 = 1868935, SolutionPart2 = 1965970888 },
+				new Day03.BinaryDiagnostic() { SolutionPart1 = 2250414, SolutionPart2 = 6085575 },
+				new Day04.GiantSquid() { SolutionPart1 = null, SolutionPart2 = null },
 
 				// TODO 2021
 			});
