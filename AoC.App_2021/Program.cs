@@ -16,6 +16,7 @@ namespace Ujeby.AoC.App
 				new Day06.Lanternfish()				{ SolutionPart1 = 352151,	SolutionPart2 = 1601616884019 },
 				new Day07.TheTreacheryOfWhales()	{ SolutionPart1 = 355150,	SolutionPart2 = 98368490 },
 				new Day08.SevenSegmentSearch()		{ SolutionPart1 = 247,		SolutionPart2 = null },
+                new Day09.SmokeBasin()				{ SolutionPart1 = 444,		SolutionPart2 = null },
 
 				// TODO 2021
 			});
