@@ -4,13 +4,14 @@ namespace Ujeby.AoC.App.Day03
 {
 	internal class BinaryDiagnostic : ProblemBase
 	{
-		protected override (long, long) SolveProblem()
+		protected override (long, long) SolveProblem(string[] input)
 		{
-			var input = ReadInputLines()
-				.Select(s => Convert.ToInt32(s, 2)).ToArray();
 			DebugLine($"{ input.Length } diagnostic reports");
 
-			var bitCount = ReadInputLine(0).Length;
+			var inputN = input
+				.Select(s => Convert.ToInt32(s, 2)).ToArray();
+
+			var bitCount = input.First().Length;
 			var inputMask = (long)Math.Pow(2, bitCount) - 1;
 
 			// part1
@@ -18,8 +19,8 @@ namespace Ujeby.AoC.App.Day03
 			var gammaRate = 0;
 			for (var i = bitCount - 1; i >= 0; i--)
 			{
-				var _1count = input.Count(b => (b & shift) == shift);
-				var significant = _1count > (input.Length - _1count) ? 1 : 0;
+				var _1count = inputN.Count(b => (b & shift) == shift);
+				var significant = _1count > (inputN.Length - _1count) ? 1 : 0;
 				gammaRate += significant * shift;
 				shift <<= 1;
 			}
@@ -27,7 +28,7 @@ namespace Ujeby.AoC.App.Day03
 			var result1 = gammaRate * epsilonRate;
 
 			// part2
-			var tmpInput = input;
+			var tmpInput = inputN;
 			for (shift = bitCount - 1; tmpInput.Length > 1 && shift >= 0; shift--)
 			{
 				var mostSig = tmpInput.Count(i => (i >> shift & 1) == 1) * 2 >= tmpInput.Length ? 1 : 0;
@@ -35,7 +36,7 @@ namespace Ujeby.AoC.App.Day03
 			}
 			var oxygenGeneratorRating = tmpInput.Single();
 
-			tmpInput = input;
+			tmpInput = inputN;
 			for (shift = bitCount - 1; tmpInput.Length > 1 && shift >= 0; shift--)
 			{
 				var leastSig = tmpInput.Count(i => (i >> shift & 1) == 1) * 2 >= tmpInput.Length ? 0 : 1;

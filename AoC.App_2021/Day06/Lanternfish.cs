@@ -4,13 +4,13 @@ namespace Ujeby.AoC.App.Day06
 {
 	internal class Lanternfish : ProblemBase
 	{
-		protected override (long, long) SolveProblem()
+		protected override (long, long) SolveProblem(string[] input)
 		{
-			var input = ReadInputLine().Split(',').Select(s => byte.Parse(s)).ToArray();
-			DebugLine($"{ input.Length } lanternfish");
+			var inputB = input.First().Split(',').Select(s => byte.Parse(s)).ToArray();
+			DebugLine($"{inputB.Length } lanternfish");
 
 			// part1
-			var fish = new List<byte>(input);
+			var fish = new List<byte>(inputB);
 			for (var day = 1; day <= 80; day++)
 			{
 				for (int f = fish.Count - 1; f >= 0; f--)

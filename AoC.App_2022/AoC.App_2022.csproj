@@ -23,20 +23,25 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Day02\**" />
 		<Compile Remove="Day03\**" />
-		<EmbeddedResource Remove="Day02\**" />
 		<EmbeddedResource Remove="Day03\**" />
-		<None Remove="Day02\**" />
 		<None Remove="Day03\**" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Day02\input.sample.txt" />
+		<None Remove="Day02\input.txt" />
 		<None Remove="Day01\input.sample.txt" />
 		<None Remove="Day01\input.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="Day02\input.sample.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day02\input.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Day01\input.sample.txt">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

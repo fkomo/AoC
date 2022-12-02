@@ -4,9 +4,8 @@ namespace Ujeby.AoC.App.Day01
 {
 	internal class CalorieCounting : ProblemBase
 	{
-		protected override (long, long) SolveProblem()
+		protected override (long, long) SolveProblem(string[] input)
 		{
-			var input = ReadInputLines();
 			DebugLine($"{ input.Length } lines");
 
 			// part1

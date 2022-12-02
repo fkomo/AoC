@@ -22,7 +22,7 @@ namespace Ujeby.AoC.Common
 
 				sw.Start();
 
-				var answer = SolveProblem();
+				var answer = SolveProblem(ReadInput());
 
 				DebugLine($"Solved in { sw.Elapsed }");
 				DebugLine(AnswerMessage(1, answer.Item1, SolutionPart1));
@@ -63,36 +63,24 @@ namespace Ujeby.AoC.Common
 			return answerMessage;
 		}
 
-		protected abstract (long, long) SolveProblem();
+		protected abstract (long, long) SolveProblem(string[] input);
 
-		public static void DebugLine(string message = null)
+		protected static void DebugLine(string message = null)
 		{
 			Debug.Line("  " + message);
 		}
 
 		protected string WorkingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
 
-		protected string[] ReadInputLines()
+		private string[] ReadInput(string inputName = null)
 		{
 #if _DEBUG_SAMPLE
-			var inputName = $"input.sample.txt";
+			inputName ??= $"input.sample.txt";
 #else
-			var inputName = $"input.txt";
+			inputName ??= $"input.txt";
 #endif
 			return File.ReadLines(Path.Combine(WorkingDir, inputName))
 				.ToArray();
-		}
-
-		protected string ReadInputLine(int lineNumber = 0)
-		{
-#if _DEBUG_SAMPLE
-			var inputName = $"input.sample.txt";
-#else
-			var inputName = $"input.txt";
-#endif
-			return File.ReadLines(Path.Combine(WorkingDir, inputName))
-				.Skip(lineNumber)
-				.FirstOrDefault();
 		}
 	}
 }

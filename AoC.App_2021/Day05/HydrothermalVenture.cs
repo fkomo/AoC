@@ -18,9 +18,8 @@ namespace Ujeby.AoC.App.Day05
 			public override string ToString() => $"{X}x{Y}";
 		}
 
-		protected override (long, long) SolveProblem()
+		protected override (long, long) SolveProblem(string[] input)
 		{
-			var input = ReadInputLines();
 			DebugLine($"{ input.Length } lines");
 
 			var size = new Point();
