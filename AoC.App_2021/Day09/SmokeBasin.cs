@@ -2,84 +2,83 @@
 
 namespace Ujeby.AoC.App.Day09
 {
-    internal class SmokeBasin : ProblemBase
+	internal class SmokeBasin : ProblemBase
 	{
 		protected override (long, long) SolveProblem(string[] input)
 		{
-			DebugLine($"map size { input.Length}x{input[0].Length}");
+			var w = input.First().Length;
+			var h = input.Length;
+
+			DebugLine($"map size {w}x{h}");
 
 			// part1
 			long result1 = 0;
-			for (var y = 1; y < input.Length - 1; y++)
-			{
-				// middle
-				for (var x = 1; x < input[0].Length - 1; x++)
+			for (var y = 0; y < h; y++)
+				for (var x = 0; x < w; x++)
 				{
-					if ((input[y][x] < input[y - 1][x]) &&
-						(input[y][x] < input[y + 1][x]) &&
-						(input[y][x] < input[y][x - 1]) &&
-						(input[y][x] < input[y][x + 1]))
-						result1 += input[y][x] - '0' + 1;
-                }
-            }
+					var p = input[y][x];
+					if ((p == '9') ||
+						(x > 0 && input[y][x - 1] < p) ||
+						(y > 0 && input[y - 1][x] < p) ||
+						(x < w - 1 && input[y][x + 1] < p) ||
+						(y < h - 1 && input[y + 1][x] < p))
+						continue;
 
-            for (var x = 1; x < input[0].Length - 1; x++)
-            {
-                // top edge
-                var t = input[0][x];
-                if ((t < input[1][x]) &&
-                    (t < input[0][x - 1]) &&
-                    (t < input[0][x + 1]))
-                    result1 += t - '0' + 1;
+					// basin
+					result1 += (p - '0') + 1;
+				}
 
-                // bottom edge
-                var b = input[input.Length - 1][x];
-                if ((b < input[input.Length - 2][x]) &&
-                    (b < input[input.Length - 1][x - 1]) &&
-                    (b < input[input.Length - 1][x + 1]))
-                    result1 += b - '0' + 1;
-            }
+			// part2
+			var basinSizes = new List<long>();
+			for (var y = 0; y < h; y++)
+				for (var x = 0; x < w; x++)
+				{
+					var p = input[y][x];
+					if ((p == '9') ||
+						(x > 0 && input[y][x - 1] < p) ||
+						(y > 0 && input[y - 1][x] < p) ||
+						(x < w - 1 && input[y][x + 1] < p) ||
+						(y < h - 1 && input[y + 1][x] < p))
+						continue;
 
-            for (var y = 1; y < input.Length - 1; y++)
-            {
-                // left edge
-                var l = input[y][0];
-                if ((l < input[y - 1][0]) &&
-                    (l < input[y][1]) &&
-                    (l < input[y + 1][0]))
-                    result1 += l - '0' + 1;
+					// basin
+					basinSizes.Add(BasinSize(input, x, y, 0, 0));
+				}
+			long result2 = 1;
+			foreach (var bs in basinSizes.OrderByDescending(s => s).Take(3))
+				result2 *= bs;
 
-                // right edge
-                var r = input[y][input[y].Length - 1];
-                if ((r < input[y - 1][input[y].Length - 1]) &&
-                    (r < input[y][input[y].Length - 2]) &&
-                    (r < input[y + 1][input[y].Length - 1]))
-                    result1 += r - '0' + 1;
-            }
-
-            // top left
-            if (input[0][0] < input[0][1] && input[0][0] < input[1][0])
-                result1 += input[0][0] - '0' + 1;
-
-            // bottom left
-            if (input[input.Length - 1][0] < input[input.Length - 2][0] && 
-                input[input.Length - 1][0] < input[input.Length - 1][1])
-                result1 += input[0][0] - '0' + 1;
-
-            // top right
-            if (input[0][input[0].Length - 1] < input[0][input[0].Length - 2] &&
-                input[0][input[0].Length - 1] < input[1][input[0].Length - 1])
-                result1 += input[0][input[0].Length - 1] - '0' + 1;
-
-            // bottom right
-            if (input[input.Length - 1][input.Last().Length - 1] < input[input.Length - 1][input.Last().Length - 2] &&
-                input[input.Length - 1][input.Last().Length - 1] < input[input.Length - 2][input.Last().Length - 1])
-                result1 += input[input.Length - 1][input.Last().Length - 1] - '0' + 1;
-
-            // part2
-            long result2 = 0;
 
 			return (result1, result2);
+		}
+
+		/// <summary>
+		/// x, y
+		/// </summary>
+		private static (int, int)[] _dir = new[] { (-1, 0), (0, 1), (1, 0), (0, -1) };
+
+		private static int BasinSize(string[] map, int x, int y, int x0, int y0)
+		{
+			// TODO mark place x,y as visited
+
+			var size = 1;
+
+			foreach (var dir in _dir)
+			{
+				if (dir.Item1 == x0 && dir.Item2 == y0)
+					continue;
+
+				var x1 = x + dir.Item1;
+				var y1 = y + dir.Item2;
+
+				if (y1 < 0 || x1 < 0 || x1 >= map.First().Length || y1 >= map.Length ||
+					map[y1][x1] <= map[y][x] || map[y1][x1] == '9')
+					continue;
+
+				size += BasinSize(map, x1, y1, dir.Item1 * -1, dir.Item2 * -1);
+			}
+
+			return size;
 		}
 	}
 }
