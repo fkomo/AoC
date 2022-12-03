@@ -8,15 +8,15 @@ namespace Ujeby.AoC.App
 		{
 			AdventOfCode.Run("https://adventofcode.com/2021", new ISolvable[]
 			{
-				new Day01.SonarSweep()				{ SolutionPart1 = 1226,		SolutionPart2 = 1252 },
-				new Day02.Dive()					{ SolutionPart1 = 1868935,	SolutionPart2 = 1965970888 },
-				new Day03.BinaryDiagnostic()		{ SolutionPart1 = 2250414,	SolutionPart2 = 6085575 },
-				new Day04.GiantSquid()				{ SolutionPart1 = 10680,	SolutionPart2 = 31892 },
-				new Day05.HydrothermalVenture()		{ SolutionPart1 = 7085,		SolutionPart2 = 20271 },
-				new Day06.Lanternfish()				{ SolutionPart1 = 352151,	SolutionPart2 = 1601616884019 },
-				new Day07.TheTreacheryOfWhales()	{ SolutionPart1 = 355150,	SolutionPart2 = 98368490 },
-				new Day08.SevenSegmentSearch()		{ SolutionPart1 = 247,		SolutionPart2 = null },
-                new Day09.SmokeBasin()				{ SolutionPart1 = 444,		SolutionPart2 = 1168440 },
+				new Day01.SonarSweep()              { Solution = new long?[] { 1226, 1252 } },
+				new Day02.Dive()					{ Solution = new long?[] { 1868935,	1965970888 } },
+				new Day03.BinaryDiagnostic()		{ Solution = new long?[] { 2250414,	6085575 } },
+				new Day04.GiantSquid()				{ Solution = new long?[] { 10680, 31892 } },
+				new Day05.HydrothermalVenture()		{ Solution = new long?[] { 7085, 20271 } },
+				new Day06.Lanternfish()				{ Solution = new long?[] { 352151, 1601616884019 } },
+				new Day07.TheTreacheryOfWhales()	{ Solution = new long?[] { 355150, 98368490 } },
+				new Day08.SevenSegmentSearch()		{ Solution = new long?[] { 247,	null } },
+                new Day09.SmokeBasin()				{ Solution = new long?[] { 444, 1168440 } },
 
 				// TODO 2021
 			});

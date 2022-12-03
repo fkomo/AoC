@@ -6,27 +6,48 @@ namespace Ujeby.AoC.App.Day07
 	{
 		protected override (long, long) SolveProblem(string[] input)
 		{
-			var inputN = input.First().Split(',').Select(s => int.Parse(s)).ToArray();
-			DebugLine($"{inputN.Length } crab submarines");
+			var inputN = input.First().Split(',').Select(s => int.Parse(s))
+				.OrderBy(i => i)
+				.ToArray();
+
+			DebugLine($"{inputN.Length} crab submarines");
+
+			var max = inputN.Max();
 
 			// part1
-			var fuel = new List<int>();
-			for (var m = 0; m < inputN.Max(); m++)
-				fuel.Add(inputN.Sum(p => Math.Abs(p - m)));
-			long result1 = fuel.Min();
+			long result1 = long.MaxValue;
+			for (var m = 0; m < max; m++)
+			{
+				long fuel = 0;
+				for (var i = 0; i < inputN.Length; i++)
+				{
+					fuel += Math.Abs(inputN[i] - m);
+					if (fuel > result1)
+						break;
+				}
+				if (fuel < result1)
+					result1 = fuel;
+			}
 
 			// part2
-			fuel.Clear();
-			for (var m = 0; m < inputN.Max(); m++)
-				fuel.Add(inputN.Sum(p =>
+			long result2 = long.MaxValue;
+			for (var m = 0; m < max; m++)
+			{
+				long fuel = 0;
+				for (var i = 0; i < inputN.Length; i++)
 				{
-					var f = 0;
-					for (var d = Math.Abs(p - m); d > 0; d--)
-						f += d;
-
-					return f;
-				}));
-			long result2 = fuel.Min();
+					for (var d = Math.Abs(inputN[i] - m); d > 0; d--)
+					{
+						fuel += d;
+						if (fuel > result2)
+							break;
+					}
+					if (fuel > result2)
+						break;
+				}
+				if (fuel < result2)
+					result2 = fuel;
+			}
 
 			return (result1, result2);
 		}

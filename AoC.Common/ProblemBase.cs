@@ -4,8 +4,7 @@ namespace Ujeby.AoC.Common
 {
 	public abstract class ProblemBase : ISolvable
 	{
-		public long? SolutionPart1 { get; set; }
-		public long? SolutionPart2 { get; set; }
+		public long?[] Solution { get; set; }
 
 		public bool Solve()
 		{
@@ -24,16 +23,17 @@ namespace Ujeby.AoC.Common
 
 				var answer = SolveProblem(ReadInput());
 
-				DebugLine($"Solved in { sw.Elapsed }");
-				DebugLine(AnswerMessage(1, answer.Item1, SolutionPart1));
-				DebugLine(AnswerMessage(2, answer.Item2, SolutionPart2));
+				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
+				DebugLine($"Solved in ~{ elapsed }ms { (elapsed > 250 ? "[>250ms!]" : null) }");
+				DebugLine(AnswerMessage(1, answer.Item1, Solution[0]));
+				DebugLine(AnswerMessage(2, answer.Item2, Solution[1]));
 
 				result = true;
 
-				if (SolutionPart1.HasValue && SolutionPart1.Value != answer.Item1)
+				if (Solution[0].HasValue && Solution[0].Value != answer.Item1)
 					result = false;
 
-				if (SolutionPart2.HasValue && SolutionPart2.Value != answer.Item2)
+				if (Solution[1].HasValue && Solution[1].Value != answer.Item2)
 					result = false;
 			}
 			catch (Exception ex)
