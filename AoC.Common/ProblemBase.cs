@@ -24,16 +24,16 @@ namespace Ujeby.AoC.Common
 				var answer = SolveProblem(ReadInput());
 
 				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
-				DebugLine($"Solved in ~{ elapsed }ms { (elapsed > 250 ? "[>250ms!]" : null) }");
+				DebugLine($"Solved in ~{ elapsed }ms { (elapsed > 250 ? "[> 250ms!]" : null) }");
 				DebugLine(AnswerMessage(1, answer.Item1, Solution[0]));
 				DebugLine(AnswerMessage(2, answer.Item2, Solution[1]));
 
 				result = true;
 
-				if (Solution[0].HasValue && Solution[0].Value != answer.Item1)
+				if (!Solution[0].HasValue || Solution[0].Value != answer.Item1)
 					result = false;
 
-				if (Solution[1].HasValue && Solution[1].Value != answer.Item2)
+				if (!Solution[1].HasValue || Solution[1].Value != answer.Item2)
 					result = false;
 			}
 			catch (Exception ex)
