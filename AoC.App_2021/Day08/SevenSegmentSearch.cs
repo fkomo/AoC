@@ -9,11 +9,11 @@ namespace Ujeby.AoC.App.Day08
 			DebugLine($"{ input.Length } lines");
 
 			// part1
-			long result1 = 0;
-			foreach (var line in input)
-				result1 += line.Split(" | ")[1].Split(' ').Count(s => s.Length == 2 || s.Length == 3 || s.Length == 4 || s.Length == 7);
+			long result1 = input
+				.Sum(i => i.Split(" | ")[1].Split(' ').Count(s => s.Length == 2 || s.Length == 3 || s.Length == 4 || s.Length == 7));
 
 			// part2
+			// TODO 2021/08 part2
 			long result2 = 0;
 
 			return (result1, result2);

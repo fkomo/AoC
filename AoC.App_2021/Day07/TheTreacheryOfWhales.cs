@@ -20,10 +20,8 @@ namespace Ujeby.AoC.App.Day07
 			for (var m = 0; m < inputN.Max(); m++)
 				fuel.Add(inputN.Sum(p =>
 				{
-					var d = Math.Abs(p - m);
-
 					var f = 0;
-					for (; d > 0; d--)
+					for (var d = Math.Abs(p - m); d > 0; d--)
 						f += d;
 
 					return f;

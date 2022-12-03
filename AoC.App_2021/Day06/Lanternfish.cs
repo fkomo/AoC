@@ -28,7 +28,7 @@ namespace Ujeby.AoC.App.Day06
 
 			// part2
 
-			// +++ naive approach (for sample ~25Gb mem and a lot! of cpu time) :D
+			#region naive approach (sample needs ~25Gb mem and a LOT! of cpu time)
 
 			//long _maxArraySize = 1024 * 1024 * 1024;
 			//byte NO_FISH = 0xff;
@@ -69,6 +69,8 @@ namespace Ujeby.AoC.App.Day06
 			//	DebugLine($"day { day }, { fishGroup.Count } fish groups, { nextFish } fish in last group");
 			//}
 			//long result2 = fishGroup.First().Length + (fishGroup.Count - 2) * _maxArraySize + nextFish;
+
+			#endregion
 
 			var fishAge = new long[9];
 			foreach (var f in fish)
