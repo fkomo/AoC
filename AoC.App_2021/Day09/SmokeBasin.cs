@@ -59,7 +59,10 @@ namespace Ujeby.AoC.App.Day09
 
 		private static int BasinSize(string[] map, int x, int y, int x0, int y0)
 		{
-			// TODO mark place x,y as visited
+			var xy = map[y][x];
+
+			// mark place x,y as visited
+			map[y] = $"{map[y].Substring(0, x)}X{map[y].Substring(x + 1)}";
 
 			var size = 1;
 
@@ -72,7 +75,7 @@ namespace Ujeby.AoC.App.Day09
 				var y1 = y + dir.Item2;
 
 				if (y1 < 0 || x1 < 0 || x1 >= map.First().Length || y1 >= map.Length ||
-					map[y1][x1] <= map[y][x] || map[y1][x1] == '9')
+					map[y1][x1] <= xy || map[y1][x1] == '9' || map[y1][x1] == 'X')
 					continue;
 
 				size += BasinSize(map, x1, y1, dir.Item1 * -1, dir.Item2 * -1);

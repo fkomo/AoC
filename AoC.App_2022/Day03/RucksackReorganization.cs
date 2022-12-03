@@ -9,12 +9,11 @@ namespace Ujeby.AoC.App.Day03
 			DebugLine($"{ input.Length } rucksacks");
 
 			// part1
-			long result1 = 0;
-			foreach (var r in input)
+			long result1 = input.Select(r => 
 			{
 				var error = r[..(r.Length / 2)].Intersect(r[(r.Length / 2)..]).Single();
-				result1 += error >= 'a' ? error - 'a' + 1 : error - 'A' + 27;
-			}
+				return error >= 'a' ? error - 'a' + 1 : error - 'A' + 27;
+			}).Sum();
 
 			// part2
 			long result2 = 0;
