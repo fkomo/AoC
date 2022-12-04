@@ -2,7 +2,7 @@
 {
 	public static class Debug
 	{
-		public static int LineLength = 64;
+		public static int LineLength = 100;
 		static bool _outputTimestamp = true;
 		const string DateTimeFormat = "yyyy-MM-dd_HH:mm:ss.fff";
 

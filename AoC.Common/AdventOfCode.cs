@@ -1,10 +1,20 @@
 ﻿namespace Ujeby.AoC.Common
 {
-	public static class AdventOfCode
+	public class AdventOfCode
 	{
-		public static void Run(string title, ISolvable[] problemsToSolve)
+		private string _aocUrl;
+		private string _session;
+
+		public AdventOfCode(string url, 
+			string session = null)
 		{
-			var header = $"~~#[ {title} ]#";
+			_aocUrl = url;
+			_session = session;
+		}
+
+		public void Run(ISolvable[] problemsToSolve)
+		{
+			var header = $"~~#[ {_aocUrl} ]#";
 			header += string.Join("", Enumerable.Repeat("~", Debug.LineLength - header.Length));
 			Debug.Line(header);
 			Debug.Line();
@@ -12,8 +22,18 @@
 			var solved = 0;
 			try
 			{
+				if (_session == null)
+				{
+					var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
+					if (File.Exists(sessionFilename))
+						_session = File.ReadAllText(sessionFilename);
+				}
+
 				foreach (var problem in problemsToSolve)
-					solved += problem.Solve() ? 1 : 0;
+					solved += problem.Solve(
+						inputUrl: $"{_aocUrl}/day/{problem.Day}/input",
+						session: _session) 
+						? 1 : 0;
 			}
 			catch (Exception ex)
 			{
