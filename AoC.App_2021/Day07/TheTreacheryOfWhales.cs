@@ -4,13 +4,11 @@ namespace Ujeby.AoC.App.Day07
 {
 	internal class TheTreacheryOfWhales : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
 			var inputN = input.First().Split(',').Select(s => int.Parse(s))
 				.OrderBy(i => i)
 				.ToArray();
-
-			DebugLine($"{inputN.Length} crab submarines");
 
 			var max = inputN.Max();
 

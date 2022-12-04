@@ -4,10 +4,8 @@ namespace Ujeby.AoC.App.Day03
 {
 	internal class RucksackReorganization : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{ input.Length } rucksacks");
-
 			// part1
 			long result1 = input
 				.Select(r => 

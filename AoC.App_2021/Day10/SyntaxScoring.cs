@@ -4,10 +4,8 @@ namespace Ujeby.AoC.App.Day10
 {
 	internal class SyntaxScoring : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{ input.Length } lines");
-
 			var tags = new char[][] 
 			{ 
 				new[] { '(', '[', '{', '<' },

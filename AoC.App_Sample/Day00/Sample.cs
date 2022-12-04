@@ -4,15 +4,13 @@ namespace Ujeby.AoC.App.Day00
 {
 	internal class Sample : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{ input.Length } lines");
-
 			// part1
-			long result1 = 0;
+			long? result1 = null;
 
 			// part2
-			long result2 = 0;
+			long? result2 = null;
 
 			return (result1, result2);
 		}

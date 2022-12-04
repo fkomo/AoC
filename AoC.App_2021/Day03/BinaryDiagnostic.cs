@@ -4,10 +4,8 @@ namespace Ujeby.AoC.App.Day03
 {
 	internal class BinaryDiagnostic : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{ input.Length } diagnostic reports");
-
 			var inputN = input
 				.Select(s => Convert.ToInt32(s, 2)).ToArray();
 

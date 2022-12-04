@@ -18,10 +18,8 @@ namespace Ujeby.AoC.App.Day05
 			public override string ToString() => $"{X}x{Y}";
 		}
 
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{ input.Length } lines");
-
 			var size = new Point();
 			var lines = input
 				.Select(l =>
@@ -48,7 +46,6 @@ namespace Ujeby.AoC.App.Day05
 				}).ToArray();
 			size.X += 1;
 			size.Y += 1;
-			DebugLine($"map size { size }");
 
 			var map = new int[size.X * size.Y];
 

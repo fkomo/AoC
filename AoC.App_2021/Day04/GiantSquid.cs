@@ -4,15 +4,13 @@ namespace Ujeby.AoC.App.Day04
 {
 	internal class GiantSquid : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
 			var numOrder = input.First().Split(',').Select(s => int.Parse(s)).ToArray();
-			DebugLine($"{ numOrder.Length } numbers drawn");
 
 			input = input.Skip(2).ToArray();
 			var bingoSize = 5;
 			var bingoSets = CreateBingoSets(input, bingoSize);
-			DebugLine($"{ bingoSets.Count } bingo sets");
 
 			// part1
 			long result1 = -1;

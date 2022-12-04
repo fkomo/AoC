@@ -4,10 +4,9 @@ namespace Ujeby.AoC.App.Day06
 {
 	internal class Lanternfish : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
 			var inputB = input.First().Split(',').Select(s => byte.Parse(s)).ToArray();
-			DebugLine($"{inputB.Length } lanternfish");
 
 			// part1
 			var fish = new List<byte>(inputB);

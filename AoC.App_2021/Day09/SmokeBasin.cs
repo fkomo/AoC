@@ -4,12 +4,10 @@ namespace Ujeby.AoC.App.Day09
 {
 	internal class SmokeBasin : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
 			var w = input.First().Length;
 			var h = input.Length;
-
-			DebugLine($"map size {w}x{h}");
 
 			// part1
 			long result1 = 0;

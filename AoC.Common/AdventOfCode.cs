@@ -14,8 +14,8 @@
 
 		public void Run(ISolvable[] problemsToSolve)
 		{
-			var header = $"~~#[ {_aocUrl} ]#";
-			header += string.Join("", Enumerable.Repeat("~", Debug.LineLength - header.Length));
+			var header = $"  ~#[ {_aocUrl} ]#";
+			header += string.Join("", Enumerable.Repeat("~", 101 - header.Length));
 			Debug.Line(header);
 			Debug.Line();
 
@@ -34,6 +34,8 @@
 						inputUrl: $"{_aocUrl}/day/{problem.Day}/input",
 						session: _session) 
 						? 1 : 0;
+
+				Debug.Line();
 			}
 			catch (Exception ex)
 			{
@@ -41,8 +43,8 @@
 			}
 			finally
 			{
-				var result = $"~~#[ Solved { solved }/{ problemsToSolve.Length } problems ]#";
-				result += string.Join("", Enumerable.Repeat("~", Debug.LineLength - result.Length));
+				var result = $"  ~#[ Solved { solved }/{ problemsToSolve.Length } problems ]#";
+				result += string.Join("", Enumerable.Repeat("~", 101 - result.Length));
 
 				Debug.Line(result);
 			}

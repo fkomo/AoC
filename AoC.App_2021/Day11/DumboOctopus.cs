@@ -4,10 +4,8 @@ namespace Ujeby.AoC.App.Day11
 {
 	internal class DumboOctopus : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{input.Length} lines");
-
 			var inputN = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
 
 			// part1

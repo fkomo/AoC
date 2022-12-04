@@ -4,39 +4,41 @@ namespace Ujeby.AoC.Common
 {
 	public abstract class ProblemBase : ISolvable
 	{
-		public long?[] Solution { get; set; }
+		public long?[] Answer { get; set; }
 
 		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
+		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.".Length);
 
 		public bool Solve(
 			string inputUrl = null, string session = null)
 		{
 			var result = false;
 
-			var title = $"--=[ { GetType().FullName.Substring("Ujeby.AoC.App.".Length) } ]=";
-			title += string.Join("", Enumerable.Repeat("-", Debug.LineLength - title.Length));
-			Debug.Line(title);
-
 			var sw = new Stopwatch();
 			try
 			{
-				DebugLine();
-
 				sw.Start();
-
 				var answer = SolveProblem(ReadInput(inputUrl, session));
-
 				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
-				DebugLine($"Solved in ~{ elapsed }ms { (elapsed > 250 ? "[> 250ms!]" : null) }");
-				DebugLine(AnswerMessage(1, answer.Item1, Solution[0]));
-				DebugLine(AnswerMessage(2, answer.Item2, Solution[1]));
+
+				var title = $"-=[ {Title} ]=";
+				var elapsedMsg = $"=[ {elapsed}ms ]=-";
+				var msg = title + string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length)) + elapsedMsg;
+
+				var msg2 = $"=[ { answer.Item1?.ToString() ?? "?" }, {answer.Item2?.ToString() ?? "?"} ]=-";
+				var msg3 = msg + string.Join("", Enumerable.Repeat("-", 90 - msg.Length - msg2.Length)) + msg2;
+
+				var a1 = !Answer[0].HasValue ? "?" : (Answer[0].HasValue && Answer[0].Value == answer.Item1 ? "*" : "");
+				var a2 = !Answer[1].HasValue ? "?" : (Answer[1].HasValue && Answer[1].Value == answer.Item2 ? "*" : "");
+
+				DebugLine(msg3 + $"=[ {a1,1}{a2,1} ]=-");
 
 				result = true;
 
-				if (!Solution[0].HasValue || Solution[0].Value != answer.Item1)
+				if (!Answer[0].HasValue || Answer[0].Value != answer.Item1)
 					result = false;
 
-				if (!Solution[1].HasValue || Solution[1].Value != answer.Item2)
+				if (!Answer[1].HasValue || Answer[1].Value != answer.Item2)
 					result = false;
 			}
 			catch (Exception ex)
@@ -48,25 +50,23 @@ namespace Ujeby.AoC.Common
 				sw.Stop();
 			}
 
-			DebugLine();
-
 			return result;
 		}
 
 		private string AnswerMessage(int part, long answer, long? solution)
 		{
-			var answerMessage = $"Part{part} answer = { answer }";
+			var answerMessage = $"Part{part} answer = {answer}";
 
 			if (solution.HasValue && solution.Value != answer)
 				answerMessage += $" [!= {solution.Value}]";
-			
+
 			else if (!solution.HasValue)
 				answerMessage += $" [?]";
 
 			return answerMessage;
 		}
 
-		protected abstract (long, long) SolveProblem(string[] input);
+		protected abstract (long?, long?) SolveProblem(string[] input);
 
 		protected static void DebugLine(string message = null)
 		{

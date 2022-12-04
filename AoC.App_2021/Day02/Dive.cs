@@ -4,10 +4,8 @@ namespace Ujeby.AoC.App.Day02
 {
 	internal class Dive : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{ input.Length } commands");
-
 			// part1
 			long depth = 0;
 			long position = 0;

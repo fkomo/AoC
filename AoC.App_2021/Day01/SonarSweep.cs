@@ -4,10 +4,8 @@ namespace Ujeby.AoC.App.Day01
 {
 	internal class SonarSweep : ProblemBase
 	{
-		protected override (long, long) SolveProblem(string[] input)
+		protected override (long?, long?) SolveProblem(string[] input)
 		{
-			DebugLine($"{ input.Length } depth measurements");
-
 			// part1
 			long result1 = 0;
 			for (var i = 1; i < input.Length; i++)
