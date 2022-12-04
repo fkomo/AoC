@@ -9,7 +9,7 @@ namespace Ujeby.AoC.App
 			new AdventOfCode("https://adventofcode.com")
 				.Run(new ISolvable[]
 				{
-					new Day00.Sample() { SolutionPart1 = null, SolutionPart2 = null },
+					new Day00.Sample() { Solution = new long?[] { null, null } },
 				});
 		}
 	}
