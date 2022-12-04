@@ -18,6 +18,7 @@ namespace Ujeby.AoC.App
 				new Day08.SevenSegmentSearch()      { Solution = new long?[] { 247, null } },
 				new Day09.SmokeBasin()              { Solution = new long?[] { 444, 1168440 } },
 				new Day10.SyntaxScoring()           { Solution = new long?[] { 369105, 3999363569 } },
+				new Day11.DumboOctopus()			{ Solution = new long?[] { 1741, 440 }},
 
 				// TODO 2021
 			});
