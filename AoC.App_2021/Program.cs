@@ -20,6 +20,7 @@ namespace Ujeby.AoC.App
 					new Day09.SmokeBasin()              { Answer = new long?[] { 444, 1168440 } },
 					new Day10.SyntaxScoring()           { Answer = new long?[] { 369105, 3999363569 } },
 					new Day11.DumboOctopus()            { Answer = new long?[] { 1741, 440 }},
+					new Day12.PassagePathing()          { Answer = new long?[] { null, null }},
 
 					// TODO rest of 2021
 				});

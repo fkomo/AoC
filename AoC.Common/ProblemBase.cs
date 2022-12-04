@@ -28,9 +28,15 @@ namespace Ujeby.AoC.Common
 				var msg2 = $"=[ { answer.Item1?.ToString() ?? "?" }, {answer.Item2?.ToString() ?? "?"} ]=-";
 				var msg3 = msg + string.Join("", Enumerable.Repeat("-", 90 - msg.Length - msg2.Length)) + msg2;
 
-				var a1 = !Answer[0].HasValue ? "?" : (Answer[0].HasValue && Answer[0].Value == answer.Item1 ? "*" : "");
-				var a2 = !Answer[1].HasValue ? "?" : (Answer[1].HasValue && Answer[1].Value == answer.Item2 ? "*" : "");
-
+#if _DEBUG_SAMPLE
+				var a1 = "N";
+				var a2 = "A";
+#else
+				var a1 = !Answer[0].HasValue ? "?" : 
+					(Answer[0].HasValue && Answer[0].Value == answer.Item1 ? "*" : "");
+				var a2 = !Answer[1].HasValue ? "?" : 
+					(Answer[1].HasValue && Answer[1].Value == answer.Item2 ? "*" : "");
+#endif
 				DebugLine(msg3 + $"=[ {a1,1}{a2,1} ]=-");
 
 				result = true;
@@ -51,19 +57,6 @@ namespace Ujeby.AoC.Common
 			}
 
 			return result;
-		}
-
-		private string AnswerMessage(int part, long answer, long? solution)
-		{
-			var answerMessage = $"Part{part} answer = {answer}";
-
-			if (solution.HasValue && solution.Value != answer)
-				answerMessage += $" [!= {solution.Value}]";
-
-			else if (!solution.HasValue)
-				answerMessage += $" [?]";
-
-			return answerMessage;
 		}
 
 		protected abstract (long?, long?) SolveProblem(string[] input);

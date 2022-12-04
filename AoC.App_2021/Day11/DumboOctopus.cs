@@ -1,5 +1,12 @@
 ﻿using Ujeby.AoC.Common;
 
+using FFMpegCore;
+using FFMpegCore.Enums;
+using FFMpegCore.Extend;
+using FFMpegCore.Pipes;
+using System.Drawing;
+using System.Drawing.Imaging;
+
 namespace Ujeby.AoC.App.Day11
 {
 	internal class DumboOctopus : ProblemBase
@@ -22,11 +29,19 @@ namespace Ujeby.AoC.App.Day11
 						if (inputN[y][x] > 9 && inputN[y][x] != 0xff)
 							result1 += Flash(inputN, x, y, x, y);
 
+				//SaveMap(inputN, i);
+
 				for (var y = 0; y < input.Length; y++)
 					for (var x = 0; x < input[0].Length; x++)
 						if (inputN[y][x] == 0xff)
 							inputN[y][x] = 0;
 			}
+
+			//var outputFiles = Directory.EnumerateFiles(_workingDir, "*.png");
+			//FFMpeg.JoinImageSequence(Path.Combine(_workingDir, "output.mp4"), frameRate: 60,
+			//	outputFiles.Select(f => ImageInfo.FromPath(f)).ToArray());
+			//foreach (var outputFile in outputFiles)
+			//	File.Delete(outputFile);
 
 			// part2
 			long result2 = long.MaxValue;
@@ -99,12 +114,30 @@ namespace Ujeby.AoC.App.Day11
 			return flashes;
 		}
 
-		private void DrawMap(byte[][] map)
+		private void SaveMap(byte[][] map, int i)
 		{
-			for (var y = 0; y < map.Length; y++)
-				DebugLine(string.Join(' ', map[y].Select(b => b.ToString("x2")).ToArray()));
+			var size = 32;
+			int width = map[0].Length * size;
+			int height = map.Length * size;
 
-			DebugLine();
+			using Bitmap bmp = new(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+			using Graphics gfx = Graphics.FromImage(bmp);
+			gfx.Clear(Color.Black);
+
+			for (var y = 0; y < map.Length; y++)
+				for (var x = 0; x < map[0].Length; x++)
+				{
+					var c = Math.Clamp(map[y][x] * 10, 0, 0xff);
+
+					Point pt = new(x * size, y * size);
+					Size sz = new(size, size);
+					Rectangle rect = new(pt, sz);
+					gfx.FillRectangle(
+						new SolidBrush(Color.FromArgb(c, c, c)), 
+						rect);
+				}
+
+			bmp.Save(Path.Combine(_workingDir, $"output.{i.ToString("D3")}.png"));
 		}
 	}
 }
