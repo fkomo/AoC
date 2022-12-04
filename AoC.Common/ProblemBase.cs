@@ -6,7 +6,10 @@ namespace Ujeby.AoC.Common
 	{
 		public long?[] Solution { get; set; }
 
-		public bool Solve()
+		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
+
+		public bool Solve(
+			string inputUrl = null, string session = null)
 		{
 			var result = false;
 
@@ -21,7 +24,7 @@ namespace Ujeby.AoC.Common
 
 				sw.Start();
 
-				var answer = SolveProblem(ReadInput());
+				var answer = SolveProblem(ReadInput(inputUrl, session));
 
 				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
 				DebugLine($"Solved in ~{ elapsed }ms { (elapsed > 250 ? "[> 250ms!]" : null) }");
@@ -70,17 +73,33 @@ namespace Ujeby.AoC.Common
 			Debug.Line("  " + message);
 		}
 
-		protected string WorkingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
+		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
 
-		private string[] ReadInput(string inputName = null)
+#if _DEBUG_SAMPLE
+		protected string _inputFilename => Path.Combine(_workingDir, "input.sample.txt");
+#else
+		protected string _inputFilename => Path.Combine(_workingDir, "input.txt");
+#endif
+
+		private string[] ReadInput(string inputUrl, string session)
 		{
 #if _DEBUG_SAMPLE
-			inputName ??= $"input.sample.txt";
 #else
-			inputName ??= $"input.txt";
+			// download input
+			if (!File.Exists(_inputFilename) && session != null)
+			{
+				var httpClient = new HttpClient();
+				httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
+				var input = httpClient.GetStringAsync(inputUrl).Result;
+				DebugLine($"Input downloaded from {inputUrl}");
+
+				if (!Directory.Exists(_workingDir))
+					Directory.CreateDirectory(_workingDir);
+
+				File.WriteAllText(_inputFilename, input);
+			}
 #endif
-			return File.ReadLines(Path.Combine(WorkingDir, inputName))
-				.ToArray();
+			return File.ReadLines(_inputFilename).ToArray();
 		}
 	}
 }

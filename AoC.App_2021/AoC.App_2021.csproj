@@ -24,6 +24,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove=".session" />
 	  <None Remove="Day11\input.sample.txt" />
 	  <None Remove="Day11\input.txt" />
 	  <None Remove="Day10\input.sample.txt" />

@@ -2,6 +2,8 @@
 {
 	public interface ISolvable
 	{
-		bool Solve();
+		public int Day { get; }
+		bool Solve(
+			string inputUrl = null, string session = null);
 	}
 }
