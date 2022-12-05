@@ -14,7 +14,7 @@ namespace Ujeby.AoC.App.Day08
 			// TODO 2021/08 part2
 			long? result2 = null;
 
-			return (result1.ToString(), result2.ToString());
+			return (result1.ToString(), result2?.ToString());
 		}
 	}
 }
