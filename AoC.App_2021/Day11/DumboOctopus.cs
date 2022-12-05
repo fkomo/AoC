@@ -11,7 +11,7 @@ namespace Ujeby.AoC.App.Day11
 {
 	internal class DumboOctopus : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var inputN = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
 
@@ -73,7 +73,7 @@ namespace Ujeby.AoC.App.Day11
 				}
 			}
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 
 		private (int, int)[] _dir = new (int, int)[]
@@ -116,6 +116,7 @@ namespace Ujeby.AoC.App.Day11
 
 		private void SaveMap(byte[][] map, int i)
 		{
+#pragma warning disable CA1416 // Validate platform compatibility
 			var size = 32;
 			int width = map[0].Length * size;
 			int height = map.Length * size;
@@ -138,6 +139,7 @@ namespace Ujeby.AoC.App.Day11
 				}
 
 			bmp.Save(Path.Combine(_workingDir, $"output.{i.ToString("D3")}.png"));
+#pragma warning restore CA1416 // Validate platform compatibility
 		}
 	}
 }

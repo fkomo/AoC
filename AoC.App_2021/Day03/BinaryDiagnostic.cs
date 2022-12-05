@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day03
 {
 	internal class BinaryDiagnostic : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var inputN = input
 				.Select(s => Convert.ToInt32(s, 2)).ToArray();
@@ -44,7 +44,7 @@ namespace Ujeby.AoC.App.Day03
 
 			var result2 = oxygenGeneratorRating * co2ScrubberRating;
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Ujeby.AoC.App.Day05
 			public override string ToString() => $"{X}x{Y}";
 		}
 
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var size = new Point();
 			var lines = input
@@ -94,7 +94,7 @@ namespace Ujeby.AoC.App.Day05
 			}
 			long result2 = map.Count(p => p > 1);
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 
 		private void DrawMap(int[] map, Point size)

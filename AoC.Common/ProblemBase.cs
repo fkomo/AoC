@@ -4,7 +4,7 @@ namespace Ujeby.AoC.Common
 {
 	public abstract class ProblemBase : ISolvable
 	{
-		public long?[] Answer { get; set; }
+		public string[] Answer { get; set; }
 
 		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
 		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.".Length);
@@ -32,19 +32,19 @@ namespace Ujeby.AoC.Common
 				var a1 = "N";
 				var a2 = "A";
 #else
-				var a1 = !Answer[0].HasValue ? "?" : 
-					(Answer[0].HasValue && Answer[0].Value == answer.Item1 ? "*" : "");
-				var a2 = !Answer[1].HasValue ? "?" : 
-					(Answer[1].HasValue && Answer[1].Value == answer.Item2 ? "*" : "");
+				var a1 = Answer[0] == null ? "?" : 
+					(Answer[0] != null && Answer[0] == answer.Item1 ? "*" : "");
+				var a2 = Answer[1] == null ? "?" : 
+					(Answer[1] != null && Answer[1] == answer.Item2 ? "*" : "");
 #endif
 				DebugLine(msg3 + $"=[ {a1,1}{a2,1} ]=-");
 
 				result = true;
 
-				if (!Answer[0].HasValue || Answer[0].Value != answer.Item1)
+				if (Answer[0] == null || Answer[0] != answer.Item1)
 					result = false;
 
-				if (!Answer[1].HasValue || Answer[1].Value != answer.Item2)
+				if (Answer[1] == null || Answer[1] != answer.Item2)
 					result = false;
 			}
 			catch (Exception ex)
@@ -59,7 +59,7 @@ namespace Ujeby.AoC.Common
 			return result;
 		}
 
-		protected abstract (long?, long?) SolveProblem(string[] input);
+		protected abstract (string, string) SolveProblem(string[] input);
 
 		protected static void DebugLine(string message = null)
 		{

@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day07
 {
 	internal class TheTreacheryOfWhales : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var inputN = input.First().Split(',').Select(s => int.Parse(s))
 				.OrderBy(i => i)
@@ -47,7 +47,7 @@ namespace Ujeby.AoC.App.Day07
 					result2 = fuel;
 			}
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

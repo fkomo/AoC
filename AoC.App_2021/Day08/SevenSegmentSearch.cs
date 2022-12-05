@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day08
 {
 	internal class SevenSegmentSearch : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
 			long result1 = input
@@ -14,7 +14,7 @@ namespace Ujeby.AoC.App.Day08
 			// TODO 2021/08 part2
 			long? result2 = null;
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

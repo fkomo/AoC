@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day04
 {
 	internal class CampCleanup : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var inputP = input.Select(l => l.Split(',').Select(p =>
 			{
@@ -20,7 +20,7 @@ namespace Ujeby.AoC.App.Day04
 			long result2 = inputP.Count(p =>
 				!((p[0].Item1 < p[1].Item1 && p[0].Item2 < p[1].Item1) || (p[1].Item1 < p[0].Item1 && p[1].Item2 < p[0].Item1)));
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

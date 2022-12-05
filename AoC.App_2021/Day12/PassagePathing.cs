@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day12
 {
 	internal class PassagePathing : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
 			long? result1 = null;
@@ -12,7 +12,7 @@ namespace Ujeby.AoC.App.Day12
 			// part2
 			long? result2 = null;
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

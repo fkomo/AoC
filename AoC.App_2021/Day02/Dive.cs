@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day02
 {
 	internal class Dive : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
 			long depth = 0;
@@ -46,7 +46,7 @@ namespace Ujeby.AoC.App.Day02
 
 			long result2 = position * depth;
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

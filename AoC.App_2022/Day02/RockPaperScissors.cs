@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day02
 {
 	internal class RockPaperScissors : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
 			long result1 = input
@@ -14,7 +14,7 @@ namespace Ujeby.AoC.App.Day02
 			long result2 = input
 				.Sum(g => new[,] { { 2, 0, 1 }, { 0, 1, 2 }, { 1, 2, 0 } }[g[0] - 'A', g[2] - 'X'] + 1 + (g[2] - 'X') * 3);
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day09
 {
 	internal class SmokeBasin : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var w = input.First().Length;
 			var h = input.Length;
@@ -47,7 +47,7 @@ namespace Ujeby.AoC.App.Day09
 				result2 *= bs;
 
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 
 		/// <summary>

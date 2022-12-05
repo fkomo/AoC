@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day03
 {
 	internal class RucksackReorganization : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
 			long result1 = input
@@ -19,7 +19,7 @@ namespace Ujeby.AoC.App.Day03
 				result2 += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 					.IndexOf(input[i].Intersect(input[i + 1]).Intersect(input[i + 2]).Single()) + 1;
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

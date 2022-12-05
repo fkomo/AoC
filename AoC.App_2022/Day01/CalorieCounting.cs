@@ -4,10 +4,10 @@ namespace Ujeby.AoC.App.Day01
 {
 	internal class CalorieCounting : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
-			long result1 = string.Join('|', input)
+			long? result1 = string.Join('|', input)
 				.Split("||")
 				.Select(e => e.Split('|').Sum(c => int.Parse(c)))
 				.Max();
@@ -20,7 +20,7 @@ namespace Ujeby.AoC.App.Day01
 				.Take(3)
 				.Sum();
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

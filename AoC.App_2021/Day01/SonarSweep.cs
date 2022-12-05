@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day01
 {
 	internal class SonarSweep : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
 			long result1 = 0;
@@ -30,7 +30,7 @@ namespace Ujeby.AoC.App.Day01
 					result2++;
 			}
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

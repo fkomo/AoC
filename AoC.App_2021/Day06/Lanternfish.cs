@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day06
 {
 	internal class Lanternfish : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var inputB = input.First().Split(',').Select(s => byte.Parse(s)).ToArray();
 
@@ -88,7 +88,7 @@ namespace Ujeby.AoC.App.Day06
 
 			long result2 = fishAge.Sum();
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

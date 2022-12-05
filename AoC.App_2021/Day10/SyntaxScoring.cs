@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day10
 {
 	internal class SyntaxScoring : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var tags = new char[][] 
 			{ 
@@ -74,7 +74,7 @@ namespace Ujeby.AoC.App.Day10
 			}
 			long result2 = scores.OrderBy(s => s).ElementAt(scores.Count / 2);
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 	}
 }

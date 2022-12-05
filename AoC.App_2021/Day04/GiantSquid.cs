@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Day04
 {
 	internal class GiantSquid : ProblemBase
 	{
-		protected override (long?, long?) SolveProblem(string[] input)
+		protected override (string, string) SolveProblem(string[] input)
 		{
 			var numOrder = input.First().Split(',').Select(s => int.Parse(s)).ToArray();
 
@@ -59,7 +59,7 @@ namespace Ujeby.AoC.App.Day04
 				}
 			}
 
-			return (result1, result2);
+			return (result1.ToString(), result2.ToString());
 		}
 
 		private static List<int[]> CreateBingoSets(string[] input, int bingoSize)
