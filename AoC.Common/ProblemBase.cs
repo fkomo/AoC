@@ -13,7 +13,8 @@ namespace Ujeby.AoC.Common
 		{
 			(250, ConsoleColor.Red),
 			(100, ConsoleColor.Yellow),
-			(0, ConsoleColor.Green),
+			(10, ConsoleColor.Green),
+			(0, ConsoleColor.White),
 		};
 
 		public int Solve(
@@ -35,7 +36,7 @@ namespace Ujeby.AoC.Common
 
 				var elapsedColor = ConsoleColor.White;
 				foreach (var ec in _elapsedColors)
-					if (elapsed > ec.Item1)
+					if (elapsed >= ec.Item1)
 					{
 						elapsedColor = ec.Item2;
 						break;
