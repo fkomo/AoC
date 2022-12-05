@@ -9,6 +9,13 @@ namespace Ujeby.AoC.Common
 		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
 		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.".Length);
 
+		private readonly (int, ConsoleColor)[] _elapsedColors = new (int, ConsoleColor)[]
+		{
+			(250, ConsoleColor.Red),
+			(100, ConsoleColor.Yellow),
+			(0, ConsoleColor.Green),
+		};
+
 		public int Solve(
 			string inputUrl = null, string session = null)
 		{
@@ -25,8 +32,16 @@ namespace Ujeby.AoC.Common
 				var elapsedMsg = $"=[ {elapsed}ms ]=-";
 				var msg = title + string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length)) + $"=[ ";
 				Debug.Text(msg, indent: 2);
-				Debug.Text($"{elapsed}ms",
-					textColor: (elapsed > 250 ? ConsoleColor.Red : ConsoleColor.White));
+
+				var elapsedColor = ConsoleColor.White;
+				foreach (var ec in _elapsedColors)
+					if (elapsed > ec.Item1)
+					{
+						elapsedColor = ec.Item2;
+						break;
+					}
+				Debug.Text($"{elapsed}ms", textColor: elapsedColor);
+
 				Debug.Text(" ]=-");
 				msg += $"{elapsed}ms ]=-";
 
