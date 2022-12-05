@@ -29,11 +29,17 @@ namespace Ujeby.AoC.Common
 				var answer = SolveProblem(ReadInput(inputUrl, session));
 				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
 
-				var title = $"-=[ {Title} ]=";
-				var elapsedMsg = $"=[ {elapsed}ms ]=-";
-				var msg = title + string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length)) + $"=[ ";
-				Debug.Text(msg, indent: 2);
+				var title = $"-={{ {Title} }}=-";
+				Debug.Text($"-={{ ", indent: 2, textColor: ConsoleColor.Gray);
+				Debug.Text(Title, textColor: ConsoleColor.White);
+				Debug.Text($" }}=-", textColor: ConsoleColor.Gray);
 
+				var elapsedMsg = $"-={{ {elapsed}ms }}=-";
+
+				var padding = string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length));
+				Debug.Text(padding, textColor: ConsoleColor.DarkGray);
+
+				Debug.Text($"-={{ ", textColor: ConsoleColor.Gray);
 				var elapsedColor = ConsoleColor.White;
 				foreach (var ec in _elapsedColors)
 					if (elapsed >= ec.Item1)
@@ -42,27 +48,31 @@ namespace Ujeby.AoC.Common
 						break;
 					}
 				Debug.Text($"{elapsed}ms", textColor: elapsedColor);
+				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
-				Debug.Text(" ]=-");
-				msg += $"{elapsed}ms ]=-";
+				var answers = $"{answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"}";
+				var answersMsg = $"-={{ {answers} }}=-";
+				padding = string.Join("", Enumerable.Repeat("-", 38 - answersMsg.Length));
+				Debug.Text(padding, textColor: ConsoleColor.DarkGray);
 
-				var msg2 = $"=[ { answer.Item1?.ToString() ?? "?" }, {answer.Item2?.ToString() ?? "?"} ]=-";
-				var msg3 = string.Join("", Enumerable.Repeat("-", 90 - msg.Length - msg2.Length)) + msg2;
+				Debug.Text($"-={{ ", textColor: ConsoleColor.Gray);
+				Debug.Text(answers);
+				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
 #if _DEBUG_SAMPLE
 				var a1 = "N";
 				var a2 = "A";
 #else
-				var a1 = Answer[0] == null ? "" : 
+				var a1 = Answer[0] == null ? "" :
 					(Answer[0] != null && Answer[0] == answer.Item1 ? "*" : "");
-				var a2 = Answer[1] == null ? "" : 
+				var a2 = Answer[1] == null ? "" :
 					(Answer[1] != null && Answer[1] == answer.Item2 ? "*" : "");
 #endif
-
-				Debug.Text(msg3 + $"=[ ");
-				Debug.Text($"{a1,1}{a2,1}", 
+				Debug.Text("-", textColor: ConsoleColor.DarkGray);
+				Debug.Text($"-={{ ", textColor: ConsoleColor.Gray);
+				Debug.Text($"{a1,1}{a2,1}",
 					textColor: ConsoleColor.Yellow);
-				Debug.Text(" ]=-");
+				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
 				Debug.Line();
 
