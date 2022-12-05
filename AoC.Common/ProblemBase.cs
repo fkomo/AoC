@@ -37,9 +37,9 @@ namespace Ujeby.AoC.Common
 				var a1 = "N";
 				var a2 = "A";
 #else
-				var a1 = Answer[0] == null ? "?" : 
+				var a1 = Answer[0] == null ? "" : 
 					(Answer[0] != null && Answer[0] == answer.Item1 ? "*" : "");
-				var a2 = Answer[1] == null ? "?" : 
+				var a2 = Answer[1] == null ? "" : 
 					(Answer[1] != null && Answer[1] == answer.Item2 ? "*" : "");
 #endif
 

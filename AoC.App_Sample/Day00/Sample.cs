@@ -12,7 +12,7 @@ namespace Ujeby.AoC.App.Day00
 			// part2
 			long? answer2 = null;
 
-			return (answer1.ToString(), answer2.ToString());
+			return (answer1?.ToString(), answer2?.ToString());
 		}
 	}
 }
