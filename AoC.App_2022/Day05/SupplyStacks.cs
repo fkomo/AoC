@@ -7,12 +7,7 @@ namespace Ujeby.AoC.App.Day05
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			var numOfStacks = (input[0].Length + 1) / 4;
-
-			var stacksEnd = 0;
-			for (; stacksEnd < input.Length; stacksEnd++)
-				if (input[stacksEnd].StartsWith(" 1"))
-					break;
-			var commands = input.Skip(stacksEnd + 2);
+			var stacksEnd = Array.IndexOf(input, "") - 1;
 
 			// part1
 			var stacks = new List<Stack<char>>();
@@ -25,7 +20,7 @@ namespace Ujeby.AoC.App.Day05
 					if (char.IsLetter(input[i][c]))
 						stacks[(c - 1) / 4].Push(input[i][c]); 
 			
-			foreach (var cmd in commands)
+			foreach (var cmd in input.Skip(stacksEnd + 2))
 			{
 				var c = cmd.Replace("move", string.Empty).Replace("from", string.Empty).Replace("to", string.Empty)
 					.Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -47,7 +42,7 @@ namespace Ujeby.AoC.App.Day05
 					if (char.IsLetter(input[i][c]))
 						stacks[(c - 1) / 4].Push(input[i][c]);
 
-			foreach (var cmd in commands)
+			foreach (var cmd in input.Skip(stacksEnd + 2))
 			{
 				var c = cmd.Replace("move", string.Empty).Replace("from", string.Empty).Replace("to", string.Empty)
 					.Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -56,10 +51,8 @@ namespace Ujeby.AoC.App.Day05
 
 				var tmpStack = new Stack<char>();
 				for (var p = 0; p < c[0]; p++)
-				{
 					if (stacks[c[1] - 1].Count > 0)
 						tmpStack.Push(stacks[c[1] - 1].Pop());
-				}
 
 				while (tmpStack.Count > 0)
 					stacks[c[2] - 1].Push(tmpStack.Pop());
