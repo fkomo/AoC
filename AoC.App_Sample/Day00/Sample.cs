@@ -7,12 +7,12 @@ namespace Ujeby.AoC.App.Day00
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
-			long? result1 = null;
+			long? answer1 = null;
 
 			// part2
-			long? result2 = null;
+			long? answer2 = null;
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

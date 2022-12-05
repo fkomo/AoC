@@ -10,7 +10,7 @@ namespace Ujeby.AoC.App.Day09
 			var h = input.Length;
 
 			// part1
-			long result1 = 0;
+			long answer1 = 0;
 			for (var y = 0; y < h; y++)
 				for (var x = 0; x < w; x++)
 				{
@@ -23,7 +23,7 @@ namespace Ujeby.AoC.App.Day09
 						continue;
 
 					// basin
-					result1 += (p - '0') + 1;
+					answer1 += (p - '0') + 1;
 				}
 
 			// part2
@@ -42,12 +42,12 @@ namespace Ujeby.AoC.App.Day09
 					// basin
 					basinSizes.Add(BasinSize(input, x, y, 0, 0));
 				}
-			long result2 = 1;
+			long answer2 = 1;
 			foreach (var bs in basinSizes.OrderByDescending(s => s).Take(3))
-				result2 *= bs;
+				answer2 *= bs;
 
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 
 		/// <summary>

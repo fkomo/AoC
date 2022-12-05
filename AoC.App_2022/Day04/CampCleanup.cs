@@ -13,14 +13,14 @@ namespace Ujeby.AoC.App.Day04
 			}).ToArray()).ToArray();
 
 			// part1
-			long result1 = inputP.Count(p => (p[0].Item2 - p[0].Item1 >= p[1].Item2 - p[1].Item1) ?
+			long answer1 = inputP.Count(p => (p[0].Item2 - p[0].Item1 >= p[1].Item2 - p[1].Item1) ?
 				(p[0].Item1 <= p[1].Item1 && p[0].Item2 >= p[1].Item2) : (p[1].Item1 <= p[0].Item1 && p[1].Item2 >= p[0].Item2));
 
 			// part2
-			long result2 = inputP.Count(p =>
+			long answer2 = inputP.Count(p =>
 				!((p[0].Item1 < p[1].Item1 && p[0].Item2 < p[1].Item1) || (p[1].Item1 < p[0].Item1 && p[1].Item2 < p[0].Item1)));
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

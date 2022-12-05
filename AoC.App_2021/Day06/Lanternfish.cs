@@ -23,7 +23,7 @@ namespace Ujeby.AoC.App.Day06
 						fish[f]--;
 				}
 			}
-			long result1 = fish.Count;
+			long answer1 = fish.Count;
 
 			// part2
 
@@ -67,7 +67,7 @@ namespace Ujeby.AoC.App.Day06
 			//	}
 			//	DebugLine($"day { day }, { fishGroup.Count } fish groups, { nextFish } fish in last group");
 			//}
-			//long result2 = fishGroup.First().Length + (fishGroup.Count - 2) * _maxArraySize + nextFish;
+			//long answer2 = fishGroup.First().Length + (fishGroup.Count - 2) * _maxArraySize + nextFish;
 
 			#endregion
 
@@ -86,9 +86,9 @@ namespace Ujeby.AoC.App.Day06
 				fishAge[8] = newFish;
 			}
 
-			long result2 = fishAge.Sum();
+			long answer2 = fishAge.Sum();
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

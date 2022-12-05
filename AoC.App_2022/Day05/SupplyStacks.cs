@@ -30,7 +30,7 @@ namespace Ujeby.AoC.App.Day05
 				for (var p = 0; p < c[0]; p++)
 					stacks[c[2] - 1].Push(stacks[c[1] - 1].Pop());
 			}
-			var result1 = string.Join("", stacks.Select(s => s.Pop()));
+			var answer1 = string.Join("", stacks.Select(s => s.Pop()));
 
 			// part2
 			foreach (var stack in stacks)
@@ -57,9 +57,9 @@ namespace Ujeby.AoC.App.Day05
 				while (tmpStack.Count > 0)
 					stacks[c[2] - 1].Push(tmpStack.Pop());
 			}
-			var result2 = string.Join("", stacks.Select(s => s.Pop()));
+			var answer2 = string.Join("", stacks.Select(s => s.Pop()));
 
-			return (result1, result2);
+			return (answer1, answer2);
 		}
 	}
 }

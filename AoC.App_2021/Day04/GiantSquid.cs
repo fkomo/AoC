@@ -13,7 +13,7 @@ namespace Ujeby.AoC.App.Day04
 			var bingoSets = CreateBingoSets(input, bingoSize);
 
 			// part1
-			long result1 = -1;
+			long answer1 = -1;
 			foreach (var n in numOrder)
 			{
 				for (var bs = 0; bs < bingoSets.Count; bs++)
@@ -26,18 +26,18 @@ namespace Ujeby.AoC.App.Day04
 
 					if (CheckBingo(bingoSets[bs]))
 					{
-						result1 = n * bingoSets[bs].Where(n => n > 0).Sum();
+						answer1 = n * bingoSets[bs].Where(n => n > 0).Sum();
 						break;
 					}
 				}
 
-				if (result1 > 0)
+				if (answer1 > 0)
 					break;
 			}
 
 			// part2
 			bingoSets = CreateBingoSets(input, bingoSize);
-			long result2 = -1;
+			long answer2 = -1;
 			foreach (var n in numOrder)
 			{
 				for (var bs = 0; bs < bingoSets.Count; bs++)
@@ -53,13 +53,13 @@ namespace Ujeby.AoC.App.Day04
 
 					if (CheckBingo(bingoSets[bs]))
 					{
-						result2 = n * bingoSets[bs].Where(n => n > 0).Sum();
+						answer2 = n * bingoSets[bs].Where(n => n > 0).Sum();
 						bingoSets[bs] = null;
 					}
 				}
 			}
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 
 		private static List<int[]> CreateBingoSets(string[] input, int bingoSize)

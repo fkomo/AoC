@@ -7,13 +7,13 @@ namespace Ujeby.AoC.App.Day01
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
-			long result1 = 0;
+			long answer1 = 0;
 			for (var i = 1; i < input.Length; i++)
 				if (int.Parse(input[i - 1]) < int.Parse(input[i]))
-					result1++;
+					answer1++;
 
 			// part2
-			long result2 = 0;
+			long answer2 = 0;
 			for (var i = 0; i < input.Length - 3; i++)
 			{
 				var sum1 = 
@@ -27,10 +27,10 @@ namespace Ujeby.AoC.App.Day01
 					int.Parse(input[i + 3]);
 
 				if (sum2 > sum1)
-					result2++;
+					answer2++;
 			}
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

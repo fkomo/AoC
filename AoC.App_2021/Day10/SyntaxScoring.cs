@@ -21,7 +21,7 @@ namespace Ujeby.AoC.App.Day10
 			};
 
 			// part1
-			long result1 = 0;
+			long answer1 = 0;
 			for (var i = 0; i < input.Length; i++)
 			{
 				var open = new List<char>();
@@ -33,7 +33,7 @@ namespace Ujeby.AoC.App.Day10
 					{
 						if (Array.IndexOf(tags[0], open.Last()) != Array.IndexOf(tags[1], c))
 						{
-							result1 += score[c];
+							answer1 += score[c];
 							break;
 						}
 
@@ -72,9 +72,9 @@ namespace Ujeby.AoC.App.Day10
 					s = s * 5 + Array.IndexOf(tags[0], open[c]) + 1;
 				scores.Add(s);
 			}
-			long result2 = scores.OrderBy(s => s).ElementAt(scores.Count / 2);
+			long answer2 = scores.OrderBy(s => s).ElementAt(scores.Count / 2);
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Ujeby.AoC.App.Day03
 				shift <<= 1;
 			}
 			var epsilonRate = ~gammaRate & inputMask;
-			var result1 = gammaRate * epsilonRate;
+			var answer1 = gammaRate * epsilonRate;
 
 			// part2
 			var tmpInput = inputN;
@@ -42,9 +42,9 @@ namespace Ujeby.AoC.App.Day03
 			}
 			var co2ScrubberRating = tmpInput.Single();
 
-			var result2 = oxygenGeneratorRating * co2ScrubberRating;
+			var answer2 = oxygenGeneratorRating * co2ScrubberRating;
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

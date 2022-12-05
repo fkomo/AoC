@@ -1,11 +1,6 @@
-﻿using Ujeby.AoC.Common;
-
-using FFMpegCore;
-using FFMpegCore.Enums;
-using FFMpegCore.Extend;
-using FFMpegCore.Pipes;
+﻿using FFMpegCore;
 using System.Drawing;
-using System.Drawing.Imaging;
+using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Day11
 {
@@ -13,67 +8,66 @@ namespace Ujeby.AoC.App.Day11
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			var inputN = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
+			var map = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
 
 			// part1
-			long result1 = 0;
+			long answer1 = 0;
 			var i = 0;
 			while (i++ < 100)
 			{
 				for (var y = 0; y < input.Length; y++)
 					for (var x = 0; x < input[0].Length; x++)
-						inputN[y][x]++;
+						map[y][x]++;
 
 				for (var y = 0; y < input.Length; y++)
 					for (var x = 0; x < input[0].Length; x++)
-						if (inputN[y][x] > 9 && inputN[y][x] != 0xff)
-							result1 += Flash(inputN, x, y, x, y);
+						if (map[y][x] > 9 && map[y][x] != 0xff)
+							answer1 += Flash(map, x, y, x, y);
 
-				//SaveMap(inputN, i);
+				//SaveMapToImage(map, i, "part1");
 
 				for (var y = 0; y < input.Length; y++)
 					for (var x = 0; x < input[0].Length; x++)
-						if (inputN[y][x] == 0xff)
-							inputN[y][x] = 0;
+						if (map[y][x] == 0xff)
+							map[y][x] = 0;
 			}
 
-			//var outputFiles = Directory.EnumerateFiles(_workingDir, "*.png");
-			//FFMpeg.JoinImageSequence(Path.Combine(_workingDir, "output.mp4"), frameRate: 60,
-			//	outputFiles.Select(f => ImageInfo.FromPath(f)).ToArray());
-			//foreach (var outputFile in outputFiles)
-			//	File.Delete(outputFile);
-
 			// part2
-			long result2 = long.MaxValue;
+			long answer2 = long.MaxValue;
 			var n = input.Length * input[0].Length;
-			inputN = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
+			map = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
 			i = 0;
-			while (result2 == long.MaxValue)
+			while (answer2 == long.MaxValue)
 			{
 				i++;
 				for (var y = 0; y < input.Length; y++)
 					for (var x = 0; x < input[0].Length; x++)
-						inputN[y][x]++;
+						map[y][x]++;
 
 				for (var y = 0; y < input.Length; y++)
 					for (var x = 0; x < input[0].Length; x++)
-						if (inputN[y][x] > 9 && inputN[y][x] != 0xff &&
-							Flash(inputN, x, y, x, y) == n)
+						if (map[y][x] > 9 && map[y][x] != 0xff &&
+							Flash(map, x, y, x, y) == n)
 						{
-							result2 = i;
+							answer2 = i;
 							break;
 						}
 
-				if (result2 == long.MaxValue)
+				//SaveMapToImage(map, i, "part2");
+
+				if (answer2 == long.MaxValue)
 				{
 					for (var y = 0; y < input.Length; y++)
 						for (var x = 0; x < input[0].Length; x++)
-							if (inputN[y][x] == 0xff)
-								inputN[y][x] = 0;
+							if (map[y][x] == 0xff)
+								map[y][x] = 0;
 				}
 			}
 
-			return (result1.ToString(), result2.ToString());
+			//CreateVideoFromImages(Path.Combine(_workingDir, "output-part1.mp4"), "part1");
+			//CreateVideoFromImages(Path.Combine(_workingDir, "output-part2.mp4"), "part2");
+
+			return (answer1.ToString(), answer2.ToString());
 		}
 
 		private (int, int)[] _dir = new (int, int)[]
@@ -114,7 +108,7 @@ namespace Ujeby.AoC.App.Day11
 			return flashes;
 		}
 
-		private void SaveMap(byte[][] map, int i)
+		private void SaveMapToImage(byte[][] map, int step, string fileNamePrefix)
 		{
 #pragma warning disable CA1416 // Validate platform compatibility
 			var size = 32;
@@ -138,8 +132,17 @@ namespace Ujeby.AoC.App.Day11
 						rect);
 				}
 
-			bmp.Save(Path.Combine(_workingDir, $"output.{i.ToString("D3")}.png"));
+			bmp.Save(Path.Combine(_workingDir, $"{fileNamePrefix}.{step.ToString("D3")}.png"));
 #pragma warning restore CA1416 // Validate platform compatibility
+		}
+
+		private void CreateVideoFromImages(string output, string inputImagePrefix)
+		{
+			var outputFiles = Directory.EnumerateFiles(_workingDir, $"{inputImagePrefix}.*.png");
+			FFMpeg.JoinImageSequence(output, frameRate: 60,
+				outputFiles.Select(f => ImageInfo.FromPath(f)).ToArray());
+			foreach (var outputFile in outputFiles)
+				File.Delete(outputFile);
 		}
 	}
 }

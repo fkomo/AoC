@@ -13,22 +13,22 @@ namespace Ujeby.AoC.App.Day07
 			var max = inputN.Max();
 
 			// part1
-			long result1 = long.MaxValue;
+			long answer1 = long.MaxValue;
 			for (var m = 0; m < max; m++)
 			{
 				long fuel = 0;
 				for (var i = 0; i < inputN.Length; i++)
 				{
 					fuel += Math.Abs(inputN[i] - m);
-					if (fuel > result1)
+					if (fuel > answer1)
 						break;
 				}
-				if (fuel < result1)
-					result1 = fuel;
+				if (fuel < answer1)
+					answer1 = fuel;
 			}
 
 			// part2
-			long result2 = long.MaxValue;
+			long answer2 = long.MaxValue;
 			for (var m = 0; m < max; m++)
 			{
 				long fuel = 0;
@@ -37,17 +37,17 @@ namespace Ujeby.AoC.App.Day07
 					for (var d = Math.Abs(inputN[i] - m); d > 0; d--)
 					{
 						fuel += d;
-						if (fuel > result2)
+						if (fuel > answer2)
 							break;
 					}
-					if (fuel > result2)
+					if (fuel > answer2)
 						break;
 				}
-				if (fuel < result2)
-					result2 = fuel;
+				if (fuel < answer2)
+					answer2 = fuel;
 			}
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

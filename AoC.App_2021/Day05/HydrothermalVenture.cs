@@ -73,7 +73,7 @@ namespace Ujeby.AoC.App.Day05
 						map[line.Item1.Y * size.X + x]++;
 				}
 			}
-			long result1 = map.Count(p => p > 1);
+			long answer1 = map.Count(p => p > 1);
 			
 			// part2
 			foreach (var line in lines)
@@ -92,9 +92,9 @@ namespace Ujeby.AoC.App.Day05
 						map[y * size.X + x]++;
 				}
 			}
-			long result2 = map.Count(p => p > 1);
+			long answer2 = map.Count(p => p > 1);
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 
 		private void DrawMap(int[] map, Point size)

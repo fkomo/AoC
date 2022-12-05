@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Day12
 {
@@ -13,80 +12,81 @@ namespace Ujeby.AoC.App.Day12
 				var c = line.Split('-');
 				if (!caves.ContainsKey(c[0]))
 					caves.Add(c[0], new List<string>());
-				caves[c[0]].Add(c[1]);
+
+				if (c[1] != "start")
+					caves[c[0]].Add(c[1]);
 
 				if (!caves.ContainsKey(c[1]))
 					caves.Add(c[1], new List<string>());
-				caves[c[1]].Add(c[0]);
+
+				if (c[0] != "start")
+					caves[c[1]].Add(c[0]);
 			}
 
 			// part1
-			var paths = new List<string>();
-			VisitCave_AllSmallOnce(caves, "start", string.Empty, paths);
-			long result1 = paths.Count();
+			long? answer1 = VisitCave_AllSmallOnce(caves, "start", string.Empty);
 
 			// part2
-			paths = new List<string>();
-			VisitCave_OneSmallTwice(caves, "start", string.Empty, paths);
-			long result2 = paths.Count();
+			// TODO 2021/11 optimize [<250ms]
+			long? answer2 = VisitCave_OneSmallTwice(caves, "start", string.Empty);
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 
-		internal void VisitCave_AllSmallOnce(Dictionary<string, List<string>> caves, string toVisit, string path, List<string> paths)
+		internal int VisitCave_AllSmallOnce(Dictionary<string, List<string>> caves, string toVisit, string path)
 		{
-			var visited = path.Split(',', StringSplitOptions.RemoveEmptyEntries);
+			var result = 0;
+
 			foreach (var cave in caves[toVisit])
 			{
-				if (cave == "start")
-					continue;
-
 				if (cave == "end")
 				{
-					paths.Add(path + ",end");
+					//DebugLine("start" + path + ",end");
+					result++;
 					continue;
 				}
 
-				// small cave
+				var visited = path.Split(',');
 				if (!cave.Any(c => char.IsUpper(c)) && visited.Contains(cave))
 					continue;
 
-				// big cave
-				VisitCave_AllSmallOnce(caves, cave, path + $",{cave}", paths);
-			}	
+				result += VisitCave_AllSmallOnce(caves, cave, path + "," + cave);
+			}
+
+			return result;
 		}
 
-		internal void VisitCave_OneSmallTwice(Dictionary<string, List<string>> caves, string toVisit, string path, List<string> paths)
+		internal int VisitCave_OneSmallTwice(Dictionary<string, List<string>> caves, string toVisit, string path)
 		{
-			var visited = path.Split(',', StringSplitOptions.RemoveEmptyEntries);
+			var result = 0;
+
 			foreach (var cave in caves[toVisit])
 			{
-				if (cave == "start")
-					continue;
-
 				if (cave == "end")
 				{
-					paths.Add(path);
-					DebugLine("start" + path + ",end");
+					//DebugLine("start" + path + ",end");
+					result++;
 					continue;
 				}
 
-				// small cave
 				if (!cave.Any(c => char.IsUpper(c)))
 				{
+					var visited = path.Split(',');
 					if (visited.Count(c => c == cave) == 2)
 						continue;
 
-					if (visited.Contains(cave) && visited
-						.GroupBy(c => c)
-						.Where(cave => !cave.Key.Any(c => char.IsUpper(c)))
-						.Any(g => g.Count() == 2))
+					if (visited.Contains(cave) && 
+						visited
+							.Where(cave => !cave.Any(c => char.IsUpper(c)))
+							.GroupBy(c => c)
+							.Any(g => g.Count() == 2))
 						continue;
 				}
 
-				// big cave
-				VisitCave_OneSmallTwice(caves, cave, path + "," + cave, paths);
+				result += VisitCave_OneSmallTwice(caves, cave, path + "," + cave);
 			}
+
+			return result;
 		}
 	}
 }

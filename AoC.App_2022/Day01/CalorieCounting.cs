@@ -7,20 +7,20 @@ namespace Ujeby.AoC.App.Day01
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
-			long? result1 = string.Join('|', input)
+			long? answer1 = string.Join('|', input)
 				.Split("||")
 				.Select(e => e.Split('|').Sum(c => int.Parse(c)))
 				.Max();
 
 			// part2
-			long result2 = string.Join('|', input)
+			long answer2 = string.Join('|', input)
 				.Split("||")
 				.Select(e => e.Split('|').Sum(c => int.Parse(c)))
 				.OrderByDescending(c => c)
 				.Take(3)
 				.Sum();
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }

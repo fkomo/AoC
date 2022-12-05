@@ -21,7 +21,7 @@ namespace Ujeby.AoC.App.Day02
 				}
 			}
 
-			long result1 = position * depth;
+			long answer1 = position * depth;
 
 			// part2
 			depth = 0;
@@ -44,9 +44,9 @@ namespace Ujeby.AoC.App.Day02
 				}
 			}
 
-			long result2 = position * depth;
+			long answer2 = position * depth;
 
-			return (result1.ToString(), result2.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 	}
 }
