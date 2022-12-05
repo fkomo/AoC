@@ -105,7 +105,7 @@ namespace Ujeby.AoC.App.Day05
 				for (var x = 0; x < size.X; x++)
 					mapLine += map[y * size.X + x] == 0 ? "." : map[y * size.X + x];
 
-				DebugLine(mapLine);
+				Debug.Line(mapLine);
 			}
 		}
 	}

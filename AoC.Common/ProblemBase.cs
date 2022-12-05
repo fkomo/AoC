@@ -9,10 +9,10 @@ namespace Ujeby.AoC.Common
 		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
 		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.".Length);
 
-		public bool Solve(
+		public int Solve(
 			string inputUrl = null, string session = null)
 		{
-			var result = false;
+			var result = 0;
 
 			var sw = new Stopwatch();
 			try
@@ -23,10 +23,15 @@ namespace Ujeby.AoC.Common
 
 				var title = $"-=[ {Title} ]=";
 				var elapsedMsg = $"=[ {elapsed}ms ]=-";
-				var msg = title + string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length)) + elapsedMsg;
+				var msg = title + string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length)) + $"=[ ";
+				Debug.Text(msg, indent: 2);
+				Debug.Text($"{elapsed}ms",
+					textColor: (elapsed > 250 ? ConsoleColor.Red : ConsoleColor.White));
+				Debug.Text(" ]=-");
+				msg += $"{elapsed}ms ]=-";
 
 				var msg2 = $"=[ { answer.Item1?.ToString() ?? "?" }, {answer.Item2?.ToString() ?? "?"} ]=-";
-				var msg3 = msg + string.Join("", Enumerable.Repeat("-", 90 - msg.Length - msg2.Length)) + msg2;
+				var msg3 = string.Join("", Enumerable.Repeat("-", 90 - msg.Length - msg2.Length)) + msg2;
 
 #if _DEBUG_SAMPLE
 				var a1 = "N";
@@ -37,19 +42,23 @@ namespace Ujeby.AoC.Common
 				var a2 = Answer[1] == null ? "?" : 
 					(Answer[1] != null && Answer[1] == answer.Item2 ? "*" : "");
 #endif
-				DebugLine(msg3 + $"=[ {a1,1}{a2,1} ]=-");
 
-				result = true;
+				Debug.Text(msg3 + $"=[ ");
+				Debug.Text($"{a1,1}{a2,1}", 
+					textColor: ConsoleColor.Yellow);
+				Debug.Text(" ]=-");
 
-				if (Answer[0] == null || Answer[0] != answer.Item1)
-					result = false;
+				Debug.Line();
 
-				if (Answer[1] == null || Answer[1] != answer.Item2)
-					result = false;
+				if (Answer[0] != null && Answer[0] == answer.Item1)
+					result++;
+
+				if (Answer[1] != null && Answer[1] == answer.Item2)
+					result++;
 			}
 			catch (Exception ex)
 			{
-				DebugLine(ex.ToString());
+				Debug.Line(ex.ToString());
 			}
 			finally
 			{
@@ -60,11 +69,6 @@ namespace Ujeby.AoC.Common
 		}
 
 		protected abstract (string, string) SolveProblem(string[] input);
-
-		protected static void DebugLine(string message = null)
-		{
-			Debug.Line("  " + message);
-		}
 
 		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
 
@@ -84,7 +88,7 @@ namespace Ujeby.AoC.Common
 				var httpClient = new HttpClient();
 				httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
 				var input = httpClient.GetStringAsync(inputUrl).Result;
-				DebugLine($"Input downloaded from {inputUrl}");
+				Debug.Line($"Input downloaded from {inputUrl}");
 
 				if (!Directory.Exists(_workingDir))
 					Directory.CreateDirectory(_workingDir);

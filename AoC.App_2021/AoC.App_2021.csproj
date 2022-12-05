@@ -25,6 +25,8 @@
 
 	<ItemGroup>
 	  <None Remove=".session" />
+	  <None Remove="Day13\input.sample.txt" />
+	  <None Remove="Day13\input.txt" />
 	  <None Remove="Day12\input.sample.txt" />
 	  <None Remove="Day12\input.txt" />
 	  <None Remove="Day11\input.sample.txt" />
@@ -53,6 +55,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Day13\input.sample.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Day13\input.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="Day12\input.sample.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>

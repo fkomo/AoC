@@ -14,12 +14,11 @@
 
 		public void Run(ISolvable[] problemsToSolve)
 		{
-			var header = $"  ~#[ {_aocUrl} ]#";
-			header += string.Join("", Enumerable.Repeat("~", 101 - header.Length));
-			Debug.Line(header);
+			Debug.ChristmasHeader(_aocUrl, 
+				length: 101);
 			Debug.Line();
 
-			var solved = 0;
+			var stars = 0;
 			try
 			{
 				if (_session == null)
@@ -30,10 +29,9 @@
 				}
 
 				foreach (var problem in problemsToSolve)
-					solved += problem.Solve(
+					stars += problem.Solve(
 						inputUrl: $"{_aocUrl}/day/{problem.Day}/input",
-						session: _session) 
-						? 1 : 0;
+						session: _session);
 
 				Debug.Line();
 			}
@@ -43,10 +41,10 @@
 			}
 			finally
 			{
-				var result = $"  ~#[ Solved { solved }/{ problemsToSolve.Length } problems ]#";
-				result += string.Join("", Enumerable.Repeat("~", 101 - result.Length));
-
-				Debug.Line(result);
+				Debug.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
+					textColor: ConsoleColor.Yellow,
+					length: 101);
+				Debug.Line();
 			}
 		}
 	}
