@@ -17,8 +17,7 @@ namespace Ujeby.AoC.Common
 			(0, ConsoleColor.White),
 		};
 
-		public int Solve(
-			string inputUrl = null, string session = null)
+		public int Solve()
 		{
 			var result = 0;
 
@@ -26,7 +25,7 @@ namespace Ujeby.AoC.Common
 			try
 			{
 				sw.Start();
-				var answer = SolveProblem(ReadInput(inputUrl, session));
+				var answer = SolveProblem(ReadInput());
 				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
 
 				var title = $"-={{ {Title} }}=-";
@@ -102,24 +101,8 @@ namespace Ujeby.AoC.Common
 		protected string _inputFilename => Path.Combine(_workingDir, "input.txt");
 #endif
 
-		private string[] ReadInput(string inputUrl, string session)
+		private string[] ReadInput()
 		{
-#if _DEBUG_SAMPLE
-#else
-			// download input
-			if (!File.Exists(_inputFilename) && session != null)
-			{
-				var httpClient = new HttpClient();
-				httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
-				var input = httpClient.GetStringAsync(inputUrl).Result;
-				Debug.Line($"Input downloaded from {inputUrl}");
-
-				if (!Directory.Exists(_workingDir))
-					Directory.CreateDirectory(_workingDir);
-
-				File.WriteAllText(_inputFilename, input);
-			}
-#endif
 			return File.ReadLines(_inputFilename).ToArray();
 		}
 	}

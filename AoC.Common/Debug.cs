@@ -40,7 +40,7 @@
 			Console.ForegroundColor = ConsoleColor.DarkGreen,
 		};
 
-		internal static void ChristmasHeader(string text, 
+		public static void ChristmasHeader(string text, 
 			ConsoleColor textColor = ConsoleColor.White, int indent = 2, int length = 80)
 		{
 			Indent(indent);
