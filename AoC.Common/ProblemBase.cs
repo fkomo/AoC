@@ -59,19 +59,17 @@ namespace Ujeby.AoC.Common
 				Debug.Text(answers);
 				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
+				var stars = "";
 #if _DEBUG_SAMPLE
-				var a1 = "N";
-				var a2 = "A";
+				stars = "NA";
 #else
-				var a1 = Answer[0] == null ? "" :
-					(Answer[0] != null && Answer[0] == answer.Item1 ? "*" : "");
-				var a2 = Answer[1] == null ? "" :
-					(Answer[1] != null && Answer[1] == answer.Item2 ? "*" : "");
+				stars += (Answer[0] != null && Answer[0] == answer.Item1) ? "*" : " ";
+				stars += (Answer[1] != null && Answer[1] == answer.Item2) ? "*" : " ";
 #endif
 				Debug.Text("-", textColor: ConsoleColor.DarkGray);
 				Debug.Text($"-={{ ", textColor: ConsoleColor.Gray);
-				Debug.Text($"{a1,1}{a2,1}",
-					textColor: ConsoleColor.Yellow);
+				Debug.Text($"{stars}",
+					textColor: stars == "NA" ? ConsoleColor.DarkGray : ConsoleColor.Yellow);
 				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
 				Debug.Line();
