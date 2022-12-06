@@ -7,18 +7,26 @@ namespace Ujeby.AoC.App.Day06
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
-			long? answer1 = 4;
-			for (; answer1 < input[0].Length; answer1++)
-				if (input[0].Skip((int)answer1 - 4).Take(4).Distinct().Count() == 4)
-					break;
+			long? answer1 = FindDistinctSequence(input[0], 4);
 
 			// part2
-			long? answer2 = 14;
-			for (; answer2 < input[0].Length; answer2++)
-				if (input[0].Skip((int)answer2 - 14).Take(14).Distinct().Count() == 14)
-					break;
+			long? answer2 = FindDistinctSequence(input[0], 14);
 
 			return (answer1?.ToString(), answer2?.ToString());
+		}
+
+		private static long FindDistinctSequence(string data, int length)
+		{
+			long result = 1;
+			for (long sequenceStart = 0; result - sequenceStart < length; result++)
+				for (long c = result - 1; c >= sequenceStart; c--)
+					if (data[(int)c] == data[(int)result])
+					{
+						sequenceStart = c + 1;
+						break;
+					}
+
+			return result;
 		}
 	}
 }

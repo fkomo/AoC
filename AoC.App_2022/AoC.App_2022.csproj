@@ -8,6 +8,11 @@
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<Configurations>Debug;Release;Debug.Sample</Configurations>
+		<Authors>fkomo</Authors>
+		<Company>Ujeby</Company>
+		<PackageProjectUrl>https://github.com/fkomo/AoC</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/fkomo/AoC.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
