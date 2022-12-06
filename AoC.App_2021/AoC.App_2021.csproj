@@ -11,136 +11,181 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE;_DEBUG_SAMPLE</DefineConstants>
-	  <Optimize>False</Optimize>
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG_SAMPLE</DefineConstants>
+		<Optimize>False</Optimize>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove=".session" />
-	  <None Remove="Day13\input.sample.txt" />
-	  <None Remove="Day12\input.sample.txt" />
-	  <None Remove="Day12\input.txt" />
-	  <None Remove="Day11\input.sample.txt" />
-	  <None Remove="Day11\input.txt" />
-	  <None Remove="Day10\input.sample.txt" />
-	  <None Remove="Day10\input.txt" />
-	  <None Remove="Day09\input.sample.txt" />
-	  <None Remove="Day09\input.txt" />
-	  <None Remove="Day08\input.sample.txt" />
-	  <None Remove="Day08\input.txt" />
-	  <None Remove="Day07\input.sample.txt" />
-	  <None Remove="Day07\input.txt" />
-	  <None Remove="Day01\input.sample.txt" />
-	  <None Remove="Day02\input.sample.txt" />
-	  <None Remove="Day06\input.sample.txt" />
-	  <None Remove="Day06\input.txt" />
-	  <None Remove="Day05\input.sample.txt" />
-	  <None Remove="Day05\input.txt" />
-	  <None Remove="Day04\input.sample.txt" />
-	  <None Remove="Day04\input.txt" />
-	  <None Remove="Day03\input.sample.txt" />
-	  <None Remove="Day03\input.txt" />
-	  <None Remove="Day01\input.txt" />
-	  <None Remove="Day02\input.txt" />
-	  <None Remove="ffmpeg.config.json" />
+		<None Remove=".session" />
+		<None Remove="Day13\input.sample.txt" />
+		<None Remove="Day12\input.sample.txt" />
+		<None Remove="Day12\input.txt" />
+		<None Remove="Day11\input.sample.txt" />
+		<None Remove="Day11\input.txt" />
+		<None Remove="Day10\input.sample.txt" />
+		<None Remove="Day10\input.txt" />
+		<None Remove="Day09\input.sample.txt" />
+		<None Remove="Day09\input.txt" />
+		<None Remove="Day08\input.sample.txt" />
+		<None Remove="Day08\input.txt" />
+		<None Remove="Day07\input.sample.txt" />
+		<None Remove="Day07\input.txt" />
+		<None Remove="Day01\input.sample.txt" />
+		<None Remove="Day02\input.sample.txt" />
+		<None Remove="Day06\input.sample.txt" />
+		<None Remove="Day06\input.txt" />
+		<None Remove="Day05\input.sample.txt" />
+		<None Remove="Day05\input.txt" />
+		<None Remove="Day04\input.sample.txt" />
+		<None Remove="Day04\input.txt" />
+		<None Remove="Day03\input.sample.txt" />
+		<None Remove="Day03\input.txt" />
+		<None Remove="Day01\input.txt" />
+		<None Remove="Day02\input.txt" />
+		<None Remove="Day13\input.txt" />
+		<None Remove="Day14\input.txt" />
+		<None Remove="Day15\input.txt" />
+		<None Remove="Day16\input.txt" />
+		<None Remove="Day17\input.txt" />
+		<None Remove="ffmpeg.config.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="Day13\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day12\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day12\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day11\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day11\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day10\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day10\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day09\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day09\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day08\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day08\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day07\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day07\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day01\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day02\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day06\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day06\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day05\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day05\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day04\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day04\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day03\input.sample.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day03\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day01\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Day02\input.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="ffmpeg.config.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+		<Content Include="Day13\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day12\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day12\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day11\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day11\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day10\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day10\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day09\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day09\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day08\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day08\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day07\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day07\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day01\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day02\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day06\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day06\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day05\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day05\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day04\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day04\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day03\input.sample.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day03\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day01\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day02\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day13\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day14\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day15\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day16\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day17\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day18\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day19\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day20\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day21\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day22\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day23\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day24\input.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="ffmpeg.config.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
+		<ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="FFMpegCore" Version="4.8.0" />
-	  <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+		<PackageReference Include="FFMpegCore" Version="4.8.0" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Include="Day16\input.txt" />
 	</ItemGroup>
 
 </Project>

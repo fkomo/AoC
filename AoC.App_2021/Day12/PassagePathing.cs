@@ -46,7 +46,7 @@ namespace Ujeby.AoC.App.Day12
 			long? answer1 = VisitCave_AllSmallOnce(caves, 0, Array.Empty<int>());
 
 			// part2
-			// TODO 2021/11 optimize [<250ms]
+			// TODO 2021/12 optimize [<250ms]
 			long? answer2 = VisitCave_OneSmallTwice(caves, 0, Array.Empty<int>());
 
 			return (answer1?.ToString(), answer2?.ToString());
