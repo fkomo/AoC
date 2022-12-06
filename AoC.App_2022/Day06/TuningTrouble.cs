@@ -15,12 +15,12 @@ namespace Ujeby.AoC.App.Day06
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		private static long FindDistinctSequence(string data, int length)
+		private static int FindDistinctSequence(string data, int length)
 		{
-			long result = 1;
-			for (long sequenceStart = 0; result - sequenceStart < length; result++)
-				for (long c = result - 1; c >= sequenceStart; c--)
-					if (data[(int)c] == data[(int)result])
+			var result = 1;
+			for (var sequenceStart = 0; result - sequenceStart < length; result++)
+				for (var c = result - 1; c >= sequenceStart; c--)
+					if (data[c] == data[result])
 					{
 						sequenceStart = c + 1;
 						break;
