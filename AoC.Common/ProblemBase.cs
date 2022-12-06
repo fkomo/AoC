@@ -29,7 +29,7 @@ namespace Ujeby.AoC.Common
 				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
 
 				var title = $"-={{ {Title} }}=-";
-				Debug.Text($"-={{ ", indent: 2, textColor: ConsoleColor.Gray);
+				Debug.Text($"-={{ ", indent: 4, textColor: ConsoleColor.Gray);
 				Debug.Text(Title, textColor: ConsoleColor.White);
 				Debug.Text($" }}=-", textColor: ConsoleColor.Gray);
 
