@@ -66,7 +66,7 @@ namespace Ujeby.AoC.App
 				var input = await httpClient.GetStringAsync(inputUrl);
 				Debug.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
 
-				File.WriteAllText(path, input);
+				File.WriteAllText(path, input.Substring(0, input.Length - 1));
 			}
 
 			Debug.Line(path);
