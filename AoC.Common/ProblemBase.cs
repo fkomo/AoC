@@ -57,12 +57,14 @@ namespace Ujeby.AoC.Common
 				Debug.Text($"-={{ ", textColor: ConsoleColor.Gray);
 
 				Debug.Text(answer.Item1?.ToString() ?? "?", 
-					textColor: Answer[0] != null && Answer[0] != answer.Item1 ? ConsoleColor.Red : 
-					(answer.Item1 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
+					textColor: 
+						Answer[0] != null && Answer[0] != answer.Item1 ? ConsoleColor.Red : 
+						(answer.Item1 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
 				Debug.Text(", ", textColor: ConsoleColor.White);
 				Debug.Text(answer.Item2?.ToString() ?? "?",
-					textColor: Answer[1] != null && Answer[1] != answer.Item2 ? ConsoleColor.Red :
-					(answer.Item2 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
+					textColor: 
+						Answer[1] != null && Answer[1] != answer.Item2 ? ConsoleColor.Red :
+						(answer.Item2 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
 
 				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
