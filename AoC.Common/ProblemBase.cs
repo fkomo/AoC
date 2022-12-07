@@ -49,14 +49,21 @@ namespace Ujeby.AoC.Common
 				Debug.Text($"{elapsed}ms", textColor: elapsedColor);
 				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
-				// TODO make wrong answers red
 				var answers = $"{answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"}";
 				var answersMsg = $"-={{ {answers} }}=-";
 				padding = string.Join("", Enumerable.Repeat("-", 38 - answersMsg.Length));
 				Debug.Text(padding, textColor: ConsoleColor.DarkGray);
 
 				Debug.Text($"-={{ ", textColor: ConsoleColor.Gray);
-				Debug.Text(answers);
+
+				Debug.Text(answer.Item1?.ToString() ?? "?", 
+					textColor: Answer[0] != null && Answer[0] != answer.Item1 ? ConsoleColor.Red : 
+					(answer.Item1 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
+				Debug.Text(", ", textColor: ConsoleColor.White);
+				Debug.Text(answer.Item2?.ToString() ?? "?",
+					textColor: Answer[1] != null && Answer[1] != answer.Item2 ? ConsoleColor.Red :
+					(answer.Item2 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
+
 				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
 				var stars = "";

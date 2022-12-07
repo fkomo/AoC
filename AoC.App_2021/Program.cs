@@ -16,7 +16,7 @@ namespace Ujeby.AoC.App
 					new Day05.HydrothermalVenture()     { Answer = new string[] { "7085", "20271" } },
 					new Day06.Lanternfish()             { Answer = new string[] { "352151", "1601616884019" } },
 					new Day07.TheTreacheryOfWhales()    { Answer = new string[] { "355150", "98368490" } },
-					new Day08.SevenSegmentSearch()      { Answer = new string[] { "247", "null" } },
+					new Day08.SevenSegmentSearch()      { Answer = new string[] { "247", null } },
 					new Day09.SmokeBasin()              { Answer = new string[] { "444", "1168440" } },
 					new Day10.SyntaxScoring()           { Answer = new string[] { "369105", "3999363569" } },
 					new Day11.DumboOctopus()            { Answer = new string[] { "1741", "440" } },
