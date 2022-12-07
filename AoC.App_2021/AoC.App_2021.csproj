@@ -53,6 +53,7 @@
 		<None Remove="Day13\input.txt" />
 		<None Remove="Day14\input.sample.txt" />
 		<None Remove="Day14\input.txt" />
+		<None Remove="Day15\input.sample.txt" />
 		<None Remove="Day15\input.txt" />
 		<None Remove="Day16\input.txt" />
 		<None Remove="Day17\input.txt" />
@@ -143,6 +144,9 @@
 		</Content>
 		<Content Include="Day14\input.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Day15\input.sample.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Day15\input.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
