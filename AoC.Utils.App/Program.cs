@@ -77,16 +77,16 @@ namespace Ujeby.AoC.App
 			{
 				var inputUrl = $"{_aocUrl}/{year}/day/{day}/input";
 
-				Debug.Text($"{inputUrl}", indent: 2, textColor: ConsoleColor.Yellow);
+				Output.Text($"{inputUrl}", indent: 4, textColor: ConsoleColor.Yellow);
 				var input = await httpClient.GetStringAsync(inputUrl);
 				downloaded = true;
 
-				Debug.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
+				Output.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
 
 				File.WriteAllText(path, input.Substring(0, input.Length - 1));
 			}
 
-			Debug.Line(path);
+			Output.Line(path, indent: 4);
 			return downloaded;
 		}
 	}
