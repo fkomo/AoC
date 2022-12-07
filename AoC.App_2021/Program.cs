@@ -22,7 +22,7 @@ namespace Ujeby.AoC.App
 					new Day11.DumboOctopus()            { Answer = new string[] { "1741", "440" } },
 					new Day12.PassagePathing()          { Answer = new string[] { "4792", "133360" }},
 					new Day13.TransparentOrigami()      { Answer = new string[] { "751", "PGHRKLKL" }},
-					new Day14.ExtendedPolymerization()	{ Answer = new string[] { "2657", null }},
+					new Day14.ExtendedPolymerization()	{ Answer = new string[] { "2657", "2911561572630" }},
 
 					// TODO rest of 2021
 				});

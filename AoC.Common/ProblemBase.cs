@@ -35,7 +35,7 @@ namespace Ujeby.AoC.Common
 
 				var elapsedMsg = $"-={{ {elapsed}ms }}=-";
 
-				var padding = string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length));
+				var padding = string.Join("", Enumerable.Repeat("-", 60 - title.Length - elapsedMsg.Length));
 				Output.Text(padding, textColor: ConsoleColor.DarkGray);
 
 				Output.Text($"-={{ ", textColor: ConsoleColor.Gray);

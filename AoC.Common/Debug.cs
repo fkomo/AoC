@@ -7,7 +7,7 @@
 		public static void Line(
 			string lineText = null, ConsoleColor textColor = ConsoleColor.White, int indent = 2)
 		{
-#if DEBUG
+#if _DEBUG
 			if (lineText != null)
 				Indent(indent);
 
@@ -20,7 +20,7 @@
 		public static void Text(string text,
 			int indent = 0, ConsoleColor textColor = ConsoleColor.White)
 		{
-#if DEBUG
+#if _DEBUG
 			Indent(indent);
 
 			Console.ForegroundColor = textColor;
