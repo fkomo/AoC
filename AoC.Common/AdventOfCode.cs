@@ -11,18 +11,14 @@
 
 		public void Run(ISolvable[] problemsToSolve)
 		{
-			Debug.Line();
 			Debug.ChristmasHeader(_title, 
 				length: 105);
-			Debug.Line();
 
 			var stars = 0;
 			try
 			{
 				foreach (var problem in problemsToSolve)
 					stars += problem.Solve();
-
-				Debug.Line();
 			}
 			catch (Exception ex)
 			{
@@ -33,7 +29,6 @@
 				Debug.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
 					textColor: ConsoleColor.Yellow,
 					length: 105);
-				Debug.Line();
 			}
 		}
 	}

@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Day13
 {

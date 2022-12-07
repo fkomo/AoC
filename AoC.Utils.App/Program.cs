@@ -17,7 +17,6 @@ namespace Ujeby.AoC.App
 			{
 				Debug.ChristmasHeader("AoC input downloader",
 					length: 100);
-				Debug.Line();
 
 				var session = ""; // aoc session cookie value
 				if (string.IsNullOrEmpty(session))
@@ -33,13 +32,27 @@ namespace Ujeby.AoC.App
 				}
 
 				httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
-			
+
+				var total = 0;
+				var downloaded = 0;
 				for (var year = 2015; year <= DateTime.Now.Year; year++)
+				{
 					for (var day = 1; day <= 24; day++)
-						DownloadInput(year, day,
+					{
+						var result = DownloadInput(year, day,
 							yearPrefix: yearDirPrefix,
-							rootDir: outputDir)
-							.Wait();
+							rootDir: outputDir);
+						result.Wait();
+
+						if (result.Result)
+							downloaded++;
+
+						total++;
+					}
+				}
+
+				Debug.ChristmasHeader($"{ downloaded }/{ total } downloaded",
+					length: 100);
 			}
 			catch (Exception ex)
 			{
@@ -47,11 +60,13 @@ namespace Ujeby.AoC.App
 			}
 		}
 
-		async static Task DownloadInput(int year, int day,
+		async static Task<bool> DownloadInput(int year, int day,
 			string rootDir = null, string yearPrefix = null)
 		{
 			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
-				return;
+				return false;
+
+			var downloaded = false;
 
 			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
 			if (!Directory.Exists(path))
@@ -64,12 +79,15 @@ namespace Ujeby.AoC.App
 
 				Debug.Text($"{inputUrl}", indent: 2, textColor: ConsoleColor.Yellow);
 				var input = await httpClient.GetStringAsync(inputUrl);
+				downloaded = true;
+
 				Debug.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
 
 				File.WriteAllText(path, input.Substring(0, input.Length - 1));
 			}
 
 			Debug.Line(path);
+			return downloaded;
 		}
 	}
 }
