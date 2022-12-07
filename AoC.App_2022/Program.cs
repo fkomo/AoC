@@ -14,7 +14,8 @@ namespace Ujeby.AoC.App
 					new Day03.RucksackReorganization()  { Answer = new string[] { "8394", "2413" }},
 					new Day04.CampCleanup()             { Answer = new string[] { "651", "956" }},
 					new Day05.SupplyStacks()			{ Answer = new string[] { "TLFGBZHCN", "QRQFHFWCL" }},
-					new Day06.TuningTrouble()			{ Answer = new string[] { "1723", "3708"}},
+					new Day06.TuningTrouble()			{ Answer = new string[] { "1723", "3708" }},
+					new Day07.NoSpaceLeftOnDevice()		{ Answer = new string[] { "1086293", "366028" }},
 
 					// TODO rest of 2022
 				});

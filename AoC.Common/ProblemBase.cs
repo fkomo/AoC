@@ -49,6 +49,7 @@ namespace Ujeby.AoC.Common
 				Debug.Text($"{elapsed}ms", textColor: elapsedColor);
 				Debug.Text(" }=-", textColor: ConsoleColor.Gray);
 
+				// TODO make wrong answers red
 				var answers = $"{answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"}";
 				var answersMsg = $"-={{ {answers} }}=-";
 				padding = string.Join("", Enumerable.Repeat("-", 38 - answersMsg.Length));
