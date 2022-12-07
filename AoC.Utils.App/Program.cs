@@ -15,7 +15,7 @@ namespace Ujeby.AoC.App
 
 			try
 			{
-				Debug.ChristmasHeader("AoC input downloader",
+				Output.ChristmasHeader("AoC input downloader",
 					length: 100);
 
 				var session = ""; // aoc session cookie value
@@ -27,7 +27,7 @@ namespace Ujeby.AoC.App
 
 				if (string.IsNullOrEmpty(session))
 				{
-					Debug.Line("Missing AoC session", textColor: ConsoleColor.Red);
+					Console.WriteLine("Missing AoC session");
 					return;
 				}
 
@@ -51,12 +51,12 @@ namespace Ujeby.AoC.App
 					}
 				}
 
-				Debug.ChristmasHeader($"{ downloaded }/{ total } downloaded",
+				Output.ChristmasHeader($"{ downloaded }/{ total } downloaded",
 					length: 100);
 			}
 			catch (Exception ex)
 			{
-				Debug.Line(ex.ToString());
+				Console.WriteLine(ex.ToString());
 			}
 		}
 

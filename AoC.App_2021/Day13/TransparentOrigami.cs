@@ -53,6 +53,9 @@ namespace Ujeby.AoC.App.Day13
 				}
 			}
 			size = new[] { points.Max(p => p[0]) + 1, points.Max(p => p[1]) + 1 };
+
+			DrawPaper(size[0], size[1], paper);
+
 			var answer2 = GetCodeFromPaper(size, paper);
 
 			return (answer1?.ToString(), answer2?.ToString());
@@ -79,9 +82,6 @@ namespace Ujeby.AoC.App.Day13
 						break;
 					}
 				}
-
-			if (result.Length != 8)
-				DrawPaper(size[0], size[1], paper);
 
 			return result;
 		}
