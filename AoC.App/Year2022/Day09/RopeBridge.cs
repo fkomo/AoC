@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.Day09
+namespace Ujeby.AoC.App.Year2022.Day09
 {
 	internal class RopeBridge : ProblemBase
 	{
@@ -44,8 +44,7 @@ namespace Ujeby.AoC.App.Day09
 						visited.Add(t.ToArray());
 				}
 			}
-			//long? answer1 = visited.Distinct(new Int2EqComparer()).Count();
-			long? answer1 = visited.Count();
+			long? answer1 = visited.Count;
 
 			// part2
 			long? answer2 = null;

@@ -7,7 +7,7 @@ namespace Ujeby.AoC.Common
 		public string[] Answer { get; set; }
 
 		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
-		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.".Length);
+		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.YearYYYY.DayDD.".Length);
 
 		private readonly (int, ConsoleColor)[] _elapsedColors = new (int, ConsoleColor)[]
 		{
@@ -106,9 +106,9 @@ namespace Ujeby.AoC.Common
 		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
 
 #if _DEBUG_SAMPLE
-		protected string _inputFilename => Path.Combine(_workingDir, "input.sample.txt");
+		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day.ToString().PadLeft(2, '0')}", "input.sample.txt");
 #else
-		protected string _inputFilename => Path.Combine(_workingDir, "input.txt");
+		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day.ToString().PadLeft(2, '0')}", "input.txt");
 #endif
 
 		private string[] ReadInput()
