@@ -47,7 +47,7 @@ namespace Ujeby.AoC.App
 					new Year2022.Day06.TuningTrouble()				{ Answer = new string[] { "1723", "3708" }},
 					new Year2022.Day07.NoSpaceLeftOnDevice()		{ Answer = new string[] { "1086293", "366028" }},
 					new Year2022.Day08.TreetopTreeHouse()			{ Answer = new string[] { "1782", "474606" }},
-					new Year2022.Day09.RopeBridge()					{ Answer = new string[] { null, null }},
+					new Year2022.Day09.RopeBridge()					{ Answer = new string[] { "5619", "2376" }},
 
 					// TODO 2022
 				});

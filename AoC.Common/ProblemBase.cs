@@ -29,16 +29,16 @@ namespace Ujeby.AoC.Common
 				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
 
 				var title = $"-={{ {Title} }}=-";
-				Output.Text($"-={{ ", indent: 4, textColor: ConsoleColor.Gray);
-				Output.Text(Title, textColor: ConsoleColor.White);
-				Output.Text($" }}=-", textColor: ConsoleColor.Gray);
+				Log.Text($"-={{ ", indent: 4, textColor: ConsoleColor.Gray);
+				Log.Text(Title, textColor: ConsoleColor.White);
+				Log.Text($" }}=-", textColor: ConsoleColor.Gray);
 
 				var elapsedMsg = $"-={{ {elapsed}ms }}=-";
 
 				var padding = string.Join("", Enumerable.Repeat("-", 60 - title.Length - elapsedMsg.Length));
-				Output.Text(padding, textColor: ConsoleColor.DarkGray);
+				Log.Text(padding, textColor: ConsoleColor.DarkGray);
 
-				Output.Text($"-={{ ", textColor: ConsoleColor.Gray);
+				Log.Text($"-={{ ", textColor: ConsoleColor.Gray);
 				var elapsedColor = ConsoleColor.White;
 				foreach (var ec in _elapsedColors)
 					if (elapsed >= ec.Item1)
@@ -46,27 +46,27 @@ namespace Ujeby.AoC.Common
 						elapsedColor = ec.Item2;
 						break;
 					}
-				Output.Text($"{elapsed}ms", textColor: elapsedColor);
-				Output.Text(" }=-", textColor: ConsoleColor.Gray);
+				Log.Text($"{elapsed}ms", textColor: elapsedColor);
+				Log.Text(" }=-", textColor: ConsoleColor.Gray);
 
 				var answers = $"{answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"}";
 				var answersMsg = $"-={{ {answers} }}=-";
 				padding = string.Join("", Enumerable.Repeat("-", 38 - answersMsg.Length));
-				Output.Text(padding, textColor: ConsoleColor.DarkGray);
+				Log.Text(padding, textColor: ConsoleColor.DarkGray);
 
-				Output.Text($"-={{ ", textColor: ConsoleColor.Gray);
+				Log.Text($"-={{ ", textColor: ConsoleColor.Gray);
 
-				Output.Text(answer.Item1?.ToString() ?? "?", 
+				Log.Text(answer.Item1?.ToString() ?? "?", 
 					textColor: 
 						Answer[0] != null && Answer[0] != answer.Item1 ? ConsoleColor.Red : 
 						(answer.Item1 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
-				Output.Text(", ", textColor: ConsoleColor.White);
-				Output.Text(answer.Item2?.ToString() ?? "?",
+				Log.Text(", ", textColor: ConsoleColor.White);
+				Log.Text(answer.Item2?.ToString() ?? "?",
 					textColor: 
 						Answer[1] != null && Answer[1] != answer.Item2 ? ConsoleColor.Red :
 						(answer.Item2 == null ? ConsoleColor.DarkGray : ConsoleColor.White));
 
-				Output.Text(" }=-", textColor: ConsoleColor.Gray);
+				Log.Text(" }=-", textColor: ConsoleColor.Gray);
 
 				var stars = "";
 #if _DEBUG_SAMPLE
@@ -75,13 +75,13 @@ namespace Ujeby.AoC.Common
 				stars += (Answer[0] != null && Answer[0] == answer.Item1) ? "*" : " ";
 				stars += (Answer[1] != null && Answer[1] == answer.Item2) ? "*" : " ";
 #endif
-				Output.Text("-", textColor: ConsoleColor.DarkGray);
-				Output.Text($"-={{ ", textColor: ConsoleColor.Gray);
-				Output.Text($"{stars}",
+				Log.Text("-", textColor: ConsoleColor.DarkGray);
+				Log.Text($"-={{ ", textColor: ConsoleColor.Gray);
+				Log.Text($"{stars}",
 					textColor: stars == "NA" ? ConsoleColor.DarkGray : ConsoleColor.Yellow);
-				Output.Text(" }=-", textColor: ConsoleColor.Gray);
+				Log.Text(" }=-", textColor: ConsoleColor.Gray);
 
-				Output.Line();
+				Log.Line();
 
 				if (Answer[0] != null && Answer[0] == answer.Item1)
 					result++;
@@ -91,7 +91,7 @@ namespace Ujeby.AoC.Common
 			}
 			catch (Exception ex)
 			{
-				Output.Line(ex.ToString());
+				Log.Line(ex.ToString());
 			}
 			finally
 			{
@@ -111,7 +111,7 @@ namespace Ujeby.AoC.Common
 		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.txt");
 #endif
 
-		private string[] ReadInput()
+		public string[] ReadInput()
 		{
 			return File.ReadLines(_inputFilename).ToArray();
 		}

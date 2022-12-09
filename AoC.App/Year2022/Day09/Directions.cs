@@ -1,9 +1,9 @@
 ﻿namespace Ujeby.AoC.App.Year2022.Day09
 {
-	internal static class Directions
+	public static class Directions
 	{
 		/// <summary>
-		/// x,y
+		/// 4 x,y directions (90deg)
 		/// </summary>
 		public static Dictionary<char, int[]> NSWE = new()
 		{
@@ -14,7 +14,7 @@
 		};
 
 		/// <summary>
-		/// x,y
+		/// 8 x,y directions (45deg)
 		/// </summary>
 		public static Dictionary<string, int[]> All = new()
 		{

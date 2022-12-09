@@ -2,54 +2,68 @@
 
 namespace Ujeby.AoC.App.Year2022.Day09
 {
-	internal class RopeBridge : ProblemBase
+	public class RopeBridge : ProblemBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			// part1
-			var h = new int[] { 0, 0 };
-			var t = new int[] { 0, 0 };
-			var dist = new int[] { 0, 0 };
+			long? answer1 = RopePhysics(input, 2);
 
-			var visited = new List<int[]>();
-			visited.Add(t.ToArray());
+			// part2
+			long? answer2 = RopePhysics(input, 10);
+
+			return (answer1?.ToString(), answer2?.ToString());
+		}
+
+		private long RopePhysics(string[] input, int ropeLength)
+		{
+			var rope = new (int x, int y)[ropeLength];
+			
+			HashSet<(int x, int y)> visited = new()
+			{
+				rope.Last()
+			};
 
 			foreach (var mov in input)
 			{
 				var dir = Directions.NSWE[mov.Replace('U', 'N').Replace('D', 'S').Replace('L', 'W').Replace('R', 'E')[0]];
-				var len = mov[2] - '0';
 
-				for (var i = 0; i < len; i++)
+				var steps = int.Parse(mov[2..]);
+				for (var step = 0; step < steps; step++)
 				{
-					h[0] += dir[0];
-					h[1] += dir[1];
-
-					dist[0] = h[0] - t[0];
-					dist[1] = h[1] - t[1];
-
-					if (Math.Abs(dist[0]) <= 1 && Math.Abs(dist[1]) <= 1)
-						continue;
-
-					if (dist[0] == 0)
-						t[1] += dir[1];
-					else if (dist[1] == 0)
-						t[0] += dir[0];
-					else
-					{
-						t[0] += dist[0] / Math.Abs(dist[0]);
-						t[1] += dist[1] / Math.Abs(dist[1]);
-					}
-
-					if (!visited.Any(v => v[0] == t[0] && v[1] == t[1]))
-						visited.Add(t.ToArray());
+					rope = SimulateRope(rope, dir[0], dir[1]);
+					visited.Add(rope.Last());
 				}
 			}
-			long? answer1 = visited.Count;
 
-			// part2
-			long? answer2 = null;
+			return visited.Count;
+		}
 
-			return (answer1?.ToString(), answer2?.ToString());
+		public static (int x, int y)[] SimulateRope((int x, int y)[] rope, int dx, int dy)
+		{
+			rope[0].x += dx;
+			rope[0].y += dy;
+
+			for (var p = 1; p < rope.Length; p++)
+			{
+				dx = rope[p - 1].x - rope[p].x;
+				dy = rope[p - 1].y - rope[p].y;
+
+				if (Math.Abs(dx) <= 1 && Math.Abs(dy) <= 1)
+					continue;
+
+				if (dx == 0)
+					rope[p].y += dy / Math.Abs(dy);
+				else if (dy == 0)
+					rope[p].x += dx / Math.Abs(dx);
+				else
+				{
+					rope[p].x += dx / Math.Abs(dx);
+					rope[p].y += dy / Math.Abs(dy);
+				}
+			}
+
+			return rope;
 		}
 	}
 }

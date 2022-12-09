@@ -15,7 +15,7 @@ namespace Ujeby.AoC.App
 
 			try
 			{
-				Output.ChristmasHeader("AoC input downloader",
+				Log.ChristmasHeader("AoC input downloader",
 					length: 100);
 
 				var session = ""; // aoc session cookie value
@@ -51,7 +51,7 @@ namespace Ujeby.AoC.App
 					}
 				}
 
-				Output.ChristmasHeader($"{ downloaded }/{ total } downloaded",
+				Log.ChristmasHeader($"{ downloaded }/{ total } downloaded",
 					length: 100);
 			}
 			catch (Exception ex)
@@ -77,16 +77,16 @@ namespace Ujeby.AoC.App
 			{
 				var inputUrl = $"{_aocUrl}/{year}/day/{day}/input";
 
-				Output.Text($"{inputUrl}", indent: 4, textColor: ConsoleColor.Yellow);
+				Log.Text($"{inputUrl}", indent: 4, textColor: ConsoleColor.Yellow);
 				var input = await httpClient.GetStringAsync(inputUrl);
 				downloaded = true;
 
-				Output.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
+				Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
 
 				File.WriteAllText(path, input.Substring(0, input.Length - 1));
 			}
 
-			Output.Line(path, indent: 4);
+			Log.Line(path, indent: 4);
 			return downloaded;
 		}
 	}

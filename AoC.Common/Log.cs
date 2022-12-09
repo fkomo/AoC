@@ -1,6 +1,6 @@
 ﻿namespace Ujeby.AoC.Common
 {
-	public static class Output
+	public static class Log
 	{
 		public const string DateTimeFormat = "yyyy-MM-dd_HH:mm:ss.fff";
 

@@ -11,7 +11,7 @@
 
 		public void Run(ISolvable[] problemsToSolve)
 		{
-			Output.ChristmasHeader(_title, 
+			Log.ChristmasHeader(_title, 
 				length: 115);
 
 			var stars = 0;
@@ -26,7 +26,7 @@
 			}
 			finally
 			{
-				Output.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
+				Log.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
 					textColor: ConsoleColor.Yellow,
 					length: 115);
 			}
