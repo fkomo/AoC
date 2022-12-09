@@ -10,8 +10,8 @@ namespace Ujeby.AoC.App
 
 		static void Main(string[] args)
 		{
-			var outputDir = @"c:\Users\filip\source\repos\fkomo\AoC";
-			var yearDirPrefix = "AoC.App_";
+			var outputDir = @"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\";
+			var yearDirPrefix = "Year";
 
 			try
 			{

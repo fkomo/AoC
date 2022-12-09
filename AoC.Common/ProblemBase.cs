@@ -106,9 +106,9 @@ namespace Ujeby.AoC.Common
 		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
 
 #if _DEBUG_SAMPLE
-		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day.ToString().PadLeft(2, '0')}", "input.sample.txt");
+		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.sample.txt");
 #else
-		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day.ToString().PadLeft(2, '0')}", "input.txt");
+		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.txt");
 #endif
 
 		private string[] ReadInput()

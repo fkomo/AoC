@@ -6,6 +6,13 @@ namespace Ujeby.AoC.App
 	{
 		static void Main(string[] args)
 		{
+			// TODO 2015
+			// TODO 2016
+			// TODO 2017
+			// TODO 2018
+			// TODO 2019
+			// TODO 2020
+
 			new AdventOfCode("https://adventofcode.com/2021")
 				.Run(new ISolvable[]
 				{
@@ -26,7 +33,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day15.Chitron()					{ Answer = new string[] { "811", null }},
 					new Year2021.Day16.PacketDecoder()				{ Answer = new string[] { null, null }},
 
-					// TODO rest of 2021
+					// TODO 2021
 				});
 
 			new AdventOfCode("https://adventofcode.com/2022")
@@ -42,7 +49,7 @@ namespace Ujeby.AoC.App
 					new Year2022.Day08.TreetopTreeHouse()			{ Answer = new string[] { "1782", "474606" }},
 					new Year2022.Day09.RopeBridge()					{ Answer = new string[] { null, null }},
 
-					// TODO rest of 2022
+					// TODO 2022
 				});
 		}
 	}
