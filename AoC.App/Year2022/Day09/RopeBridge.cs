@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day09
 {
@@ -11,12 +10,13 @@ namespace Ujeby.AoC.App.Year2022.Day09
 			var h = new int[] { 0, 0 };
 			var t = new int[] { 0, 0 };
 			var dist = new int[] { 0, 0 };
+
 			var visited = new List<int[]>();
 			visited.Add(t.ToArray());
 
 			foreach (var mov in input)
 			{
-				var dir = _dir[mov[0]];
+				var dir = Directions.NSWE[mov.Replace('U', 'N').Replace('D', 'S').Replace('L', 'W').Replace('R', 'E')[0]];
 				var len = mov[2] - '0';
 
 				for (var i = 0; i < len; i++)
@@ -51,27 +51,5 @@ namespace Ujeby.AoC.App.Year2022.Day09
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
-
-		internal class Int2EqComparer : IEqualityComparer<int[]>
-		{
-			public bool Equals(int[] x, int[] y)
-			{
-				if (x.Length != y.Length)
-					return false;
-
-				for (var i = 0; i < x.Length; i++)
-					if (x[i] != y[i])
-						return false;
-
-				return true;
-			}
-
-			public int GetHashCode([DisallowNull] int[] obj) => obj.GetHashCode();
-		}
-
-		private Dictionary<char, int[]> _dir = new()
-		{
-			{ 'L', new[] { -1, 0 } }, { 'R', new[] { 1, 0 } }, { 'D', new[] { 0, -1 } }, { 'U', new[] { 0, 1 } },
-		};
 	}
 }

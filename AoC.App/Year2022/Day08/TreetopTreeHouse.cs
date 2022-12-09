@@ -51,25 +51,25 @@ namespace Ujeby.AoC.App.Year2022.Day08
 				}
 			}
 
-			Debug.Line();
-			Debug.Line("visibility map:", indent: 6);
-			for (var y = 0; y < trees.Length; y++)
-			{
-				Debug.Text(null, indent: 6);
-				for (var x = 0; x < trees[y].Length; x++)
-					Debug.Text($"{visibility[y][x],2}");
-				Debug.Line();
-			}
-			Debug.Line();
+			//Debug.Line();
+			//Debug.Line("visibility map:", indent: 6);
+			//for (var y = 0; y < trees.Length; y++)
+			//{
+			//	Debug.Text(null, indent: 6);
+			//	for (var x = 0; x < trees[y].Length; x++)
+			//		Debug.Text($"{visibility[y][x],2}");
+			//	Debug.Line();
+			//}
+			//Debug.Line();
 
 			long? answer1 = 2 * (trees.Length + trees[0].Length - 2) + visibility.Sum(r => r.Count(v => v > 0));
 
 			// part2
-			Debug.Line("scenic score map (inner):", indent: 6);
+			//Debug.Line("scenic score map (inner):", indent: 6);
 			long? answer2 = long.MinValue;
 			for (var y = 1; y < size - 1; y++)
 			{
-				Debug.Text(null, indent: 6);
+				//Debug.Text(null, indent: 6);
 				for (var x = 1; x < size - 1; x++)
 				{
 					var i = 0;
@@ -95,13 +95,13 @@ namespace Ujeby.AoC.App.Year2022.Day08
 					}
 					score *= i;
 
-					Debug.Text($"{score,2}");
+					//Debug.Text($"{score,2}");
 					if (score > answer2)
 						answer2 = score;
 				}
-				Debug.Line();
+				//Debug.Line();
 			}
-			Debug.Line();
+			//Debug.Line();
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

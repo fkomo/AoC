@@ -4,20 +4,6 @@ namespace Ujeby.AoC.App.Year2021.Day05
 {
 	internal class HydrothermalVenture : ProblemBase
 	{
-		internal class Point
-		{
-			public int X;
-			public int Y;
-
-			public Point(int x = 0, int y = 0)
-			{
-				X = x;
-				Y = y;
-			}
-
-			public override string ToString() => $"{X}x{Y}";
-		}
-
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			var size = new Point();
@@ -95,18 +81,6 @@ namespace Ujeby.AoC.App.Year2021.Day05
 			long answer2 = map.Count(p => p > 1);
 
 			return (answer1.ToString(), answer2.ToString());
-		}
-
-		private void DrawMap(int[] map, Point size)
-		{
-			for (var y = 0; y < size.Y; y++)
-			{
-				var mapLine = string.Empty;
-				for (var x = 0; x < size.X; x++)
-					mapLine += map[y * size.X + x] == 0 ? "." : map[y * size.X + x];
-
-				Debug.Line(mapLine);
-			}
 		}
 	}
 }

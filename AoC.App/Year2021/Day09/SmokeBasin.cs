@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.App.Year2022.Day09;
+using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2021.Day09
 {
@@ -50,11 +51,6 @@ namespace Ujeby.AoC.App.Year2021.Day09
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		/// <summary>
-		/// x, y
-		/// </summary>
-		private static (int, int)[] _dir = new[] { (-1, 0), (0, 1), (1, 0), (0, -1) };
-
 		private static int BasinSize(string[] map, int x, int y, int x0, int y0)
 		{
 			var xy = map[y][x];
@@ -64,19 +60,19 @@ namespace Ujeby.AoC.App.Year2021.Day09
 
 			var size = 1;
 
-			foreach (var dir in _dir)
+			foreach (var dir in Directions.NSWE.Values)
 			{
-				if (dir.Item1 == x0 && dir.Item2 == y0)
+				if (dir[0] == x0 && dir[1] == y0)
 					continue;
 
-				var x1 = x + dir.Item1;
-				var y1 = y + dir.Item2;
+				var x1 = x + dir[0];
+				var y1 = y + dir[1];
 
 				if (y1 < 0 || x1 < 0 || x1 >= map.First().Length || y1 >= map.Length ||
 					map[y1][x1] <= xy || map[y1][x1] == '9' || map[y1][x1] == 'X')
 					continue;
 
-				size += BasinSize(map, x1, y1, dir.Item1 * -1, dir.Item2 * -1);
+				size += BasinSize(map, x1, y1, dir[0] * -1, dir[1] * -1);
 			}
 
 			return size;

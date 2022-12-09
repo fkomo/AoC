@@ -30,7 +30,7 @@ namespace Ujeby.AoC.App.Year2021.Day14
 		/// <returns></returns>
 		private long ProcessTemplate_Naive(string template, int steps, Dictionary<string, char> rules)
 		{
-			Debug.Line();
+			//Debug.Line();
 
 			var sb = new StringBuilder();
 
@@ -50,9 +50,9 @@ namespace Ujeby.AoC.App.Year2021.Day14
 				sb.Append(result.Last());
 				result = sb.ToString();
 
-				Debug.Line($"{step}: {result}", indent: 6);
+				//Debug.Line($"{step}: {result}", indent: 6);
 			}
-			Debug.Line();
+			//Debug.Line();
 
 			var quant = result.Distinct().ToDictionary(c => c, c => result.LongCount(rc => rc == c)).OrderByDescending(d => d.Value);
 			return quant.First().Value - quant.Last().Value;
@@ -112,12 +112,12 @@ namespace Ujeby.AoC.App.Year2021.Day14
 
 				pairs = newPairs.ToDictionary(d => d.Key, d => d.Value);
 
-				Debug.Text($"{step}: ", indent: 6);
-				foreach (var q in quant.OrderByDescending(d => d.Value))
-					Debug.Text($"{q.Key}={q.Value} ");
-				Debug.Line();
+				//Debug.Text($"{step}: ", indent: 6);
+				//foreach (var q in quant.OrderByDescending(d => d.Value))
+				//	Debug.Text($"{q.Key}={q.Value} ");
+				//Debug.Line();
 			}
-			Debug.Line();
+			//Debug.Line();
 
 			var orderedQuant = quant.OrderByDescending(d => d.Value);
 			return orderedQuant.First().Value - orderedQuant.Last().Value;

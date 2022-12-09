@@ -5,28 +5,18 @@ namespace Ujeby.AoC.App.Year2022.Day07
 {
 	internal class NoSpaceLeftOnDevice : ProblemBase
 	{
-		internal class Entry
-		{
-			public string Name { get; set; }
-
-			public long Size { get; set; }
-			
-			/// <summary> name, size </summary>
-			public List<(string, long)> Files { get; set; } = new List<(string, long)>();
-		}
-
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			var root = new Entry
+			var root = new DirEntry
 			{
 				Name = "/",
 			};
 
-			var fs = new Dictionary<string, Entry>();
+			var fs = new Dictionary<string, DirEntry>();
 			fs.Add(root.Name, root);
 
 			// part1
-			var path = new Stack<Entry>();
+			var path = new Stack<DirEntry>();
 			for (var i = 0; i < input.Length; i++)
 			{
 				var line = input[i];
@@ -61,7 +51,7 @@ namespace Ujeby.AoC.App.Year2022.Day07
 						//Debug.Line(fullName);
 
 						if (!fs.ContainsKey(fullName))
-							fs.Add(fullName, new Entry { Name = fullName });
+							fs.Add(fullName, new DirEntry { Name = fullName });
 						
 						path.First().Files.Add((fullName, -1));
 					}
@@ -82,7 +72,7 @@ namespace Ujeby.AoC.App.Year2022.Day07
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		protected long GetSize(Dictionary<string, Entry> fs, string dirName)
+		protected long GetSize(Dictionary<string, DirEntry> fs, string dirName)
 		{
 			if (fs[dirName].Size > 0)
 				return fs[dirName].Size;

@@ -54,7 +54,7 @@ namespace Ujeby.AoC.App.Year2021.Day13
 			}
 			size = new[] { points.Max(p => p[0]) + 1, points.Max(p => p[1]) + 1 };
 
-			DrawPaper(size[0], size[1], paper);
+			//DrawPaper(size[0], size[1], paper);
 
 			var answer2 = GetCodeFromPaper(size, paper);
 
