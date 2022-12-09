@@ -17,6 +17,7 @@ namespace Ujeby.AoC.App
 					new Day06.TuningTrouble()			{ Answer = new string[] { "1723", "3708" }},
 					new Day07.NoSpaceLeftOnDevice()		{ Answer = new string[] { "1086293", "366028" }},
 					new Day08.TreetopTreeHouse()		{ Answer = new string[] { "1782", "474606" }},
+					new Day09.RopeBridge()				{ Answer = new string[] { null, null }},
 
 					// TODO rest of 2022
 				});

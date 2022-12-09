@@ -13,8 +13,6 @@ namespace Ujeby.AoC.App.Day15
 				for (var x = 0; x < size; x++)
 					risk[y, x] = input[y][x] - '0';
 
-			// part1
-
 			Debug.Line();
 			for (var y = 0; y < risk.GetLength(0); y++)
 			{
@@ -25,6 +23,7 @@ namespace Ujeby.AoC.App.Day15
 			}
 			Debug.Line();
 
+			// part1
 			long? answer1 = LowestRiskPath(risk);
 
 			// part2

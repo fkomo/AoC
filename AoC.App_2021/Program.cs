@@ -24,6 +24,7 @@ namespace Ujeby.AoC.App
 					new Day13.TransparentOrigami()      { Answer = new string[] { "751", "PGHRKLKL" }},
 					new Day14.ExtendedPolymerization()	{ Answer = new string[] { "2657", "2911561572630" }},
 					new Day15.Chitron()					{ Answer = new string[] { "811", null }},
+					new Day16.PacketDecoder()           { Answer = new string[] { null, null }},
 
 					// TODO rest of 2021
 				});
