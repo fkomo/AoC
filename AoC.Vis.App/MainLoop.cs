@@ -27,8 +27,6 @@ namespace Ujeby.AoC.Vis.App
 				_mouseState = SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
 				_mouse.X = mouseX - Program.WindowSize.X / 2;
 				_mouse.Y = Program.WindowSize.Y - mouseY - Program.WindowSize.Y / 2;
-				
-				_mouseLeft = (_mouseState & 1) == 1;
 
 				var right = (_mouseState & 4) == 4;
 				if (right && !_mouseRight)
@@ -55,6 +53,11 @@ namespace Ujeby.AoC.Vis.App
 				_mouseGrid.X = _mouse.X - _gridOffset.X;
 				_mouseGrid.Y = _mouse.Y + _gridOffset.Y;
 
+				var left = (_mouseState & 4) == 4;
+				if (left)
+					LeftMouseDown();
+				_mouseLeft = left;
+
 				Update();
 
 				_title = $"mouse[btn={_mouseState}]";
@@ -73,6 +76,8 @@ namespace Ujeby.AoC.Vis.App
 				SDL.SDL_RenderPresent(Program.RendererPtr);
 			}
 		}
+
+		protected abstract void LeftMouseDown();
 
 		protected abstract void Init();
 		protected abstract void Update();

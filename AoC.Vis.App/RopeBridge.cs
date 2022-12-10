@@ -1,7 +1,4 @@
-﻿using SDL2;
-using System.Numerics;
-
-namespace Ujeby.AoC.Vis.App
+﻿namespace Ujeby.AoC.Vis.App
 {
 	internal class RopeBridge : MainLoop
 	{
@@ -10,12 +7,13 @@ namespace Ujeby.AoC.Vis.App
 			rope = new (int x, int y)[10];
 		}
 
-		private (int x, int y) _target;
+		private (int x, int y)? _target = null;
 		private (int x, int y)[] rope;
 
 		protected override void Update()
 		{
-			AoC.App.Year2022.Day09.RopeBridge.SimulateRope(rope, _target.x, _target.y);
+			if (_target.HasValue)
+				AoC.App.Year2022.Day09.RopeBridge.SimulateRope(rope, _target.Value.x, _target.Value.y);
 		}
 
 		protected override void Render()
@@ -26,6 +24,12 @@ namespace Ujeby.AoC.Vis.App
 				DrawGridCell(rope[p].x, rope[p].y, 0x77, 0x77, 0x77, 0x77);
 
 			DrawGridCell(rope[0].x, rope[0].y, 0x77, 0x00, 0x00, 0xff);
+		}
+
+		protected override void LeftMouseDown()
+		{
+			_target = new((int)_mouseGrid.X / _gridSize, (int)_mouseGrid.Y / _gridSize);
+
 		}
 	}
 }
