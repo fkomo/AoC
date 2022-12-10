@@ -41,7 +41,7 @@ namespace Ujeby.AoC.App.Year2022.Day10
 			var outputy = 0;
 			for (var cycle = 1; i < input.Length; cycle++)
 			{
-				output[outputy, outputx] = Math.Abs(x + 1 - cycle % 40) <= 1;
+				output[outputy, outputx] = Math.Abs(outputx - x) <= 1;
 				outputx++;
 
 				if (exec != null)
@@ -59,7 +59,7 @@ namespace Ujeby.AoC.App.Year2022.Day10
 						exec = instr;
 				}
 
-				if (cycle % 40 == 0)
+				if ((cycle) % 40 == 0)
 				{
 					outputy++;
 					outputx = 0;

@@ -48,7 +48,6 @@
 		public static void ChristmasHeader(string text, 
 			ConsoleColor textColor = ConsoleColor.White, int length = 80)
 		{
-			Console.WriteLine();
 			PrintIndent();
 
 			for (var i = 0; i < _christmasColors.Length; i++)
@@ -74,7 +73,6 @@
 			}
 			Console.ForegroundColor = ConsoleColor.White;
 
-			Console.WriteLine();
 			Console.WriteLine();
 		}
 	}
