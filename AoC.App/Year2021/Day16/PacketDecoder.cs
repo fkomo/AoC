@@ -7,143 +7,197 @@ namespace Ujeby.AoC.App.Year2021.Day16
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			ReadPackets("D2FE28");
-			ReadPackets("38006F45291200");
+			Debug.Line();
 
-			//ReadPackets("EE00D40C823060");
-			//Debug.Line();
-			
+			//ParsePacket("D2FE28", out _);
+			//ParsePacket("38006F45291200", out _);
+			//ParsePacket("EE00D40C823060", out _);
+			//ParsePacket("8A004A801A8002F478", out _);
+			//ParsePacket("620080001611562C8802118E34", out _);
+			//ParsePacket("C0015000016115A2E0802F182340", out _);
+			//ParsePacket("A0016C880162017C3686B18A3D4780", out _);
 
 			// part1
-			long? answer1 = null;
+			ParsePacket(input[0], out int versionSum);
+			long? answer1 = versionSum;
 
 			// part2
-			long? answer2 = null;
+			long? answer2 = ParsePacket(input[0], out _);
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		private static long ReadPackets(string input)
+		private static long ParsePacket(string input, out int versionSum)
 		{
+			Debug.Line(input);
+
 			var bytes = new byte[input.Length / 2];
 			for (var i = 0; i < bytes.Length; i++)
 				bytes[i] = byte.Parse($"{input[i * 2]}{input[i * 2 + 1]}", NumberStyles.HexNumber);
 
-			return ParsePackets(bytes, 0, out int read,
-				length: bytes.Length * 8);
+			var result = ParsePacket(bytes, 0, out _, out versionSum);
+			Debug.Line();
+
+			return result;
 		}
 
-		private static long ParsePackets(byte[] bytes, int start, out int read,
-			int? length = null, int? count = null)
+		private static long ParsePacket(byte[] bytes, int start, out int read, out int versionSum)
 		{
-			long versionSum = 0;
+			Debug.Indent += 2;
 
-			var b = start;
-			var c = 0;
-			while (length.HasValue ? (b + 6 < length) : c < count)
+			long result = 0;
+
+			versionSum = 0;
+			var version = GetValue(bytes, start, 3);
+			var typeId = GetValue(bytes, start + 3, 3);
+			read = 6;
+
+			versionSum += version;
+
+			if (typeId == 4)
 			{
-				Debug.Line();
-				Debug.Text("PACKET: ", indent: 6);
+				result = ParseLiteral(bytes, start + read, out int literalLength);
+				read += literalLength;
 
-				var version = Mask(bytes, b, 3);
-				b += 3;
-				Debug.Text($" ver={version}");
+				Debug.Line($"LITERAL[{start}-{start + read}]: version={version} typeId={typeId} literal={result}");
+			}
+			else
+			{
+				var operands = new List<long>();
 
-				var typeId = Mask(bytes, b, 3);
-				b += 3;
-				Debug.Text($" id={typeId}");
+				var lengthTypeId = GetValue(bytes, start + read, 1);
+				read++;
 
-				versionSum += version;
-
-				if (typeId == 4)
+				if (lengthTypeId == 0)
 				{
-					var literal = ReadLiteral(bytes, b, out int r);
-					b += r;
-					Debug.Text($" literal={literal}");
+					var subPacketslength = GetValue(bytes, start + read, 15);
+					read += 15;
+
+					Debug.Line($"OP[{start}-{start + read}]: " 
+						+ $"version={version} typeId={typeId} lengthTypeId={lengthTypeId} subPacketslength={subPacketslength}");
+
+					var toRead = (int)subPacketslength;
+					while (toRead > 0)
+					{
+						operands.Add(ParsePacket(bytes, start + read, out int packetLength, out int _versionSum));
+						read += packetLength;
+						versionSum += _versionSum;
+
+						toRead -= packetLength;
+					}
+
+					result = Result(typeId, operands);
 				}
-				else
+				else if (lengthTypeId == 1)
 				{
-					var lengthTypeId = Mask(bytes, b, 1);
-					b++;
-					Debug.Text($" lengthTypeId={lengthTypeId}");
+					var numOfsubPackets = GetValue(bytes, start + read, 11);
+					read += 11;
 
-					if (lengthTypeId == 0)
+					Debug.Line($"OP[{start}-{start + read}]: " 
+						+ $"version={version} typeId={typeId} lengthTypeId={lengthTypeId} numOfsubPackets={numOfsubPackets}");
+
+					for (var i = 0; i < numOfsubPackets; i++)
 					{
-						var subPacketslength = Mask(bytes, b, 15);
-						b += 15;
-						Debug.Text($" subPacketslength={subPacketslength}");
-						versionSum += ParsePackets(bytes, b, out int r, 
-							length: subPacketslength);
-						b += r;
+						operands.Add(ParsePacket(bytes, start + read, out int packetsLength, out int _versionSum));
+						read += packetsLength;
+						versionSum += _versionSum;
 					}
-					else if (lengthTypeId == 1)
-					{
-						var numOfsubPackets = Mask(bytes, b, 11);
-						b += 11;
-						Debug.Text($" numOfsubPackets={numOfsubPackets}");
-						versionSum += ParsePackets(bytes, b, out int r,
-							count: numOfsubPackets);
-						b += r;
-					}
+
+					result = Result(typeId, operands);
 				}
 			}
 
-			c++;
-			read = b - start;
-			return versionSum;
+			Debug.Indent -= 2;
+
+			return result;
 		}
 
-		private static long ReadLiteral(byte[] bytes, int start, out int length)
+		private static long Result(ushort packetTypeId, IEnumerable<long> operands)
 		{
-			length = start;
+			switch (packetTypeId)
+			{
+				// sum
+				case 0:
+					return operands.Sum();
+
+				// product
+				case 1:
+					{
+						var result = operands.First();
+						foreach (var p in operands.Skip(1))
+							result *= p;
+
+						return result;
+					}
+
+				// min
+				case 2:
+					return operands.Min();
+
+				// max
+				case 3:
+					return operands.Max();
+
+				// greater than
+				case 5:
+					return operands.First() > operands.Last() ? 1 : 0;
+
+				// less than
+				case 6:
+					return operands.First() < operands.Last() ? 1 : 0;
+
+				// equal to
+				case 7:
+					return operands.First() == operands.Last() ? 1 : 0;
+
+				default:
+					throw new NotImplementedException();
+			};
+		}
+
+		private static long ParseLiteral(byte[] bytes, int start, out int read)
+		{
+			read = 0;
 			long literal = 0;
 			var literalLength = 0;
 
-			bool notLast;
+			bool last;
 			do
 			{
-				notLast = Mask(bytes, length, 1) == 1;
-				length++;
-
+				last = GetValue(bytes, start + read, 1) == 0;
 				literal <<= literalLength;
-				literal += Mask(bytes, length, 4);
-				length += 4;
+
+				literal += GetValue(bytes, start + 1 + read, 4);
 				literalLength = 4;
 
-			} while (notLast);
+				read += 5;
+			} while (!last);
 
-			length -= start;
 			return literal;
 		}
 
-		public static ushort Mask(byte[] bytes, int start, int length)
+		/// <summary>
+		/// reads (max 2B/16Bit) value from specified position in byte array
+		/// </summary>
+		/// <param name="bytes">byte array</param>
+		/// <param name="start">starting bit</param>
+		/// <param name="length">bit length of desired value</param>
+		/// <returns></returns>
+		private static ushort GetValue(byte[] bytes, int start, int length)
 		{
 			uint result = 0;
-			var totalLength = 0;
+			var resultLength = 0;
 
-			var b0 = start / 8;
-			result += bytes[b0];
-			totalLength += 8;
-
-			if (b0 + 1 < bytes.Length)
+			var shift = 0;
+			var b = start / 8;
+			for (var i = 0; i < 3 && b < bytes.Length; i++, b++, resultLength += 8)
 			{
-				result <<= 8;
-				result += bytes[b0 + 1];
-				totalLength += 8;
+				result <<= shift;
+				result += bytes[b];
+				shift = 8;
 			}
 
-			if (b0 + 2 < bytes.Length)
-			{
-				result <<= 8;
-				result += bytes[b0 + 2];
-				totalLength += 8;
-			}
-
-			result >>= totalLength - (start % 8) - length;
-
-			var mask = (uint)(Math.Pow(2, length) - 1);
-
-			return (ushort)(result & mask);
+			return (ushort)((result >> resultLength - (start % 8) - length) & (uint)(Math.Pow(2, length) - 1));
 		}
 	}
 }

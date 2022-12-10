@@ -6,6 +6,8 @@ namespace Ujeby.AoC.App
 	{
 		static void Main(string[] args)
 		{
+			AdventOfCode.DownloadMissingInput(@"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\", "Year");
+
 			// TODO 2015
 			// TODO 2016
 			// TODO 2017
@@ -31,7 +33,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day13.TransparentOrigami()			{ Answer = new string[] { "751", "PGHRKLKL" }},
 					new Year2021.Day14.ExtendedPolymerization()		{ Answer = new string[] { "2657", "2911561572630" }},
 					new Year2021.Day15.Chitron()					{ Answer = new string[] { "811", null }},
-					new Year2021.Day16.PacketDecoder()				{ Answer = new string[] { null, null }},
+					new Year2021.Day16.PacketDecoder()				{ Answer = new string[] { "945", "10637009915279" }},
 
 					// TODO 2021
 				});

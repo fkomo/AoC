@@ -4,11 +4,13 @@
 	{
 		public const string DateTimeFormat = "yyyy-MM-dd_HH:mm:ss.fff";
 
+		public static int Indent { get; set; } = 2;
+
 		public static void Line(
-			string lineText = null, ConsoleColor textColor = ConsoleColor.White, int indent = 2)
+			string lineText = null, int? indent = null, ConsoleColor textColor = ConsoleColor.White)
 		{
 			if (lineText != null)
-				Indent(indent);
+				PrintIndent(indent);
 
 			Console.ForegroundColor = textColor;
 			Console.WriteLine(lineText);
@@ -16,18 +18,20 @@
 		}
 
 		public static void Text(string text,
-			int indent = 0, ConsoleColor textColor = ConsoleColor.White)
+			int? indent = null, ConsoleColor textColor = ConsoleColor.White)
 		{
-			Indent(indent);
+			PrintIndent(indent);
 
 			Console.ForegroundColor = textColor;
 			Console.Write(text);
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		private static void Indent(int count)
+		private static void PrintIndent(
+			int? indent = null)
 		{
-			for (var i = 0; i < count; i++)
+			indent ??= Indent; 
+			for (var i = 0; i < indent; i++)
 				Console.Write(" ");
 		}
 
@@ -42,10 +46,10 @@
 		};
 
 		public static void ChristmasHeader(string text, 
-			ConsoleColor textColor = ConsoleColor.White, int indent = 2, int length = 80)
+			ConsoleColor textColor = ConsoleColor.White, int length = 80)
 		{
 			Console.WriteLine();
-			Indent(indent);
+			PrintIndent();
 
 			for (var i = 0; i < _christmasColors.Length; i++)
 			{
@@ -53,7 +57,7 @@
 				Console.Write("#");
 			}
 
-			var headerLength = indent + _christmasColors.Length + $"[ {text} ]".Length;
+			var headerLength = _christmasColors.Length + $"[ {text} ]".Length;
 			Console.ForegroundColor = ConsoleColor.Green;
 			Console.Write($"[ ");
 

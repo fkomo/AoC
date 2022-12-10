@@ -4,12 +4,13 @@
 	{
 		public const string DateTimeFormat = "yyyy-MM-dd_HH:mm:ss.fff";
 
+		public static int Indent { get; set; } = 2;
+
 		public static void Line(
-			string lineText = null, ConsoleColor textColor = ConsoleColor.White, int indent = 2)
+			string lineText = null, int? indent = null, ConsoleColor textColor = ConsoleColor.White)
 		{
-#if _DEBUG_SAMPLE
-			if (lineText != null)
-				Indent(indent);
+#if _DEBUG_SAMPLE || _DEBUG
+			PrintIndent(indent);
 
 			Console.ForegroundColor = textColor;
 			Console.WriteLine(lineText);
@@ -18,10 +19,10 @@
 		}
 
 		public static void Text(string text,
-			int indent = 0, ConsoleColor textColor = ConsoleColor.White)
+			int? indent = null, ConsoleColor textColor = ConsoleColor.White)
 		{
-#if _DEBUG_SAMPLE
-			Indent(indent);
+#if _DEBUG_SAMPLE || _DEBUG
+			PrintIndent(indent);		
 
 			Console.ForegroundColor = textColor;
 			Console.Write(text);
@@ -29,11 +30,11 @@
 #endif
 		}
 
-
-
-		private static void Indent(int count)
+		private static void PrintIndent(
+			int? indent = null)
 		{
-			for (var i = 0; i < count; i++)
+			indent ??= Indent;
+			for (var i = 0; i < indent; i++)
 				Console.Write(" ");
 		}
 	}
