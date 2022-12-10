@@ -5,7 +5,21 @@ namespace Ujeby.AoC.Vis.App
 {
 	public abstract class MainLoop
 	{
-		protected Vector2 _mouse;
+		/// <summary>
+		/// mouse position in window (from top-left)
+		/// </summary>
+		protected Vector2 _mouseWindow;
+
+		/// <summary>
+		/// mouse position in grid
+		/// </summary>
+		protected Vector2 _mouseGrid = new(0, 0);
+
+		/// <summary>
+		/// grid offset from window center
+		/// </summary>
+		protected Vector2 _gridOffset = new(0, 0);
+
 		protected uint _mouseState;
 		protected bool _mouseLeft;
 		protected bool _mouseRight;
@@ -25,9 +39,10 @@ namespace Ujeby.AoC.Vis.App
 			while (handleInput())
 			{
 				_mouseState = SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
-				_mouse.X = mouseX - Program.WindowSize.X / 2;
-				_mouse.Y = Program.WindowSize.Y - mouseY - Program.WindowSize.Y / 2;
+				_mouseWindow.X = mouseX - Program.WindowSize.X / 2;
+				_mouseWindow.Y = Program.WindowSize.Y - mouseY - Program.WindowSize.Y / 2;
 
+				// mouse right
 				var right = (_mouseState & 4) == 4;
 				if (right && !_mouseRight)
 				{
@@ -50,19 +65,24 @@ namespace Ujeby.AoC.Vis.App
 				}
 				_mouseRight = right;
 
-				_mouseGrid.X = _mouse.X - _gridOffset.X;
-				_mouseGrid.Y = _mouse.Y + _gridOffset.Y;
+				// mouse position in grid
+				_mouseGrid.X = _mouseWindow.X - _gridOffset.X;
+				_mouseGrid.Y = _mouseWindow.Y + _gridOffset.Y;
 
-				var left = (_mouseState & 4) == 4;
+				// mouse left
+				var left = (_mouseState & 1) == 1;
 				if (left)
-					LeftMouseDown();
+					LeftMouseDown(_mouseGrid);
+				else if (!left && _mouseLeft)
+					LeftMouseUp(_mouseGrid);
 				_mouseLeft = left;
 
 				Update();
 
 				_title = $"mouse[btn={_mouseState}]";
 				_title += $" grid[{(int)_mouseGrid.X} x {(int)_mouseGrid.Y}, offset:{_gridOffset.X} x {_gridOffset.Y}]";
-				_title += $" drag[{ _drag }, {(int)_dragStart.X} x {(int)_dragStart.Y}]";
+				if (_drag)
+					_title += $" drag[{ _drag }, {(int)_dragStart.X} x {(int)_dragStart.Y}]";
 
 				// clear backbuffer
 				SDL.SDL_SetRenderDrawColor(Program.RendererPtr, _bgColor, _bgColor, _bgColor, 0xff);
@@ -77,7 +97,8 @@ namespace Ujeby.AoC.Vis.App
 			}
 		}
 
-		protected abstract void LeftMouseDown();
+		protected abstract void LeftMouseDown(Vector2 _mouseGrid);
+		protected abstract void LeftMouseUp(Vector2 _mouseGrid);
 
 		protected abstract void Init();
 		protected abstract void Update();
@@ -111,9 +132,6 @@ namespace Ujeby.AoC.Vis.App
 			SDL.SDL_RenderFillRect(Program.RendererPtr, ref rect);
 		}
 
-		protected Vector2 _mouseGrid = new(0, 0);
-		protected Vector2 _gridOffset = new(0, 0);
-		
 		private byte _bgColor = 0x0d;
 		private byte _zeroColor = 0x40;
 		private byte _majorGridColor = 0x20;
