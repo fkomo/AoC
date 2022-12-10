@@ -1,8 +1,9 @@
-﻿using Ujeby.AoC.Common;
+﻿using System.Text;
+using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2021.Day13
 {
-    public class CharCodes
+	public class CharCodes
     {
         public static string ToString(int width, int height, bool[,] charMap)
         {
@@ -34,14 +35,16 @@ namespace Ujeby.AoC.App.Year2021.Day13
 
         public static void DrawString(int width, int height, bool[,] paper)
         {
+			var line = new StringBuilder();
+
 			Log.Line();
             for (var y = 0; y < height; y++)
             {
-                Log.Text(string.Empty, indent: 6);
-                for (var x = 0; x < width; x++)
-                    Log.Text(paper[y, x] ? "█" : " ");
+				line.Clear();
+				for (var x = 0; x < width; x++)
+					line.Append(paper[y, x] ? "█" : " ");
 
-                Log.Line();
+                Log.Line(line.ToString());
             }
             Log.Line();
         }
