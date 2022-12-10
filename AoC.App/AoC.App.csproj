@@ -42,6 +42,12 @@
 		<Content Include="ffmpeg.config.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Year2022\Day10\input.sample.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Year2022\Day10\input.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Year2021\Day01\input*.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
@@ -142,6 +148,11 @@
 		<Content Include="Year2022\Day09\input*.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Year2022\Day10\input.sample.txt" />
+	  <None Remove="Year2022\Day10\input.txt" />
 	</ItemGroup>
 
 </Project>
