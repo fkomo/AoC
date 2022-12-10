@@ -118,12 +118,20 @@
 				Log.Text($"Downloading ");
 				Log.Text($"{inputUrl}",
 					textColor: ConsoleColor.Yellow, indent: 0);
-				var input = await _httpClient.GetStringAsync(inputUrl);
-				downloaded = true;
 
-				Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
+				var response = await _httpClient.GetAsync(inputUrl);
+				if (response.IsSuccessStatusCode)
+				{
+					var input = await response.Content.ReadAsStringAsync();
+					downloaded = true;
 
-				File.WriteAllText(path, input[..^1]);
+					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
+					File.WriteAllText(path, input[..^1]);
+				}
+				else
+				{
+					Log.Line($" {response.StatusCode}", indent: 0, textColor: ConsoleColor.Red);
+				}
 			}
 
 			return downloaded;

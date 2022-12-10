@@ -77,12 +77,15 @@ namespace Ujeby.AoC.Vis.App
 					LeftMouseUp(_mouseGrid);
 				_mouseLeft = left;
 
-				Update();
-
 				_title = $"mouse[btn={_mouseState}]";
 				_title += $" grid[{(int)_mouseGrid.X} x {(int)_mouseGrid.Y}, offset:{_gridOffset.X} x {_gridOffset.Y}]";
 				if (_drag)
-					_title += $" drag[{ _drag }, {(int)_dragStart.X} x {(int)_dragStart.Y}]";
+					_title += $" drag[{_drag}, {(int)_dragStart.X} x {(int)_dragStart.Y}]";
+
+				_gridSize = Math.Max(2, _gridSize + Program.MouseWheel);
+				Program.MouseWheel = 0;
+
+				Update();
 
 				// clear backbuffer
 				SDL.SDL_SetRenderDrawColor(Program.RendererPtr, _bgColor, _bgColor, _bgColor, 0xff);

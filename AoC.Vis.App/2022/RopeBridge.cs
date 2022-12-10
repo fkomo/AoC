@@ -6,23 +6,23 @@ namespace Ujeby.AoC.Vis.App
 	{
 		protected override void Init()
 		{
-			snake = new (int x, int y)[20];
+			_snake = new (int x, int y)[20];
 			SDL2.SDL.SDL_ShowCursor(0);
 		}
 
 		private (int x, int y)? _apple = null;
-		private (int x, int y)[] snake;
+		private (int x, int y)[] _snake;
 
 		protected override void Update()
 		{
 			if (_apple.HasValue)
 			{
-				var dirx = _apple.Value.x - snake[0].x;
+				var dirx = _apple.Value.x - _snake[0].x;
 
 				if (dirx != 0)
 					dirx /= Math.Abs(dirx);
 
-				var diry = _apple.Value.y - snake[0].y;
+				var diry = _apple.Value.y - _snake[0].y;
 				if (diry != 0)
 					diry /= Math.Abs(diry);
 
@@ -32,7 +32,7 @@ namespace Ujeby.AoC.Vis.App
 					return;
 				}
 
-				AoC.App.Year2022.Day09.RopeBridge.SimulateRope(snake, dirx, diry);
+				AoC.App.Year2022.Day09.RopeBridge.SimulateRope(_snake, dirx, diry);
 			}
 		}
 
@@ -45,9 +45,9 @@ namespace Ujeby.AoC.Vis.App
 				DrawGridCell(_apple.Value.x, _apple.Value.y, 0x00, 0xff, 0x00, 0x77);
 
 			// rope
-			for (var p = 1; p < snake.Length; p++)
-				DrawGridCell(snake[p].x, snake[p].y, 0x77, 0x77, 0x77, 0x77);
-			DrawGridCell(snake[0].x, snake[0].y, 0xff, 0x00, 0x00, 0xff);
+			for (var p = 1; p < _snake.Length; p++)
+				DrawGridCell(_snake[p].x, _snake[p].y, 0x77, 0x77, 0x77, 0x77);
+			DrawGridCell(_snake[0].x, _snake[0].y, 0xff, 0x00, 0x00, 0xff);
 
 			// mouse cursor
 			var mouseCursorOnGrid = _mouseGrid / _gridSize;

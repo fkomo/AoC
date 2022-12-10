@@ -3,38 +3,33 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2021.Day15
 {
-	internal class Chitron : ProblemBase
+	public class Chitron : ProblemBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			var size = input.Length;
-	
-			var risk = new int[size, size];
-			for (var y = 0; y < size; y++)
-				for (var x = 0; x < size; x++)
-					risk[y, x] = input[y][x] - '0';
-
-			//Debug.Line();
-			//for (var y = 0; y < risk.GetLength(0); y++)
-			//{
-			//	Debug.Text(null, indent: 6);
-			//	for (var x = 0; x < risk.GetLength(0); x++)
-			//		Debug.Text(risk[y, x].ToString());
-			//	Debug.Line();
-			//}
-			//Debug.Line();
-
 			// part1
-			long? answer1 = LowestRiskPath(risk);
+			var riskMap = CreateRiskMap(input, input.Length);
+			var path = LowestRiskPath(riskMap);
+			long? answer1 = path[path.GetLength(0) - 1, path.GetLength(1) - 1];
 
 			// part2
-			var risk5 = new int[size * 5, size * 5];
-			for (var y = 0; y < risk5.GetLength(0); y++)
-				for (var x = 0; x < risk5.GetLength(0); x++)
+			var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
+			var path5 = LowestRiskPath(riskMap5);
+			long? answer2 = path5[path5.GetLength(0) - 1, path5.GetLength(1) - 1];
+			// TODO 2021/15 part2 still wrong (3019) although answer for sample is correct
+
+			return (answer1?.ToString(), answer2?.ToString());
+		}
+
+		public static int[,] EnlargeRiskMap(int[,] originalRiskMap, int size, int scale)
+		{
+			var riskMap = new int[size * scale, size * scale];
+			for (var y = 0; y < size * scale; y++)
+				for (var x = 0; x < size * scale; x++)
 				{
 					if (y < size && x < size)
 					{
-						risk5[y, x] = risk[y, x];
+						riskMap[y, x] = originalRiskMap[y, x];
 						continue;
 					}
 
@@ -45,7 +40,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 					var y0 = y - size;
 					if (y0 < 0)
 						y0 = y;
-					var r = risk5[y0, x0];
+					var r = riskMap[y0, x0];
 
 					if (x >= size)
 						r++;
@@ -55,53 +50,40 @@ namespace Ujeby.AoC.App.Year2021.Day15
 					if (r >= 10)
 						r -= 9;
 
-					risk5[y, x] = r;
+					riskMap[y, x] = r;
 				}
 
-			//Debug.Line();
-			//for (var y = 0; y < risk5.GetLength(0); y++)
-			//{
-			//	Debug.Text(null, indent: 6);
-			//	for (var x = 0; x < risk5.GetLength(0); x++)
-			//		Debug.Text(risk5[y, x].ToString());
-			//	Debug.Line();
-			//}
-			//Debug.Line();
-
-			// TODO 2021/15 part2 still wrong (3019) although answer for sample is correct
-			long? answer2 = LowestRiskPath(risk5);
-
-			return (answer1?.ToString(), answer2?.ToString());
+			return riskMap;
 		}
 
-		private long? LowestRiskPath(int[,] risk)
+		public static int[,] CreateRiskMap(string[] input, int size)
+		{
+			var risk = new int[size, size];
+			for (var y = 0; y < size; y++)
+				for (var x = 0; x < size; x++)
+					risk[y, x] = input[y][x] - '0';
+
+			return risk;
+		}
+
+		public static long[,] LowestRiskPath(int[,] risk)
 		{
 			var size = risk.GetLength(0);
 
-			var path = new int[size, size];
+			var path = new long[size, size];
 			for (var y = 0; y < size; y++)
 				for (var x = 0; x < size; x++)
-					path[y, x] = int.MaxValue;
+					path[y, x] = long.MaxValue;
 
 			path[0, 0] = 0;
 			for (var y = 0; y < size; y++)
 				for (var x = 0; x < size; x++)
 					Visit(risk, path, x, y);
 
-			//Debug.Line();
-			//for (var y = 0; y < path.GetLength(0); y++)
-			//{
-			//	Debug.Text(null, indent: 6);
-			//	for (var x = 0; x < path.GetLength(0); x++)
-			//		Debug.Text($"{path[y, x],4}");
-			//	Debug.Line();
-			//}
-			//Debug.Line();
-
-			return path[size - 1, size - 1];
+			return path;
 		}
 
-		private void Visit(int[,] risk, int[,] path, int x, int y)
+		public static void Visit(int[,] risk, long[,] path, int x, int y)
 		{
 			var size = risk.GetLength(0);
 			foreach (var dir in Directions.NSWE.Values)

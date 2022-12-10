@@ -8,7 +8,7 @@ namespace Ujeby.AoC.Vis.App
 	{
 		public static IntPtr WindowPtr;
 		public static IntPtr RendererPtr;
-		public static Vector2 WindowSize = new(1280, 720);
+		public static Vector2 WindowSize = new(1500, 1500);
 
 		private static readonly Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -20,7 +20,8 @@ namespace Ujeby.AoC.Vis.App
 
 				InitSDL();
 
-				new RopeBridge().Run(HandleInput);
+				//new RopeBridge().Run(HandleInput);
+				new Chitron().Run(HandleInput);
 			}
 			catch (Exception ex)
 			{
@@ -61,10 +62,14 @@ namespace Ujeby.AoC.Vis.App
 		private static readonly byte[] CurrentKeys = new byte[(int)SDL.SDL_Scancode.SDL_NUM_SCANCODES];
 		private static readonly byte[] PreviousKeys = new byte[(int)SDL.SDL_Scancode.SDL_NUM_SCANCODES];
 
+		public static int MouseWheel { get; set; }
+
 		private static bool HandleInput()
 		{
 			while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
 			{
+				MouseWheel = 0;
+
 				switch (e.type)
 				{
 					case SDL.SDL_EventType.SDL_QUIT:
@@ -79,6 +84,18 @@ namespace Ujeby.AoC.Vis.App
 
 					if (KeyPressed(SDL.SDL_Scancode.SDL_SCANCODE_ESCAPE))
 						return false;
+				}
+
+				else if (e.type == SDL.SDL_EventType.SDL_MOUSEWHEEL)
+				{
+					if (e.wheel.y > 0) // scroll up
+					{
+					}
+					else if (e.wheel.y < 0) // scroll down
+					{
+					}
+
+					MouseWheel = e.wheel.y;
 				}
 			}
 
