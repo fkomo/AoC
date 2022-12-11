@@ -51,6 +51,7 @@ namespace Ujeby.AoC.App
 					new Year2022.Day08.TreetopTreeHouse()			{ Answer = new string[] { "1782", "474606" }},
 					new Year2022.Day09.RopeBridge()					{ Answer = new string[] { "5619", "2376" }},
 					new Year2022.Day10.CathodeRayTube()             { Answer = new string[] { "14540", "EHZFZHCZ" }},
+					new Year2022.Day11.MonkeyInTheMiddle()          { Answer = new string[] { "62491", "17408399184" }},
 
 					// TODO 2022
 				});
