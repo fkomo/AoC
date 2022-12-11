@@ -9,16 +9,25 @@ namespace Ujeby.AoC.App.Year2021.Day15
 		{
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);
-			var path = LowestRiskPath(riskMap);
-			long? answer1 = path[path.GetLength(0) - 1, path.GetLength(1) - 1];
+			LowestRiskPath(riskMap, out char[,] path, out long[,] dist);
+			long? answer1 = dist[path.GetLength(0) - 1, path.GetLength(1) - 1];
 
 			// part2
 			var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
-			var path5 = LowestRiskPath(riskMap5);
-			long? answer2 = path5[path5.GetLength(0) - 1, path5.GetLength(1) - 1];
-			// TODO 2021/15 part2 still wrong (3019) although answer for sample is correct
+			LowestRiskPath(riskMap5, out path, out dist);
+			long? answer2 = dist[riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1];
 
 			return (answer1?.ToString(), answer2?.ToString());
+		}
+
+		public static int[,] CreateRiskMap(string[] input, int size)
+		{
+			var risk = new int[size, size];
+			for (var y = 0; y < size; y++)
+				for (var x = 0; x < size; x++)
+					risk[y, x] = input[y][x] - '0';
+
+			return risk;
 		}
 
 		public static int[,] EnlargeRiskMap(int[,] originalRiskMap, int size, int scale)
@@ -56,47 +65,63 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			return riskMap;
 		}
 
-		public static int[,] CreateRiskMap(string[] input, int size)
-		{
-			var risk = new int[size, size];
-			for (var y = 0; y < size; y++)
-				for (var x = 0; x < size; x++)
-					risk[y, x] = input[y][x] - '0';
-
-			return risk;
-		}
-
-		public static long[,] LowestRiskPath(int[,] risk)
+		public static void LowestRiskPath(int[,] risk, out char[,] path, out long[,] dist)
 		{
 			var size = risk.GetLength(0);
 
-			var path = new long[size, size];
+			dist = new long[size, size];
 			for (var y = 0; y < size; y++)
 				for (var x = 0; x < size; x++)
-					path[y, x] = long.MaxValue;
+					dist[y, x] = long.MaxValue;
 
-			path[0, 0] = 0;
-			for (var y = 0; y < size; y++)
-				for (var x = 0; x < size; x++)
-					Visit(risk, path, x, y);
+			var visited = new bool[size, size];
+			path = new char[size, size];
 
-			return path;
-		}
+			dist[0, 0] = 0;
+			Visit(risk, dist, path, visited, 0, 0);
 
-		public static void Visit(int[,] risk, long[,] path, int x, int y)
-		{
-			var size = risk.GetLength(0);
-			foreach (var dir in Directions.NSWE.Values)
+			var toVisit = size * size - 1;
+			while (toVisit > 0)
 			{
-				var x1 = dir[0] + x;
-				var y1 = dir[1] + y;
-				if (x1 < 0 || y1 < 0 || x1 == size || y1 == size)
+				var shortestDist = long.MaxValue;
+				(int x, int y) shortest = (0, 0);
+				for (var y = 0; y < size; y++)
+					for (var x = 0; x < size; x++)
+					{
+						if (visited[y, x])
+							continue;
+
+						if (dist[y, x] < shortestDist)
+						{
+							shortestDist = dist[y, x];
+							shortest = (x, y);
+						}
+					}
+
+				Visit(risk, dist, path, visited, shortest.x, shortest.y);
+				toVisit--;
+			}
+		}
+
+		public static void Visit(int[,] risk, long[,] dist, char[,] prevPath, bool[,] visited, int x, int y)
+		{
+			var size = risk.GetLength(0);
+			foreach (var dir in Directions.NSWE)
+			{
+				var x1 = dir.Value[0] + x;
+				var y1 = dir.Value[1] + y;
+				if (x1 < 0 || y1 < 0 || x1 == size || y1 == size || visited[y1, x1])
 					continue;
 
-				var r = path[y, x] + risk[y1, x1];
-				if (r < path[y1, x1])
-					path[y1, x1] = r;
+				var r = dist[y, x] + risk[y1, x1];
+				if (r < dist[y1, x1])
+				{
+					dist[y1, x1] = r;
+					prevPath[y1, x1] = Directions.OppositeNSWE[dir.Key];
+				}
 			}
+
+			visited[y, x] = true;
 		}
 	}
 }

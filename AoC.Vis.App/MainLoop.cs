@@ -77,10 +77,9 @@ namespace Ujeby.AoC.Vis.App
 					LeftMouseUp(_mouseGrid);
 				_mouseLeft = left;
 
-				_title = $"mouse[btn={_mouseState}]";
-				_title += $" grid[{(int)_mouseGrid.X} x {(int)_mouseGrid.Y}, offset:{_gridOffset.X} x {_gridOffset.Y}]";
+				_title = $"mouse[btn={_mouseState}, window={mouseX}x{mouseY}, grid={(int)_mouseGrid.X}x{(int)_mouseGrid.Y}]";
 				if (_drag)
-					_title += $" drag[{_drag}, {(int)_dragStart.X} x {(int)_dragStart.Y}]";
+					_title += $" drag[{(int)_dragStart.X} x {(int)_dragStart.Y}]";
 
 				_gridSize = Math.Max(2, _gridSize + Program.MouseWheel);
 				Program.MouseWheel = 0;

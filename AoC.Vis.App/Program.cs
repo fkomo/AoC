@@ -8,7 +8,7 @@ namespace Ujeby.AoC.Vis.App
 	{
 		public static IntPtr WindowPtr;
 		public static IntPtr RendererPtr;
-		public static Vector2 WindowSize = new(1500, 1500);
+		public static Vector2 WindowSize = new(1920, 1080);
 
 		private static readonly Stopwatch stopwatch = Stopwatch.StartNew();
 

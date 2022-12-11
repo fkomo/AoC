@@ -28,14 +28,14 @@ namespace Ujeby.AoC.Common
 
 				sw.Start();
 				var answer = SolveProblem(ReadInput());
-				var elapsed = (int)sw.Elapsed.TotalMilliseconds;
+				var elapsed = sw.Elapsed.TotalMilliseconds;
 
 				var title = $"-={{ {Title} }}=-";
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray);
 				Log.Text(Title, textColor: ConsoleColor.White, indent: 0);
 				Log.Text($" }}=-", textColor: ConsoleColor.Gray, indent: 0);
 
-				var elapsedMsg = $"-={{ {elapsed}ms }}=-";
+				var elapsedMsg = $"-={{ {DurationToString(elapsed)} }}=-";
 
 				var padding = string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length));
 				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 0);
@@ -48,7 +48,7 @@ namespace Ujeby.AoC.Common
 						elapsedColor = ec.Item2;
 						break;
 					}
-				Log.Text($"{elapsed}ms", textColor: elapsedColor, indent: 0);
+				Log.Text($"{DurationToString(elapsed)}", textColor: elapsedColor, indent: 0);
 				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
 
 				var answers = $"{answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"}";
@@ -58,13 +58,13 @@ namespace Ujeby.AoC.Common
 
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
 
-				Log.Text(answer.Item1?.ToString() ?? "?", 
-					textColor: 
-						Answer[0] != null && Answer[0] != answer.Item1 ? ConsoleColor.Red : 
+				Log.Text(answer.Item1?.ToString() ?? "?",
+					textColor:
+						Answer[0] != null && Answer[0] != answer.Item1 ? ConsoleColor.Red :
 						(answer.Item1 == null ? ConsoleColor.DarkGray : ConsoleColor.White), indent: 0);
 				Log.Text(", ", textColor: ConsoleColor.White, indent: 0);
 				Log.Text(answer.Item2?.ToString() ?? "?",
-					textColor: 
+					textColor:
 						Answer[1] != null && Answer[1] != answer.Item2 ? ConsoleColor.Red :
 						(answer.Item2 == null ? ConsoleColor.DarkGray : ConsoleColor.White), indent: 0);
 
@@ -103,6 +103,28 @@ namespace Ujeby.AoC.Common
 			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="duration">duration in us</param>
+		/// <returns></returns>
+		private string DurationToString(double duration)
+		{
+			if (duration < 1)
+				return $"{(int)(duration * 1000)}us";
+			
+			else if (duration < 1000)
+				return $"{(int)duration}ms";
+			
+			else if (duration < 60 * 1000)
+				return $">{(int)(duration / 1000)}s";
+			
+			else if (duration < 60 * 60 * 1000)
+				return $">{(int)(duration / (60 * 1000))}min";
+
+			return $">1h";
 		}
 
 		protected abstract (string, string) SolveProblem(string[] input);
