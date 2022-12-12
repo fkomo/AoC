@@ -9,12 +9,12 @@ namespace Ujeby.AoC.App.Year2021.Day15
 		{
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);
-			Dijkstra(riskMap, (0,0), out char[,] path, out long[,] dist);
-			long? answer1 = dist[path.GetLength(0) - 1, path.GetLength(1) - 1];
+			Dijkstra(riskMap, (0,0), out long[,] dist);
+			long? answer1 = dist[riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1];
 
 			// part2
 			var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
-			Dijkstra(riskMap5, (0,0), out path, out dist);
+			Dijkstra(riskMap5, (0,0), out dist);
 			long? answer2 = dist[riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1];
 
 			return (answer1?.ToString(), answer2?.ToString());
@@ -65,7 +65,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			return riskMap;
 		}
 
-		public static void Dijkstra(int[,] map, (int x, int y) start, out char[,] path, out long[,] dist)
+		public static void Dijkstra(int[,] map, (int x, int y) start, out long[,] dist)
 		{
 			dist = new long[map.GetLength(0), map.GetLength(1)];
 			for (var y = 0; y < map.GetLength(0); y++)
@@ -73,7 +73,6 @@ namespace Ujeby.AoC.App.Year2021.Day15
 					dist[y, x] = long.MaxValue;
 
 			var visited = new bool[map.GetLength(0), map.GetLength(1)];
-			path = new char[map.GetLength(0), map.GetLength(1)];
 
 			dist[start.y, start.x] = 0;
 
@@ -81,7 +80,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			var shortest = start;
 			do
 			{
-				Visit(map, dist, path, visited, shortest.x, shortest.y);
+				Visit(map, dist, visited, shortest.x, shortest.y);
 
 				// find next, shortest and not visited
 				shortestDist = long.MaxValue;
@@ -101,7 +100,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			while (shortestDist != long.MaxValue);
 		}
 
-		private static void Visit(int[,] map, long[,] dist, char[,] prevPath, bool[,] visited, int x, int y)
+		private static void Visit(int[,] map, long[,] dist, bool[,] visited, int x, int y)
 		{
 			foreach (var dir in Directions.NSWE)
 			{
@@ -113,10 +112,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 
 				var r = dist[y, x] + map[y1, x1];
 				if (r < dist[y1, x1])
-				{
 					dist[y1, x1] = r;
-					prevPath[y1, x1] = Directions.OppositeNSWE[dir.Key];
-				}
 			}
 
 			visited[y, x] = true;

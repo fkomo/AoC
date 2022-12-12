@@ -22,7 +22,7 @@ namespace Ujeby.AoC.Vis.App
 			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 
-			AoC.App.Year2022.Day12.HillClimbingAlgorithm.Dijkstra(_heightMap, _start, out _, out _dijkstraDist);
+			AoC.App.Year2022.Day12.HillClimbingAlgorithm.Dijkstra(_heightMap, _start, out _dijkstraDist);
 			_dijkstraPath = AoC.App.Year2022.Day12.HillClimbingAlgorithm.DijkstraPath(_start, _end, _heightMap, _dijkstraDist);
 			Console.WriteLine($"shortest dijkstra path={_dijkstraPath.Length}");
 
@@ -30,7 +30,8 @@ namespace Ujeby.AoC.Vis.App
 			_bfsPath = AoC.App.Year2022.Day12.HillClimbingAlgorithm.BreadthFirstPath(_start,_end, prev);
 			Console.WriteLine($"shortest bfs path={_bfsPath.Length}");
 
-			_gridSize = 20;
+			_gridSize = 10;
+			_gridOffset = new Vector2(-_heightMap.GetLength(1) / 2 * _gridSize, -_heightMap.GetLength(0) / 2 * _gridSize);
 		}
 
 		protected override void Update()

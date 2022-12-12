@@ -9,24 +9,30 @@ namespace Ujeby.AoC.App.Year2022.Day12
 		{
 			var heightMap = CreateHeightMap(input, out (int x, int y) start, out (int x, int y) end);
 
-			Debug.Line();
-			Debug.Line($"width={heightMap.GetLength(1)}, height={heightMap.GetLength(0)}, start={start.y}x{start.x}, end={end.y}x{end.x}");
-
-			// part1
 			//Dijkstra(heightMap, start, out char[,] dir, out long[,] dist);
 			//var path = GetPathFromEndToStart(start, end, heightMap, dist);
 			//long? answer1 = path.Length;
 
+			// part1
 			BreadthFirst(heightMap, start, out (int x, int y)?[,] prev);
 			var path = BreadthFirstPath(start, end, prev);
 			long? answer1 = path.Length;
 
 			// part2
-			long? answer2 = null;
+			long answer2 = long.MaxValue;
+			for (var y = 0; y < heightMap.GetLength(0); y++)
+				for (var x = 0; x < heightMap.GetLength(1); x++)
+				{
+					if (heightMap[y, x] != 1)
+						continue;
 
-			Debug.Line();
+					BreadthFirst(heightMap, (x, y), out (int x, int y)?[,] tmpPrev);
+					var length = BreadthFirstPath((x, y), end, tmpPrev)?.Length;
+					if (length.HasValue && length.Value < answer2)
+						answer2 = length.Value;
+				}
 
-			return (answer1?.ToString(), answer2?.ToString());
+			return (answer1?.ToString(), answer2.ToString());
 		}
 
 		private static bool CheckHeight(int high, int low) => high <= low || high == low + 1;
@@ -60,7 +66,7 @@ namespace Ujeby.AoC.App.Year2022.Day12
 			return map;
 		}
 
-		public static void Dijkstra(int[,] map, (int x, int y) start, out char[,] path, out long[,] dist)
+		public static void Dijkstra(int[,] map, (int x, int y) start, out long[,] dist)
 		{
 			dist = new long[map.GetLength(0), map.GetLength(1)];
 			for (var y = 0; y < map.GetLength(0); y++)
@@ -68,7 +74,6 @@ namespace Ujeby.AoC.App.Year2022.Day12
 					dist[y, x] = long.MaxValue;
 
 			var visited = new bool[map.GetLength(0), map.GetLength(1)];
-			path = new char[map.GetLength(0), map.GetLength(1)];
 
 			dist[start.y, start.x] = 0;
 
@@ -92,10 +97,7 @@ namespace Ujeby.AoC.App.Year2022.Day12
 
 					var r = dist[shortest.y, shortest.x] + map[y1, x1];
 					if (r < dist[y1, x1])
-					{
 						dist[y1, x1] = r;
-						path[y1, x1] = Directions.OppositeNSWE[dir.Key];
-					}
 				}
 				visited[shortest.y, shortest.x] = true;
 
@@ -116,7 +118,7 @@ namespace Ujeby.AoC.App.Year2022.Day12
 			}
 			while (shortestDist != long.MaxValue);
 		}
-		
+
 		public static (int x, int y)[] DijkstraPath((int x, int y) start, (int x, int y) end, int[,] heightMap, long[,] dist)
 		{
 			var path = new List<(int x, int y)>();
@@ -201,7 +203,7 @@ namespace Ujeby.AoC.App.Year2022.Day12
 				path.Add(p);
 
 				if (!prev[p.y, p.x].HasValue)
-					break;
+					return null;
 
 				p = prev[p.y, p.x].Value;
 			}
