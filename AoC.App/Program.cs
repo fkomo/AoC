@@ -32,7 +32,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day12.PassagePathing()				{ Answer = new string[] { "4792", "133360" }},
 					new Year2021.Day13.TransparentOrigami()			{ Answer = new string[] { "751", "PGHRKLKL" }},
 					new Year2021.Day14.ExtendedPolymerization()		{ Answer = new string[] { "2657", "2911561572630" }},
-					new Year2021.Day15.Chitron()					{ Answer = new string[] { "811", "3012" }},
+					//new Year2021.Day15.Chitron()					{ Answer = new string[] { "811", "3012" }},
 					new Year2021.Day16.PacketDecoder()				{ Answer = new string[] { "945", "10637009915279" }},
 
 					// TODO 2021
@@ -52,6 +52,7 @@ namespace Ujeby.AoC.App
 					new Year2022.Day09.RopeBridge()					{ Answer = new string[] { "5619", "2376" }},
 					new Year2022.Day10.CathodeRayTube()             { Answer = new string[] { "14540", "EHZFZHCZ" }},
 					new Year2022.Day11.MonkeyInTheMiddle()          { Answer = new string[] { "62491", "17408399184" }},
+					new Year2022.Day12.HillClimbingAlgorithm()      { Answer = new string[] { "497", null }},
 
 					// TODO 2022
 				});

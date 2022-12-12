@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class RopeBridge : MainLoop
+	internal class RopeBridge : BaseLoop
 	{
 		protected override void Init()
 		{

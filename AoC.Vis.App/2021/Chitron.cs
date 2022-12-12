@@ -3,7 +3,7 @@ using Ujeby.AoC.App.Year2022.Day09;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class Chitron : MainLoop
+	internal class Chitron : BaseLoop
 	{
 		private int[,] _riskMap;
 		private long[,] _dist;
@@ -18,7 +18,7 @@ namespace Ujeby.AoC.Vis.App
 			_riskMap = AoC.App.Year2021.Day15.Chitron.CreateRiskMap(input, input.Length);
 			_riskMap = AoC.App.Year2021.Day15.Chitron.EnlargeRiskMap(_riskMap, input.Length, 5);
 
-			AoC.App.Year2021.Day15.Chitron.LowestRiskPath(_riskMap, out char[,] path, out _dist);
+			AoC.App.Year2021.Day15.Chitron.Dijkstra(_riskMap, (0,0), out char[,] path, out _dist);
 
 			var size = _riskMap.GetLength(0);
 			var x = size - 1;

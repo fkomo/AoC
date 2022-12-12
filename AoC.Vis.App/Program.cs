@@ -21,7 +21,8 @@ namespace Ujeby.AoC.Vis.App
 				InitSDL();
 
 				//new RopeBridge().Run(HandleInput);
-				new Chitron().Run(HandleInput);
+				//new Chitron().Run(HandleInput);
+				new HillClimbingAlgorithm().Run(HandleInput);
 			}
 			catch (Exception ex)
 			{
