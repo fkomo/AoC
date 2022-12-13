@@ -18,9 +18,8 @@ namespace Ujeby.AoC.Vis.App
 			_riskMap = AoC.App.Year2021.Day15.Chitron.CreateRiskMap(input, input.Length);
 			_riskMap = AoC.App.Year2021.Day15.Chitron.EnlargeRiskMap(_riskMap, input.Length, 5);
 
-			AoC.App.Year2021.Day15.Chitron.Dijkstra(_riskMap, (0,0), out _dist);
-
-			_path = AoC.App.Year2021.Day15.Chitron.DijkstraPath((0, 0), (_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1), _riskMap, _dist);
+			_dist = AoC.App.Year2021.Day15.Dijkstra.Create(_riskMap, (0,0));
+			_path = AoC.App.Year2021.Day15.Dijkstra.Path((0, 0), (_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1), _riskMap, _dist);
 
 			_gridSize = 8;
 		}

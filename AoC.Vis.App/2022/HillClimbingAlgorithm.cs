@@ -22,16 +22,18 @@ namespace Ujeby.AoC.Vis.App
 			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 
-			AoC.App.Year2021.Day15.Chitron.Dijkstra(_heightMap, _start, out _dijkstraDist,
-				nodesConnected: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+			_dijkstraDist = AoC.App.Year2021.Day15.Dijkstra.Create(_heightMap, _start,
+				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 
-			_dijkstraPath = AoC.App.Year2021.Day15.Chitron.DijkstraPath(_start, _end, _heightMap, _dijkstraDist,
-				nodesConnected: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+			_dijkstraPath = AoC.App.Year2021.Day15.Dijkstra.Path(_start, _end, _heightMap, _dijkstraDist,
+				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 
 			Console.WriteLine($"shortest dijkstra path={_dijkstraPath.Length}");
 
-			AoC.App.Year2022.Day12.HillClimbingAlgorithm.BreadthFirst(_heightMap, _start, out (int x, int y)?[,] prev);
-			_bfsPath = AoC.App.Year2022.Day12.HillClimbingAlgorithm.BreadthFirstPath(_start, _end, prev);
+			var bfsPrev = AoC.App.Year2022.Day12.BreadthFirstSearch.Create(_heightMap, _start,
+				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+			_bfsPath = AoC.App.Year2022.Day12.BreadthFirstSearch.Path(_start, _end, bfsPrev);
+			
 			Console.WriteLine($"shortest bfs path={_bfsPath.Length}");
 
 			_gridSize = 10;
