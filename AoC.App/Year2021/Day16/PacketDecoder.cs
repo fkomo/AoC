@@ -18,16 +18,13 @@ namespace Ujeby.AoC.App.Year2021.Day16
 			//ParsePacket("A0016C880162017C3686B18A3D4780", out _);
 
 			// part1
-			ParsePacket(input[0], out int versionSum);
-			long? answer1 = versionSum;
-
 			// part2
-			long? answer2 = ParsePacket(input[0], out _);
+			long answer2 = ParsePacket(input[0], out long answer1);
 
-			return (answer1?.ToString(), answer2?.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 
-		private static long ParsePacket(string input, out int versionSum)
+		private static long ParsePacket(string input, out long versionSum)
 		{
 			Debug.Line(input);
 
@@ -41,7 +38,7 @@ namespace Ujeby.AoC.App.Year2021.Day16
 			return result;
 		}
 
-		private static long ParsePacket(byte[] bytes, int start, out int read, out int versionSum)
+		private static long ParsePacket(byte[] bytes, int start, out int read, out long versionSum)
 		{
 			Debug.Indent += 2;
 
@@ -79,7 +76,7 @@ namespace Ujeby.AoC.App.Year2021.Day16
 					var toRead = (int)subPacketslength;
 					while (toRead > 0)
 					{
-						operands.Add(ParsePacket(bytes, start + read, out int packetLength, out int _versionSum));
+						operands.Add(ParsePacket(bytes, start + read, out int packetLength, out long _versionSum));
 						read += packetLength;
 						versionSum += _versionSum;
 
@@ -98,7 +95,7 @@ namespace Ujeby.AoC.App.Year2021.Day16
 
 					for (var i = 0; i < numOfsubPackets; i++)
 					{
-						operands.Add(ParsePacket(bytes, start + read, out int packetsLength, out int _versionSum));
+						operands.Add(ParsePacket(bytes, start + read, out int packetsLength, out long _versionSum));
 						read += packetsLength;
 						versionSum += _versionSum;
 					}

@@ -20,17 +20,7 @@ namespace Ujeby.AoC.Vis.App
 
 			AoC.App.Year2021.Day15.Chitron.Dijkstra(_riskMap, (0,0), out _dist);
 
-			var size = _riskMap.GetLength(0);
-			var x = size - 1;
-			var y = size - 1;
-
-			var tmp = new List<(int x, int y)>
-			{
-				(x, y)
-			};
-
-			// TODO Chitron visualization _path
-			_path = tmp.ToArray();
+			_path = AoC.App.Year2021.Day15.Chitron.DijkstraPath((0, 0), (_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1), _riskMap, _dist);
 
 			_gridSize = 8;
 		}

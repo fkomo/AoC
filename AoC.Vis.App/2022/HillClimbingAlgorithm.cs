@@ -22,12 +22,16 @@ namespace Ujeby.AoC.Vis.App
 			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 
-			AoC.App.Year2022.Day12.HillClimbingAlgorithm.Dijkstra(_heightMap, _start, out _dijkstraDist);
-			_dijkstraPath = AoC.App.Year2022.Day12.HillClimbingAlgorithm.DijkstraPath(_start, _end, _heightMap, _dijkstraDist);
+			AoC.App.Year2021.Day15.Chitron.Dijkstra(_heightMap, _start, out _dijkstraDist,
+				nodesConnected: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+
+			_dijkstraPath = AoC.App.Year2021.Day15.Chitron.DijkstraPath(_start, _end, _heightMap, _dijkstraDist,
+				nodesConnected: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+
 			Console.WriteLine($"shortest dijkstra path={_dijkstraPath.Length}");
 
 			AoC.App.Year2022.Day12.HillClimbingAlgorithm.BreadthFirst(_heightMap, _start, out (int x, int y)?[,] prev);
-			_bfsPath = AoC.App.Year2022.Day12.HillClimbingAlgorithm.BreadthFirstPath(_start,_end, prev);
+			_bfsPath = AoC.App.Year2022.Day12.HillClimbingAlgorithm.BreadthFirstPath(_start, _end, prev);
 			Console.WriteLine($"shortest bfs path={_bfsPath.Length}");
 
 			_gridSize = 10;
@@ -41,7 +45,7 @@ namespace Ujeby.AoC.Vis.App
 			if ((int)m.X >= 0 && (int)m.X < _heightMap.GetLength(1) && (int)-m.Y >= 0 && (int)-m.Y < _heightMap.GetLength(0))
 			{
 				var height = _heightMap[(int)-m.Y, (int)m.X];
-				_title += $"={height}/{ (char)('a' + height - 1) }";
+				_title += $"={height}/{(char)('a' + height - 1)}";
 			}
 		}
 
@@ -69,7 +73,7 @@ namespace Ujeby.AoC.Vis.App
 			//		DrawGridCell(x, -y, color.R, color.G, color.B, 0x77);
 			//	}
 
-			DrawGridRect(0, 0, _heightMap.GetLength(1), _heightMap.GetLength(0), 0xff, 0xff, 0xff, 0xff, 
+			DrawGridRect(0, 0, _heightMap.GetLength(1), _heightMap.GetLength(0), 0xff, 0xff, 0xff, 0xff,
 				fill: false);
 
 			// start
@@ -85,7 +89,7 @@ namespace Ujeby.AoC.Vis.App
 
 			// mouse cursor
 			var mouseCursorOnGrid = _mouseGrid / _gridSize;
-			DrawGridCell((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y, 0xff, 0xff, 0x00, 0xff, 
+			DrawGridCell((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y, 0xff, 0xff, 0x00, 0xff,
 				fill: false);
 		}
 
