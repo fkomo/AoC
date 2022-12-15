@@ -38,6 +38,8 @@ namespace Ujeby.AoC.Vis.App
 
 			_gridSize = 10;
 			_gridOffset = new Vector2(-_heightMap.GetLength(1) / 2 * _gridSize, -_heightMap.GetLength(0) / 2 * _gridSize);
+
+			// TODO render progress of search algs, not just result
 		}
 
 		protected override void Update()

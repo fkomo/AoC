@@ -59,6 +59,8 @@ namespace Ujeby.AoC.App
 					new Year2022.Day13.DistressSignal()				{ Answer = new string[] { "5682", "20304" }},
 
 					// TODO 2022
+					new Year2022.Day14.RegolithReservoir()          { Answer = new string[] { null, null }},
+					new Year2022.Day15.BeaconExclusionZone()        { Answer = new string[] { null, null }},
 				});
 		}
 	}

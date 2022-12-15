@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Ujeby.AoC.App.Year2022.Day09;
 
 namespace Ujeby.AoC.Vis.App
 {
@@ -22,6 +21,8 @@ namespace Ujeby.AoC.Vis.App
 			_path = AoC.App.Year2021.Day15.Dijkstra.Path((0, 0), (_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1), _riskMap, _dist);
 
 			_gridSize = 8;
+
+			// TODO Init with progressbar (iterate with update/render)
 		}
 
 		protected override void Update()

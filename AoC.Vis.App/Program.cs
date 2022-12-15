@@ -20,9 +20,13 @@ namespace Ujeby.AoC.Vis.App
 
 				InitSDL();
 
+				// TODO string drawing
+				// TODO menu with visualization options
+
 				//new RopeBridge().Run(HandleInput);
 				//new Chitron().Run(HandleInput);
-				new HillClimbingAlgorithm().Run(HandleInput);
+				//new HillClimbingAlgorithm().Run(HandleInput);
+				new RegolithReservoir().Run(HandleInput);
 			}
 			catch (Exception ex)
 			{
