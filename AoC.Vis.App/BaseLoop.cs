@@ -1,10 +1,10 @@
 ﻿using SDL2;
 using System.Numerics;
-using System.Runtime.CompilerServices;
+using Ujeby.AoC.Vis.App.Common;
 
 namespace Ujeby.AoC.Vis.App
 {
-	public abstract class BaseLoop
+	public abstract class BaseLoop : IRunnable
 	{
 		/// <summary>
 		/// mouse position in window (from top-left)
@@ -15,6 +15,8 @@ namespace Ujeby.AoC.Vis.App
 		/// mouse position in grid
 		/// </summary>
 		protected Vector2 _mouseGrid = new(0, 0);
+
+		protected Vector2 _mouseGridDiscrete => _mouseGrid / _gridSize;
 
 		/// <summary>
 		/// grid offset from window center
@@ -27,9 +29,12 @@ namespace Ujeby.AoC.Vis.App
 
 		protected string _title;
 
+		protected bool _endLoop;
+
+		public bool DragEnabled = true;
+
 		protected BaseLoop()
 		{
-			Init();
 		}
 
 		protected bool _drag = false;
@@ -37,38 +42,45 @@ namespace Ujeby.AoC.Vis.App
 
 		public void Run(Func<bool> handleInput)
 		{
-			while (handleInput())
+			Init();
+
+			while (handleInput() && !_endLoop)
 			{
 				_mouseState = SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
-				_mouseWindow.X = mouseX - Program.WindowSize.X / 2;
-				_mouseWindow.Y = Program.WindowSize.Y - mouseY - Program.WindowSize.Y / 2;
+				_mouseWindow.X = mouseX;
+				_mouseWindow.Y = mouseY;
+
+				var mouseCentered = new Vector2(_mouseWindow.X - Program.WindowSize.X / 2, Program.WindowSize.Y - mouseY - Program.WindowSize.Y / 2);
 
 				// mouse right
 				var right = (_mouseState & 4) == 4;
-				if (right && !_mouseRight)
+				if (DragEnabled)
 				{
-					_drag = true;
+					if (right && !_mouseRight)
+					{
+						_drag = true;
 
-					_dragStart.X = mouseX;
-					_dragStart.Y = mouseY;
-				}
-				else if (!right && _mouseRight)
-				{
-					_drag = false;
-				}
-				else if (_drag)
-				{
-					_gridOffset.X += mouseX - _dragStart.X;
-					_gridOffset.Y += mouseY - _dragStart.Y;
+						_dragStart.X = mouseX;
+						_dragStart.Y = mouseY;
+					}
+					else if (!right && _mouseRight)
+					{
+						_drag = false;
+					}
+					else if (_drag)
+					{
+						_gridOffset.X += mouseX - _dragStart.X;
+						_gridOffset.Y += mouseY - _dragStart.Y;
 
-					_dragStart.X = mouseX;
-					_dragStart.Y = mouseY;
+						_dragStart.X = mouseX;
+						_dragStart.Y = mouseY;
+					}
 				}
 				_mouseRight = right;
 
 				// mouse position in grid
-				_mouseGrid.X = _mouseWindow.X - _gridOffset.X;
-				_mouseGrid.Y = _mouseWindow.Y + _gridOffset.Y;
+				_mouseGrid.X = mouseCentered.X - _gridOffset.X;
+				_mouseGrid.Y = mouseCentered.Y + _gridOffset.Y;
 
 				// mouse left
 				var left = (_mouseState & 1) == 1;
@@ -77,10 +89,6 @@ namespace Ujeby.AoC.Vis.App
 				else if (!left && _mouseLeft)
 					LeftMouseUp(_mouseGrid);
 				_mouseLeft = left;
-
-				_title = $"mouse[btn={_mouseState}, window={mouseX}x{mouseY}, grid={(int)_mouseGrid.X}x{(int)_mouseGrid.Y}]";
-				if (_drag)
-					_title += $" drag[{(int)_dragStart.X} x {(int)_dragStart.Y}]";
 
 				_gridSize = Math.Max(2, _gridSize + Program.MouseWheel);
 				Program.MouseWheel = 0;
@@ -98,14 +106,22 @@ namespace Ujeby.AoC.Vis.App
 				// display backbuffer
 				SDL.SDL_RenderPresent(Program.RendererPtr);
 			}
+
+			Destroy();
 		}
 
-		protected abstract void LeftMouseDown(Vector2 _mouseGrid);
-		protected abstract void LeftMouseUp(Vector2 _mouseGrid);
+		protected virtual void LeftMouseDown(Vector2 _mouseGrid)
+		{
+		}
+
+		protected virtual void LeftMouseUp(Vector2 _mouseGrid)
+		{
+		}
 
 		protected abstract void Init();
 		protected abstract void Update();
 		protected abstract void Render();
+		protected abstract void Destroy();
 
 		protected void DrawRect(int x, int y, int w, int h, byte r, byte g, byte b, byte a,
 			bool fill = true)
@@ -233,6 +249,92 @@ namespace Ujeby.AoC.Vis.App
 				-h * _gridSize,
 				r, g, b, a,
 				fill: fill);
+		}
+
+		protected void DrawGridMouseCursor(bool printCoords = true)
+		{
+			// mouse cursor
+			DrawGridCell((int)_mouseGridDiscrete.X, (int)_mouseGridDiscrete.Y, 0xff, 0xff, 0x00, 0xff,
+				fill: false);
+
+			if (printCoords)
+				DrawTextLines(_mouseWindow + new Vector2(16, 16), new Text($"[{(int)_mouseGridDiscrete.X},{(int)_mouseGridDiscrete.Y}]"));
+		}
+
+		protected void DrawTextLines(Vector2 position, params TextLine[] lines)
+		{
+			var font = Program.CurrentFont;
+			var fontSprite = SpriteCache.Get(Program.CurrentFont.SpriteId);
+
+			var scale = new Vector2(2, 2);
+
+			var sourceRect = new SDL2.SDL.SDL_Rect();
+			var destinationRect = new SDL2.SDL.SDL_Rect();
+
+			var textPosition = position;
+			foreach (var line in lines)
+			{
+				if (line is Text text)
+				{
+					var color = text.Color * 255;
+					SDL2.SDL.SDL_SetTextureColorMod(fontSprite.TexturePtr, (byte)color.X, (byte)color.Y, (byte)color.Z);
+
+					for (var i = 0; i < text.Value.Length; i++)
+					{
+						var charIndex = (int)text.Value[i] - 32;
+						var charAabb = font.CharBoxes[charIndex];
+
+						sourceRect.x = (int)(font.CharSize.X * charIndex + charAabb.Min.X);
+						sourceRect.y = (int)charAabb.Min.Y;
+						sourceRect.w = (int)charAabb.Size.X;
+						sourceRect.h = (int)charAabb.Size.Y;
+
+						destinationRect.x = (int)(textPosition.X);
+						destinationRect.y = (int)(textPosition.Y);
+						destinationRect.w = (int)(charAabb.Size.X * scale.X);
+						destinationRect.h = (int)(charAabb.Size.Y * scale.Y);
+
+						SDL2.SDL.SDL_RenderCopy(Program.RendererPtr, fontSprite.TexturePtr, ref sourceRect, ref destinationRect);
+						textPosition.X += (charAabb.Size.X + font.Spacing.X) * scale.X;
+					}
+
+					textPosition.Y += (font.CharSize.Y + font.Spacing.Y) * scale.Y;
+					textPosition.X = position.X;
+				}
+				else if (line is EmptyLine)
+				{
+					textPosition.Y += font.CharSize.Y + font.Spacing.Y;
+				}
+			}
+		}
+
+		protected static Vector2 GetTextSize(TextLine[] lines, Common.Font font)
+		{
+			var scale = new Vector2(2, 2);
+
+			var size = Vector2.Zero;
+			foreach (var line in lines)
+			{
+				if (line is Text text)
+				{
+					var lineLength = 0;
+					for (var i = 0; i < text.Value.Length; i++)
+					{
+						var charIndex = (int)text.Value[i] - 32;
+						var charAabb = font.CharBoxes[charIndex];
+
+						lineLength += (int)(charAabb.Size.X + font.Spacing.X);
+					}
+					size.X = Math.Max(lineLength, size.X);
+					size.Y += font.CharSize.Y + font.Spacing.Y;
+				}
+				else if (line is EmptyLine)
+				{
+					size.Y += font.CharSize.Y + font.Spacing.Y;
+				}
+			}
+
+			return size * scale;
 		}
 	}
 }

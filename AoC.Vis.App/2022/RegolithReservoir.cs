@@ -24,7 +24,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid(showMain: true, showMajor: true, showMinor: false);
+			DrawGrid(showMinor: false);
 
 			// height map
 			for (var y = 0; y < _map.GetLength(0); y++)
@@ -40,20 +40,17 @@ namespace Ujeby.AoC.Vis.App
 						DrawGridCell(x - 500, -y, c, c, c, 0x77);
 				}
 
-			// mouse cursor
-			var mouseCursorOnGrid = _mouseGrid / _gridSize;
-			DrawGridCell((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y, 0xff, 0xff, 0x00, 0xff,
-				fill: false);
+			DrawGridMouseCursor();
+		}
+
+		protected override void Destroy()
+		{
+			SDL2.SDL.SDL_ShowCursor(1);
 		}
 
 		protected override void LeftMouseDown(Vector2 position)
 		{
-
-		}
-
-		protected override void LeftMouseUp(Vector2 position)
-		{
-
+			// TODO add sand at cursor
 		}
 	}
 }

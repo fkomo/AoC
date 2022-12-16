@@ -6,8 +6,9 @@ namespace Ujeby.AoC.Vis.App
 	{
 		protected override void Init()
 		{
+			SDL2.SDL.SDL_ShowCursor(0); 
+			
 			_snake = new (int x, int y)[20];
-			SDL2.SDL.SDL_ShowCursor(0);
 		}
 
 		private (int x, int y)? _apple = null;
@@ -49,20 +50,18 @@ namespace Ujeby.AoC.Vis.App
 				DrawGridCell(_snake[p].x, _snake[p].y, 0x77, 0x77, 0x77, 0x77);
 			DrawGridCell(_snake[0].x, _snake[0].y, 0xff, 0x00, 0x00, 0xff);
 
-			// mouse cursor
-			var mouseCursorOnGrid = _mouseGrid / _gridSize;
-			DrawGridCell((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y, 0xff, 0xff, 0xff, 0x77);
+			DrawGridMouseCursor();
+		}
+
+		protected override void Destroy()
+		{
+			SDL2.SDL.SDL_ShowCursor(1);
 		}
 
 		protected override void LeftMouseDown(Vector2 position)
 		{
 			var mouseCursorOnGrid = position / _gridSize;
 			_apple = new((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y);
-		}
-
-		protected override void LeftMouseUp(Vector2 position)
-		{
-
 		}
 	}
 }

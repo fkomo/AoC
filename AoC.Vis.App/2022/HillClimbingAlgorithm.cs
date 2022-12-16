@@ -28,14 +28,10 @@ namespace Ujeby.AoC.Vis.App
 			_dijkstraPath = AoC.App.Year2021.Day15.Dijkstra.Path(_start, _end, _heightMap, _dijkstraDist,
 				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 
-			Console.WriteLine($"shortest dijkstra path={_dijkstraPath.Length}");
-
 			var bfsPrev = AoC.App.Year2022.Day12.BreadthFirstSearch.Create(_heightMap, _start,
 				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 			_bfsPath = AoC.App.Year2022.Day12.BreadthFirstSearch.Path(_start, _end, bfsPrev);
 			
-			Console.WriteLine($"shortest bfs path={_bfsPath.Length}");
-
 			_gridSize = 10;
 			_gridOffset = new Vector2(-_heightMap.GetLength(1) / 2 * _gridSize, -_heightMap.GetLength(0) / 2 * _gridSize);
 
@@ -44,18 +40,11 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			var m = _mouseGrid / _gridSize;
-			_title += $" height[{(int)m.X}x{(int)-m.Y}]";
-			if ((int)m.X >= 0 && (int)m.X < _heightMap.GetLength(1) && (int)-m.Y >= 0 && (int)-m.Y < _heightMap.GetLength(0))
-			{
-				var height = _heightMap[(int)-m.Y, (int)m.X];
-				_title += $"={height}/{(char)('a' + height - 1)}";
-			}
 		}
 
 		protected override void Render()
 		{
-			DrawGrid(showMain: true, showMajor: true, showMinor: true);
+			DrawGrid();
 
 			// height map
 			var maxHeight = 'z' - 'a' + 2;
@@ -91,19 +80,35 @@ namespace Ujeby.AoC.Vis.App
 			foreach (var (x, y) in _dijkstraPath)
 				DrawGridCell(x, -y, 0xff, 0x00, 0x00, 0x77);
 
-			// mouse cursor
-			var mouseCursorOnGrid = _mouseGrid / _gridSize;
-			DrawGridCell((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y, 0xff, 0xff, 0x00, 0xff,
-				fill: false);
+			DrawGridMouseCursor();
+
+			var ui = new List<TextLine>();
+
+			ui.Add(new Text($"dijkstra path: {_dijkstraPath.Length}"));
+			ui.Add(new Text($"bfs path: {_bfsPath.Length}"));
+
+			if ((int)_mouseGridDiscrete.X >= 0 && (int)_mouseGridDiscrete.X < _heightMap.GetLength(1) && 
+				(int)-_mouseGridDiscrete.Y >= 0 && (int)-_mouseGridDiscrete.Y < _heightMap.GetLength(0))
+			{
+				var height = _heightMap[(int)-_mouseGridDiscrete.Y, (int)_mouseGridDiscrete.X];
+				ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
+			}
+
+			DrawTextLines(new Vector2(32, 32), ui.ToArray());
+		}
+
+		protected override void Destroy()
+		{
+			SDL2.SDL.SDL_ShowCursor(1);
 		}
 
 		protected override void LeftMouseDown(Vector2 position)
 		{
+			// TODO add/remove height
 		}
 
 		protected override void LeftMouseUp(Vector2 position)
 		{
-
 		}
 	}
 }

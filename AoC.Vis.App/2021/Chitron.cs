@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿using Ujeby.AoC.Vis.App.Common;
 
 namespace Ujeby.AoC.Vis.App
 {
@@ -27,14 +27,6 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			var m = _mouseGrid / _gridSize;
-			_title += $" risk[{(int)m.X}x{(int)-m.Y}]";
-			if ((int)m.X >= 0 && (int)m.X < _riskMap.GetLength(0) && (int)-m.Y >= 0 && (int)-m.Y < _riskMap.GetLength(0))
-			{
-				_title += $"={_riskMap[(int)-m.Y, (int)m.X]}";
-				_title += $" dist[{_dist[(int)-m.Y, (int)m.X]}]";
-			}
-			_title += $" total={_dist[_dist.GetLength(0) - 1, _dist.GetLength(0) - 1]}";
 		}
 
 		protected override void Render()
@@ -51,18 +43,26 @@ namespace Ujeby.AoC.Vis.App
 			foreach (var (x, y) in _path)
 				DrawGridCell(x, -y, 0x00, 0xff, 0x00, 0xaa);
 
-			// mouse cursor
-			var mouseCursorOnGrid = _mouseGrid / _gridSize;
-			DrawGridCell((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y, 0xff, 0x00, 0x00, 0xaa);
+			DrawGridMouseCursor();
+
+			var ui = new List<TextLine>
+			{
+				new Text($"path distance = {_dist[_dist.GetLength(0) - 1, _dist.GetLength(0) - 1]}")
+			};
+
+			if ((int)_mouseGridDiscrete.X >= 0 && (int)_mouseGridDiscrete.X < _riskMap.GetLength(0) && 
+				(int)-_mouseGridDiscrete.Y >= 0 && (int)-_mouseGridDiscrete.Y < _riskMap.GetLength(0))
+			{
+				ui.Add(new Text($"risk = {_riskMap[(int)-_mouseGridDiscrete.Y, (int)_mouseGridDiscrete.X]}"));
+				ui.Add(new Text($"distance = {_dist[(int)-_mouseGridDiscrete.Y, (int)_mouseGridDiscrete.X]}"));
+			}
+
+			DrawTextLines(new System.Numerics.Vector2(32, 32), ui.ToArray());
 		}
 
-		protected override void LeftMouseDown(Vector2 position)
+		protected override void Destroy()
 		{
-		}
-
-		protected override void LeftMouseUp(Vector2 position)
-		{
-
+			SDL2.SDL.SDL_ShowCursor(1);
 		}
 	}
 }

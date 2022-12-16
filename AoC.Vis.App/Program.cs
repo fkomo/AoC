@@ -1,6 +1,7 @@
 ﻿using SDL2;
 using System.Diagnostics;
 using System.Numerics;
+using Ujeby.AoC.Vis.App.Common;
 
 namespace Ujeby.AoC.Vis.App
 {
@@ -9,6 +10,7 @@ namespace Ujeby.AoC.Vis.App
 		public static IntPtr WindowPtr;
 		public static IntPtr RendererPtr;
 		public static Vector2 WindowSize = new(1920, 1080);
+		public static Font CurrentFont;
 
 		private static readonly Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -18,15 +20,26 @@ namespace Ujeby.AoC.Vis.App
 			{
 				stopwatch.Restart();
 
+				SpriteCache.Initialize();
+
 				InitSDL();
 
-				// TODO string drawing
-				// TODO menu with visualization options
+				CurrentFont = SpriteCache.LoadFont("font-5x7");
+				SpriteCache.CreateTexture(CurrentFont.SpriteId, out _);
 
-				//new RopeBridge().Run(HandleInput);
-				//new Chitron().Run(HandleInput);
-				//new HillClimbingAlgorithm().Run(HandleInput);
-				new RegolithReservoir().Run(HandleInput);
+				var menu = new Menu(
+					new IRunnable[]
+					{
+						new RopeBridge(),
+						new Chitron(),
+						new HillClimbingAlgorithm(),
+						new RegolithReservoir(),
+					}
+				);
+				
+				menu.Run(HandleInput);
+
+				menu.Selected?.Run(HandleInput);
 			}
 			catch (Exception ex)
 			{
