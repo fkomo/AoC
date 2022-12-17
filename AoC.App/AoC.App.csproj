@@ -78,6 +78,18 @@
 		<Content Include="Year2022\Day15\input.txt">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Year2022\Day16\input.sample.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Year2022\Day16\input.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Year2022\Day17\input.sample.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Year2022\Day17\input.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Year2021\Day01\input*.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
@@ -193,6 +205,10 @@
 	  <None Remove="Year2022\Day14\input.txt" />
 	  <None Remove="Year2022\Day15\input.sample.txt" />
 	  <None Remove="Year2022\Day15\input.txt" />
+	  <None Remove="Year2022\Day16\input.sample.txt" />
+	  <None Remove="Year2022\Day16\input.txt" />
+	  <None Remove="Year2022\Day17\input.sample.txt" />
+	  <None Remove="Year2022\Day17\input.txt" />
 	</ItemGroup>
 
 </Project>

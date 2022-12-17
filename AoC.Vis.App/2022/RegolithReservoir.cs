@@ -26,18 +26,19 @@ namespace Ujeby.AoC.Vis.App
 		{
 			DrawGrid(showMinor: false);
 
+			var blockerColor = new Vector4(1, 1, 1, .7f);
+			var sandColor = new Vector4(0.9f, 0.7f, 0, .7f);
+
 			// height map
 			for (var y = 0; y < _map.GetLength(0); y++)
 				for (var x = 0; x < _map.GetLength(1); x++)
 				{
-					byte c = 0;
-					if (_map[y, x] == (byte)'#')
-						c = 0xff;
-					else if (_map[y, x] == (byte)'o')
-						c = 0x77;
+					if (_map[y, x] == 0)
+						continue;
 
-					if (c != 0)
-						DrawGridCell(x - 500, -y, c, c, c, 0x77);
+					var color = (_map[y, x] == (byte)'#') ? blockerColor : sandColor;
+
+					DrawGridCell(x - 500, -y, color);
 				}
 
 			DrawGridMouseCursor();
@@ -50,7 +51,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown(Vector2 position)
 		{
-			// TODO add sand at cursor
+			AoC.App.Year2022.Day14.RegolithReservoir.AddSand(((int)_mouseGridDiscrete.X, -(int)_mouseGridDiscrete.Y), _map);
 		}
 	}
 }

@@ -1,21 +1,13 @@
-﻿using SDL2;
-using System.Numerics;
+﻿using System.Numerics;
 using Ujeby.AoC.Vis.App.Common;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class Exit : IRunnable
-	{
-		public void Run(Func<bool> handleInput)
-		{
-		}
-	}
-
 	internal class Menu : BaseLoop
 	{
 		private readonly IRunnable[] _options;
 
-		private Vector2 _topLeft;
+		private Vector2 _position;
 
 		public Menu(IRunnable[] options)
 		{
@@ -24,7 +16,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			_topLeft = Program.WindowSize / 2;
+			_position = Program.WindowSize / 2;
 		}
 
 		protected override void Update()
@@ -41,7 +33,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			var items = _options.Select(o => new Text(o.GetType().Name)).ToArray();
 
-			var topLeft = _topLeft;
+			var topLeft = _position;
 			for (var i = 0; i < items.Length; i++)
 			{
 				var itemSize = GetTextSize(new TextLine[] { items[i] }, Program.CurrentFont);
@@ -58,7 +50,7 @@ namespace Ujeby.AoC.Vis.App
 				break;
 			}
 
-			DrawTextLines(_topLeft, items);
+			DrawTextLines(_position, items);
 		}
 
 		protected override void Destroy()

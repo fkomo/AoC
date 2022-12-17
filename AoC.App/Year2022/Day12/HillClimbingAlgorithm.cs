@@ -10,23 +10,25 @@ namespace Ujeby.AoC.App.Year2022.Day12
 			var heightMap = CreateHeightMap(input, out (int x, int y) start, out (int x, int y) end);
 
 			// part1
-			var prev = BreadthFirstSearch.Create(heightMap, start);
+			var prev = BreadthFirstSearch.Create(heightMap, start, connectionCheck: CheckHeight);
 			var path = BreadthFirstSearch.Path(start, end, prev);
 			long? answer1 = path.Length;
 
 			// part2
 			long answer2 = long.MaxValue;
 			for (var y = 0; y < heightMap.GetLength(0); y++)
-				for (var x = 0; x < heightMap.GetLength(1); x++)
-				{
-					if (heightMap[y, x] != 1)
-						continue;
+			// its enough to check first column, because other possibilities cant climb the hill
+			//for (var x = 0; x < heightMap.GetLength(1); x++)
+			{
+				var x = 0;
+				if (heightMap[y, x] != 1)
+					continue;
 
-					var tmpPrev = BreadthFirstSearch.Create(heightMap, (x, y));
-					var length = BreadthFirstSearch.Path((x, y), end, tmpPrev)?.Length;
-					if (length.HasValue && length.Value < answer2)
-						answer2 = length.Value;
-				}
+				var tmpPrev = BreadthFirstSearch.Create(heightMap, (x, y), connectionCheck: CheckHeight);
+				var length = BreadthFirstSearch.Path((x, y), end, tmpPrev)?.Length;
+				if (length.HasValue && length.Value < answer2)
+					answer2 = length.Value;
+			}
 
 			return (answer1?.ToString(), answer2.ToString());
 		}

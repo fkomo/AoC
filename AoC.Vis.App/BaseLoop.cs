@@ -239,6 +239,14 @@ namespace Ujeby.AoC.Vis.App
 			DrawRect((int)gx, (int)gy, _gridSize, _gridSize, r, g, b, a, fill: fill);
 		}
 
+		protected void DrawGridCell(int x, int y, Vector4 color,
+			bool fill = true)
+		{
+			var bColor = color * 255;
+
+			DrawGridCell(x, y, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W, fill: fill);
+		}
+
 		protected void DrawGridRect(int x, int y, int w, int h, byte r, byte g, byte b, byte a,
 			bool fill = true)
 		{
