@@ -12,7 +12,6 @@ namespace Ujeby.AoC.App.Year2022.Day18
 				return (x: int.Parse(split[0]), y: int.Parse(split[1]), z: int.Parse(split[2]));
 			}).ToArray();
 
-			//var min = (x: cubes.Min(c => c.x), y: cubes.Min(c => c.y), z: cubes.Min(c => c.z));
 			var max = (x: cubes.Max(c => c.x), y: cubes.Max(c => c.y), z: cubes.Max(c => c.z));
 
 			// 0=air, 1=lava, 2=steam
@@ -40,7 +39,7 @@ namespace Ujeby.AoC.App.Year2022.Day18
 							x == grid.GetLength(2) - 1 ||
 							y == grid.GetLength(1) - 1 ||
 							z == grid.GetLength(0) - 1)
-							ExpandSteam((x: x, y: y, z: z), grid);
+							ExpandSteam((x, y, z), grid);
 					}
 				}
 			}
@@ -60,22 +59,22 @@ namespace Ujeby.AoC.App.Year2022.Day18
 			grid[p.z, p.y, p.x] = 2;
 
 			if (p.z + 1 < grid.GetLength(0) && grid[p.z + 1, p.y, p.x] == 0)
-				ExpandSteam((x: p.x, y: p.y, z: p.z + 1), grid);
+				ExpandSteam((p.x, p.y, p.z + 1), grid);
 
 			if (p.z - 1 > 0 && grid[p.z - 1, p.y, p.x] == 0)
-				ExpandSteam((x: p.x, y: p.y, z: p.z - 1), grid);
+				ExpandSteam((p.x, p.y, p.z - 1), grid);
 
 			if (p.y + 1 < grid.GetLength(1) && grid[p.z, p.y + 1, p.x] == 0)
-				ExpandSteam((x: p.x, y: p.y + 1, z: p.z), grid);
+				ExpandSteam((p.x, p.y + 1, p.z), grid);
 
 			if (p.y - 1 > 0 && grid[p.z, p.y - 1, p.x] == 0)
-				ExpandSteam((x: p.x, y: p.y - 1, z: p.z), grid);
+				ExpandSteam((p.x, p.y - 1, p.z), grid);
 
 			if (p.x + 1 < grid.GetLength(2) && grid[p.z, p.y, p.x + 1] == 0)
-				ExpandSteam((x: p.x + 1, y: p.y, z: p.z), grid);
+				ExpandSteam((p.x + 1, p.y, p.z), grid);
 
 			if (p.x - 1 > 0 && grid[p.z, p.y, p.x - 1] == 0)
-				ExpandSteam((x: p.x - 1, y: p.y, z: p.z), grid);
+				ExpandSteam((p.x - 1, p.y, p.z), grid);
 		}
 
 		private static long GetSurfaceArea((int x, int y, int z)[] cubes, byte[,,] grid, 
