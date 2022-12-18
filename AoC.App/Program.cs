@@ -64,7 +64,7 @@ namespace Ujeby.AoC.App
 					//new Year2022.Day16.ProboscideaVolcanium()       { Answer = new string[] { null, null }},
 					//new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { null, null }},
 
-					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { "4288", null }},
+					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { "4288", "2494" }},
 				});
 		}
 	}
