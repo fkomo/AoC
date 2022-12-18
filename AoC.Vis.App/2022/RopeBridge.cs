@@ -50,7 +50,7 @@ namespace Ujeby.AoC.Vis.App
 				DrawGridCell(_snake[p].x, _snake[p].y, 0x77, 0x77, 0x77, 0x77);
 			DrawGridCell(_snake[0].x, _snake[0].y, 0xff, 0x00, 0x00, 0xff);
 
-			DrawGridMouseCursor();
+			DrawGridCursor();
 		}
 
 		protected override void Destroy()

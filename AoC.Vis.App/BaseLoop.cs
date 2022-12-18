@@ -243,7 +243,6 @@ namespace Ujeby.AoC.Vis.App
 			bool fill = true)
 		{
 			var bColor = color * 255;
-
 			DrawGridCell(x, y, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W, fill: fill);
 		}
 
@@ -259,14 +258,14 @@ namespace Ujeby.AoC.Vis.App
 				fill: fill);
 		}
 
-		protected void DrawGridMouseCursor(bool printCoords = true)
+		protected void DrawGridCursor(bool printCoords = true)
 		{
 			// mouse cursor
 			DrawGridCell((int)_mouseGridDiscrete.X, (int)_mouseGridDiscrete.Y, 0xff, 0xff, 0x00, 0xff,
 				fill: false);
 
 			if (printCoords)
-				DrawTextLines(_mouseWindow + new Vector2(16, 16), new Text($"[{(int)_mouseGridDiscrete.X},{(int)_mouseGridDiscrete.Y}]"));
+				DrawTextLines(_mouseWindow + new Vector2(16, 16), new Text($"[{(int)_mouseGridDiscrete.X};{(int)_mouseGridDiscrete.Y}]"));
 		}
 
 		protected void DrawTextLines(Vector2 position, params TextLine[] lines)

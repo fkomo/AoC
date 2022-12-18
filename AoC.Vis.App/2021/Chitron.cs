@@ -43,7 +43,7 @@ namespace Ujeby.AoC.Vis.App
 			foreach (var (x, y) in _path)
 				DrawGridCell(x, -y, 0x00, 0xff, 0x00, 0xaa);
 
-			DrawGridMouseCursor();
+			DrawGridCursor();
 
 			var ui = new List<TextLine>
 			{

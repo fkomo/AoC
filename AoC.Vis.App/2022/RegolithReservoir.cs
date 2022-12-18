@@ -41,7 +41,7 @@ namespace Ujeby.AoC.Vis.App
 					DrawGridCell(x - 500, -y, color);
 				}
 
-			DrawGridMouseCursor();
+			DrawGridCursor();
 		}
 
 		protected override void Destroy()

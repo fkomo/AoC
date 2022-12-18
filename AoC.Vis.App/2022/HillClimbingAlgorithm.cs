@@ -80,7 +80,7 @@ namespace Ujeby.AoC.Vis.App
 			foreach (var (x, y) in _dijkstraPath)
 				DrawGridCell(x, -y, 0xff, 0x00, 0x00, 0x77);
 
-			DrawGridMouseCursor();
+			DrawGridCursor();
 
 			var ui = new List<TextLine>();
 

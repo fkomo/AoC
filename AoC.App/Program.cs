@@ -58,9 +58,9 @@ namespace Ujeby.AoC.App
 					new Year2022.Day12.HillClimbingAlgorithm()      { Answer = new string[] { "497", "492" }},
 					new Year2022.Day13.DistressSignal()				{ Answer = new string[] { "5682", "20304" }},
 					new Year2022.Day14.RegolithReservoir()          { Answer = new string[] { "774", "22499" }},
+					new Year2022.Day15.BeaconExclusionZone()        { Answer = new string[] { "5166077", "13071206703981" }},
 
 					// TODO 2022
-					new Year2022.Day15.BeaconExclusionZone()        { Answer = new string[] { null, null }},
 					new Year2022.Day16.ProboscideaVolcanium()       { Answer = new string[] { null, null }},
 					new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { null, null }},
 				});

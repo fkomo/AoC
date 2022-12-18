@@ -30,9 +30,9 @@ namespace Ujeby.AoC.Common
 				var answer = SolveProblem(ReadInput());
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
-				var title = $"-={{ {Title} }}=-";
+				var title = $"-={{ #{Day:d2} {Title} }}=-";
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray);
-				Log.Text(Title, textColor: ConsoleColor.White, indent: 0);
+				Log.Text($"#{Day:d2} {Title}", textColor: ConsoleColor.White, indent: 0);
 				Log.Text($" }}=-", textColor: ConsoleColor.Gray, indent: 0);
 
 				var elapsedMsg = $"-={{ {DurationToString(elapsed)} }}=-";
