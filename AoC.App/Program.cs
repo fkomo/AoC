@@ -63,6 +63,7 @@ namespace Ujeby.AoC.App
 					// TODO 2022
 					new Year2022.Day16.ProboscideaVolcanium()       { Answer = new string[] { null, null }},
 					new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { null, null }},
+					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { null, null }},
 				});
 		}
 	}

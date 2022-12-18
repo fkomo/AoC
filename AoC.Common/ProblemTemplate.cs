@@ -1,12 +1,12 @@
 ﻿using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.Year2022.Day17
+namespace Ujeby.AoC.App.YearYYYY.DayDD
 {
-	public class PyroclasticFlow : ProblemBase
+	public class PROBLEMNAME : ProblemBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			// TODO 2022/17
+			// TODO YYYY/DD
 
 			// part1
 			long? answer1 = null;

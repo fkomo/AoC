@@ -1,12 +1,12 @@
-﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.Year2022.Day17
+namespace Ujeby.AoC.App.Year2022.Day18
 {
-	public class PyroclasticFlow : ProblemBase
+	public class BoilingBoulders : ProblemBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			// TODO 2022/17
+			// TODO 2022/18
 
 			// part1
 			long? answer1 = null;

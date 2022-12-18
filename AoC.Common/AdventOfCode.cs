@@ -82,7 +82,10 @@
 						result.Wait();
 
 						if (result.Result)
+						{
 							downloaded++;
+							CreateCodeTemplate(year, day, outputDir, yearDirPrefix);
+						}
 
 						total++;
 					}
@@ -110,8 +113,8 @@
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
-			path = Path.Combine(path, "input.txt");
-			if (!File.Exists(path))
+			var inputPath = Path.Combine(path, "input.txt");
+			if (!File.Exists(inputPath))
 			{
 				var inputUrl = $"{_aocUrl}/{year}/day/{day}/input";
 
@@ -126,7 +129,9 @@
 					downloaded = true;
 
 					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
-					File.WriteAllText(path, input[..^1]);
+					
+					File.WriteAllText(inputPath, input[..^1]);
+					File.WriteAllText(Path.Combine(path, "input.sample.txt"), null);
 				}
 				else
 				{
@@ -135,6 +140,22 @@
 			}
 
 			return downloaded;
+		}
+
+		private static void CreateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
+		{
+			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+
+			path = Path.Combine(path, "Sample.cs");
+
+			var template = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "ProblemTemplate.cs"))
+				.Replace("YYYY", year.ToString())
+				.Replace("DD", day.ToString())
+				.Replace("PROBLEMNAME", "Sample");
+
+			File.WriteAllText(path, template);
 		}
 	}
 }
