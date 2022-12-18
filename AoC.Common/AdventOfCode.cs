@@ -84,7 +84,8 @@
 						if (result.Result)
 						{
 							downloaded++;
-							CreateCodeTemplate(year, day, outputDir, yearDirPrefix);
+							var codeResult = CreateCodeTemplate(year, day, outputDir, yearDirPrefix);
+							codeResult.Wait();
 						}
 
 						total++;
@@ -129,7 +130,7 @@
 					downloaded = true;
 
 					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
-					
+
 					File.WriteAllText(inputPath, input[..^1]);
 					File.WriteAllText(Path.Combine(path, "input.sample.txt"), null);
 				}
@@ -142,11 +143,23 @@
 			return downloaded;
 		}
 
-		private static void CreateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
+		private static async Task CreateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
 		{
 			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
+
+			// TODO read puzzle title
+
+			//var response = await _httpClient.GetAsync($"{_aocUrl}/{year}/day/{day:d2}");
+			//if (response.IsSuccessStatusCode)
+			//{
+			//	var content = await response.Content.ReadAsStringAsync();
+
+			//	var start = content.IndexOf("<h2>--- ") + "<h2>--- ".Length;
+			//	var length = content.IndexOf(" ---</h2>") - start;
+			//	var puzzleTitle = content.Substring(start, length);
+			//}
 
 			path = Path.Combine(path, "Sample.cs");
 

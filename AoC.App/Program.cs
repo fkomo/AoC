@@ -61,9 +61,10 @@ namespace Ujeby.AoC.App
 					new Year2022.Day15.BeaconExclusionZone()        { Answer = new string[] { "5166077", "13071206703981" }},
 
 					// TODO 2022
-					new Year2022.Day16.ProboscideaVolcanium()       { Answer = new string[] { null, null }},
-					new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { null, null }},
-					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { null, null }},
+					//new Year2022.Day16.ProboscideaVolcanium()       { Answer = new string[] { null, null }},
+					//new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { null, null }},
+
+					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { "4288", null }},
 				});
 		}
 	}
