@@ -1,4 +1,4 @@
-﻿namespace Ujeby.AoC.Vis.App
+﻿namespace Ujeby.Common.Drawing.Interfaces
 {
 	public interface IRunnable
 	{

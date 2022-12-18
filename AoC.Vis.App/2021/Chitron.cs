@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Vis.App.Common;
+﻿using Ujeby.Common.Drawing;
+using Ujeby.Common.Drawing.Entities;
 
 namespace Ujeby.AoC.Vis.App
 {

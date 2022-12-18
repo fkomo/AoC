@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Ujeby.AoC.Vis.App.Common
+namespace Ujeby.Common.Drawing.Entities
 {
 	public struct AABB
 	{

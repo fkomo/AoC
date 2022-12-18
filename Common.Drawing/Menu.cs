@@ -1,9 +1,10 @@
 ﻿using System.Numerics;
-using Ujeby.AoC.Vis.App.Common;
+using Ujeby.Common.Drawing.Entities;
+using Ujeby.Common.Drawing.Interfaces;
 
-namespace Ujeby.AoC.Vis.App
+namespace Ujeby.Common.Drawing
 {
-	internal class Menu : BaseLoop
+    public class Menu : BaseLoop
 	{
 		private readonly IRunnable[] _options;
 
@@ -16,7 +17,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			_position = Program.WindowSize / 2;
+			_position = Core.WindowSize / 2;
 		}
 
 		protected override void Update()
@@ -36,7 +37,7 @@ namespace Ujeby.AoC.Vis.App
 			var topLeft = _position;
 			for (var i = 0; i < items.Length; i++)
 			{
-				var itemSize = GetTextSize(new TextLine[] { items[i] }, Program.CurrentFont);
+				var itemSize = GetTextSize(new TextLine[] { items[i] }, Core.CurrentFont);
 
 				if (_mouseWindow.X < topLeft.X || _mouseWindow.Y < topLeft.Y ||
 					_mouseWindow.X > topLeft.X + itemSize.X || _mouseWindow.Y > topLeft.Y + itemSize.Y)

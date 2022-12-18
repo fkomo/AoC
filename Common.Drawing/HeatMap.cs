@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Ujeby.AoC.Vis.App.Common
+namespace Ujeby.Common.Drawing
 {
 	public static class HeatMap
 	{

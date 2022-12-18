@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Ujeby.Common.Drawing;
 
 namespace Ujeby.AoC.Vis.App
 {

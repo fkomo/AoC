@@ -10,33 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Content\font-5x7-data.png" />
-	  <None Remove="Content\font-5x7.ase" />
-	  <None Remove="Content\font-5x7.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="Content\font-5x7-data.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Content\font-5x7.ase">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Content\font-5x7.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="SDL2-CS.NetCore" Version="2.0.8" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\AoC.App\AoC.App.csproj" />
+	  <ProjectReference Include="..\Common.Drawing\Common.Drawing.csproj" />
 	</ItemGroup>
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="copy $(SolutionDir)3rd\SDL2\*.dll $(OutDir)" />
-	</Target>
 
 </Project>

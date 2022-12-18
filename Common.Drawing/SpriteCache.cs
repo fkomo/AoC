@@ -1,10 +1,11 @@
 ﻿using SDL2;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Ujeby.Common.Drawing.Entities;
 
-namespace Ujeby.AoC.Vis.App.Common
+namespace Ujeby.Common.Drawing
 {
-	public class SpriteCache
+    public class SpriteCache
 	{
 		public static string ContentDirectory => Path.Combine(Environment.CurrentDirectory, "Content");
 		public static Dictionary<string, string> LibraryFileMap { get; private set; }
@@ -123,7 +124,7 @@ namespace Ujeby.AoC.Vis.App.Common
 			sprite = Library[spriteId];
 			if (sprite.ImagePtr != IntPtr.Zero && sprite.TexturePtr == IntPtr.Zero)
 			{
-				sprite.TexturePtr = SDL2.SDL.SDL_CreateTextureFromSurface(Program.RendererPtr, sprite.ImagePtr);
+				sprite.TexturePtr = SDL2.SDL.SDL_CreateTextureFromSurface(Core.RendererPtr, sprite.ImagePtr);
 				Library[spriteId] = sprite;
 
 				return true;
