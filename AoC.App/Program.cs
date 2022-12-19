@@ -1,4 +1,4 @@
-﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App
 {
@@ -7,13 +7,6 @@ namespace Ujeby.AoC.App
 		static void Main(string[] args)
 		{
 			AdventOfCode.DownloadMissingInput(@"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\", "Year");
-
-			// TODO 2015
-			// TODO 2016
-			// TODO 2017
-			// TODO 2018
-			// TODO 2019
-			// TODO 2020
 
 			new AdventOfCode("https://adventofcode.com/2021")
 				.Run(new ISolvable[]
@@ -32,13 +25,16 @@ namespace Ujeby.AoC.App
 					new Year2021.Day12.PassagePathing()				{ Answer = new string[] { "4792", "133360" }},
 					new Year2021.Day13.TransparentOrigami()			{ Answer = new string[] { "751", "PGHRKLKL" }},
 					new Year2021.Day14.ExtendedPolymerization()		{ Answer = new string[] { "2657", "2911561572630" }},
-
-					// TODO 2021/15 optimize, takes >1min to complete
-					//new Year2021.Day15.Chitron()					{ Answer = new string[] { "811", "3012" }},
-
+					new Year2021.Day15.Chitron()					{ Answer = new string[] { "811", "3012" }},
 					new Year2021.Day16.PacketDecoder()				{ Answer = new string[] { "945", "10637009915279" }},
-
-					// TODO 2021
+					new Year2021.Day17.Puzzle202117()				{ Answer = new string[] { null, null } },
+					new Year2021.Day18.Puzzle202118()				{ Answer = new string[] { null, null } },
+					new Year2021.Day19.Puzzle202119()				{ Answer = new string[] { null, null } },
+					new Year2021.Day20.Puzzle202120()				{ Answer = new string[] { null, null } },
+					new Year2021.Day21.Puzzle202121()				{ Answer = new string[] { null, null } },
+					new Year2021.Day22.Puzzle202122()				{ Answer = new string[] { null, null } },
+					new Year2021.Day23.Puzzle202123()				{ Answer = new string[] { null, null } },
+					new Year2021.Day24.Puzzle202124()				{ Answer = new string[] { null, null } },
 				});
 
 			new AdventOfCode("https://adventofcode.com/2022")
@@ -60,9 +56,9 @@ namespace Ujeby.AoC.App
 					new Year2022.Day14.RegolithReservoir()          { Answer = new string[] { "774", "22499" }},
 					new Year2022.Day15.BeaconExclusionZone()        { Answer = new string[] { "5166077", "13071206703981" }},
 					new Year2022.Day16.ProboscideaVolcanium()       { Answer = new string[] { null, null }},
-					new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { null, null }},
+					new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { "3202", null }},
 					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { "4288", "2494" }},
-
+					new Year2022.Day19.Puzzle202219()				{ Answer = new string[] { null, null } },
 					// TODO 2022
 				});
 		}

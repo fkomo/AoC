@@ -67,9 +67,6 @@ namespace Ujeby.AoC.Vis.App
 			//		DrawGridCell(x, -y, color.R, color.G, color.B, 0x77);
 			//	}
 
-			DrawGridRect(0, 0, _heightMap.GetLength(1), _heightMap.GetLength(0), 0xff, 0xff, 0xff, 0xff,
-				fill: false);
-
 			// start
 			DrawGridCell(_start.x, -_start.y, 0xff, 0xff, 0xff, 0xff);
 			// end

@@ -18,6 +18,7 @@ namespace Ujeby.AoC.Vis.App
 						new Chitron(),
 						new HillClimbingAlgorithm(),
 						new RegolithReservoir(),
+						new PyroclasticFlow(),
 					}
 				);
 				

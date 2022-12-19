@@ -147,6 +147,7 @@ namespace Ujeby.Common.Drawing
 		private byte _zeroColor = 0xcc;
 		private byte _majorGridColor = 0x20;
 		private byte _minorGridColor = 0x10;
+		private byte _gridAlpha = 0xaa;
 
 		public int _gridSize = 16;
 		public int _majorGrid = 10;
@@ -161,25 +162,25 @@ namespace Ujeby.Common.Drawing
 			{
 				for (var ix = 1; origin.X + ix * size < Core.WindowSize.X; ix++)
 				{
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, (int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)Core.WindowSize.Y);
 				}
 
 				for (var ix = 1; origin.X - ix * size >= 0; ix++)
 				{
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, (int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)Core.WindowSize.Y);
 				}
 
 				for (var iy = 1; origin.Y + iy * size < Core.WindowSize.Y; iy++)
 				{
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, 0, (int)origin.Y + iy * size, (int)Core.WindowSize.X, (int)origin.Y + iy * size);
 				}
 
 				for (var iy = 1; origin.Y - iy * size >= 0; iy++)
 				{
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _minorGridColor, _minorGridColor, _minorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, 0, (int)origin.Y - iy * size, (int)Core.WindowSize.X, (int)origin.Y - iy * size);
 				}
 			}
@@ -191,7 +192,7 @@ namespace Ujeby.Common.Drawing
 					if (ix % _majorGrid != 0)
 						continue;
 
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, (int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)Core.WindowSize.Y);
 				}
 
@@ -200,7 +201,7 @@ namespace Ujeby.Common.Drawing
 					if (ix % _majorGrid != 0)
 						continue;
 
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, (int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)Core.WindowSize.Y);
 				}
 
@@ -209,7 +210,7 @@ namespace Ujeby.Common.Drawing
 					if (iy % _majorGrid != 0)
 						continue;
 
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, 0, (int)origin.Y + iy * size, (int)Core.WindowSize.X, (int)origin.Y + iy * size);
 				}
 
@@ -218,14 +219,14 @@ namespace Ujeby.Common.Drawing
 					if (iy % _majorGrid != 0)
 						continue;
 
-					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, 0xff);
+					SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _majorGridColor, _majorGridColor, _majorGridColor, _gridAlpha);
 					SDL.SDL_RenderDrawLine(Core.RendererPtr, 0, (int)origin.Y - iy * size, (int)Core.WindowSize.X, (int)origin.Y - iy * size);
 				}
 			}
 
 			if (showMain)
 			{
-				SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _zeroColor, _zeroColor, _zeroColor, 0xff);
+				SDL.SDL_SetRenderDrawColor(Core.RendererPtr, _zeroColor, _zeroColor, _zeroColor, _gridAlpha);
 				SDL.SDL_RenderDrawLine(Core.RendererPtr, (int)origin.X, 0, (int)origin.X, (int)Core.WindowSize.Y);
 				SDL.SDL_RenderDrawLine(Core.RendererPtr, 0, (int)origin.Y, (int)Core.WindowSize.X, (int)origin.Y);
 			}
@@ -247,12 +248,21 @@ namespace Ujeby.Common.Drawing
 			DrawGridCell(x, y, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W, fill: fill);
 		}
 
+		protected void DrawGridRect(int x, int y, int w, int h, Vector4 color,
+			bool fill = true)
+		{
+			var bColor = color * 255;
+			DrawGridRect(x, y, w, -h,
+				(byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W,
+				fill: fill);
+		}
+
 		protected void DrawGridRect(int x, int y, int w, int h, byte r, byte g, byte b, byte a,
 			bool fill = true)
 		{
 			DrawRect(
 				(int)(Core.WindowSize.X / 2 + _gridOffset.X + x * _gridSize) - _gridSize / 2,
-				(int)(Core.WindowSize.Y / 2 - _gridOffset.Y + (y + 1) * _gridSize) - _gridSize / 2,
+				(int)(Core.WindowSize.Y / 2 - _gridOffset.Y + (y) * _gridSize) - _gridSize / 2,
 				w * _gridSize,
 				-h * _gridSize,
 				r, g, b, a,

@@ -1,12 +1,12 @@
-﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.YearYYYY.DayDD
+namespace Ujeby.AoC.App.Year2022.Day19
 {
-	public class PROBLEMNAME : ProblemBase
+	public class Puzzle202219 : ProblemBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			// TODO YYYY/DD
+			// TODO 2022/19
 
 			// part1
 			long? answer1 = null;

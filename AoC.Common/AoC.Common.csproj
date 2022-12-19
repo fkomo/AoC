@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Update="ProblemTemplate.cs">
+	  <Compile Update="PuzzleTemplate.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Compile>
 	</ItemGroup>

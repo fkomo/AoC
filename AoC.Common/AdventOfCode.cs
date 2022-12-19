@@ -84,8 +84,10 @@
 						if (result.Result)
 						{
 							downloaded++;
-							var codeResult = CreateCodeTemplate(year, day, outputDir, yearDirPrefix);
-							codeResult.Wait();
+
+							Log.Indent += 2;
+							CreateCodeTemplate(year, day, outputDir, yearDirPrefix);
+							Log.Indent -= 2;
 						}
 
 						total++;
@@ -143,32 +145,33 @@
 			return downloaded;
 		}
 
-		private static async Task CreateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
+		private static void CreateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
 		{
 			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
-			// TODO read puzzle title
-
-			//var response = await _httpClient.GetAsync($"{_aocUrl}/{year}/day/{day:d2}");
-			//if (response.IsSuccessStatusCode)
-			//{
-			//	var content = await response.Content.ReadAsStringAsync();
-
-			//	var start = content.IndexOf("<h2>--- ") + "<h2>--- ".Length;
-			//	var length = content.IndexOf(" ---</h2>") - start;
-			//	var puzzleTitle = content.Substring(start, length);
-			//}
-
-			path = Path.Combine(path, "Sample.cs");
-
-			var template = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "ProblemTemplate.cs"))
+			var puzzleTitle = $"Puzzle{year}{day:d2}";
+			var template = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "PuzzleTemplate.cs"))
 				.Replace("YYYY", year.ToString())
-				.Replace("DD", day.ToString())
-				.Replace("PROBLEMNAME", "Sample");
+				.Replace("DD", day.ToString("d2"))
+				.Replace("PUZZLETITLE", puzzleTitle);
 
-			File.WriteAllText(path, template);
+			File.WriteAllText(Path.Combine(path, $"{puzzleTitle}.cs"), template);
+			Log.Line($"{Path.Combine(path, $"{puzzleTitle}.cs")}");
+
+			var programCsFilename = Path.Combine(rootDir, "Program.cs");
+			var programCs = File.ReadAllText(programCsFilename);
+			var todo = $"// TODO {year}";
+			if (programCs.Contains(todo))
+			{
+				programCs = programCs.Replace(todo, 
+					$"new Year{year}.Day{day:d2}.{puzzleTitle}()\t\t\t\t{{ Answer = new string[] {{ null, null }} }}," + Environment.NewLine +
+					$"\t\t\t\t\t{todo}");
+
+				File.WriteAllText(programCsFilename, programCs);
+				Log.Line($"{programCsFilename}");
+			}
 		}
 	}
 }
