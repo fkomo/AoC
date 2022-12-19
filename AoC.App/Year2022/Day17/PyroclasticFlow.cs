@@ -91,6 +91,8 @@ namespace Ujeby.AoC.App.Year2022.Day17
 
 					y = y1;
 				}
+
+				// drop distance
 				drops.Add(chamber.Count + 3 - y);
 
 				// add placed rock to chamber
@@ -155,19 +157,13 @@ namespace Ujeby.AoC.App.Year2022.Day17
 
 					if (patternFound)
 					{
-						var beforePatternHeight = heightInc.Take(pattern.from).Sum();
-						Debug.Line($"before-pattern count = {pattern.from}, height = {beforePatternHeight}");
-						Debug.Line($"pattern {pattern.from}-{pattern.to}, length = {pattern.to - pattern.from}");
-
 						var patternCount = (rockCount - pattern.from) / (pattern.to - pattern.from);
-						var patternHeight = heightInc.Skip(pattern.from).Take(pattern.to - pattern.from).Sum();
-						Debug.Line($"pattern height = {patternHeight} * count = {patternCount} => {patternHeight * patternCount}");
-
 						var afterPatternCount = rockCount - patternCount * (pattern.to - pattern.from) - pattern.from;
-						var afterPatternHeight = heightInc.Skip(pattern.from).Take((int)afterPatternCount).Sum();
-						Debug.Line($"after-pattern count = {afterPatternCount}, height = {afterPatternHeight}");
 
-						return beforePatternHeight + (patternHeight * patternCount) + afterPatternHeight;
+						return 
+							heightInc.Take(pattern.from).Sum() + 
+							(heightInc.Skip(pattern.from).Take(pattern.to - pattern.from).Sum() * patternCount) +
+							heightInc.Skip(pattern.from).Take((int)afterPatternCount).Sum();
 					}
 				}
 			}
