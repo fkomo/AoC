@@ -56,9 +56,9 @@ namespace Ujeby.AoC.App
 					new Year2022.Day14.RegolithReservoir()          { Answer = new string[] { "774", "22499" }},
 					new Year2022.Day15.BeaconExclusionZone()        { Answer = new string[] { "5166077", "13071206703981" }},
 					new Year2022.Day16.ProboscideaVolcanium()       { Answer = new string[] { null, null }},
-					new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { "3202", null }},
+					new Year2022.Day17.PyroclasticFlow()			{ Answer = new string[] { "3202", "1591977077352" }},
 					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { "4288", "2494" }},
-					new Year2022.Day19.Puzzle202219()				{ Answer = new string[] { null, null } },
+					new Year2022.Day19.NotEnoughMinerals()			{ Answer = new string[] { null, null } },
 					// TODO 2022
 				});
 		}
