@@ -6,8 +6,6 @@ namespace Ujeby.AoC.App.Year2022.Day15
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			return (null, null);
-
 			// [0] sensor, [1] beacon
 			var sbs = input.Select(l => l["Sensor at x=".Length..].Replace(" closest beacon is at x=", string.Empty)
 				.Split(":").Select(p =>

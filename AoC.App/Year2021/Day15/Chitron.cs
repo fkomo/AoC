@@ -6,15 +6,13 @@ namespace Ujeby.AoC.App.Year2021.Day15
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			// TODO 2021/15 optimize, takes >1min to complete
-			return (null, null);
-
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);
 			var dist = Dijkstra.Create(riskMap, (0, 0));
 			long? answer1 = dist[riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1];
 
 			// part2
+			// TODO 2021/15 part2 optimize, takes >1min to complete
 			var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
 			dist = Dijkstra.Create(riskMap5, (0, 0));
 			long? answer2 = dist[riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1];
