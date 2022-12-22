@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2021.Day13
 {
-    internal class TransparentOrigami : ProblemBase
+    internal class TransparentOrigami : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

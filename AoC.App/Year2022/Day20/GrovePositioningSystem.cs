@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day20
 {
-	public class GrovePositioningSystem : ProblemBase
+	public class GrovePositioningSystem : PuzzleBase
 	{
 		internal class Position
 		{
@@ -78,13 +78,17 @@ namespace Ujeby.AoC.App.Year2022.Day20
 
 			foreach (var position in file.Values)
 				if (position.Number == 0)
+				{
+					PrintFile(position);
 					return position;
-			
+				}
+
 			return null;
 		}
 
-		private static void Print(Position first)
+		private static void PrintFile(Position first)
 		{
+#if _DEBUG_SAMPLE
 			Debug.Text($"{first.Number}", indent: 6);
 			var node = first.Neighbour[1];
 			do
@@ -93,6 +97,7 @@ namespace Ujeby.AoC.App.Year2022.Day20
 				node = node.Neighbour[1];
 			} while (node != first);
 			Debug.Line();
+#endif
 		}
 
 		private static Dictionary<int, Position> ParseInput(string[] input)

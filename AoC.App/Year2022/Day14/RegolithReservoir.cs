@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day14
 {
-	public class RegolithReservoir : ProblemBase
+	public class RegolithReservoir : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

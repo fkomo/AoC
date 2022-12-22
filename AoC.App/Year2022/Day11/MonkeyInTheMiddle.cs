@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day11
 {
-	public class MonkeyInTheMiddle : ProblemBase
+	public class MonkeyInTheMiddle : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

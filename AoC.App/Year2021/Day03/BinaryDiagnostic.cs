@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2021.Day03
 {
-	internal class BinaryDiagnostic : ProblemBase
+	internal class BinaryDiagnostic : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

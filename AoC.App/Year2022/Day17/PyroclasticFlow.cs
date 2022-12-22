@@ -3,7 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day17
 {
-	public class PyroclasticFlow : ProblemBase
+	public class PyroclasticFlow : PuzzleBase
 	{
 		public static char Empty = '.';
 		private static readonly string EmptyLine = new(Enumerable.Repeat(Empty, 7).ToArray());

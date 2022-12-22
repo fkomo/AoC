@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2021.Day05
 {
-	internal class HydrothermalVenture : ProblemBase
+	internal class HydrothermalVenture : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

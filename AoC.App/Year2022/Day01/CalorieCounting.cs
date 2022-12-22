@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day01
 {
-	internal class CalorieCounting : ProblemBase
+	internal class CalorieCounting : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

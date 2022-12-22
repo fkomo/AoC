@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day15
 {
-	public class BeaconExclusionZone : ProblemBase
+	public class BeaconExclusionZone : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

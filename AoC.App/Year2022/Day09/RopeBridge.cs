@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day09
 {
-	public class RopeBridge : ProblemBase
+	public class RopeBridge : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

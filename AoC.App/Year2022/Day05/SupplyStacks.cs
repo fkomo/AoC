@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day05
 {
-	internal class SupplyStacks : ProblemBase
+	internal class SupplyStacks : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

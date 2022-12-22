@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day06
 {
-	internal class TuningTrouble : ProblemBase
+	internal class TuningTrouble : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

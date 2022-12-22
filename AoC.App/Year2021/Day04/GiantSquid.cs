@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2021.Day04
 {
-	internal class GiantSquid : ProblemBase
+	internal class GiantSquid : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

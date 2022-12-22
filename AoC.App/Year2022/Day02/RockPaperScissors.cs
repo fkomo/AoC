@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day02
 {
-	internal class RockPaperScissors : ProblemBase
+	internal class RockPaperScissors : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

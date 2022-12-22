@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2021.Day08
 {
-	internal class SevenSegmentSearch : ProblemBase
+	internal class SevenSegmentSearch : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

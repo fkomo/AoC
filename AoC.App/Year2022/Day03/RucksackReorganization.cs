@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day03
 {
-	internal class RucksackReorganization : ProblemBase
+	internal class RucksackReorganization : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

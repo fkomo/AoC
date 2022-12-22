@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2022.Day10
 {
-	public class CathodeRayTube : ProblemBase
+	public class CathodeRayTube : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

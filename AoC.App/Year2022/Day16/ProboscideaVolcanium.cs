@@ -9,7 +9,7 @@ namespace Ujeby.AoC.App.Year2022.Day16
 		public Valve[] Tunnels { get; set; }
 	}
 
-	public class ProboscideaVolcanium : ProblemBase
+	public class ProboscideaVolcanium : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

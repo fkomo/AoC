@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day19
 {
-	public class NotEnoughMinerals : ProblemBase
+	public class NotEnoughMinerals : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

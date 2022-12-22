@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2021.Day07
 {
-	internal class TheTreacheryOfWhales : ProblemBase
+	internal class TheTreacheryOfWhales : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

@@ -3,7 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day12
 {
-	public class HillClimbingAlgorithm : ProblemBase
+	public class HillClimbingAlgorithm : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{

@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.App.Year2021.Day10
 {
-	internal class SyntaxScoring : ProblemBase
+	internal class SyntaxScoring : PuzzleBase
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
