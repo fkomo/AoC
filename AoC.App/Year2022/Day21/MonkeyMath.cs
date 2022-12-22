@@ -23,6 +23,7 @@ namespace Ujeby.AoC.App.Year2022.Day21
 			// part2
 			long? answer2 = null;
 			long human = 301; // sample
+			// TODO 2022/21 part2
 			if (CheckHuman(human, monkeys))
 				answer2 = human;
 
