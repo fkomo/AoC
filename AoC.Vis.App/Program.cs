@@ -1,5 +1,7 @@
-﻿using Ujeby.Common.Drawing;
-using Ujeby.Common.Drawing.Interfaces;
+﻿using Ujeby.AoC.Vis.App.Common;
+using Ujeby.Graphics.Sdl;
+using Ujeby.Graphics.Sdl.Interfaces;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
@@ -9,21 +11,28 @@ namespace Ujeby.AoC.Vis.App
 		{
 			try
 			{
-				Core.Init();
+				v2i windowSize = new(1920, 1080);
+				Sdl2Wrapper.Init("AoC.Vis", windowSize);
 
-				var menu = new Menu(
-					new IRunnable[]
-					{
-						new RopeBridge(),
-						new Chitron(),
-						new HillClimbingAlgorithm(),
-						new RegolithReservoir(),
-					}
-				);
-				
-				menu.Run(HandleInput);
+				while (true)
+				{
+					var menu = new Menu(windowSize,
+						new IRunnable[]
+						{
+							new RopeBridge(windowSize),
+							new Chitron(windowSize),
+							new HillClimbingAlgorithm(windowSize),
+							new RegolithReservoir(windowSize),
+							new MonkeyMap(windowSize)
+						}
+					);
+					menu.Run(HandleInput);
 
-				menu.Selected?.Run(HandleInput);
+					if (menu.Selected == null)
+						break;
+
+					menu.Selected.Run(HandleInput);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -31,7 +40,7 @@ namespace Ujeby.AoC.Vis.App
 			}
 			finally
 			{
-				Core.Destroy();
+				Sdl2Wrapper.Destroy();
 			}
 		}
 

@@ -13,7 +13,7 @@ namespace Ujeby.AoC.App.Year2021.Day11
 			int height = map.Length * size;
 
 			using Bitmap bmp = new(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-			using Graphics gfx = Graphics.FromImage(bmp);
+			using System.Drawing.Graphics gfx = System.Drawing.Graphics.FromImage(bmp);
 			gfx.Clear(Color.Black);
 
 			for (var y = 0; y < map.Length; y++)

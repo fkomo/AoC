@@ -1,10 +1,11 @@
-﻿using System.Numerics;
-using Ujeby.Common.Drawing;
-using Ujeby.Common.Drawing.Entities;
+﻿using Ujeby.Graphics;
+using Ujeby.Graphics.Entities;
+using Ujeby.Graphics.Sdl;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class HillClimbingAlgorithm : BaseLoop
+	internal class HillClimbingAlgorithm : Sdl2Loop
 	{
 		private int[,] _heightMap;
 
@@ -16,9 +17,13 @@ namespace Ujeby.AoC.Vis.App
 		private (int x, int y) _start;
 		private (int x, int y) _end;
 
+		public HillClimbingAlgorithm(v2i windowSize) : base(windowSize)
+		{
+		}
+
 		protected override void Init()
 		{
-			SDL2.SDL.SDL_ShowCursor(0);
+			ShowCursor(false);
 
 			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
@@ -33,8 +38,8 @@ namespace Ujeby.AoC.Vis.App
 				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 			_bfsPath = AoC.App.Year2022.Day12.BreadthFirstSearch.Path(_start, _end, bfsPrev);
 			
-			_gridSize = 10;
-			_gridOffset = new Vector2(-_heightMap.GetLength(1) / 2 * _gridSize, -_heightMap.GetLength(0) / 2 * _gridSize);
+			MinorGridSize = 10;
+			GridOffset = new v2i(-_heightMap.GetLength(1) / 2 * MinorGridSize, -_heightMap.GetLength(0) / 2 * MinorGridSize);
 
 			// TODO render progress of search algs, not just result
 		}
@@ -51,10 +56,7 @@ namespace Ujeby.AoC.Vis.App
 			var maxHeight = 'z' - 'a' + 2;
 			for (var y = 0; y < _heightMap.GetLength(0); y++)
 				for (var x = 0; x < _heightMap.GetLength(1); x++)
-				{
-					var color = HeatMap.GetColorForValue(_heightMap[y, x], maxHeight);
-					DrawGridCell(x, -y, color.R, color.G, color.B, 0x77);
-				}
+					DrawGridCellFill(x, y, HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
 
 			// dijkstra distance map
 			//var maxDist = _dijkstraDist.Cast<long>().Where(l => l < long.MaxValue).Max() + 1;
@@ -67,45 +69,41 @@ namespace Ujeby.AoC.Vis.App
 			//		DrawGridCell(x, -y, color.R, color.G, color.B, 0x77);
 			//	}
 
-			// start
-			DrawGridCell(_start.x, -_start.y, 0xff, 0xff, 0xff, 0xff);
-			// end
-			DrawGridCell(_end.x, -_end.y, 0xff, 0xff, 0xff, 0xff);
-
 			// path
 			foreach (var (x, y) in _bfsPath)
-				DrawGridCell(x, -y, 0xff, 0xff, 0xff, 0x77);
-			foreach (var (x, y) in _dijkstraPath)
-				DrawGridCell(x, -y, 0xff, 0x00, 0x00, 0x77);
+				DrawGridCellFill(x, y, new v4f(1, 1, 1, 0.5));
 
-			DrawGridCursor();
+			foreach (var (x, y) in _dijkstraPath)
+				DrawGridCellFill(x, y, new v4f(1, 0, 0, 0.5));
+
+			DrawGridMouseCursor();
 
 			var ui = new List<TextLine>();
 
 			ui.Add(new Text($"dijkstra path: {_dijkstraPath.Length}"));
 			ui.Add(new Text($"bfs path: {_bfsPath.Length}"));
 
-			if ((int)_mouseGridDiscrete.X >= 0 && (int)_mouseGridDiscrete.X < _heightMap.GetLength(1) && 
-				(int)-_mouseGridDiscrete.Y >= 0 && (int)-_mouseGridDiscrete.Y < _heightMap.GetLength(0))
+			if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _heightMap.GetLength(1) && 
+				(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _heightMap.GetLength(0))
 			{
-				var height = _heightMap[(int)-_mouseGridDiscrete.Y, (int)_mouseGridDiscrete.X];
+				var height = _heightMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X];
 				ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
 			}
 
-			DrawTextLines(new Vector2(32, 32), ui.ToArray());
+			DrawText(new v2i(32, 32), ui.ToArray());
 		}
 
 		protected override void Destroy()
 		{
-			SDL2.SDL.SDL_ShowCursor(1);
+			ShowCursor();
 		}
 
-		protected override void LeftMouseDown(Vector2 position)
+		protected override void LeftMouseDown(v2i position)
 		{
 			// TODO add/remove height
 		}
 
-		protected override void LeftMouseUp(Vector2 position)
+		protected override void LeftMouseUp(v2i position)
 		{
 		}
 	}

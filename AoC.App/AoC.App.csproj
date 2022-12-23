@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
+		<ProjectReference Include="..\Ujeby\Ujeby.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -51,6 +51,12 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Common\PuzzleTemplate.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

@@ -11,7 +11,11 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\AoC.App\AoC.App.csproj" />
-	  <ProjectReference Include="..\Common.Drawing\Common.Drawing.csproj" />
+	  <ProjectReference Include="..\Ujeby\Ujeby.csproj" />
 	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="copy $(SolutionDir)3rd\SDL2\*.dll $(OutDir)" />
+	</Target>
 
 </Project>

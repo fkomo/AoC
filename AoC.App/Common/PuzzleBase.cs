@@ -2,7 +2,7 @@
 
 namespace Ujeby.AoC.Common
 {
-	public abstract class PuzzleBase : ISolvable
+	public abstract class PuzzleBase : IPuzzle
 	{
 		public string[] Answer { get; set; }
 

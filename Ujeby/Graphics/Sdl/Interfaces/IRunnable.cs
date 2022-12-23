@@ -1,4 +1,4 @@
-﻿namespace Ujeby.Common.Drawing.Interfaces
+﻿namespace Ujeby.Graphics.Sdl.Interfaces
 {
 	public interface IRunnable
 	{

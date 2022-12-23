@@ -1,27 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!--<Nullable>enable</Nullable>-->
-		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<AssemblyName>Ujeby</AssemblyName>
+		<RootNamespace>Ujeby</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Content\font-5x7-data.png" />
-	  <None Remove="Content\font-5x7.ase" />
-	  <None Remove="Content\font-5x7.png" />
+	  <None Remove="Content\Fonts\font-5x7-data.png" />
+	  <None Remove="Content\Fonts\font-5x7.ase" />
+	  <None Remove="Content\Fonts\font-5x7.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="Content\font-5x7-data.png">
+	  <Content Include="Content\Fonts\font-5x7-data.png">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Content\font-5x7.ase">
+	  <Content Include="Content\Fonts\font-5x7.ase">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Content\font-5x7.png">
+	  <Content Include="Content\Fonts\font-5x7.png">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>

@@ -1,6 +1,6 @@
-﻿using System.Numerics;
+﻿using Ujeby.Vectors;
 
-namespace Ujeby.Common.Drawing.Entities
+namespace Ujeby.Graphics.Entities
 {
     public abstract class TextLine
     {
@@ -18,7 +18,7 @@ namespace Ujeby.Common.Drawing.Entities
         }
 
         public string Value;
-        public Vector4 Color = Colors.White;
+        public v4f Color = Colors.White;
     }
 
     public class Font
@@ -27,11 +27,18 @@ namespace Ujeby.Common.Drawing.Entities
         public string DataSpriteId;
 
         /// <summary></summary>
-        public Vector2 CharSize;
+        public v2i CharSize;
 
         /// <summary></summary>
-        public Vector2 Spacing;
+        public v2i Spacing;
 
-        public AABB[] CharBoxes;
+        public AABBi[] CharBoxes;
+    }
+
+    public enum TextAlign
+    {
+        Left,
+        Center,
+        Right
     }
 }

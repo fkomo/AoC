@@ -8,37 +8,37 @@ namespace Ujeby.AoC.App
 		{
 			AdventOfCode.DownloadMissingInput(@"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\", "Year");
 
-			new AdventOfCode("https://adventofcode.com/2021")
-				.Run(new ISolvable[]
-				{
-					new Year2021.Day01.SonarSweep()                 { Answer = new string[] { "1226", "1252" } },
-					new Year2021.Day02.Dive()                       { Answer = new string[] { "1868935", "1965970888" } },
-					new Year2021.Day03.BinaryDiagnostic()           { Answer = new string[] { "2250414", "6085575" } },
-					new Year2021.Day04.GiantSquid()                 { Answer = new string[] { "10680", "31892" } },
-					new Year2021.Day05.HydrothermalVenture()        { Answer = new string[] { "7085", "20271" } },
-					new Year2021.Day06.Lanternfish()                { Answer = new string[] { "352151", "1601616884019" } },
-					new Year2021.Day07.TheTreacheryOfWhales()       { Answer = new string[] { "355150", "98368490" } },
-					new Year2021.Day08.SevenSegmentSearch()         { Answer = new string[] { "247", null } },
-					new Year2021.Day09.SmokeBasin()                 { Answer = new string[] { "444", "1168440" } },
-					new Year2021.Day10.SyntaxScoring()              { Answer = new string[] { "369105", "3999363569" } },
-					new Year2021.Day11.DumboOctopus()               { Answer = new string[] { "1741", "440" } },
-					new Year2021.Day12.PassagePathing()             { Answer = new string[] { "4792", "133360" }},
-					new Year2021.Day13.TransparentOrigami()         { Answer = new string[] { "751", "PGHRKLKL" }},
-					new Year2021.Day14.ExtendedPolymerization()     { Answer = new string[] { "2657", "2911561572630" }},
-					new Year2021.Day15.Chitron()                    { Answer = new string[] { "811", "3012" }},
-					new Year2021.Day16.PacketDecoder()              { Answer = new string[] { "945", "10637009915279" }},
-					new Year2021.Day17.Puzzle202117()               { Answer = new string[] { null, null } },
-					new Year2021.Day18.Puzzle202118()               { Answer = new string[] { null, null } },
-					new Year2021.Day19.Puzzle202119()               { Answer = new string[] { null, null } },
-					new Year2021.Day20.Puzzle202120()               { Answer = new string[] { null, null } },
-					new Year2021.Day21.Puzzle202121()               { Answer = new string[] { null, null } },
-					new Year2021.Day22.Puzzle202122()               { Answer = new string[] { null, null } },
-					new Year2021.Day23.Puzzle202123()               { Answer = new string[] { null, null } },
-					new Year2021.Day24.Puzzle202124()               { Answer = new string[] { null, null } },
-				});
+			//new AdventOfCode("https://adventofcode.com/2021")
+			//	.Run(new ISolvable[]
+			//	{
+			//		new Year2021.Day01.SonarSweep()                 { Answer = new string[] { "1226", "1252" } },
+			//		new Year2021.Day02.Dive()                       { Answer = new string[] { "1868935", "1965970888" } },
+			//		new Year2021.Day03.BinaryDiagnostic()           { Answer = new string[] { "2250414", "6085575" } },
+			//		new Year2021.Day04.GiantSquid()                 { Answer = new string[] { "10680", "31892" } },
+			//		new Year2021.Day05.HydrothermalVenture()        { Answer = new string[] { "7085", "20271" } },
+			//		new Year2021.Day06.Lanternfish()                { Answer = new string[] { "352151", "1601616884019" } },
+			//		new Year2021.Day07.TheTreacheryOfWhales()       { Answer = new string[] { "355150", "98368490" } },
+			//		new Year2021.Day08.SevenSegmentSearch()         { Answer = new string[] { "247", null } },
+			//		new Year2021.Day09.SmokeBasin()                 { Answer = new string[] { "444", "1168440" } },
+			//		new Year2021.Day10.SyntaxScoring()              { Answer = new string[] { "369105", "3999363569" } },
+			//		new Year2021.Day11.DumboOctopus()               { Answer = new string[] { "1741", "440" } },
+			//		new Year2021.Day12.PassagePathing()             { Answer = new string[] { "4792", "133360" }},
+			//		new Year2021.Day13.TransparentOrigami()         { Answer = new string[] { "751", "PGHRKLKL" }},
+			//		new Year2021.Day14.ExtendedPolymerization()     { Answer = new string[] { "2657", "2911561572630" }},
+			//		new Year2021.Day15.Chitron()                    { Answer = new string[] { "811", "3012" }},
+			//		new Year2021.Day16.PacketDecoder()              { Answer = new string[] { "945", "10637009915279" }},
+			//		new Year2021.Day17.Puzzle202117()               { Answer = new string[] { null, null } },
+			//		new Year2021.Day18.Puzzle202118()               { Answer = new string[] { null, null } },
+			//		new Year2021.Day19.Puzzle202119()               { Answer = new string[] { null, null } },
+			//		new Year2021.Day20.Puzzle202120()               { Answer = new string[] { null, null } },
+			//		new Year2021.Day21.Puzzle202121()               { Answer = new string[] { null, null } },
+			//		new Year2021.Day22.Puzzle202122()               { Answer = new string[] { null, null } },
+			//		new Year2021.Day23.Puzzle202123()               { Answer = new string[] { null, null } },
+			//		new Year2021.Day24.Puzzle202124()               { Answer = new string[] { null, null } },
+			//	});
 
 			new AdventOfCode("https://adventofcode.com/2022")
-				.Run(new ISolvable[]
+				.Run(new IPuzzle[]
 				{
 					new Year2022.Day01.CalorieCounting()            { Answer = new string[] { "66306", "195292" }},
 					new Year2022.Day02.RockPaperScissors()          { Answer = new string[] { "13484", "13433" }},
@@ -60,8 +60,9 @@ namespace Ujeby.AoC.App
 					new Year2022.Day18.BoilingBoulders()            { Answer = new string[] { "4288", "2494" }},
 					new Year2022.Day19.NotEnoughMinerals()          { Answer = new string[] { null, null } },
 					new Year2022.Day20.GrovePositioningSystem()     { Answer = new string[] { "2622", "1538773034088" } },
-					new Year2022.Day21.MonkeyMath()					{ Answer = new string[] { "43699799094202", "3375719472770" } },
+					new Year2022.Day21.MonkeyMath()                 { Answer = new string[] { "43699799094202", "3375719472770" } },
 					new Year2022.Day22.MonkeyMap()					{ Answer = new string[] { null, null } },
+					new Year2022.Day23.UnstableDiffusion()			{ Answer = new string[] { null, null } },
 					// TODO 2022
 				});
 		}

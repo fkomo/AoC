@@ -1,17 +1,17 @@
 ﻿using SDL2;
-using System.Numerics;
-using Ujeby.Common.Drawing.Entities;
+using Ujeby.Graphics.Entities;
+using Ujeby.Vectors;
 
-namespace Ujeby.Common.Drawing
+namespace Ujeby.Graphics.Sdl
 {
-	public static class Core
+	public static class Sdl2Wrapper
 	{
-		public static IntPtr WindowPtr;
-		public static IntPtr RendererPtr;
+		internal static IntPtr WindowPtr;
+		internal static IntPtr RendererPtr;
+		
 		public static Font CurrentFont;
-		public static Vector2 WindowSize = new(1920, 1080);
 
-		public static void Init(
+		public static void Init(string title, v2i windowSize,
 			string fontName = "font-5x7")
 		{
 			SpriteCache.Initialize();
@@ -19,9 +19,9 @@ namespace Ujeby.Common.Drawing
 			if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
 				throw new Exception($"Failed to initialize SDL2 library. SDL2Error({SDL.SDL_GetError()})");
 
-			WindowPtr = SDL.SDL_CreateWindow("UjebyTest",
+			WindowPtr = SDL.SDL_CreateWindow(title,
 				SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED,
-				(int)WindowSize.X, (int)WindowSize.Y,
+				(int)windowSize.X, (int)windowSize.Y,
 				SDL.SDL_WindowFlags.SDL_WINDOW_VULKAN);
 			if (WindowPtr == IntPtr.Zero)
 				throw new Exception($"Failed to create window. SDL2Error({SDL.SDL_GetError()})");
@@ -34,7 +34,6 @@ namespace Ujeby.Common.Drawing
 
 			CurrentFont = SpriteCache.LoadFont(fontName);
 			SpriteCache.CreateTexture(CurrentFont.SpriteId, out _);
-
 		}
 
 		public static void Destroy()

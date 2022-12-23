@@ -1,6 +1,6 @@
-﻿using System.Numerics;
+﻿using Ujeby.Vectors;
 
-namespace Ujeby.Common.Drawing.Entities
+namespace Ujeby.Graphics.Entities
 {
     public class Sprite
     {
@@ -10,7 +10,7 @@ namespace Ujeby.Common.Drawing.Entities
         public string Filename;
 
         /// <summary>width x height</summary>
-        public Vector2 Size;
+        public v2i Size;
 
         /// <summary>
         /// pixel format: 0xARGB

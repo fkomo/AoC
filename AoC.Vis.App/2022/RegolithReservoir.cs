@@ -1,21 +1,29 @@
-﻿using System.Numerics;
-using Ujeby.Common.Drawing;
+﻿using Ujeby.Graphics.Sdl;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class RegolithReservoir : BaseLoop
+	internal class RegolithReservoir : Sdl2Loop
 	{
 		private byte[,] _map;
 
+		private Random _rnd;
+
+		public RegolithReservoir(v2i windowSize) : base(windowSize)
+		{
+		}
+
 		protected override void Init()
 		{
-			SDL2.SDL.SDL_ShowCursor(0);
+			ShowCursor(false);
 
 			var input = new AoC.App.Year2022.Day14.RegolithReservoir().ReadInput();
 			_map = AoC.App.Year2022.Day14.RegolithReservoir.CreateMap(input, ground: true);
 
-			_gridSize = 6;
-			_gridOffset = new Vector2(0, -500);
+			MinorGridSize = 6;
+			GridOffset = new v2i(0, -500);
+
+			_rnd = new Random(123);
 		}
 
 		protected override void Update()
@@ -27,8 +35,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			DrawGrid(showMinor: false);
 
-			var blockerColor = new Vector4(1, 1, 1, .7f);
-			var sandColor = new Vector4(0.9f, 0.7f, 0, .7f);
+			var blockerColor = new v4f(1, 1, 1, .7f);
 
 			// height map
 			for (var y = 0; y < _map.GetLength(0); y++)
@@ -37,22 +44,23 @@ namespace Ujeby.AoC.Vis.App
 					if (_map[y, x] == 0)
 						continue;
 
-					var color = (_map[y, x] == (byte)'#') ? blockerColor : sandColor;
+					var color = (_map[y, x] == (byte)'#') ? 
+						blockerColor : new v4f(0.4 + _rnd.NextDouble() / 2, 0.3 + _rnd.NextDouble() / 2, 0, 0.8f);
 
-					DrawGridCell(x - 500, -y, color);
+					DrawGridCellFill(x - 500, y, color);
 				}
 
-			DrawGridCursor();
+			DrawGridMouseCursor();
 		}
 
 		protected override void Destroy()
 		{
-			SDL2.SDL.SDL_ShowCursor(1);
+			ShowCursor();
 		}
 
-		protected override void LeftMouseDown(Vector2 position)
+		protected override void LeftMouseDown(v2i position)
 		{
-			AoC.App.Year2022.Day14.RegolithReservoir.AddSand(((int)_mouseGridDiscrete.X, -(int)_mouseGridDiscrete.Y), _map);
+			AoC.App.Year2022.Day14.RegolithReservoir.AddSand(((int)MouseGridPositionDiscrete.X, -(int)MouseGridPositionDiscrete.Y), _map);
 		}
 	}
 }

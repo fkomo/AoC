@@ -1,11 +1,13 @@
 ﻿using SDL2;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Ujeby.Common.Drawing.Entities;
+using Ujeby.Graphics.Entities;
+using Ujeby.Graphics.Sdl;
+using Ujeby.Vectors;
 
-namespace Ujeby.Common.Drawing
+namespace Ujeby.Graphics
 {
-    public class SpriteCache
+	public class SpriteCache
 	{
 		public static string ContentDirectory => Path.Combine(Environment.CurrentDirectory, "Content");
 		public static Dictionary<string, string> LibraryFileMap { get; private set; }
@@ -59,7 +61,7 @@ namespace Ujeby.Common.Drawing
 
 		public static Font LoadFont(string name)
 		{
-			var file = Path.Combine(ContentDirectory, $"{ name }.png");
+			var file = Path.Combine(ContentDirectory, "Fonts", $"{ name }.png");
 
 			var fileInfo = new FileInfo(file);
 			var sizeString = fileInfo.Name
@@ -70,22 +72,22 @@ namespace Ujeby.Common.Drawing
 			var font = new Font
 			{
 				SpriteId = LoadSprite(file)?.Id,
-				CharSize = new Vector2(Convert.ToInt32(sizeString[0]), Convert.ToInt32(sizeString[1])),
-				Spacing = new Vector2(1, 1),
+				CharSize = new v2i(Convert.ToInt32(sizeString[0]), Convert.ToInt32(sizeString[1])),
+				Spacing = new v2i(1, 1),
 			};
 
 			// create aabb's for each character
-			var dataFile = Path.Combine(ContentDirectory, $"{ name }-data.png");
+			var dataFile = Path.Combine(ContentDirectory, "Fonts", $"{ name }-data.png");
 			if (File.Exists(dataFile))
 			{
 				var dataSprite = LoadSprite(dataFile);
 				font.DataSpriteId = dataSprite.Id;
 
-				font.CharBoxes = new AABB[(int)(dataSprite.Size.X / font.CharSize.X)];
+				font.CharBoxes = new AABBi[(int)(dataSprite.Size.X / font.CharSize.X)];
 				for (var ci = 0; ci < dataSprite.Size.X; ci += (int)font.CharSize.X)
 				{
-					var min = new Vector2(font.CharSize.X, font.CharSize.Y);
-					var max = new Vector2(0, 0);
+					var min = new v2i(font.CharSize.X, font.CharSize.Y);
+					var max = v2i.Zero;
 
 					for (var y = 0; y < font.CharSize.Y; y++)
 					{
@@ -102,7 +104,7 @@ namespace Ujeby.Common.Drawing
 						}
 					}
 
-					font.CharBoxes[(int)(ci / font.CharSize.X)] = new AABB(min, max);
+					font.CharBoxes[(int)(ci / font.CharSize.X)] = new AABBi(min, max);
 				}
 			}
 
@@ -124,7 +126,7 @@ namespace Ujeby.Common.Drawing
 			sprite = Library[spriteId];
 			if (sprite.ImagePtr != IntPtr.Zero && sprite.TexturePtr == IntPtr.Zero)
 			{
-				sprite.TexturePtr = SDL2.SDL.SDL_CreateTextureFromSurface(Core.RendererPtr, sprite.ImagePtr);
+				sprite.TexturePtr = SDL2.SDL.SDL_CreateTextureFromSurface(Sdl2Wrapper.RendererPtr, sprite.ImagePtr);
 				Library[spriteId] = sprite;
 
 				return true;
@@ -148,16 +150,16 @@ namespace Ujeby.Common.Drawing
 			Library.Clear();
 		}
 
-		private static bool LoadImage(string filename, out IntPtr imagePtr, out Vector2 size, out uint[] data)
+		private static bool LoadImage(string filename, out IntPtr imagePtr, out v2i size, out uint[] data)
 		{
 			imagePtr = IntPtr.Zero;
-			size = Vector2.Zero;
+			size = v2i.Zero;
 			data = null;
 
 			imagePtr = SDL_image.IMG_Load(filename);
 			var surface = Marshal.PtrToStructure<SDL2.SDL.SDL_Surface>(imagePtr);
 
-			size = new Vector2(surface.w, surface.h);
+			size = new v2i(surface.w, surface.h);
 
 			//var bitmap = new Bitmap(fileName);
 			//var data = bitmap.LockBits(

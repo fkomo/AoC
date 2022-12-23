@@ -13,7 +13,7 @@
 			_title = title;
 		}
 
-		public void Run(ISolvable[] problemsToSolve)
+		public void Run(IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
 			Log.ChristmasHeader(_title,

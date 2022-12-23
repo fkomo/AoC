@@ -1,6 +1,6 @@
 ﻿namespace Ujeby.AoC.Common
 {
-	public interface ISolvable
+	public interface IPuzzle
 	{
 		public int Day { get; }
 
