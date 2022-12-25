@@ -31,7 +31,6 @@ namespace Ujeby.AoC.Vis.App
 							},
 							{ "2022", new IRunnable[]
 								{
-
 									new RopeBridge(windowSize),
 									new HillClimbingAlgorithm(windowSize),
 									new RegolithReservoir(windowSize),

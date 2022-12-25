@@ -30,7 +30,7 @@ namespace Ujeby.Graphics.Sdl
 			if (RendererPtr == IntPtr.Zero)
 				throw new Exception($"Failed to create renderer. SDL2Error({SDL.SDL_GetError()})");
 
-			SDL.SDL_SetRenderDrawBlendMode(RendererPtr, SDL.SDL_BlendMode.SDL_BLENDMODE_ADD);
+			_ = SDL.SDL_SetRenderDrawBlendMode(RendererPtr, SDL.SDL_BlendMode.SDL_BLENDMODE_ADD);
 
 			CurrentFont = SpriteCache.LoadFont(fontName);
 			SpriteCache.CreateTexture(CurrentFont.SpriteId, out _);
@@ -97,6 +97,11 @@ namespace Ujeby.Graphics.Sdl
 		internal static bool KeyReleased(SDL.SDL_Scancode scanCode)
 		{
 			return CurrentKeys[(int)scanCode] == 0 && PreviousKeys[(int)scanCode] == 1;
+		}
+
+		public static void SetWindowTitle(string title)
+		{
+			SDL.SDL_SetWindowTitle(WindowPtr, title);
 		}
 	}
 }

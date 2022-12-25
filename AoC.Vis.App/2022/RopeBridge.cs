@@ -48,12 +48,12 @@ namespace Ujeby.AoC.Vis.App
 
 			// target
 			if (_apple.HasValue)
-				DrawGridCellFill(_apple.Value.x, _apple.Value.y, new v4f(0, 1, 0, 0.5f));
+				DrawGridCell(_apple.Value.x, _apple.Value.y, fill: new v4f(0, 1, 0, 0.5f));
 
 			// rope
 			for (var p = 1; p < _snake.Length; p++)
-				DrawGridCellFill(_snake[p].x, _snake[p].y, new v4f(1, 1, 1, 0.5f));
-			DrawGridCellFill(_snake[0].x, _snake[0].y, new v4f(1, 0, 0, 0.5f));
+				DrawGridCell(_snake[p].x, _snake[p].y, fill: new v4f(1, 1, 1, 0.5f));
+			DrawGridCell(_snake[0].x, _snake[0].y, fill: new v4f(1, 0, 0, 0.5f));
 
 			DrawGridMouseCursor();
 		}

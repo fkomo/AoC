@@ -88,9 +88,9 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid(showMain: false, showMajor: false);
+			DrawGrid(showAxis: false, showMajor: false);
 
-			DrawGridRect(0, 0, _map[0].Length, _map.Length, new v4f(1));
+			//DrawGridRect(0, 0, _map[0].Length, _map.Length, new v4f(1));
 
 			// map
 			for (var y = 0; y < _map.Length; y++)
@@ -100,32 +100,33 @@ namespace Ujeby.AoC.Vis.App
 					switch (_map[y][x])
 					{
 						case ' ': continue;
-						case '#': color = new v4f(0.8f); break;
-						case '.': color = new v4f(0.3f); break;
+						case '#': color = new v4f(0.9f); break;
+						case '.': color = new v4f(0.2f); break;
 					};
 
-					DrawGridCellFill(x, y, color);
+					DrawGridCell(x, y, fill: color);
 				}
 
 			// path
-			for (var i = Math.Max(0, _pathToDraw - 100); i < _pathToDraw; i++)
-				DrawGridCellFill((int)_path[i].X, (int)_path[i].Y, HeatMap.GetColorForValue(i, _path.Length, 0.5f));
+			for (var i = Math.Max(0, _pathToDraw - 500); i < _pathToDraw; i++)
+				DrawGridCell((int)_path[i].X, (int)_path[i].Y, fill: HeatMap.GetColorForValue(i, _path.Length, 1));
 
 			// userPath
 			if (_userPoints != 0)
 			{
 				if (_userPoints > 0)
-					DrawGridCellFill((int)_userStart.X, (int)_userStart.Y, new v4f(0, 0, 1, 1));
+					DrawGridCell((int)_userStart.X, (int)_userStart.Y, fill: new v4f(0, 0, 1, 1));
 				if (_userPoints > 1)
-					DrawGridCellFill((int)_userEnd.X, (int)_userEnd.Y, new v4f(1, 0, 0, 1));
+					DrawGridCell((int)_userEnd.X, (int)_userEnd.Y, fill: new v4f(1, 0, 0, 1));
 			}
 			for (var i = 0; i < _userPathToDraw; i++)
-				DrawGridCellFill((int)_userPath[i].X, (int)_userPath[i].Y, HeatMap.GetColorForValue(i, _userPath.Length, 0.5f));
+				DrawGridCell((int)_userPath[i].X, (int)_userPath[i].Y, fill: HeatMap.GetColorForValue(i, _userPath.Length, 1));
+			
 			DrawGridMouseCursor();
 
 			var p = _path.Last();
 			DrawText(new v2i(32, 32), v2i.Zero, 
-				new Text($"password = {1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z} (1000 * {p.Y + 1} + 4 * {p.X + 1} + {p.Z})"));
+				new Text($"password: {1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z} (1000 * {p.Y + 1} + 4 * {p.X + 1} + {p.Z})"));
 		}
 		protected override void Destroy()
 		{

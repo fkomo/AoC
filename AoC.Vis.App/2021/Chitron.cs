@@ -45,24 +45,24 @@ namespace Ujeby.AoC.Vis.App
 					var color = new v4f(1.0 / (10 - _riskMap[y, x]));
 					color.W = 0.5f;
 
-					DrawGridCellFill(x, y, color);
+					DrawGridCell(x, y, fill: color);
 				}
 
 			foreach (var (x, y) in _path)
-				DrawGridCellFill(x, y, new v4f(0, 1, 0, 0.5f));
+				DrawGridCell(x, y, fill: new v4f(0, 1, 0, 0.5f));
 
 			DrawGridMouseCursor();
 
 			var ui = new List<TextLine>
 			{
-				new Text($"path distance = {_dist[_dist.GetLength(0) - 1, _dist.GetLength(0) - 1]}")
+				new Text($"path distance: {_dist[_dist.GetLength(0) - 1, _dist.GetLength(0) - 1]}")
 			};
 
 			if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _riskMap.GetLength(0) && 
 				(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _riskMap.GetLength(0))
 			{
-				ui.Add(new Text($"risk = {_riskMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
-				ui.Add(new Text($"distance = {_dist[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
+				ui.Add(new Text($"risk: {_riskMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
+				ui.Add(new Text($"distance: {_dist[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
 			}
 
 			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());

@@ -56,7 +56,7 @@ namespace Ujeby.AoC.Vis.App
 			var maxHeight = 'z' - 'a' + 2;
 			for (var y = 0; y < _heightMap.GetLength(0); y++)
 				for (var x = 0; x < _heightMap.GetLength(1); x++)
-					DrawGridCellFill(x, y, HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
+					DrawGridCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
 
 			// dijkstra distance map
 			//var maxDist = _dijkstraDist.Cast<long>().Where(l => l < long.MaxValue).Max() + 1;
@@ -71,10 +71,10 @@ namespace Ujeby.AoC.Vis.App
 
 			// path
 			foreach (var (x, y) in _bfsPath)
-				DrawGridCellFill(x, y, new v4f(1, 1, 1, 0.5));
+				DrawGridCell(x, y, fill: new v4f(1, 1, 1, 0.5));
 
 			foreach (var (x, y) in _dijkstraPath)
-				DrawGridCellFill(x, y, new v4f(1, 0, 0, 0.5));
+				DrawGridCell(x, y, fill: new v4f(1, 0, 0, 0.5));
 
 			DrawGridMouseCursor();
 

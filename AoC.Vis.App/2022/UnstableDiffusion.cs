@@ -48,7 +48,7 @@ namespace Ujeby.AoC.Vis.App
 			var maxStep = _elves.Max(e => e.Steps);
 
 			foreach (var elf in _elves)
-				DrawGridCellFill((int)elf.Position.X, (int)elf.Position.Y, HeatMap.GetColorForValue(elf.Steps, maxStep + 1, alpha: 0.7f));
+				DrawGridCell((int)elf.Position.X, (int)elf.Position.Y, fill: HeatMap.GetColorForValue(elf.Steps, maxStep + 1, alpha: 0.7f));
 
 			var min = new v2i(_elves.Min(e => e.Position.X), _elves.Min(e => e.Position.Y));
 			var max = new v2i(_elves.Max(e => e.Position.X), _elves.Max(e => e.Position.Y));
@@ -61,7 +61,7 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawText(new v2i(32, 32), v2i.Zero, 
 				new Text($"step: {_step}"),
-				new Text($"noMovement: {_noMovement}"),
+				new Text($"movement: {!_noMovement}"),
 				new Text($"area: {min}x{max}"),
 				new Text($"empty: {empty}"));
 		}

@@ -54,7 +54,7 @@ namespace Ujeby.AoC.Vis.App
 					if (_map[y, x] == (byte)'o')
 						color = new v4f(0.4 + _rnd.NextDouble() / 2, 0.3 + _rnd.NextDouble() / 2, 0, 0.8f);
 
-					DrawGridCellFill(x - 500, y, color);
+					DrawGridCell(x - 500, y, fill: color);
 				}
 
 			DrawGridMouseCursor();

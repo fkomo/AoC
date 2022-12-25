@@ -38,6 +38,10 @@
 
 		public readonly static v4f Zero = new();
 
+		public v4f(double xyz, double w) : this(xyz, xyz, xyz, w)
+		{
+		}
+
 		public v4f(double x, double y, double z, double w) : this()
 		{
 			X = x;
