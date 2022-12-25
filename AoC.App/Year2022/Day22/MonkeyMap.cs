@@ -5,23 +5,36 @@ namespace Ujeby.AoC.App.Year2022.Day22
 {
 	public class MonkeyMap : PuzzleBase
 	{
+		private static Dictionary<long, v2i> _facingToDirection = new()
+		{
+			{ 0, v2i.Right },
+			{ 1, v2i.Up },
+			{ 2, v2i.Left },
+			{ 3, v2i.Down }
+		};
+
 		protected override (string, string) SolveProblem(string[] input)
 		{
 			var map = CreateMap(input);
 			var directions = ReadDirections(input);
 
+			Debug.Line();
+			for (var y = 0; y < map.Length; y++)
+				Debug.Line(new string(map[y]));
+			Debug.Line();
+
 			// part1
 			var path = Travel(map, directions, new(Array.IndexOf(map[0], '.'), 0, 0));
-
 			long? answer1 = 1000 * (path.Last().Y + 1) + 4 * (path.Last().X + 1) + path.Last().Z;
 
 			// part2
-			long? answer2 = null;
+			path = TravelCube(map, directions, new(Array.IndexOf(map[0], '.'), 0, 0));
+			long? answer2 = 1000 * (path.Last().Y + 1) + 4 * (path.Last().X + 1) + path.Last().Z;
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		public static string []ReadDirections(string[] input)
+		public static string[] ReadDirections(string[] input)
 		{
 			return input[Array.IndexOf(input, "") + 1]
 				.Replace("R", " R ")
@@ -43,6 +56,21 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			return map;
 		}
 
+		private static v3i[] TravelCube(char[][] map, string[] directions, v3i position)
+		{
+			var path = new List<v3i>
+			{
+				position
+			};
+
+
+
+
+			path.Add(position);
+			return path.ToArray();
+		}
+
+
 		public static v3i[] Travel(char[][] map, string[] directions, v3i position)
 		{
 			var path = new List<v3i>
@@ -57,8 +85,9 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			{
 				// turn left
 				if (step == "L")
-					position.Z = (position.Z - 1) % 4;
-
+				{
+					position.Z = (position.Z - 1 + 4) % 4;
+				}
 				// turn right
 				else if (step == "R")
 					position.Z = (position.Z + 1) % 4;
@@ -67,15 +96,8 @@ namespace Ujeby.AoC.App.Year2022.Day22
 				{
 					// move
 					var distance = int.Parse(step);
-					var dir = v2i.Right;
-					switch (position.Z)
-					{
-						//case 0: dir = v2i.Right; break;
-						case 1: dir = v2i.Up; break;
-						case 2: dir = v2i.Left; break;
-						case 3: dir = v2i.Down; break;
-					}
-
+					var dir = _facingToDirection[position.Z];
+					
 					for (var i = 0; i < distance; i++)
 					{
 						var newPosition = position + dir;

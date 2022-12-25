@@ -62,7 +62,7 @@ namespace Ujeby.AoC.App
 					new Year2022.Day19.NotEnoughMinerals()          { Answer = new string[] { null, null } },
 					new Year2022.Day20.GrovePositioningSystem()     { Answer = new string[] { "2622", "1538773034088" } },
 					new Year2022.Day21.MonkeyMath()                 { Answer = new string[] { "43699799094202", "3375719472770" } },
-					new Year2022.Day22.MonkeyMap()                  { Answer = new string[] { null, null } },
+					new Year2022.Day22.MonkeyMap()                  { Answer = new string[] { "27492", null } },
 					new Year2022.Day23.UnstableDiffusion()          { Answer = new string[] { "3920", "889" } },
 					new Year2022.Day24.BlizzardBasin()              { Answer = new string[] { null, null } },
 					new Year2022.Day25.FullOfHotAir()               { Answer = new string[] { null, null } },
