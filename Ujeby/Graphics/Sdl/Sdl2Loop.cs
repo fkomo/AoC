@@ -44,7 +44,7 @@ namespace Ujeby.Graphics.Sdl
 		/// </summary>
 		protected v2i GridOffset;
 
-		private readonly v2i _windowSize;
+		protected readonly v2i _windowSize;
 
 		protected uint _mouseState;
 		protected bool _mouseLeft;
@@ -322,10 +322,10 @@ namespace Ujeby.Graphics.Sdl
 			DrawGridCell((int)m.X, (int)m.Y, 0xff, 0xff, 0x00, 0xff);
 
 			if (printCoords)
-				DrawText(MouseWindowPosition + new v2i(16, 16), new Text($"[{(int)m.X};{(int)m.Y}]"));
+				DrawText(MouseWindowPosition + new v2i(16, 16), v2i.Zero, new Text($"[{(int)m.X};{(int)m.Y}]"));
 		}
 
-		protected void DrawText(v2i position, params TextLine[] lines)
+		protected void DrawText(v2i position, v2i spacing, params TextLine[] lines)
 		{
 			var font = Sdl2Wrapper.CurrentFont;
 			var fontSprite = SpriteCache.Get(Sdl2Wrapper.CurrentFont.SpriteId);
@@ -359,46 +359,17 @@ namespace Ujeby.Graphics.Sdl
 						destinationRect.h = (int)(charAabb.Size.Y * scale.Y);
 
 						SDL.SDL_RenderCopy(Sdl2Wrapper.RendererPtr, fontSprite.TexturePtr, ref sourceRect, ref destinationRect);
-						textPosition.X += (charAabb.Size.X + font.Spacing.X) * scale.X;
+						textPosition.X += (charAabb.Size.X + font.Spacing.X + spacing.X) * scale.X;
 					}
 
-					textPosition.Y += (font.CharSize.Y + font.Spacing.Y) * scale.Y;
+					textPosition.Y += (font.CharSize.Y + font.Spacing.Y + spacing.Y) * scale.Y;
 					textPosition.X = position.X;
 				}
 				else if (line is EmptyLine)
 				{
-					textPosition.Y += font.CharSize.Y + font.Spacing.Y;
+					textPosition.Y += font.CharSize.Y + font.Spacing.Y + spacing.Y;
 				}
 			}
-		}
-
-		protected static v2i GetTextSize(Font font, params TextLine[] lines)
-		{
-			var scale = new v2i(2, 2);
-
-			var size = v2i.Zero;
-			foreach (var line in lines)
-			{
-				if (line is Text text)
-				{
-					var lineLength = 0;
-					for (var i = 0; i < text.Value.Length; i++)
-					{
-						var charIndex = (int)text.Value[i] - 32;
-						var charAabb = font.CharBoxes[charIndex];
-
-						lineLength += (int)(charAabb.Size.X + font.Spacing.X);
-					}
-					size.X = Math.Max(lineLength, size.X);
-					size.Y += font.CharSize.Y + font.Spacing.Y;
-				}
-				else if (line is EmptyLine)
-				{
-					size.Y += font.CharSize.Y + font.Spacing.Y;
-				}
-			}
-
-			return size * scale;
 		}
 
 		protected void ShowCursor(bool show = true)

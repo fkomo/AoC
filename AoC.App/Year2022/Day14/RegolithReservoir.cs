@@ -90,8 +90,7 @@ namespace Ujeby.AoC.App.Year2022.Day14
 
 		public static (int x, int y)? AddSand((int x, int y) sand, byte[,] map)
 		{
-			var sandAtRest = false;
-			while (!sandAtRest)
+			while (true)
 			{
 				if (map[sand.y, sand.x] != 0 || sand.y == map.GetLength(0) - 1)
 					break;

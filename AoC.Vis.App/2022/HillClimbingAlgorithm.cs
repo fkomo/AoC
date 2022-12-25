@@ -90,7 +90,7 @@ namespace Ujeby.AoC.Vis.App
 				ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
 			}
 
-			DrawText(new v2i(32, 32), ui.ToArray());
+			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
 		}
 
 		protected override void Destroy()

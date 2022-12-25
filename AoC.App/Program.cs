@@ -65,7 +65,7 @@ namespace Ujeby.AoC.App
 					new Year2022.Day22.MonkeyMap()                  { Answer = new string[] { null, null } },
 					new Year2022.Day23.UnstableDiffusion()          { Answer = new string[] { "3920", "889" } },
 					new Year2022.Day24.BlizzardBasin()              { Answer = new string[] { null, null } },
-					new Year2022.Day25.Puzzle202225()               { Answer = new string[] { null, null } },
+					new Year2022.Day25.FullOfHotAir()               { Answer = new string[] { null, null } },
 				});
 		}
 	}

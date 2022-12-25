@@ -16,15 +16,29 @@ namespace Ujeby.AoC.Vis.App
 
 				while (true)
 				{
-					var menu = new Menu(windowSize,
-						new IRunnable[]
+					var menu = new AoCMenu(windowSize,
+						new Dictionary<string, IRunnable[]>
 						{
-							new RopeBridge(windowSize),
-							new Chitron(windowSize),
-							new HillClimbingAlgorithm(windowSize),
-							new RegolithReservoir(windowSize),
-							new MonkeyMap(windowSize),
-							new UnstableDiffusion(windowSize),
+							{ "2020", new IRunnable[]
+								{
+									new Dummy(windowSize),
+								}
+							},
+							{ "2021", new IRunnable[]
+								{
+									new Chitron(windowSize),
+								}
+							},
+							{ "2022", new IRunnable[]
+								{
+
+									new RopeBridge(windowSize),
+									new HillClimbingAlgorithm(windowSize),
+									new RegolithReservoir(windowSize),
+									new MonkeyMap(windowSize),
+									new UnstableDiffusion(windowSize),
+								}
+							}
 						}
 					);
 					menu.Run(HandleInput);

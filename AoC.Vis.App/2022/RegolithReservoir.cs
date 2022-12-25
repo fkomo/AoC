@@ -1,4 +1,6 @@
-﻿using Ujeby.Graphics.Sdl;
+﻿using Ujeby.Graphics;
+using Ujeby.Graphics.Entities;
+using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
@@ -8,6 +10,8 @@ namespace Ujeby.AoC.Vis.App
 		private byte[,] _map;
 
 		private Random _rnd;
+
+		private long _sandCount;
 
 		public RegolithReservoir(v2i windowSize) : base(windowSize)
 		{
@@ -24,11 +28,13 @@ namespace Ujeby.AoC.Vis.App
 			GridOffset = new v2i(0, -500);
 
 			_rnd = new Random(123);
+			_sandCount = 0;
 		}
 
 		protected override void Update()
 		{
-			AoC.App.Year2022.Day14.RegolithReservoir.AddSand((500, 0), _map);
+			if (AoC.App.Year2022.Day14.RegolithReservoir.AddSand((500, 0), _map) != null)
+				_sandCount++;
 		}
 
 		protected override void Render()
@@ -44,13 +50,17 @@ namespace Ujeby.AoC.Vis.App
 					if (_map[y, x] == 0)
 						continue;
 
-					var color = (_map[y, x] == (byte)'#') ? 
-						blockerColor : new v4f(0.4 + _rnd.NextDouble() / 2, 0.3 + _rnd.NextDouble() / 2, 0, 0.8f);
+					var color = blockerColor;
+					if (_map[y, x] == (byte)'o')
+						color = new v4f(0.4 + _rnd.NextDouble() / 2, 0.3 + _rnd.NextDouble() / 2, 0, 0.8f);
 
 					DrawGridCellFill(x - 500, y, color);
 				}
 
 			DrawGridMouseCursor();
+
+			DrawText(new v2i(32, 32), v2i.Zero,
+				new Text($"sand: {_sandCount}"));
 		}
 
 		protected override void Destroy()

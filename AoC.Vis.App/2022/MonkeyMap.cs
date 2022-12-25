@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -125,7 +124,7 @@ namespace Ujeby.AoC.Vis.App
 			DrawGridMouseCursor();
 
 			var p = _path.Last();
-			DrawText(new v2i(32, 32), 
+			DrawText(new v2i(32, 32), v2i.Zero, 
 				new Text($"password = {1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z} (1000 * {p.Y + 1} + 4 * {p.X + 1} + {p.Z})"));
 		}
 		protected override void Destroy()

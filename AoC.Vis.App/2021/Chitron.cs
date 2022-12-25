@@ -65,7 +65,7 @@ namespace Ujeby.AoC.Vis.App
 				ui.Add(new Text($"distance = {_dist[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
 			}
 
-			DrawText(new v2i(32, 32), ui.ToArray());
+			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
 		}
 
 		protected override void Destroy()
