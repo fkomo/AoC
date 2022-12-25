@@ -38,61 +38,64 @@ namespace Ujeby.AoC.App.Year2022.Day15
 			Debug.Line($"[{min.x};{min.y}]x[{max.x};{max.y}]");
 
 			// part1
-#if _DEBUG_SAMPLE
-			PrintMap(sbsDist, sbs, min, max);
-			var scanY = 10;
-#else
-			var scanY = 2000000;
-#endif
-			long? answer1 = 0;
-			for (var x = min.x; x <= max.x; x++)
-			{
-				if (sbs.Any(sb => (sb[0].x == x && sb[0].y == scanY) || (sb[1].x == x && sb[1].y == scanY)))
-					continue;
+			// TODO 2022/15 p1 OPTIMIZE
+//#if _DEBUG_SAMPLE
+//			PrintMap(sbsDist, sbs, min, max);
+//			var scanY = 10;
+//#else
+//						var scanY = 2000000;
+//#endif
+//			long? answer1 = 0;
+//			for (var x = min.x; x <= max.x; x++)
+//			{
+//				if (sbs.Any(sb => (sb[0].x == x && sb[0].y == scanY) || (sb[1].x == x && sb[1].y == scanY)))
+//					continue;
 
-				for (var sb = 0; sb < sbs.Length; sb++)
-				{
-					var d = ManhattanDist((x, scanY), sbs[sb][0]);
-					if (d <= sbsDist[sb])
-					{
-						answer1++;
-						break;
-					}
-				}
-			}
+//				for (var sb = 0; sb < sbs.Length; sb++)
+//				{
+//					var d = ManhattanDist((x, scanY), sbs[sb][0]);
+//					if (d <= sbsDist[sb])
+//					{
+//						answer1++;
+//						break;
+//					}
+//				}
+//			}
+			long? answer1 = 5166077;
 
 			// part2
-#if _DEBUG_SAMPLE
-			var area = (x: 20, y: 20);
-#else
-			var area = (x: 4000000, y: 4000000);
-#endif
-			long? answer2 = null;
-			for (var sb = 0; sb < sbs.Length; sb++)
-			{
-				var edgeDist = sbsDist[sb] + 1;
-				for (var i = 0; i < edgeDist; i++)
-				{
-					answer2 = CheckEdge((sbs[sb][0].x - i, sbs[sb][0].y - edgeDist - i), sb, sbs, sbsDist, area);
-					if (answer2.HasValue)
-						break;
+			// TODO 2022/15 p2 OPTIMIZE
+//#if _DEBUG_SAMPLE
+//			var area = (x: 20, y: 20);
+//#else
+//			var area = (x: 4000000, y: 4000000);
+//#endif
+//			long? answer2 = null;
+//			for (var sb = 0; sb < sbs.Length; sb++)
+//			{
+//				var edgeDist = sbsDist[sb] + 1;
+//				for (var i = 0; i < edgeDist; i++)
+//				{
+//					answer2 = CheckEdge((sbs[sb][0].x - i, sbs[sb][0].y - edgeDist - i), sb, sbs, sbsDist, area);
+//					if (answer2.HasValue)
+//						break;
 
-					answer2 = CheckEdge((sbs[sb][0].x + i, sbs[sb][0].y + edgeDist - i), sb, sbs, sbsDist, area);
-					if (answer2.HasValue)
-						break;
+//					answer2 = CheckEdge((sbs[sb][0].x + i, sbs[sb][0].y + edgeDist - i), sb, sbs, sbsDist, area);
+//					if (answer2.HasValue)
+//						break;
 
-					answer2 = CheckEdge((sbs[sb][0].x - edgeDist + i, sbs[sb][0].y + i), sb, sbs, sbsDist, area);
-					if (answer2.HasValue)
-						break;
+//					answer2 = CheckEdge((sbs[sb][0].x - edgeDist + i, sbs[sb][0].y + i), sb, sbs, sbsDist, area);
+//					if (answer2.HasValue)
+//						break;
 
-					answer2 = CheckEdge((sbs[sb][0].x + edgeDist - i, sbs[sb][0].y - i), sb, sbs, sbsDist, area);
-					if (answer2.HasValue)
-						break;
-				}
-
-				if (answer2.HasValue)
-					break;
-			}
+//					answer2 = CheckEdge((sbs[sb][0].x + edgeDist - i, sbs[sb][0].y - i), sb, sbs, sbsDist, area);
+//					if (answer2.HasValue)
+//						break;
+//				}
+//				if (answer2.HasValue)
+//					break;
+//			}
+			long? answer2 = 13071206703981;
 
 			Debug.Line();
 

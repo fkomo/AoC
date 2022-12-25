@@ -24,12 +24,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Day00\**" />
-		<EmbeddedResource Remove="Day00\**" />
-		<None Remove="Day00\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Ujeby\Ujeby.csproj" />
 	</ItemGroup>
 
@@ -43,11 +37,7 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		
-		<Content Include="Year2021\**\input*.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-
-		<Content Include="Year2022\**\input*.txt">
+		<Content Include="Year*\**\input*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 

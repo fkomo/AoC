@@ -61,6 +61,8 @@
 		public static v2i Min(v2i v1, v2i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y));
 		public static v2i Max(v2i v1, v2i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y));
 
+		public v2i Abs() => new(Math.Abs(X), Math.Abs(Y));
+
 		public static v2i operator +(v2i a, v2i b) => new(a.X + b.X, a.Y + b.Y);
 		public static v2i operator -(v2i a, v2i b) => new(a.X - b.X, a.Y - b.Y);
 		public static v2i operator *(v2i a, v2i b) => new(a.X * b.X, a.Y * b.Y);

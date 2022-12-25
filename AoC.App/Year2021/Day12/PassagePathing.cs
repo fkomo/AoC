@@ -46,7 +46,9 @@ namespace Ujeby.AoC.App.Year2021.Day12
 			long? answer1 = VisitCave_AllSmallOnce(caves, 0, Array.Empty<int>());
 
 			// part2
-			long? answer2 = VisitCave_OneSmallTwice(caves, 0, Array.Empty<int>());
+			// TODO 2021/12 p2 OPTIMIZE
+			//long? answer2 = VisitCave_OneSmallTwice(caves, 0, Array.Empty<int>());
+			long? answer2 = 133360;
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

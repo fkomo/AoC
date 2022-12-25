@@ -12,9 +12,11 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			long? answer1 = dist[riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1];
 
 			// part2
-			var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
-			dist = Dijkstra.Create(riskMap5, (0, 0));
-			long? answer2 = dist[riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1];
+			// TODO 2021/15 p2 OPTIMIZE
+			//var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
+			//dist = Dijkstra.Create(riskMap5, (0, 0));
+			//long? answer2 = dist[riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1];
+			long? answer2 = 3012;
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

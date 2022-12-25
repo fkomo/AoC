@@ -71,10 +71,13 @@
 				Log.Indent += 2;
 
 				var total = 0;
-				var downloaded = 0;
 				for (var year = 2015; year <= DateTime.Now.Year; year++)
 				{
-					for (var day = 1; day <= 24; day++)
+					var programCsFilename = Path.Combine(outputDir, "Program.cs");
+					if (!File.ReadAllText(programCsFilename).Contains($"// TODO {year}"))
+						continue;
+
+					for (var day = 1; day <= 25; day++)
 					{
 						var result = DownloadInput(year, day,
 							yearPrefix: yearDirPrefix,
@@ -82,21 +85,13 @@
 						result.Wait();
 
 						if (result.Result)
-						{
-							downloaded++;
-
-							Log.Indent += 2;
-							CreateCodeTemplate(year, day, outputDir, yearDirPrefix);
-							Log.Indent -= 2;
-						}
+							UpdateCodeTemplate(year, day, outputDir, yearDirPrefix);
 
 						total++;
 					}
 				}
 
 				Log.Indent -= 2;
-
-				Log.Line($"All input files up to date ({total})");
 			}
 			catch (Exception ex)
 			{
@@ -110,8 +105,6 @@
 			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
 				return false;
 
-			var downloaded = false;
-
 			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
@@ -121,15 +114,13 @@
 			{
 				var inputUrl = $"{_aocUrl}/{year}/day/{day}/input";
 
-				Log.Text($"Downloading ");
 				Log.Text($"{inputUrl}",
-					textColor: ConsoleColor.Yellow, indent: 0);
+					textColor: ConsoleColor.Yellow);
 
 				var response = await _httpClient.GetAsync(inputUrl);
 				if (response.IsSuccessStatusCode)
 				{
 					var input = await response.Content.ReadAsStringAsync();
-					downloaded = true;
 
 					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
 
@@ -139,38 +130,44 @@
 				else
 				{
 					Log.Line($" {response.StatusCode}", indent: 0, textColor: ConsoleColor.Red);
+					return false;
 				}
 			}
 
-			return downloaded;
+			return true;
 		}
 
-		private static void CreateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
+		private static void UpdateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
 		{
 			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
-			var puzzleTitle = $"Puzzle{year}{day:d2}";
-			var template = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "PuzzleTemplate.cs"))
-				.Replace("YYYY", year.ToString())
-				.Replace("DD", day.ToString("d2"))
-				.Replace("PUZZLETITLE", puzzleTitle);
-
-			File.WriteAllText(Path.Combine(path, $"{puzzleTitle}.cs"), template);
-			Log.Line($"{Path.Combine(path, $"{puzzleTitle}.cs")}");
-
-			var programCsFilename = Path.Combine(rootDir, "Program.cs");
-			var programCs = File.ReadAllText(programCsFilename);
-			var todo = $"// TODO {year}";
-			if (programCs.Contains(todo))
+			if (!Directory.EnumerateFiles(path, "*.cs").Any())
 			{
-				programCs = programCs.Replace(todo, 
-					$"new Year{year}.Day{day:d2}.{puzzleTitle}()\t\t\t\t{{ Answer = new string[] {{ null, null }} }}," + Environment.NewLine +
-					$"\t\t\t\t\t{todo}");
+				var puzzleTitle = $"Puzzle{year}{day:d2}";
 
-				File.WriteAllText(programCsFilename, programCs);
-				Log.Line($"{programCsFilename}");
+				var puzzleCs = Path.Combine(path, $"{puzzleTitle}.cs");
+				var template = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Common", "PuzzleTemplate.cs"))
+					.Replace("YYYY", year.ToString())
+					.Replace("DD", day.ToString("d2"))
+					.Replace("PUZZLETITLE", puzzleTitle);
+
+				File.WriteAllText(puzzleCs, template);
+				Log.Line($"{puzzleCs}");
+
+				var programCsFilename = Path.Combine(rootDir, "Program.cs");
+				var programCs = File.ReadAllText(programCsFilename);
+				var todo = $"// TODO {year}";
+				if (programCs.Contains(todo))
+				{
+					programCs = programCs.Replace(todo,
+						$"new Year{year}.Day{day:d2}.{puzzleTitle}()\t\t\t\t{{ Answer = new string[] {{ null, null }} }}," + Environment.NewLine +
+						$"\t\t\t\t\t{todo}");
+
+					File.WriteAllText(programCsFilename, programCs);
+					Log.Line($"{programCsFilename}");
+				}
 			}
 		}
 	}

@@ -23,7 +23,8 @@ namespace Ujeby.AoC.Vis.App
 							new Chitron(windowSize),
 							new HillClimbingAlgorithm(windowSize),
 							new RegolithReservoir(windowSize),
-							new MonkeyMap(windowSize)
+							new MonkeyMap(windowSize),
+							new UnstableDiffusion(windowSize),
 						}
 					);
 					menu.Run(HandleInput);

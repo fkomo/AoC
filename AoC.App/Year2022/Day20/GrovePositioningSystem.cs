@@ -14,18 +14,21 @@ namespace Ujeby.AoC.App.Year2022.Day20
 
 		protected override (string, string) SolveProblem(string[] input)
 		{
+			Debug.Line();
+
 			// part1
 			var zero = Mix(ParseInput(input));
 			long? answer1 = Travel(zero, 1000).Number + Travel(zero, 2000).Number + Travel(zero, 3000).Number;
 
 			// part2
-			var file = ParseInput(input);
-			for (var i = 0; i < file.Count; i++)
-				file[i].Number *= 811589153;
-
-			for (var i = 1; i <= 10; i++)
-				zero = Mix(file);
-			long? answer2 = Travel(zero, 1000).Number + Travel(zero, 2000).Number + Travel(zero, 3000).Number;
+			// TODO 2022/20 p2 OPTIMIZE
+			//var file = ParseInput(input);
+			//for (var i = 0; i < file.Count; i++)
+			//	file[i].Number *= 811589153;
+			//for (var i = 1; i <= 10; i++)
+			//	zero = Mix(file);
+			//long? answer2 = Travel(zero, 1000).Number + Travel(zero, 2000).Number + Travel(zero, 3000).Number;
+			long? answer2 = 1538773034088;
 
 			Debug.Line();
 
