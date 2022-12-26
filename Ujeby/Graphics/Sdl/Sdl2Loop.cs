@@ -67,7 +67,7 @@ namespace Ujeby.Graphics.Sdl
 			while (Sdl2Wrapper.HandleInput(handleInput) && !_terminate)
 			{
 				_mouseState = SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
-				MouseWindowPosition.Set(mouseX, mouseY);
+				MouseWindowPosition = new(mouseX, mouseY);
 
 				// mouse right
 				var right = (_mouseState & 4) == 4;
@@ -95,9 +95,9 @@ namespace Ujeby.Graphics.Sdl
 				// mouse left
 				var left = (_mouseState & 1) == 1;
 				if (left)
-					LeftMouseDown(MouseGridPosition);
+					LeftMouseDown();
 				else if (!left && _mouseLeft)
-					LeftMouseUp(MouseGridPosition);
+					LeftMouseUp();
 				_mouseLeft = left;
 
 				MinorGridSize = Math.Max(2, MinorGridSize + Sdl2Wrapper.MouseWheel);
@@ -120,11 +120,11 @@ namespace Ujeby.Graphics.Sdl
 			Destroy();
 		}
 
-		protected virtual void LeftMouseDown(v2i _mouseGrid)
+		protected virtual void LeftMouseDown()
 		{
 		}
 
-		protected virtual void LeftMouseUp(v2i _mouseGrid)
+		protected virtual void LeftMouseUp()
 		{
 		}
 
@@ -261,9 +261,10 @@ namespace Ujeby.Graphics.Sdl
 				lines);
 		}
 
-		protected void ShowCursor(bool show = true)
+		protected void ShowCursor(
+			bool show = true)
 		{
-			_ = SDL2.SDL.SDL_ShowCursor(show ? 1 : 0);
+			Sdl2Wrapper.ShowCursor(show);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using SDL2;
+using System.Numerics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Vectors;
 
@@ -70,6 +71,37 @@ namespace Ujeby.Graphics.Sdl
 						return false;
 
 					// TODO handle user input
+
+					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_UP))
+					//	player.HandleButton(InputButton.Up, InputButtonState.Pressed);
+					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_UP))
+					//	player.HandleButton(InputButton.Up, InputButtonState.Released);
+
+					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_DOWN))
+					//	player.HandleButton(InputButton.Down, InputButtonState.Pressed);
+					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_DOWN))
+					//	player.HandleButton(InputButton.Down, InputButtonState.Released);
+
+					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LEFT))
+					//	player.HandleButton(InputButton.Left, InputButtonState.Pressed);
+					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LEFT))
+					//	player.HandleButton(InputButton.Left, InputButtonState.Released);
+
+					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RIGHT))
+					//	player.HandleButton(InputButton.Right, InputButtonState.Pressed);
+					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RIGHT))
+					//	player.HandleButton(InputButton.Right, InputButtonState.Released);
+
+					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LSHIFT))
+					//	player.HandleButton(InputButton.LT, InputButtonState.Pressed);
+					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LSHIFT))
+					//	player.HandleButton(InputButton.LT, InputButtonState.Released);
+
+					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RSHIFT))
+					//	player.HandleButton(InputButton.RT, InputButtonState.Pressed);
+					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RSHIFT))
+					//	player.HandleButton(InputButton.RT, InputButtonState.Released);
+
 					return handleInput();
 				}
 
@@ -102,6 +134,12 @@ namespace Ujeby.Graphics.Sdl
 		public static void SetWindowTitle(string title)
 		{
 			SDL.SDL_SetWindowTitle(WindowPtr, title);
+		}
+
+		internal static void ShowCursor(
+			bool show = true)
+		{
+			_ = SDL.SDL_ShowCursor(show ? 1 : 0);
 		}
 	}
 }

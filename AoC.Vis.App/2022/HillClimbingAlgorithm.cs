@@ -10,9 +10,8 @@ namespace Ujeby.AoC.Vis.App
 		private int[,] _heightMap;
 
 		private long[,] _dijkstraDist;
-		private (int x, int y)[] _dijkstraPath = Array.Empty<(int x, int y)>();
-
-		private (int x, int y)[] _bfsPath = Array.Empty<(int x, int y)>();
+		private (int x, int y)[] _dijkstraPath = null;
+		private (int x, int y)[] _bfsPath = null;
 
 		private (int x, int y) _start;
 		private (int x, int y) _end;
@@ -27,25 +26,29 @@ namespace Ujeby.AoC.Vis.App
 
 			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
-
-			_dijkstraDist = AoC.App.Year2021.Day15.Dijkstra.Create(_heightMap, _start,
-				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
-
-			_dijkstraPath = AoC.App.Year2021.Day15.Dijkstra.Path(_start, _end, _heightMap, _dijkstraDist,
-				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
-
-			var bfsPrev = AoC.App.Year2022.Day12.BreadthFirstSearch.Create(_heightMap, _start,
-				connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
-			_bfsPath = AoC.App.Year2022.Day12.BreadthFirstSearch.Path(_start, _end, bfsPrev);
 			
 			MinorGridSize = 10;
-			GridOffset = new v2i(-_heightMap.GetLength(1) / 2 * MinorGridSize, -_heightMap.GetLength(0) / 2 * MinorGridSize);
 
 			// TODO render progress of search algs, not just result
 		}
 
 		protected override void Update()
 		{
+			if (_dijkstraPath == null)
+			{
+				_dijkstraDist = AoC.App.Year2021.Day15.Dijkstra.Create(_heightMap, _start,
+					connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+
+				_dijkstraPath = AoC.App.Year2021.Day15.Dijkstra.Path(_start, _end, _heightMap, _dijkstraDist,
+					connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+			}
+
+			if (_bfsPath == null)
+			{
+				var bfsPrev = AoC.App.Year2022.Day12.BreadthFirstSearch.Create(_heightMap, _start,
+					connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+				_bfsPath = AoC.App.Year2022.Day12.BreadthFirstSearch.Path(_start, _end, bfsPrev);
+			}
 		}
 
 		protected override void Render()
@@ -98,12 +101,16 @@ namespace Ujeby.AoC.Vis.App
 			ShowCursor();
 		}
 
-		protected override void LeftMouseDown(v2i position)
+		protected override void LeftMouseDown()
 		{
-			// TODO add/remove height
+			var m = MouseGridPositionDiscrete;
+			_heightMap[m.Y, m.X]++;
+
+			_bfsPath = null;
+			_dijkstraPath = null;
 		}
 
-		protected override void LeftMouseUp(v2i position)
+		protected override void LeftMouseUp()
 		{
 		}
 	}

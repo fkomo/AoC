@@ -63,10 +63,9 @@ namespace Ujeby.AoC.Vis.App
 			ShowCursor();
 		}
 
-		protected override void LeftMouseDown(v2i position)
+		protected override void LeftMouseDown()
 		{
-			var mouseCursorOnGrid = position / MinorGridSize;
-			_apple = new((int)mouseCursorOnGrid.X, (int)mouseCursorOnGrid.Y);
+			_apple = new((int)MouseGridPositionDiscrete.X, (int)MouseGridPositionDiscrete.Y);
 		}
 	}
 }

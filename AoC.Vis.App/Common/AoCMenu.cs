@@ -85,7 +85,7 @@ namespace Ujeby.AoC.Vis.App.Common
 		{
 		}
 
-		protected override void LeftMouseUp(v2i _mouseGrid)
+		protected override void LeftMouseUp()
 		{
 			if (_sectionItem != -1)
 				Selected = _items[_section][_sectionItem];

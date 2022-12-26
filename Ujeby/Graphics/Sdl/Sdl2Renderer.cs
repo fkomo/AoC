@@ -1,5 +1,4 @@
 ﻿using SDL2;
-using System.Drawing;
 using Ujeby.Graphics.Entities;
 using Ujeby.Vectors;
 

@@ -133,7 +133,7 @@ namespace Ujeby.AoC.Vis.App
 			ShowCursor();
 		}
 
-		protected override void LeftMouseUp(v2i position)
+		protected override void LeftMouseUp()
 		{
 			//_pathToDraw = Math.Max(_pathToDraw - 10, 0);
 

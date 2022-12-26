@@ -68,7 +68,7 @@ namespace Ujeby.AoC.Vis.App
 			ShowCursor();
 		}
 
-		protected override void LeftMouseDown(v2i position)
+		protected override void LeftMouseDown()
 		{
 			AoC.App.Year2022.Day14.RegolithReservoir.AddSand(((int)MouseGridPositionDiscrete.X, -(int)MouseGridPositionDiscrete.Y), _map);
 		}
