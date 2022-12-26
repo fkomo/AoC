@@ -28,10 +28,82 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			long? answer1 = 1000 * (path.Last().Y + 1) + 4 * (path.Last().X + 1) + path.Last().Z;
 
 			// part2
-			path = TravelCube(map, directions, new(Array.IndexOf(map[0], '.'), 0, 0));
-			long? answer2 = 1000 * (path.Last().Y + 1) + 4 * (path.Last().X + 1) + path.Last().Z;
+			var cubeMap = CreateCubeMap(input);
+			var path2 = TravelCube(cubeMap, directions, new(0, 0, 0, 1));
+			var p = CubeToMap(path2.Last());
+			long? answer2 = 1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z;
 
 			return (answer1?.ToString(), answer2?.ToString());
+		}
+
+		private v3i CubeToMap(v4i facePoint)
+		{
+			switch (facePoint.W)
+			{
+#if _DEBUG_SAMPLE
+				case 1: return new v3i(facePoint.X + 8, facePoint.Y + 0, facePoint.Z);
+				case 2: return new v3i(facePoint.X + 0, facePoint.Y + 4, facePoint.Z);
+				case 3: return new v3i(facePoint.X + 4, facePoint.Y + 4, facePoint.Z);
+				case 4: return new v3i(facePoint.X + 8, facePoint.Y + 4, facePoint.Z);
+				case 5: return new v3i(facePoint.X + 8, facePoint.Y + 8, facePoint.Z);
+				case 6: return new v3i(facePoint.X + 12, facePoint.Y + 8, facePoint.Z);
+#else
+				// TODO 2022/22 part2 cube to 2d map point transformation
+#endif
+
+				default:
+					break;
+			}
+
+			throw new Exception();
+		}
+
+		private Dictionary<long, char[,]> CreateCubeMap(string[] input)
+		{
+			var result = new Dictionary<long, char[,]>();
+			char[,] map = null;
+
+#if _DEBUG_SAMPLE
+			map = new char[_faceSize, _faceSize];
+			for (var y = 0; y < _faceSize; y++)
+				for (var x = 0; x < _faceSize; x++)
+					map[y, x] = input[y][x + 8];
+			result.Add(1, map);
+
+			map = new char[_faceSize, _faceSize];
+			for (var y = 0; y < _faceSize; y++)
+				for (var x = 0; x < _faceSize; x++)
+					map[y, x] = input[y + 4][x];
+			result.Add(2, map);
+
+			map = new char[_faceSize, _faceSize];
+			for (var y = 0; y < _faceSize; y++)
+				for (var x = 0; x < _faceSize; x++)
+					map[y, x] = input[y + 4][x + 4];
+			result.Add(3, map);
+
+			map = new char[_faceSize, _faceSize];
+			for (var y = 0; y < _faceSize; y++)
+				for (var x = 0; x < _faceSize; x++)
+					map[y, x] = input[y + 4][x + 8];
+			result.Add(4, map);
+
+			map = new char[_faceSize, _faceSize];
+			for (var y = 0; y < _faceSize; y++)
+				for (var x = 0; x < _faceSize; x++)
+					map[y, x] = input[y + 8][x + 8];
+			result.Add(5, map);
+
+			map = new char[_faceSize, _faceSize];
+			for (var y = 0; y < _faceSize; y++)
+				for (var x = 0; x < _faceSize; x++)
+					map[y, x] = input[y + 8][x + 12];
+			result.Add(6, map);
+#else
+			// TODO 2022/22 part2 create release cube map
+#endif
+
+			return result;
 		}
 
 		public static string[] ReadDirections(string[] input)
@@ -56,17 +128,110 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			return map;
 		}
 
-		private static v3i[] TravelCube(char[][] map, string[] directions, v3i position)
+#if _DEBUG_SAMPLE
+		private static readonly int _faceSize = 4;
+		private static readonly Dictionary<string, Func<v2i, v4i>> _edge = new()
 		{
-			var path = new List<v3i>
+			{ "40", (position) => { return new v4i(_faceSize - 1 - position.Y, 0, 1, 6); } },
+			{ "63", (position) => { return new v4i(_faceSize - 1, _faceSize - 1 - position.X, 2, 4); } },
+
+			{ "10", (position) => { return new v4i(_faceSize - 1, _faceSize - 1 - position.Y, 2, 6); } },
+			{ "60", (position) => { return new v4i(_faceSize - 1, _faceSize - 1 - position.Y, 2, 1); } },
+
+			{ "13", (position) => { return new v4i(position.X, 0, 1, 2); } },
+			{ "23", (position) => { return new v4i(position.X, 0, 1, 1); } },
+
+			{ "22", (position) => { return new v4i(_faceSize - 1 - position.Y, _faceSize - 1, 3, 6); } },
+			{ "61", (position) => { return new v4i(0, _faceSize - 1 - position.X, 0, 2); } },
+
+			{ "33", (position) => { return new v4i(0, position.X, 0, 1); } },
+			{ "12", (position) => { return new v4i(position.Y, 0, 1, 3); } },
+
+			{ "31", (position) => { return new v4i(0, _faceSize - 1 - position.X, 0, 5); } },
+			{ "52", (position) => { return new v4i(_faceSize - 1 - position.Y, 0, 3, 3); } },
+
+			{ "51", (position) => { return new v4i(_faceSize - 1 - position.X, _faceSize - 1, 3, 2); } },
+			{ "21", (position) => { return new v4i(_faceSize - 1 - position.X, _faceSize - 1, 3, 5); } },
+
+			{ "11", (position) => { return new v4i(position.X, 0, 1, 4); } },
+			{ "43", (position) => { return new v4i(position.X, _faceSize - 1, 3, 1); } },
+
+			{ "41", (position) => { return new v4i(position.X, 0, 1, 5); } },
+			{ "53", (position) => { return new v4i(position.X, _faceSize - 1, 3, 4); } },
+
+			{ "50", (position) => { return new v4i(0, position.Y, 0, 6); } },
+			{ "62", (position) => { return new v4i(_faceSize - 1, position.Y, 2, 5); } },
+
+			{ "42", (position) => { return new v4i(_faceSize - 1, position.Y, 2, 3); } },
+			{ "30", (position) => { return new v4i(0, position.Y, 0, 4); } },
+
+			{ "32", (position) => { return new v4i(_faceSize - 1, position.Y, 2, 2); } },
+			{ "20", (position) => { return new v4i(0, position.Y, 0, 3); } },
+		};
+#else
+		private static int _faceSize = 50;
+		private static Dictionary<string, Func<v2i, v4i>> _edge = new()
+		{
+			// TODO 2022/22 part2 release edge transformations
+		};
+#endif
+
+		/// <summary>
+		/// position [X, Y, Z - facing, W - face]
+		/// </summary>
+		/// <param name="cubeMap"></param>
+		/// <param name="directions"></param>
+		/// <param name="position"></param>
+		/// <returns></returns>
+		public static v4i[] TravelCube(Dictionary<long, char[,]> cubeMap, string[] directions, v4i position)
+		{
+			var path = new List<v4i>
 			{
-				position
+				position,
 			};
 
+			foreach (var step in directions)
+			{
+				// turn left
+				if (step == "L")
+				{
+					position.Z = (position.Z - 1 + 4) % 4;
+					path.Add(position);
+				}
+				// turn right
+				else if (step == "R")
+				{
+					position.Z = (position.Z + 1) % 4;
+					path.Add(position);
+				}
+				else
+				{
+					// move
+					var distance = int.Parse(step);
+					for (var i = 0; i < distance; i++)
+					{
+						var dir = _facingToDirection[position.Z];
+						var map = cubeMap[position.W];
 
+						var newPosition = position + dir;
 
+						if (newPosition.Y < 0 || newPosition.X < 0 ||
+							newPosition.X == _faceSize || newPosition.Y == _faceSize)
+						{
+							// transition to next face
+							newPosition = _edge[$"{position.W}{position.Z}"](position.ToV2i());
+							map = cubeMap[newPosition.W];
+						}
 
-			path.Add(position);
+						if (map[newPosition.Y, newPosition.X] == '#')
+							break;
+
+						position = newPosition;
+						path.Add(position);
+					}
+				}
+			}
+
 			return path.ToArray();
 		}
 
@@ -85,9 +250,8 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			{
 				// turn left
 				if (step == "L")
-				{
 					position.Z = (position.Z - 1 + 4) % 4;
-				}
+
 				// turn right
 				else if (step == "R")
 					position.Z = (position.Z + 1) % 4;
@@ -97,7 +261,7 @@ namespace Ujeby.AoC.App.Year2022.Day22
 					// move
 					var distance = int.Parse(step);
 					var dir = _facingToDirection[position.Z];
-					
+
 					for (var i = 0; i < distance; i++)
 					{
 						var newPosition = position + dir;
