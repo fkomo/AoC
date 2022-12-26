@@ -58,6 +58,10 @@
 		{
 		}
 
+		public v4i(v2i xy, long z, long w) : this(xy.X, xy.Y, z, w)
+		{
+		}
+
 		public override string ToString() => $"[{X};{Y};{Z};{W}]";
 		public override bool Equals(object obj) => obj is v4i v && this == v;
 		public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode() ^ W.GetHashCode();
@@ -68,6 +72,8 @@
 		public static v4i Max(v4i v1, v4i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z), Math.Max(v1.W, v2.W));
 
 		public v2i ToV2i() => new(X, Y);
+
+		public v3i ToV3i() => new(X, Y, Z);
 
 		//public static v3i operator +(v3i a, v3i b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
 		//public static v3i operator -(v3i a, v3i b) => new(a.X - b.X, a.Y - b.Y, a.Z - b.Z);

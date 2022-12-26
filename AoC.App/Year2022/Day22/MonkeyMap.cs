@@ -1,3 +1,4 @@
+using System.Data;
 using Ujeby.AoC.Common;
 using Ujeby.Vectors;
 
@@ -29,81 +30,38 @@ namespace Ujeby.AoC.App.Year2022.Day22
 
 			// part2
 			var cubeMap = CreateCubeMap(input);
-			var path2 = TravelCube(cubeMap, directions, new(0, 0, 0, 1));
+			var path2 = TravelCube(cubeMap, directions, new(0, 0, 0, 0));
 			var p = CubeToMap(path2.Last());
 			long? answer2 = 1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z;
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		private v3i CubeToMap(v4i facePoint)
-		{
-			switch (facePoint.W)
-			{
-#if _DEBUG_SAMPLE
-				case 1: return new v3i(facePoint.X + 8, facePoint.Y + 0, facePoint.Z);
-				case 2: return new v3i(facePoint.X + 0, facePoint.Y + 4, facePoint.Z);
-				case 3: return new v3i(facePoint.X + 4, facePoint.Y + 4, facePoint.Z);
-				case 4: return new v3i(facePoint.X + 8, facePoint.Y + 4, facePoint.Z);
-				case 5: return new v3i(facePoint.X + 8, facePoint.Y + 8, facePoint.Z);
-				case 6: return new v3i(facePoint.X + 12, facePoint.Y + 8, facePoint.Z);
-#else
-				// TODO 2022/22 part2 cube to 2d map point transformation
-#endif
+		/// <summary>
+		/// transforms point on cube face to point on map
+		/// </summary>
+		/// <param name="facePoint"></param>
+		/// <returns></returns>
+		private v3i CubeToMap(v4i facePoint) => facePoint.ToV3i() + _mapFaces[facePoint.W];
 
-				default:
-					break;
-			}
-
-			throw new Exception();
-		}
-
-		private Dictionary<long, char[,]> CreateCubeMap(string[] input)
+		public static Dictionary<long, char[,]> CreateCubeMap(string[] input)
 		{
 			var result = new Dictionary<long, char[,]>();
-			char[,] map = null;
 
-#if _DEBUG_SAMPLE
-			map = new char[_faceSize, _faceSize];
-			for (var y = 0; y < _faceSize; y++)
-				for (var x = 0; x < _faceSize; x++)
-					map[y, x] = input[y][x + 8];
-			result.Add(1, map);
-
-			map = new char[_faceSize, _faceSize];
-			for (var y = 0; y < _faceSize; y++)
-				for (var x = 0; x < _faceSize; x++)
-					map[y, x] = input[y + 4][x];
-			result.Add(2, map);
-
-			map = new char[_faceSize, _faceSize];
-			for (var y = 0; y < _faceSize; y++)
-				for (var x = 0; x < _faceSize; x++)
-					map[y, x] = input[y + 4][x + 4];
-			result.Add(3, map);
-
-			map = new char[_faceSize, _faceSize];
-			for (var y = 0; y < _faceSize; y++)
-				for (var x = 0; x < _faceSize; x++)
-					map[y, x] = input[y + 4][x + 8];
-			result.Add(4, map);
-
-			map = new char[_faceSize, _faceSize];
-			for (var y = 0; y < _faceSize; y++)
-				for (var x = 0; x < _faceSize; x++)
-					map[y, x] = input[y + 8][x + 8];
-			result.Add(5, map);
-
-			map = new char[_faceSize, _faceSize];
-			for (var y = 0; y < _faceSize; y++)
-				for (var x = 0; x < _faceSize; x++)
-					map[y, x] = input[y + 8][x + 12];
-			result.Add(6, map);
-#else
-			// TODO 2022/22 part2 create release cube map
-#endif
+			for (var i = 0; i < _mapFaces.Length; i++)
+				result.Add(i, CreateCubeFace(_mapFaces[i], input, _faceSize));
 
 			return result;
+		}
+
+		private static char[,] CreateCubeFace(v2i topLeft, string[] input, int size)
+		{
+			var map = new char[size, size];
+			for (var y = 0; y < size; y++)
+				for (var x = 0; x < size; x++)
+					map[y, x] = input[y + (int)topLeft.Y][x + (int)topLeft.X];
+
+			return map;
 		}
 
 		public static string[] ReadDirections(string[] input)
@@ -128,56 +86,64 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			return map;
 		}
 
+		/// <summary>
+		/// position transition over cube edge
+		/// [sourceEdge1, destinationEdge](sourceFacePosition, cubeEdgeSize) => destinationFacePosition
+		/// </summary>
+		private static readonly Func<v2i, int, v2i>[,] _edge = new Func<v2i, int, v2i>[4, 4]
+		{
+			{ (p, s) => new(s - 1, s - 1 - p.Y), (p, s) => new(p.Y, s - 1), (p, s) => new(0, p.Y), (p, s) => new(s - 1 - p.Y, 0) },
+			{ (p, s) => new(s - 1, p.X), (p, s) => new(s - 1 - p.X, s - 1), (p, s) => new(0, s - 1 - p.X), (p, s) => new(p.X, 0) },
+			{ (p, s) => new(s - 1, p.Y), (p, s) => new(s - 1 - p.Y, s - 1), (p, s) => new(0, s - 1 - p.Y), (p, s) => new(p.Y, 0) },
+			{ (p, s) => new(s - 1, s - 1 - p.X), (p, s) => new(p.X, s - 1), (p, s) => new(0, p.X), (p, s) => new(s - 1 - p.X, 0) },
+		};
+
 #if _DEBUG_SAMPLE
 		private static readonly int _faceSize = 4;
-		private static readonly Dictionary<string, Func<v2i, v4i>> _edge = new()
+
+		private static readonly v2i[] _mapFaces = new v2i[]
 		{
-			{ "40", (position) => { return new v4i(_faceSize - 1 - position.Y, 0, 1, 6); } },
-			{ "63", (position) => { return new v4i(_faceSize - 1, _faceSize - 1 - position.X, 2, 4); } },
+			new (8, 0), new (0, 4), new(4, 4), new(8, 4), new (8, 8), new (12, 8)
+		};
 
-			{ "10", (position) => { return new v4i(_faceSize - 1, _faceSize - 1 - position.Y, 2, 6); } },
-			{ "60", (position) => { return new v4i(_faceSize - 1, _faceSize - 1 - position.Y, 2, 1); } },
-
-			{ "13", (position) => { return new v4i(position.X, 0, 1, 2); } },
-			{ "23", (position) => { return new v4i(position.X, 0, 1, 1); } },
-
-			{ "22", (position) => { return new v4i(_faceSize - 1 - position.Y, _faceSize - 1, 3, 6); } },
-			{ "61", (position) => { return new v4i(0, _faceSize - 1 - position.X, 0, 2); } },
-
-			{ "33", (position) => { return new v4i(0, position.X, 0, 1); } },
-			{ "12", (position) => { return new v4i(position.Y, 0, 1, 3); } },
-
-			{ "31", (position) => { return new v4i(0, _faceSize - 1 - position.X, 0, 5); } },
-			{ "52", (position) => { return new v4i(_faceSize - 1 - position.Y, 0, 3, 3); } },
-
-			{ "51", (position) => { return new v4i(_faceSize - 1 - position.X, _faceSize - 1, 3, 2); } },
-			{ "21", (position) => { return new v4i(_faceSize - 1 - position.X, _faceSize - 1, 3, 5); } },
-
-			{ "11", (position) => { return new v4i(position.X, 0, 1, 4); } },
-			{ "43", (position) => { return new v4i(position.X, _faceSize - 1, 3, 1); } },
-
-			{ "41", (position) => { return new v4i(position.X, 0, 1, 5); } },
-			{ "53", (position) => { return new v4i(position.X, _faceSize - 1, 3, 4); } },
-
-			{ "50", (position) => { return new v4i(0, position.Y, 0, 6); } },
-			{ "62", (position) => { return new v4i(_faceSize - 1, position.Y, 2, 5); } },
-
-			{ "42", (position) => { return new v4i(_faceSize - 1, position.Y, 2, 3); } },
-			{ "30", (position) => { return new v4i(0, position.Y, 0, 4); } },
-
-			{ "32", (position) => { return new v4i(_faceSize - 1, position.Y, 2, 2); } },
-			{ "20", (position) => { return new v4i(0, position.Y, 0, 3); } },
+		/// <summary>
+		/// cube face folding
+		/// [sourceFace, sourceFaceEdge] => (destinationFace, destinationFaceEdge)
+		/// </summary>
+		private static readonly v2i[,] _folding = new v2i[6, 4]
+		{
+			{ new(5, 0), new(3, 3), new(2, 3), new(1, 3) },
+			{ new(2, 2), new(4, 1), new(5, 1), new(0, 3) },
+			{ new(3, 2), new(4, 2), new(1, 0), new(0, 2) },
+			{ new(5, 3), new(4, 3), new(2, 0), new(0, 1) },
+			{ new(5, 2), new(1, 1), new(2, 1), new(3, 1) },
+			{ new(0, 0), new(1, 2), new(4, 0), new(3, 0) }
 		};
 #else
 		private static int _faceSize = 50;
-		private static Dictionary<string, Func<v2i, v4i>> _edge = new()
+
+		private static readonly v2i[] _mapFaces = new v2i[]
 		{
-			// TODO 2022/22 part2 release edge transformations
+			new (50, 0), new (100, 0), new(50, 50), new(0, 100), new (50, 100), new (0, 150)
+		};
+
+		/// <summary>
+		/// cube face folding
+		/// [sourceFace, sourceFaceEdge] => (destinationFace, destinationFaceEdge)
+		/// </summary>
+		private static readonly v2i[,] _folding = new v2i[6, 4]
+		{
+			{ new(1, 2), new(2, 3), new(3, 2), new(5, 2) },
+			{ new(4, 0), new(2, 0), new(0, 0), new(5, 1) },
+			{ new(1, 1), new(4, 3), new(3, 3), new(0, 1) },
+			{ new(4, 2), new(5, 3), new(0, 2), new(2, 2) },
+			{ new(1, 0), new(5, 0), new(3, 0), new(2, 1) },
+			{ new(4, 1), new(1, 3), new(0, 3), new(3, 1) }
 		};
 #endif
 
 		/// <summary>
-		/// position [X, Y, Z - facing, W - face]
+		/// position [X(x-pos), Y(y-pos), Z(direction/facing), W(face)]
 		/// </summary>
 		/// <param name="cubeMap"></param>
 		/// <param name="directions"></param>
@@ -185,6 +151,8 @@ namespace Ujeby.AoC.App.Year2022.Day22
 		/// <returns></returns>
 		public static v4i[] TravelCube(Dictionary<long, char[,]> cubeMap, string[] directions, v4i position)
 		{
+			var faceSize = cubeMap.First().Value.GetLength(0);
+
 			var path = new List<v4i>
 			{
 				position,
@@ -216,10 +184,12 @@ namespace Ujeby.AoC.App.Year2022.Day22
 						var newPosition = position + dir;
 
 						if (newPosition.Y < 0 || newPosition.X < 0 ||
-							newPosition.X == _faceSize || newPosition.Y == _faceSize)
+							newPosition.X == faceSize || newPosition.Y == faceSize)
 						{
 							// transition to next face
-							newPosition = _edge[$"{position.W}{position.Z}"](position.ToV2i());
+							var newFace = _folding[position.W, position.Z];
+							newPosition = new v4i(_edge[position.Z, newFace.Y](position.ToV2i(), faceSize), (newFace.Y + 2) % 4, newFace.X);
+
 							map = cubeMap[newPosition.W];
 						}
 
@@ -234,7 +204,6 @@ namespace Ujeby.AoC.App.Year2022.Day22
 
 			return path.ToArray();
 		}
-
 
 		public static v3i[] Travel(char[][] map, string[] directions, v3i position)
 		{
