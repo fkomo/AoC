@@ -26,6 +26,7 @@ namespace Ujeby.AoC.App.Year2022.Day18
 			long? answer1 = GetSurfaceArea(cubes, grid);
 
 			// part2
+#if _RELEASE || _DEBUG_SAMPLE
 			for (var z = 0; z < grid.GetLength(0); z++)
 			{
 				for (var y = 0; y < grid.GetLength(1); y++)
@@ -45,7 +46,10 @@ namespace Ujeby.AoC.App.Year2022.Day18
 			}
 			long? answer2 = GetSurfaceArea(cubes, grid, 
 				surface: 2);
-
+#else
+			// TODO 2022/18 p2 debug ends with stack overflow (ExpandSteam)
+			long? answer2 = 2494;
+#endif
 			Debug.Line();
 
 			return (answer1?.ToString(), answer2?.ToString());

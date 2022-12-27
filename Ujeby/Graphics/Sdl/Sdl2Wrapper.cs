@@ -141,5 +141,19 @@ namespace Ujeby.Graphics.Sdl
 		{
 			_ = SDL.SDL_ShowCursor(show ? 1 : 0);
 		}
+
+		internal static v2i GetMouse(out uint mouseState)
+		{
+			mouseState = SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
+			return new(mouseX, mouseY);
+		}
+
+		/// <summary>
+		/// display backbuffer
+		/// </summary>
+		internal static void Render()
+		{
+			SDL.SDL_RenderPresent(RendererPtr);
+		}
 	}
 }

@@ -66,8 +66,7 @@ namespace Ujeby.Graphics.Sdl
 
 			while (Sdl2Wrapper.HandleInput(handleInput) && !_terminate)
 			{
-				_mouseState = SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
-				MouseWindowPosition = new(mouseX, mouseY);
+				MouseWindowPosition = Sdl2Wrapper.GetMouse(out _mouseState);
 
 				// mouse right
 				var right = (_mouseState & 4) == 4;
@@ -113,8 +112,7 @@ namespace Ujeby.Graphics.Sdl
 				if (Title != null)
 					Sdl2Wrapper.SetWindowTitle(Title);
 
-				// display backbuffer
-				SDL.SDL_RenderPresent(Sdl2Wrapper.RendererPtr);
+				Sdl2Wrapper.Render();
 			}
 
 			Destroy();

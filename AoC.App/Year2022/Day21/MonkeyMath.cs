@@ -33,10 +33,10 @@ namespace Ujeby.AoC.App.Year2022.Day21
 					var other = (string)monkeys[op][2];
 					switch ((string)monkeys[op][1])
 					{
-						case "+": answer2 = answer2 - MonkeyYell(other, monkeys); break;
-						case "-": answer2 = answer2 + MonkeyYell(other, monkeys); break;
-						case "*": answer2 = answer2 / MonkeyYell(other, monkeys); break;
-						case "/": answer2 = answer2 * MonkeyYell(other, monkeys); break;
+						case "+": answer2 -= MonkeyYell(other, monkeys); break;
+						case "-": answer2 += MonkeyYell(other, monkeys); break;
+						case "*": answer2 /= MonkeyYell(other, monkeys); break;
+						case "/": answer2 *= MonkeyYell(other, monkeys); break;
 						default:
 							break;
 					}
@@ -46,9 +46,9 @@ namespace Ujeby.AoC.App.Year2022.Day21
 					var other = (string)monkeys[op][0];
 					switch ((string)monkeys[op][1])
 					{
-						case "+": answer2 = answer2 - MonkeyYell(other, monkeys); break;
+						case "+": answer2 -= MonkeyYell(other, monkeys); break;
 						case "-": answer2 = MonkeyYell(other, monkeys) - answer2; break;
-						case "*": answer2 = answer2 / MonkeyYell(other, monkeys); break;
+						case "*": answer2 /= MonkeyYell(other, monkeys); break;
 						case "/": answer2 = MonkeyYell(other, monkeys) / answer2; break;
 						default:
 							break;

@@ -6,15 +6,17 @@ namespace Ujeby.AoC.App.Year2022.Day25
 	{
 		protected override (string, string) SolveProblem(string[] input)
 		{
-			// TODO 2022/25
-
 			// part1
-			long? answer1 = null;
+			var answer1 = DecToSnafu(input.Sum(line => SnafuToDec(line)));
 
 			// part2
-			long? answer2 = null;
+			// TODO 2022/25 p2
+			string answer2 = null;
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
+
+		private static long SnafuToDec(string snafu) => Tools.Numbers.BaseToDec(snafu, "=-012", -2);
+		private static string DecToSnafu(long dec) => Tools.Numbers.DecToBase(dec, "=-012", -2);
 	}
 }

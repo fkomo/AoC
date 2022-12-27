@@ -19,11 +19,12 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			var map = CreateMap(input);
 			var directions = ReadDirections(input);
 
+#if _DEBUG_SAMPLE
 			Debug.Line();
 			for (var y = 0; y < map.Length; y++)
 				Debug.Line(new string(map[y]));
 			Debug.Line();
-
+#endif
 			// part1
 			var path = Travel(map, directions, new(Array.IndexOf(map[0], '.'), 0, 0));
 			long? answer1 = 1000 * (path.Last().Y + 1) + 4 * (path.Last().X + 1) + path.Last().Z;
