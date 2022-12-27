@@ -2,6 +2,8 @@
 {
 	public class AdventOfCode
 	{
+		public string Session { get; set; }
+		
 		private string _title;
 
 		private const string _aocUrl = "https://adventofcode.com";
@@ -11,6 +13,15 @@
 		public AdventOfCode(string title)
 		{
 			_title = title;
+
+			if (string.IsNullOrEmpty(Session))
+			{
+				var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
+				Session = File.ReadAllText(sessionFilename);
+			}
+
+			if (!string.IsNullOrEmpty(Session))
+				_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={Session};");
 		}
 
 		public void Run(IPuzzle[] problemsToSolve)
@@ -51,22 +62,6 @@
 			{
 				Log.Line();
 				Log.Line("Checking input files ...");
-
-				var session = ""; // aoc session cookie value
-				if (string.IsNullOrEmpty(session))
-				{
-					var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
-					session = File.ReadAllText(sessionFilename);
-				}
-
-				if (string.IsNullOrEmpty(session))
-				{
-					Log.Line("AoC session missing!",
-						textColor: ConsoleColor.Red);
-					return;
-				}
-
-				_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
 
 				Log.Indent += 2;
 
@@ -169,6 +164,28 @@
 					Log.Line($"{programCsFilename}");
 				}
 			}
+		}
+
+		public async static Task<bool> SendAnswer(int year, int day, int part, string answer)
+		{
+			var url = $"{_aocUrl}/{year}/day/{day}/answer";
+
+			var content = new FormUrlEncodedContent(
+				new Dictionary<string, string>
+				{
+					{ "answer", answer },
+					{ "level", part.ToString() }
+				});
+
+			var response = await _httpClient.PostAsync(url, content);
+			if (response.IsSuccessStatusCode)
+			{
+
+			}
+
+			// TODO parse answer response
+
+			return false;
 		}
 	}
 }
