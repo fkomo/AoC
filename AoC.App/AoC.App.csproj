@@ -37,7 +37,6 @@
 		<Content Include="Year*\**\input*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-
 	</ItemGroup>
 
 	<ItemGroup>

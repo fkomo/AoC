@@ -19,17 +19,23 @@ namespace Ujeby.AoC.Vis.App
 					var menu = new AoCMenu(windowSize,
 						new Dictionary<string, IRunnable[]>
 						{
-							{ "2020", new IRunnable[]
+							{ 
+								"2020", 
+								new IRunnable[]
 								{
 									new Dummy(windowSize),
 								}
 							},
-							{ "2021", new IRunnable[]
+							{ 
+								"2021", 
+								new IRunnable[]
 								{
 									new Chitron(windowSize),
 								}
 							},
-							{ "2022", new IRunnable[]
+							{ 
+								"2022", 
+								new IRunnable[]
 								{
 									new RopeBridge(windowSize),
 									new HillClimbingAlgorithm(windowSize),
