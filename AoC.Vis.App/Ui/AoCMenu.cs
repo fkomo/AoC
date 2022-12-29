@@ -4,7 +4,7 @@ using Ujeby.Graphics.Sdl.Interfaces;
 using Ujeby.Tools;
 using Ujeby.Vectors;
 
-namespace Ujeby.AoC.Vis.App.Common
+namespace Ujeby.AoC.Vis.App.Ui
 {
 	public class AoCMenu : Sdl2Loop
 	{
