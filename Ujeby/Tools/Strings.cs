@@ -4,6 +4,28 @@ namespace Ujeby.Tools
 {
 	public static class Strings
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="duration">duration in ms</param>
+		/// <returns></returns>
+		public static string DurationToStringSimple(double duration)
+		{
+			if (duration < 1)
+				return $"{(int)(duration * 1000)}us";
+
+			else if (duration < 1000)
+				return $"{(int)duration}ms";
+
+			else if (duration < 60 * 1000)
+				return $">{(int)(duration / 1000)}s";
+
+			else if (duration < 60 * 60 * 1000)
+				return $">{(int)(duration / (60 * 1000))}min";
+
+			return $">1h";
+		}
+
 		public static string DurationString(TimeSpan span)
 		{
 			if (span.TotalSeconds < 1)

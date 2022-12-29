@@ -78,8 +78,8 @@ namespace Ujeby.AoC.Vis.App
 			{
 				if (_pathToDraw < _path.Length)
 				{
-					_pathToDraw++;
 					SetGridCenter(_path[_pathToDraw].ToV2i() * MinorGridSize);
+					_pathToDraw++;
 				}
 
 				if (_userPath != null && _userPathToDraw < _userPath.Length)
