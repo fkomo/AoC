@@ -10,8 +10,23 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Ujeby" Version="1.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\AoC.App\AoC.App.csproj" />
-	  <ProjectReference Include="..\Ujeby\Ujeby.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="C:\Users\filip\.nuget\packages\ujeby\1.2.0\contentFiles\any\net6.0\Content\Fonts\font-5x7-data.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="C:\Users\filip\.nuget\packages\ujeby\1.2.0\contentFiles\any\net6.0\Content\Fonts\font-5x7.ase">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="C:\Users\filip\.nuget\packages\ujeby\1.2.0\contentFiles\any\net6.0\Content\Fonts\font-5x7.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

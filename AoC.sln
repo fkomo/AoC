@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AoC.App", "AoC.App\AoC.App.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AoC.Vis.App", "AoC.Vis.App\AoC.Vis.App.csproj", "{A0E6656B-8873-49AA-8A99-B9448088EB81}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ujeby", "Ujeby\Ujeby.csproj", "{E1B9F1AC-F355-4500-B908-F3B2163346F4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug.Sample|Any CPU = Debug.Sample|Any CPU
@@ -28,12 +26,6 @@ Global
 		{A0E6656B-8873-49AA-8A99-B9448088EB81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0E6656B-8873-49AA-8A99-B9448088EB81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0E6656B-8873-49AA-8A99-B9448088EB81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E1B9F1AC-F355-4500-B908-F3B2163346F4}.Debug.Sample|Any CPU.ActiveCfg = Debug|Any CPU
-		{E1B9F1AC-F355-4500-B908-F3B2163346F4}.Debug.Sample|Any CPU.Build.0 = Debug|Any CPU
-		{E1B9F1AC-F355-4500-B908-F3B2163346F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E1B9F1AC-F355-4500-B908-F3B2163346F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E1B9F1AC-F355-4500-B908-F3B2163346F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E1B9F1AC-F355-4500-B908-F3B2163346F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
