@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics.Sdl;
+﻿using Ujeby.Graphics;
+using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
@@ -23,7 +24,8 @@ namespace Ujeby.AoC.Vis.App
 			DrawGrid();
 
 
-			DrawGridMouseCursor();
+			DrawGridMouseCursor(
+				style: GridCursorStyles.FullRowColumn);
 		}
 
 		protected override void Destroy()

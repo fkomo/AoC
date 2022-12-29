@@ -38,7 +38,7 @@ namespace Ujeby.AoC.Vis.App
 				new(Array.IndexOf(_map[0], '.'), 0, 0));
 
 			MinorGridSize = 5;
-			GridOffset -= new v2i(_map[0].Length, _map.Length) * MinorGridSize / 2;
+			MoveGridCenter(new v2i(_map.First().Length, _map.Length) / 2 * MinorGridSize);
 		}
 
 		protected override void Update()
@@ -74,10 +74,13 @@ namespace Ujeby.AoC.Vis.App
 				_userPoints = 0;
 			}
 
-			if (_stopwatch.ElapsedMilliseconds > 1)
+			if (_stopwatch.ElapsedMilliseconds > 10)
 			{
 				if (_pathToDraw < _path.Length)
+				{
 					_pathToDraw++;
+					SetGridCenter(_path[_pathToDraw].ToV2i() * MinorGridSize);
+				}
 
 				if (_userPath != null && _userPathToDraw < _userPath.Length)
 					_userPathToDraw++;
@@ -89,8 +92,6 @@ namespace Ujeby.AoC.Vis.App
 		protected override void Render()
 		{
 			DrawGrid(showAxis: false, showMajor: false);
-
-			//DrawGridRect(0, 0, _map[0].Length, _map.Length, new v4f(1));
 
 			// map
 			for (var y = 0; y < _map.Length; y++)
@@ -108,8 +109,8 @@ namespace Ujeby.AoC.Vis.App
 				}
 
 			// path
-			for (var i = Math.Max(0, _pathToDraw - 500); i < _pathToDraw; i++)
-				DrawGridCell((int)_path[i].X, (int)_path[i].Y, fill: HeatMap.GetColorForValue(i, _path.Length, 1));
+			for (var i = Math.Max(0, _pathToDraw - 1000); i < _pathToDraw; i++)
+				DrawGridCell((int)_path[i].X, (int)_path[i].Y, fill: HeatMap.GetColorForValue(i, _path.Length, .5));
 
 			// userPath
 			if (_userPoints != 0)
@@ -122,7 +123,7 @@ namespace Ujeby.AoC.Vis.App
 			for (var i = 0; i < _userPathToDraw; i++)
 				DrawGridCell((int)_userPath[i].X, (int)_userPath[i].Y, fill: HeatMap.GetColorForValue(i, _userPath.Length, 1));
 			
-			DrawGridMouseCursor();
+			//DrawGridMouseCursor(style: GridCursorStyles.FullRowColumn);
 
 			var p = _path.Last();
 			DrawText(new v2i(32, 32), v2i.Zero, 
@@ -133,21 +134,25 @@ namespace Ujeby.AoC.Vis.App
 			ShowCursor();
 		}
 
+		protected override void LeftMouseDown()
+		{
+			_pathToDraw = Math.Max(_pathToDraw - 1, 0);
+		}
+
 		protected override void LeftMouseUp()
 		{
-			//_pathToDraw = Math.Max(_pathToDraw - 10, 0);
-
-			if (_userPoints == 1)
-			{
-				_userEnd = new v3i(MouseGridPositionDiscrete.X, MouseGridPositionDiscrete.Y, 0);
-				_userPoints = 2;
-				_userPath = null;
-			}
-			else
-			{
-				_userStart = new v3i(MouseGridPositionDiscrete.X, MouseGridPositionDiscrete.Y, 0);
-				_userPoints = 1;
-			}
+			// user path
+			//if (_userPoints == 1)
+			//{
+			//	_userEnd = new v3i(MouseGridPositionDiscrete.X, MouseGridPositionDiscrete.Y, 0);
+			//	_userPoints = 2;
+			//	_userPath = null;
+			//}
+			//else
+			//{
+			//	_userStart = new v3i(MouseGridPositionDiscrete.X, MouseGridPositionDiscrete.Y, 0);
+			//	_userPoints = 1;
+			//}
 		}
 	}
 }

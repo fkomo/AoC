@@ -1,6 +1,7 @@
 ﻿using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Graphics.Sdl.Interfaces;
+using Ujeby.Tools;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App.Common
@@ -45,9 +46,9 @@ namespace Ujeby.AoC.Vis.App.Common
 			for (var ix = 0; ix < _items.Keys.Count; ix++)
 			{
 				var sectionTitle = _items.Keys.ElementAt(ix);
-				var sectionCenter = new v2i(_windowSize.X / (_items.Keys.Count + 1) * (ix + 1), _windowSize.Y / 2);
+				var sectionCenter = new v2i(WindowSize.X / (_items.Keys.Count + 1) * (ix + 1), WindowSize.Y / 2);
 
-				var items = _items[sectionTitle].Select(o => new Text(o.GetType().Name)).ToArray();
+				var items = _items[sectionTitle].Select(o => new Text(Strings.SplitCase(o.GetType().Name))).ToArray();
 				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, items);
 
 				var sectionTopLeft = sectionCenter - itemsSize / 2;

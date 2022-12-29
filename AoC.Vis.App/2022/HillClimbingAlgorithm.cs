@@ -28,6 +28,7 @@ namespace Ujeby.AoC.Vis.App
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 			
 			MinorGridSize = 10;
+			MoveGridCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * MinorGridSize);
 
 			// TODO render progress of search algs, not just result
 		}
