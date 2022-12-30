@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day01
 {
 	internal class SonarSweep : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
 			long answer1 = 0;

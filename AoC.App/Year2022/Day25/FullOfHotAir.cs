@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day25
 {
 	public class FullOfHotAir : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
 			var answer1 = DecToSnafu(input.Sum(line => SnafuToDec(line)));

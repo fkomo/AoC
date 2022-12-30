@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day03
 {
 	internal class BinaryDiagnostic : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var inputN = input
 				.Select(s => Convert.ToInt32(s, 2)).ToArray();

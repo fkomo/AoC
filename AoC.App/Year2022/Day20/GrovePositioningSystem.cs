@@ -12,7 +12,7 @@ namespace Ujeby.AoC.App.Year2022.Day20
 			public override string ToString() => $"{Number}";
 		}
 
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			Debug.Line();
 

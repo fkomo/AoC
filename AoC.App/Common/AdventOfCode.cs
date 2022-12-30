@@ -10,25 +10,30 @@
 
 		private static HttpClient _httpClient = new();
 
-		public AdventOfCode(string title)
+		public AdventOfCode(int year)
 		{
-			_title = title;
+			_title = $"{_aocUrl}/{year}";
 
 			if (string.IsNullOrEmpty(Session))
 			{
 				var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
-				Session = File.ReadAllText(sessionFilename);
+				if (File.Exists(sessionFilename))
+					Session = File.ReadAllText(sessionFilename);
 			}
 
 			if (!string.IsNullOrEmpty(Session))
+			{
 				_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={Session};");
+
+				DownloadMissingInput(@"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\", "Year", year);
+			}
 		}
 
 		public void Run(IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
 			Log.ChristmasHeader(_title,
-				length: 125);
+				length: 100);
 			Log.Line();
 
 			var stars = 0;
@@ -52,38 +57,33 @@
 				Log.Line();
 				Log.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
 					textColor: ConsoleColor.Yellow,
-					length: 125);
+					length: 100);
 			}
 		}
 
-		public static void DownloadMissingInput(string outputDir, string yearDirPrefix)
+		private void DownloadMissingInput(string outputDir, string yearDirPrefix, int year)
 		{
 			try
 			{
-				Log.Line();
-				Log.Line("Checking input files ...");
-
 				Log.Indent += 2;
 
 				var total = 0;
-				for (var year = 2015; year <= DateTime.Now.Year; year++)
+
+				var programCsFilename = Path.Combine(outputDir, "Program.cs");
+				if (!File.ReadAllText(programCsFilename).Contains($"// TODO {year}"))
+					return;
+
+				for (var day = 1; day <= 25; day++)
 				{
-					var programCsFilename = Path.Combine(outputDir, "Program.cs");
-					if (!File.ReadAllText(programCsFilename).Contains($"// TODO {year}"))
-						continue;
+					var result = DownloadInput(year, day,
+						yearPrefix: yearDirPrefix,
+						rootDir: outputDir);
+					result.Wait();
 
-					for (var day = 1; day <= 25; day++)
-					{
-						var result = DownloadInput(year, day,
-							yearPrefix: yearDirPrefix,
-							rootDir: outputDir);
-						result.Wait();
+					if (result.Result)
+						UpdateCodeTemplate(year, day, outputDir, yearDirPrefix);
 
-						if (result.Result)
-							UpdateCodeTemplate(year, day, outputDir, yearDirPrefix);
-
-						total++;
-					}
+					total++;
 				}
 
 				Log.Indent -= 2;

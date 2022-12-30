@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day18
 {
 	public class BoilingBoulders : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var cubes = input.Select(l =>
 			{

@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day15
 {
 	public class BeaconExclusionZone : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// [0] sensor, [1] beacon
 			var sbs = input.Select(l => l["Sensor at x=".Length..].Replace(" closest beacon is at x=", string.Empty)

@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day05
 {
 	internal class HydrothermalVenture : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var size = new Point();
 			var lines = input

@@ -6,9 +6,7 @@ namespace Ujeby.AoC.App
 	{
 		static void Main(string[] args)
 		{
-			AdventOfCode.DownloadMissingInput(@"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\", "Year");
-
-			new AdventOfCode("https://adventofcode.com/2021")
+			new AdventOfCode(2021)
 				.Run(new IPuzzle[]
 				{
 					new Year2021.Day01.SonarSweep()                 { Answer = new string[] { "1226", "1252" } },
@@ -38,7 +36,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day25.Puzzle202125()               { Answer = new string[] { null, null } },
 				});
 
-			new AdventOfCode("https://adventofcode.com/2022")
+			new AdventOfCode(2022)
 				.Run(new IPuzzle[]
 				{
 					new Year2022.Day01.CalorieCounting()            { Answer = new string[] { "66306", "195292" }},

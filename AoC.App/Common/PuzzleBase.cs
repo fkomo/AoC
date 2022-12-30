@@ -27,17 +27,16 @@ namespace Ujeby.AoC.Common
 				Debug.Indent += 2;
 
 				sw.Start();
-				var answer = SolveProblem(ReadInput());
+				var answer = SolvePuzzle(ReadInput());
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
-				var title = $"-={{ #{Day:d2} {Title} }}=-";
-				Log.Text($"-={{ ", textColor: ConsoleColor.Gray);
-				Log.Text($"#{Day:d2} {Title}", textColor: ConsoleColor.White, indent: 0);
+				var title = $"#{Day:d2} {Title} }}=-";
+				Log.Text($"#{Day:d2} {Title}", textColor: ConsoleColor.White);
 				Log.Text($" }}=-", textColor: ConsoleColor.Gray, indent: 0);
 
 				var elapsedMsg = $"-={{ {Tools.Strings.DurationToStringSimple(elapsed)} }}=-";
 
-				var padding = string.Join("", Enumerable.Repeat("-", 50 - title.Length - elapsedMsg.Length));
+				var padding = string.Join("", Enumerable.Repeat("-", 45 - title.Length - elapsedMsg.Length));
 				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 0);
 
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
@@ -53,7 +52,7 @@ namespace Ujeby.AoC.Common
 
 				var answers = $"{answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"}";
 				var answersMsg = $"-={{ {answers} }}=-";
-				padding = string.Join("", Enumerable.Repeat("-", 60 - answersMsg.Length));
+				padding = string.Join("", Enumerable.Repeat("-", 44 - answersMsg.Length));
 				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 0);
 
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
@@ -81,7 +80,6 @@ namespace Ujeby.AoC.Common
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
 				Log.Text($"{stars}",
 					textColor: stars == "NA" ? ConsoleColor.DarkGray : ConsoleColor.Yellow, indent: 0);
-				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
 
 				Log.Line();
 
@@ -105,7 +103,7 @@ namespace Ujeby.AoC.Common
 			return result;
 		}
 
-		protected abstract (string, string) SolveProblem(string[] input);
+		protected abstract (string, string) SolvePuzzle(string[] input);
 
 		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
 

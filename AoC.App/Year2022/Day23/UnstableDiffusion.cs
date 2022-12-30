@@ -21,7 +21,7 @@ namespace Ujeby.AoC.App.Year2022.Day23
 			{ 3, new v2i[] { new v2i(1, 0), new v2i(1, 1), new v2i(1, -1) } },
 		};
 
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var elves = ParseElves(input);
 

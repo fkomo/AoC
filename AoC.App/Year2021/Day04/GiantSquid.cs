@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day04
 {
 	internal class GiantSquid : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var numOrder = input.First().Split(',').Select(s => int.Parse(s)).ToArray();
 

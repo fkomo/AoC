@@ -5,7 +5,7 @@ namespace Ujeby.AoC.App.Year2021.Day11
 {
 	internal class DumboOctopus : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var map = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
 

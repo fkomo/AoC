@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day06
 {
 	internal class TuningTrouble : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
 			long? answer1 = FindDistinctSequence(input[0], 4);

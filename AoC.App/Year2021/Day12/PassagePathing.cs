@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day12
 {
 	internal class PassagePathing : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// Item1 == true - big cave
 			var caves = new List<(bool, List<int>)>

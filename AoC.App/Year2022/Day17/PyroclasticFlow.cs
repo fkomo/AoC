@@ -42,7 +42,7 @@ namespace Ujeby.AoC.App.Year2022.Day17
 
 		public const int _MIN_PATTERN_LENGTH = 1000;
 
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
 			long? answer1 = FallingRocks(2022, input[0]);

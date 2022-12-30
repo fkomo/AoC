@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day19
 {
 	public class Puzzle202119 : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// TODO 2021/19
 

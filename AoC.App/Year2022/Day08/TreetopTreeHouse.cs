@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day08
 {
 	internal class TreetopTreeHouse : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var trees = input.Select(r => r.Select(c => c - '0').ToArray()).ToArray();
 			var size = trees.Length;

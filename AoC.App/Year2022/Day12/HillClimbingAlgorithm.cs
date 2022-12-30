@@ -5,7 +5,7 @@ namespace Ujeby.AoC.App.Year2022.Day12
 {
 	public class HillClimbingAlgorithm : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var heightMap = CreateHeightMap(input, out (int x, int y) start, out (int x, int y) end);
 

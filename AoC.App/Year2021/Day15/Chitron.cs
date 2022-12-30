@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 {
 	public class Chitron : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);

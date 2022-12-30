@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day05
 {
 	internal class SupplyStacks : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var numOfStacks = (input[0].Length + 1) / 4;
 			var stacksEnd = Array.IndexOf(input, "") - 1;

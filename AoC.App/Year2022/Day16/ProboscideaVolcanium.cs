@@ -11,7 +11,7 @@ namespace Ujeby.AoC.App.Year2022.Day16
 
 	public class ProboscideaVolcanium : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var valves = input.Select(v => 
 				new Valve
