@@ -11,12 +11,12 @@ namespace Ujeby.AoC.Vis.App
 	{
 		private v2i _mapSize;
 		private Blizzard[] _blizzards = null;
-		private char[,] _map = null;
+		private byte[,] _map = null;
 		private long _time = 0;
 
 		private v3i[] _elves;
 
-		private const int _frameStep = 1000;
+		private const int _frameStep = 16;
 
 		private v2i _end;
 		private v2i _start;
@@ -24,7 +24,9 @@ namespace Ujeby.AoC.Vis.App
 
 		private Stopwatch _sw = Stopwatch.StartNew();
 
-		private static v4f _wallColor = new(.5);
+		private int[,] _mapUsage;
+
+		private static v4f _wallColor = new(.8);
 		private static readonly Dictionary<char, v4f> _blizzColors = new()
 		{
 			{ '>', new(.5, .7) },
@@ -52,19 +54,21 @@ namespace Ujeby.AoC.Vis.App
 			_elves = new[] { new v3i(_start, 0) };
 			_destination = _end;
 
+			_map = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.GetMapInTime(0, _blizzards, _mapSize);
+			_mapUsage = new int[_mapSize.Y, _mapSize.X];
+
 			MinorGridSize = 12;
 			SetGridCenter(_mapSize / 2 * MinorGridSize);
 		}
 
 		protected override void Update()
 		{
-			_map = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.GetMapInTime(_time, _blizzards, _mapSize);
+			if (_sw.ElapsedMilliseconds >= _frameStep)
+			{
+				Progress();
 
-			//if (_sw.ElapsedMilliseconds >= _frameStep)
-			//{
-			//	_sw.Restart();
-			//	_time++;
-			//}
+				_sw.Restart();
+			}
 		}
 
 		private static long ManhattanDist(v2i p1, v2i p2) => Math.Abs(p1.X - p2.X) + Math.Abs(p1.Y - p2.Y);
@@ -78,9 +82,7 @@ namespace Ujeby.AoC.Vis.App
 			{
 				if (_map[e.Y, e.X] == 0)
 					DrawGridCell((int)e.X, (int)e.Y, 
-						fill: HeatMap.GetColorForValue(maxMDist - ManhattanDist(_destination, e.ToV2i()), _mapSize.X + _mapSize.Y + 1, .5));
-				//else
-				//	DrawGridCell((int)e.X, (int)e.Y, border: new v4f(1, 1, 1, 1));
+						fill: HeatMap.GetColorForValue(ManhattanDist(_destination, e.ToV2i()), maxMDist + 1, .5));
 			}
 
 			for (var y = 0; y < _map.GetLength(0); y++)
@@ -93,7 +95,7 @@ namespace Ujeby.AoC.Vis.App
 						DrawGridCell(x, y, fill: _wallColor);
 
 					else
-						DrawGridCell(x, y, fill: _blizzColors[_map[y, x]]);
+						DrawGridCell(x, y, fill: _blizzColors[(char)_map[y, x]]);
 				}
 
 			DrawGridMouseCursor();
@@ -111,18 +113,26 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown()
 		{
+			Progress();
+		}
+
+		private void Progress()
+		{
 			if (_elves.Length != 1 || _elves[0].ToV2i() != _destination)
 			{
-				_elves = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.Step(_time, _blizzards, _elves, _mapSize, _destination);
+				_map = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.GetMapInTime(_time, _blizzards, _mapSize);
+				_elves = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.Step(_time, _blizzards, _elves, _mapSize, _destination, _mapUsage);
 				_time++;
 			}
 			else
 			{
 				if (_destination == _end)
 					_destination = _start;
-				
+
 				else if (_destination == _start)
 					_destination = _end;
+
+				_mapUsage = new int[_mapSize.Y, _mapSize.X];
 			}
 		}
 	}
