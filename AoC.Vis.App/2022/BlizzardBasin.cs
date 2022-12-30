@@ -71,18 +71,16 @@ namespace Ujeby.AoC.Vis.App
 			}
 		}
 
-		private static long ManhattanDist(v2i p1, v2i p2) => Math.Abs(p1.X - p2.X) + Math.Abs(p1.Y - p2.Y);
-
 		protected override void Render()
 		{
 			DrawGrid();
 
-			var maxMDist = _mapSize.X + _mapSize.Y;
+			var maxMDist = _mapSize.ManhLength();
 			foreach (var e in _elves)
 			{
 				if (_map[e.Y, e.X] == 0)
 					DrawGridCell((int)e.X, (int)e.Y, 
-						fill: HeatMap.GetColorForValue(ManhattanDist(_destination, e.ToV2i()), maxMDist + 1, .5));
+						fill: HeatMap.GetColorForValue(v2i.ManhDistance(_destination, e.ToV2i()), maxMDist + 1, .5));
 			}
 
 			for (var y = 0; y < _map.GetLength(0); y++)
