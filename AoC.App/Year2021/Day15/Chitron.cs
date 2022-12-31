@@ -8,7 +8,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 		{
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);
-			var dist = Dijkstra.Create(riskMap, (0, 0));
+			var dist = Dijkstra.Create(riskMap, new());
 			long? answer1 = dist[riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1];
 
 			// part2

@@ -8,7 +8,7 @@ namespace Ujeby.AoC.Vis.App
 	{
 		private int[,] _riskMap;
 		private long[,] _dist;
-		private (int x, int y)[] _path;
+		private v2i[] _path;
 
 		public Chitron(v2i windowSize) : base(windowSize)
 		{
@@ -23,8 +23,8 @@ namespace Ujeby.AoC.Vis.App
 			_riskMap = AoC.App.Year2021.Day15.Chitron.CreateRiskMap(input, input.Length);
 			_riskMap = AoC.App.Year2021.Day15.Chitron.EnlargeRiskMap(_riskMap, input.Length, 5);
 
-			_dist = AoC.App.Year2021.Day15.Dijkstra.Create(_riskMap, (0,0));
-			_path = AoC.App.Year2021.Day15.Dijkstra.Path((0, 0), (_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1), _riskMap, _dist);
+			_dist = AoC.App.Year2021.Day15.Dijkstra.Create(_riskMap, new());
+			_path = AoC.App.Year2021.Day15.Dijkstra.Path(new(), new(_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1), _riskMap, _dist);
 
 			MinorGridSize = 8;
 
@@ -48,8 +48,8 @@ namespace Ujeby.AoC.Vis.App
 					DrawGridCell(x, y, fill: color);
 				}
 
-			foreach (var (x, y) in _path)
-				DrawGridCell(x, y, fill: new v4f(0, 1, 0, 0.5f));
+			foreach (var p in _path)
+				DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 1, 0, 0.5f));
 
 			DrawGridMouseCursor();
 

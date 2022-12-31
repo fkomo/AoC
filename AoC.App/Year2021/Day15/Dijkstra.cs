@@ -1,11 +1,12 @@
 ﻿using Ujeby.AoC.App.Year2022.Day09;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2021.Day15
 {
 	public static class Dijkstra
 	{
-		public static long[,] Create(int[,] weights, (int x, int y) start,
-			Func<(int x, int y), (int x, int y), int[,], bool> connectionCheck = null)
+		public static long[,] Create(int[,] weights, v2i start,
+			Func<v2i, v2i, int[,], bool> connectionCheck = null)
 		{
 			var dist = new long[weights.GetLength(0), weights.GetLength(1)];
 			for (var y = 0; y < weights.GetLength(0); y++)
@@ -14,7 +15,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 
 			var visited = new bool[weights.GetLength(0), weights.GetLength(1)];
 
-			dist[start.y, start.x] = 0;
+			dist[start.Y, start.X] = 0;
 
 			long shortestDist;
 			var shortest = start;
@@ -23,21 +24,21 @@ namespace Ujeby.AoC.App.Year2021.Day15
 				// visit
 				foreach (var dir in Directions.NSWE)
 				{
-					var x1 = dir.Value[0] + shortest.x;
-					var y1 = dir.Value[1] + shortest.y;
+					var x1 = dir.Value[0] + shortest.X;
+					var y1 = dir.Value[1] + shortest.Y;
 
 					// visited or out of bounds
 					if (x1 < 0 || y1 < 0 || x1 == weights.GetLength(1) || y1 == weights.GetLength(0) || visited[y1, x1])
 						continue;
 
-					if (connectionCheck != null && connectionCheck((x1, y1), shortest, weights) == false)
+					if (connectionCheck != null && connectionCheck(new(x1, y1), shortest, weights) == false)
 						continue;
 
-					var r = dist[shortest.y, shortest.x] + weights[y1, x1];
+					var r = dist[shortest.Y, shortest.X] + weights[y1, x1];
 					if (r < dist[y1, x1])
 						dist[y1, x1] = r;
 				}
-				visited[shortest.y, shortest.x] = true;
+				visited[shortest.Y, shortest.X] = true;
 
 				// find next, shortest and not visited
 				shortestDist = long.MaxValue;
@@ -50,7 +51,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 						if (dist[y, x] <= shortestDist)
 						{
 							shortestDist = dist[y, x];
-							shortest = (x, y);
+							shortest = new(x, y);
 						}
 					}
 			}
@@ -59,33 +60,33 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			return dist;
 		}
 
-		public static (int x, int y)[] Path((int x, int y) start, (int x, int y) end, int[,] weights, long[,] dist, 
-			Func<(int x, int y), (int x, int y), int[,], bool> connectionCheck = null)
+		public static v2i[] Path(v2i start, v2i end, int[,] weights, long[,] dist, 
+			Func<v2i, v2i, int[,], bool> connectionCheck = null)
 		{
-			var path = new List<(int x, int y)>();
+			var path = new List<v2i>();
 
 			var pos = end;
 			var bestDist = long.MaxValue;
 			do
 			{
-				(int x, int y)? nextPos = null;
+				v2i? nextPos = null;
 				foreach (var dir in Directions.NSWE)
 				{
-					var x1 = dir.Value[0] + pos.x;
-					var y1 = dir.Value[1] + pos.y;
+					var x1 = dir.Value[0] + pos.X;
+					var y1 = dir.Value[1] + pos.Y;
 					if (x1 < 0 || y1 < 0 || x1 == weights.GetLength(1) || y1 == weights.GetLength(0))
 						continue;
 
-					if (path.Any() && path.Last().x == x1 && path.Last().y == y1)
+					if (path.Any() && path.Last().X == x1 && path.Last().Y == y1)
 						continue;
 
-					if (connectionCheck != null && connectionCheck(pos, (x1, y1), weights) == false)
+					if (connectionCheck != null && connectionCheck(pos, new(x1, y1), weights) == false)
 						continue;
 
 					if (dist[y1, x1] <= bestDist)
 					{
 						bestDist = dist[y1, x1];
-						nextPos = (x1, y1);
+						nextPos = new(x1, y1);
 					}
 				}
 
@@ -93,7 +94,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 
 				path.Add(pos);
 			}
-			while (pos.x != start.x || pos.y != start.y);
+			while (pos.X != start.X || pos.Y != start.Y);
 
 			path.Reverse();
 			return path.ToArray();
