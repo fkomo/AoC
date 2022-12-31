@@ -114,7 +114,7 @@ namespace Ujeby.AoC.App.Year2022.Day24
 					if (newSpawns.Any(s => s.ToV2i() == p1))
 						continue;
 
-					// TODO 2022/24 OPTIMIZE (this is hardcoded and stupid :D)
+					// TODO 2022/24 OPTIMIZE (280ms)
 					if (usage[p1.Y, p1.X] >= 14)
 						continue;
 

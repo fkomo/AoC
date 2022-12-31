@@ -31,8 +31,9 @@ namespace Ujeby.AoC.App.Year2022.Day23
 			Debug.Line();
 			PrintElves(elves);
 
+			// TODO 2022/23 OPTIMIZE (34s)
+
 			// part1
-			// TODO 2022/23 p1 OPTIMIZE
 			//for (var r = 0; r < 10; r++)
 			//	elves = Step(elves, r, out _);
 			//var min = new v2i(elves.Min(e => e.Position.X), elves.Min(e => e.Position.Y));
@@ -41,7 +42,6 @@ namespace Ujeby.AoC.App.Year2022.Day23
 			long? answer1 = 3920;
 
 			// part2
-			// TODO 2022/23 p2 OPTIMIZE
 			//long? answer2 = 10;
 			//while (true)
 			//{

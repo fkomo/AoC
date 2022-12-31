@@ -7,18 +7,6 @@ namespace Ujeby.AoC.App.Year2021.Day15
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
-			// Dijkstra
-			//	debug.sample:	32ms
-			//	release:		67s
-
-			// A*
-			//	debug.sample:	34ms
-			//	release:		72s
-
-			// Bfs
-			//	debug.sample:	
-			//	release:		
-
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);
 			var end = new v2i(riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1);
@@ -26,7 +14,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			long? answer1 = dist[end.Y, end.X];
 
 			// part2
-			// TODO 2021/15 p2 OPTIMIZE
+			// TODO 2021/15 p2 OPTIMIZE (63s)
 			//var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
 			//end = new v2i(riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1);
 			//dist = Dijkstra.Create(riskMap5, new(0, 0), out _);

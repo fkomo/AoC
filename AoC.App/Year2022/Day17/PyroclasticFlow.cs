@@ -48,7 +48,7 @@ namespace Ujeby.AoC.App.Year2022.Day17
 			long? answer1 = FallingRocks(2022, input[0]);
 
 			// part2
-			// TODO 2022/17 p2 OPTIMIZE
+			// TODO 2022/17 p2 OPTIMIZE (9s)
 			//long? answer2 = FallingRocks(1000000000000, input[0]);
 			long? answer2 = 1591977077352;
 

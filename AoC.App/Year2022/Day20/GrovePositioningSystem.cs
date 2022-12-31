@@ -21,7 +21,7 @@ namespace Ujeby.AoC.App.Year2022.Day20
 			long? answer1 = Travel(zero, 1000).Number + Travel(zero, 2000).Number + Travel(zero, 3000).Number;
 
 			// part2
-			// TODO 2022/20 p2 OPTIMIZE
+			// TODO 2022/20 p2 OPTIMIZE (590ms)
 			//var file = ParseInput(input);
 			//for (var i = 0; i < file.Count; i++)
 			//	file[i].Number *= 811589153;

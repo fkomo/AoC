@@ -6,6 +6,12 @@ namespace Ujeby.AoC.App
 	{
 		static void Main(string[] args)
 		{
+			new AdventOfCode(2020)
+				.Run(new IPuzzle[]
+				{
+					// TODO 2020
+				});
+
 			new AdventOfCode(2021)
 				.Run(new IPuzzle[]
 				{
