@@ -33,20 +33,17 @@
 		{
 			Log.Line();
 			Log.ChristmasHeader(_title,
-				length: 100);
+				length: 120);
 			Log.Line();
 
 			var stars = 0;
 			try
 			{
-				Log.Indent += 2;
-				Debug.Indent += 2;
+				Log.Indent += 0;
+				Debug.Indent += 0;
 
 				foreach (var problem in problemsToSolve)
 					stars += problem.Solve();
-
-				Debug.Indent -= 2;
-				Log.Indent -= 2;
 			}
 			catch (Exception ex)
 			{
@@ -54,10 +51,13 @@
 			}
 			finally
 			{
+				Debug.Indent -= 0;
+				Log.Indent -= 0;
+
 				Log.Line();
 				Log.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
 					textColor: ConsoleColor.Yellow,
-					length: 100);
+					length: 120);
 			}
 		}
 
@@ -66,8 +66,6 @@
 			try
 			{
 				Log.Indent += 2;
-
-				var total = 0;
 
 				var programCsFilename = Path.Combine(outputDir, "Program.cs");
 				if (!File.ReadAllText(programCsFilename).Contains($"// TODO {year}"))
@@ -82,15 +80,15 @@
 
 					if (result.Result)
 						UpdateCodeTemplate(year, day, outputDir, yearDirPrefix);
-
-					total++;
 				}
-
-				Log.Indent -= 2;
 			}
 			catch (Exception ex)
 			{
 				Log.Line(ex.ToString());
+			}
+			finally
+			{
+				Log.Indent -= 2;
 			}
 		}
 

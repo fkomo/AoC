@@ -1,4 +1,5 @@
 ﻿using Ujeby.AoC.Common;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2021.Day15
 {
@@ -6,16 +7,30 @@ namespace Ujeby.AoC.App.Year2021.Day15
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
+			// Dijkstra
+			//	debug.sample:	32ms
+			//	release:		67s
+
+			// A*
+			//	debug.sample:	34ms
+			//	release:		72s
+
+			// Bfs
+			//	debug.sample:	
+			//	release:		
+
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);
-			var dist = Dijkstra.Create(riskMap, new());
-			long? answer1 = dist[riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1];
+			var end = new v2i(riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1);
+			var dist = Dijkstra.Create(riskMap, new(0, 0), out _);
+			long? answer1 = dist[end.Y, end.X];
 
 			// part2
 			// TODO 2021/15 p2 OPTIMIZE
 			//var riskMap5 = EnlargeRiskMap(riskMap, input.Length, 5);
-			//dist = Dijkstra.Create(riskMap5, (0, 0));
-			//long? answer2 = dist[riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1];
+			//end = new v2i(riskMap5.GetLength(0) - 1, riskMap5.GetLength(1) - 1);
+			//dist = Dijkstra.Create(riskMap5, new(0, 0), out _);
+			//long? answer2 = dist[end.Y, end.X];
 			long? answer2 = 3012;
 
 			return (answer1?.ToString(), answer2?.ToString());

@@ -9,14 +9,6 @@ namespace Ujeby.AoC.Common
 		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
 		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.YearYYYY.DayDD.".Length);
 
-		private readonly (int, ConsoleColor)[] _elapsedColors = new (int, ConsoleColor)[]
-		{
-			(250, ConsoleColor.Red),
-			(100, ConsoleColor.Yellow),
-			(10, ConsoleColor.Green),
-			(0, ConsoleColor.White),
-		};
-
 		public int Solve()
 		{
 			var result = 0;
@@ -25,61 +17,51 @@ namespace Ujeby.AoC.Common
 			try
 			{
 				Debug.Indent += 2;
+				Log.Indent += 2;
 
 				sw.Start();
 				var answer = SolvePuzzle(ReadInput());
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
-				var title = $"#{Day:d2} {Title} }}=-";
-				Log.Text($"#{Day:d2} {Title}", textColor: ConsoleColor.White);
+				Log.Indent -= 2;
+
+				// title
+				var title = $"{{ #{Day:d2} {Title} }}=-";
+				Log.Text($"{{ ", textColor: ConsoleColor.Gray);
+				Log.Text($"#{Day:d2} {Title}", textColor: ConsoleColor.White, indent: 0);
 				Log.Text($" }}=-", textColor: ConsoleColor.Gray, indent: 0);
 
-				var elapsedMsg = $"-={{ {Tools.Strings.DurationToStringSimple(elapsed)} }}=-";
+				var answers = $"-={{ {answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"} }}=-";
 
-				var padding = string.Join("", Enumerable.Repeat("-", 45 - title.Length - elapsedMsg.Length));
+				// padding
+				var padding = string.Join("", Enumerable.Repeat("-", 97 - title.Length - answers.Length));
 				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 0);
 
+				// answers
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				var elapsedColor = ConsoleColor.White;
-				foreach (var ec in _elapsedColors)
-					if (elapsed >= ec.Item1)
-					{
-						elapsedColor = ec.Item2;
-						break;
-					}
-				Log.Text($"{Tools.Strings.DurationToStringSimple(elapsed)}", textColor: elapsedColor, indent: 0);
-				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
-
-				var answers = $"{answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"}";
-				var answersMsg = $"-={{ {answers} }}=-";
-				padding = string.Join("", Enumerable.Repeat("-", 44 - answersMsg.Length));
-				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 0);
-
-				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-
-				Log.Text(answer.Item1?.ToString() ?? "?",
-					textColor:
-						Answer[0] != null && Answer[0] != answer.Item1 ? ConsoleColor.Red :
-						(answer.Item1 == null ? ConsoleColor.DarkGray : ConsoleColor.White), indent: 0);
+				Log.Text(answer.Item1?.ToString() ?? "?", textColor: GetAnswerColor(Answer[0], answer.Item1), indent: 0);
 				Log.Text(", ", textColor: ConsoleColor.White, indent: 0);
-				Log.Text(answer.Item2?.ToString() ?? "?",
-					textColor:
-						Answer[1] != null && Answer[1] != answer.Item2 ? ConsoleColor.Red :
-						(answer.Item2 == null ? ConsoleColor.DarkGray : ConsoleColor.White), indent: 0);
-
+				Log.Text(answer.Item2?.ToString() ?? "?", textColor: GetAnswerColor(Answer[1], answer.Item2), indent: 0);
 				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
 
-				var stars = "";
-#if _DEBUG_SAMPLE
-				stars = "NA";
-#else
-				stars += (Answer[0] != null && Answer[0] == answer.Item1) ? "*" : " ";
-				stars += (Answer[1] != null && Answer[1] == answer.Item2) ? "*" : " ";
-#endif
+				// padding
 				Log.Text("-", textColor: ConsoleColor.DarkGray, indent: 0);
+
+				// elapsed
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				Log.Text($"{stars}",
-					textColor: stars == "NA" ? ConsoleColor.DarkGray : ConsoleColor.Yellow, indent: 0);
+				Log.Text($"{DurationToStringSimple(elapsed),5}", textColor: GetElapsedColor(elapsed), indent: 0);
+				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
+
+				// padding
+				Log.Text("-", textColor: ConsoleColor.DarkGray, indent: 0);
+
+				// stars
+				var stars = 
+					((Answer[0] != null && Answer[0] == answer.Item1) ? "*" : " ") + 
+					((Answer[1] != null && Answer[1] == answer.Item2) ? "*" : " ");
+				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
+				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 0);
+				Log.Text(" }", textColor: ConsoleColor.Gray, indent: 0);
 
 				Log.Line();
 
@@ -103,9 +85,60 @@ namespace Ujeby.AoC.Common
 			return result;
 		}
 
+		private static ConsoleColor GetStarsColor(string stars)
+		{
+			return stars?.Contains('*') == true ? ConsoleColor.Yellow : ConsoleColor.DarkGray;
+		}
+
+		private static ConsoleColor GetElapsedColor(double elapsed)
+		{
+			var elapsedColors = new (int, ConsoleColor)[]
+			{
+				(250, ConsoleColor.Red),
+				(100, ConsoleColor.Yellow),
+				(10, ConsoleColor.Green),
+				(0, ConsoleColor.White),
+			};
+
+			var elapsedColor = ConsoleColor.White;
+			foreach (var ec in elapsedColors)
+				if (elapsed >= ec.Item1)
+				{
+					elapsedColor = ec.Item2;
+					break;
+				}
+
+			return elapsedColor;
+		}
+
+		private static ConsoleColor GetAnswerColor(string right, string calculated)
+		{
+			return right != null && right != calculated ? ConsoleColor.Red 
+				: (calculated == null ? ConsoleColor.DarkGray : ConsoleColor.White);
+		}
+
 		protected abstract (string, string) SolvePuzzle(string[] input);
 
 		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="duration">duration in ms</param>
+		/// <returns></returns>
+		private static string DurationToStringSimple(double duration)
+		{
+			if (duration < 1)
+				return $"{(int)(duration * 1000)}us";
+
+			else if (duration < 1000)
+				return $"{(int)duration}ms";
+
+			else if (duration < 60 * 60 * 1000)
+				return $"{(int)(duration / 1000)}s";
+
+			return $"{(int)(duration / 60 * 60 * 1000)}h";
+		}
 
 #if _DEBUG_SAMPLE
 		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.sample.txt");
