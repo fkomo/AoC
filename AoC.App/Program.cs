@@ -25,7 +25,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day14.ExtendedPolymerization()     { Answer = new string[] { "2657", "2911561572630" }},
 					new Year2021.Day15.Chitron()                    { Answer = new string[] { "811", "3012" }},
 					new Year2021.Day16.PacketDecoder()              { Answer = new string[] { "945", "10637009915279" }},
-					new Year2021.Day17.Puzzle202117()               { Answer = new string[] { null, null } },
+					new Year2021.Day17.TrickShot()					{ Answer = new string[] { "10011", "2994" } },
 					new Year2021.Day18.Puzzle202118()               { Answer = new string[] { null, null } },
 					new Year2021.Day19.Puzzle202119()               { Answer = new string[] { null, null } },
 					new Year2021.Day20.Puzzle202120()               { Answer = new string[] { null, null } },

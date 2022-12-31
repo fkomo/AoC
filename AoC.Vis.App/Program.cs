@@ -31,6 +31,7 @@ namespace Ujeby.AoC.Vis.App
 								new IRunnable[]
 								{
 									new Chitron(windowSize),
+									new TrickShot(windowSize),
 								}
 							},
 							{ 
