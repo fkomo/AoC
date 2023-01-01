@@ -13,6 +13,8 @@ namespace Ujeby.AoC.Vis.App
 		private int _direction;
 		private bool _noMovement;
 
+		public override string Name => $"#23 {nameof(UnstableDiffusion)}";
+
 		public UnstableDiffusion(v2i windowSize) : base(windowSize)
 		{
 		}

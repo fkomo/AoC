@@ -1,5 +1,4 @@
-﻿using Ujeby.AoC.App.Year2021.Day15;
-using Ujeby.AoC.App.Year2022.Day12;
+﻿using Ujeby.AoC.App.Year2022.Day12;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -18,6 +17,8 @@ namespace Ujeby.AoC.Vis.App
 
 		private v2i _start;
 		private v2i _end;
+
+		public override string Name => $"#12 {nameof(HillClimbingAlgorithm)}";
 
 		public HillClimbingAlgorithm(v2i windowSize) : base(windowSize)
 		{

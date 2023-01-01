@@ -31,11 +31,17 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 		public IRunnable Selected { get; private set; }
 
+		public override string Name => "-=#[ Advent Of Code ]#=-";
+
 		private string _section = null;
 		private int _sectionItem = -1;
 
 		protected override void Render()
 		{
+			var title = new Text(Name) { Color = new v4f(1, 1, 1, 1) };
+			var titleSize = Sdl2Wrapper.CurrentFont.GetTextSize(new(), title);
+			DrawText(new(WindowSize.X / 2 - titleSize.X / 2, WindowSize.Y / 5), new(), title);
+
 			//DrawRect((int)_windowSize.X / (_items.Keys.Count + 1), 0, (int)_windowSize.X / (_items.Keys.Count + 1), (int)_windowSize.Y, 
 			//	new v4f(0, 1, 0, 0.5f));
 			//DrawRect(0, (int)_windowSize.Y / 2, (int)_windowSize.X, (int)_windowSize.Y / 2, 
@@ -45,10 +51,10 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 			for (var ix = 0; ix < _items.Keys.Count; ix++)
 			{
-				var sectionTitle = _items.Keys.ElementAt(ix);
+				var sectionTitleText = _items.Keys.ElementAt(ix);
 				var sectionCenter = new v2i(WindowSize.X / (_items.Keys.Count + 1) * (ix + 1), WindowSize.Y / 2);
 
-				var items = _items[sectionTitle].Select(o => new Text(Strings.SplitCase(o.GetType().Name))).ToArray();
+				var items = _items[sectionTitleText].Select(i => new Text(i.Name)).ToArray();
 				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, items);
 
 				var sectionTopLeft = sectionCenter - itemsSize / 2;
@@ -65,17 +71,17 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 					items[i].Color = new v4f(1, 0, 0, 1);
 
-					_section = sectionTitle;
+					_section = sectionTitleText;
 					_sectionItem = i;
 					break;
 				}
 
-				var title = new Text($"-=#{{ {sectionTitle} }}#=-") { Color = new v4f(0, 1, 0, 1) };
-				var titleSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, title);
-				var titleOffset = new v2i(titleSize.X / 2, titleSize.Y + itemsSize.Y / 2);
+				var sectionTitle = new Text($"-=#{{ {sectionTitleText} }}#=-") { Color = new v4f(0, 1, 0, 1) };
+				var sectionTitleSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, sectionTitle);
+				var titleOffset = new v2i(sectionTitleSize.X / 2, sectionTitleSize.Y + itemsSize.Y / 2);
 
 				// title
-				DrawText(sectionCenter - titleOffset, spacing, title);
+				DrawText(sectionCenter - titleOffset, spacing, sectionTitle);
 
 				// items
 				DrawText(sectionCenter - itemsSize / 2, spacing, items);

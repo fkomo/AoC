@@ -6,8 +6,10 @@ namespace Ujeby.AoC.Vis.App
 	internal class RopeBridge : Sdl2Loop
 	{
 		private (int x, int y)? _apple = null;
-		private (int x, int y)[] _snake; 
-		
+		private (int x, int y)[] _snake;
+
+		public override string Name => $"#09 {nameof(RopeBridge)}";
+
 		public RopeBridge(v2i windowSize) : base(windowSize)
 		{
 		}

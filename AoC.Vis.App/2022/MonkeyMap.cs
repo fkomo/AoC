@@ -21,6 +21,8 @@ namespace Ujeby.AoC.Vis.App
 		private v3i _userEnd;
 		private v3i[] _userPath;
 
+		public override string Name => $"#22 {nameof(MonkeyMap)}";
+
 		public MonkeyMap(v2i windowSize) : base(windowSize)
 		{
 		}

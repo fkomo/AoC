@@ -35,6 +35,8 @@ namespace Ujeby.AoC.Vis.App
 			{ '^', new(.2, .7) }
 		};
 
+		public override string Name => $"#24 {nameof(BlizzardBasin)}";
+
 		public BlizzardBasin(v2i windowSize) : base(windowSize)
 		{
 		}

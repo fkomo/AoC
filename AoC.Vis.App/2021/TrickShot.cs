@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Ujeby.Graphics;
+﻿using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -12,6 +11,8 @@ namespace Ujeby.AoC.Vis.App
 		private AABBi _target;
 		private bool _hit = false;
 		private v2i _dir;
+
+		public override string Name => $"#17 {nameof(TrickShot)}";
 
 		public TrickShot(v2i windowSize) : base(windowSize)
 		{

@@ -15,6 +15,8 @@ namespace Ujeby.AoC.Vis.App
 
 		private List<v4f> _colors = new();
 
+		public override string Name => $"#14 {nameof(RegolithReservoir)}";
+
 		public RegolithReservoir(v2i windowSize) : base(windowSize)
 		{
 		}

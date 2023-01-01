@@ -9,7 +9,7 @@ namespace Ujeby.AoC.Vis.App
 	{
 		private int[,] _riskMap;
 
-		private const int _stepsPerFrame = 100;
+		private const int _stepsPerFrame = 10;
 
 		private Dijkstra _dijkstra;
 		private v2i[] _dijkstraPath = null;
@@ -20,6 +20,8 @@ namespace Ujeby.AoC.Vis.App
 		private int _userPoints = 0;
 		private v2i _start = new();
 		private v2i _end = new();
+
+		public override string Name => $"#15 {nameof(Chitron)}";
 
 		public Chitron(v2i windowSize) : base(windowSize)
 		{
@@ -40,7 +42,8 @@ namespace Ujeby.AoC.Vis.App
 			_dijkstra = new Dijkstra(_riskMap, _start, _end);
 			_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
 
-			MinorGridSize = 8;
+			MinorGridSize = 2;
+			MoveGridCenter(new v2i(_riskMap.GetLength(1), _riskMap.GetLength(0)) / 2 * MinorGridSize);
 		}
 
 		protected override void Update()
