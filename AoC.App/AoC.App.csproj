@@ -36,9 +36,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include=".session">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 		<Content Include="ffmpeg.config.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

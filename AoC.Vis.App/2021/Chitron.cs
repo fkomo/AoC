@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics.Entities;
+﻿using Ujeby.AoC.App.Year2021.Day15;
+using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -8,10 +9,12 @@ namespace Ujeby.AoC.Vis.App
 	{
 		private int[,] _riskMap;
 
-		private long[,] _dijkstraDist;
+		private const int _stepsPerFrame = 100;
+
+		private Dijkstra _dijkstra;
 		private v2i[] _dijkstraPath = null;
 
-		private long[,] _aStarDist;
+		private AStar _aStar;
 		private v2i[] _aStarPath = null;
 
 		private int _userPoints = 0;
@@ -34,23 +37,32 @@ namespace Ujeby.AoC.Vis.App
 			_start = new(0, 0);
 			_end = new(_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1);
 
-			MinorGridSize = 8;
+			_dijkstra = new Dijkstra(_riskMap, _start, _end);
+			_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
 
-			// TODO Init with progressbar (iterate with update/render)
+			MinorGridSize = 8;
 		}
 
 		protected override void Update()
 		{
-			if (_aStarPath == null)
+			if (_aStarPath == null && _aStar != null)
 			{
-				_aStarDist = AoC.App.Year2021.Day15.AStar.Create(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b), out int[,] prev);
-				_aStarPath = AoC.App.Year2021.Day15.Dijkstra.Path(_start, _end, prev);
+				for (var i = 0; i < _stepsPerFrame; i++)
+					if (!_aStar.Step())
+					{
+						_aStarPath = _aStar.Path();
+						break;
+					}
 			}
 
-			if (_dijkstraPath == null)
+			if (_dijkstraPath == null && _dijkstra != null)
 			{
-				_dijkstraDist = AoC.App.Year2021.Day15.Dijkstra.Create(_riskMap, _start, out int[,] prev);
-				_dijkstraPath = AoC.App.Year2021.Day15.Dijkstra.Path(_start, _end, prev);
+				for (var i = 0; i < _stepsPerFrame; i++)
+					if (!_dijkstra.Step())
+					{
+						_dijkstraPath = _dijkstra.Path();
+						break;
+					}
 			}
 		}
 
@@ -79,24 +91,41 @@ namespace Ujeby.AoC.Vis.App
 
 			if (_dijkstraPath != null)
 				foreach (var p in _dijkstraPath)
-					DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 1, 0, 0.5f));
+					DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 1, 0, .5));
+			
+			else if (_dijkstra != null)
+			{
+				for (var y = 0; y < _dijkstra.Size.Y; y++)
+					for (var x = 0; x < _dijkstra.Size.X; x++)
+						if (_dijkstra.Visited[y,x])
+							DrawGridCell((int)x, (int)y, fill: new v4f(0, .5, 0, .5));
+			}
 
 			if (_aStarPath != null)
 				foreach (var p in _aStarPath)
-					DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(1, 0, 0, 0.5f));
+					DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 0, 1, .5));
+
+			else if (_aStar != null)
+			{
+				for (var y = 0; y < _aStar.Size.Y; y++)
+					for (var x = 0; x < _aStar.Size.X; x++)
+						if (_aStar.Visited[y, x])
+							DrawGridCell((int)x, (int)y, fill: new v4f(0, 0, .5, .5));
+			}
 
 			DrawGridMouseCursor();
 
 			var ui = new List<TextLine>
 			{
-				new Text($"path distance: {_dijkstraDist[_dijkstraDist.GetLength(0) - 1, _dijkstraDist.GetLength(0) - 1]}")
+				//new Text($"path distance: {_dijkstraDist[_dijkstraDist.GetLength(0) - 1, _dijkstraDist.GetLength(0) - 1]}")
 			};
 
-			if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _riskMap.GetLength(0) &&
-				(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _riskMap.GetLength(0))
+			var m = MouseGridPositionDiscrete;
+			if ((int)m.X >= 0 && (int)m.X < _riskMap.GetLength(0) &&
+				(int)m.Y >= 0 && (int)m.Y < _riskMap.GetLength(0))
 			{
-				ui.Add(new Text($"risk: {_riskMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
-				ui.Add(new Text($"distance: {_dijkstraDist[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
+				ui.Add(new Text($"risk: {_riskMap[(int)m.Y, (int)m.X]}"));
+				//ui.Add(new Text($"distance: {_dijkstraDist[(int)m.Y, (int)m.X]}"));
 			}
 
 			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
@@ -109,23 +138,28 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseUp()
 		{
-			// user path
-			if (_userPoints == 1
-				&& (int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _riskMap.GetLength(0)
-				&& (int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _riskMap.GetLength(0))
-			{
-				_end = new(MouseGridPositionDiscrete.X, MouseGridPositionDiscrete.Y);
-				_userPoints = 2;
+			var m = MouseGridPositionDiscrete;
+			var size = new v2i(_riskMap.GetLength(0), _riskMap.GetLength(0));
 
-				_aStarPath = null;
-				_dijkstraPath = null;
-			}
-			else if (
-				(int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _riskMap.GetLength(0) &&
-				(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _riskMap.GetLength(0))
+			// user path
+			if ((int)m.X >= 0 && (int)m.X < size.X && (int)m.Y >= 0 && (int)m.Y < size.Y)
 			{
-				_start = new(MouseGridPositionDiscrete.X, MouseGridPositionDiscrete.Y);
-				_userPoints = 1;
+				if (_userPoints == 1)
+				{
+					_end = new(m.X, m.Y);
+					_userPoints = 2;
+
+					_aStarPath = null;
+					_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
+
+					_dijkstraPath = null;
+					_dijkstra = new Dijkstra(_riskMap, _start, _end);
+				}
+				else
+				{
+					_start = new(m.X, m.Y);
+					_userPoints = 1;
+				}
 			}
 		}
 	}

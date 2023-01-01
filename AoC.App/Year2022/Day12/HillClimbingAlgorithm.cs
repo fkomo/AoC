@@ -1,5 +1,6 @@
 ﻿using Ujeby.AoC.App.Year2022.Day09;
 using Ujeby.AoC.Common;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2022.Day12
 {
@@ -7,12 +8,13 @@ namespace Ujeby.AoC.App.Year2022.Day12
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
-			var heightMap = CreateHeightMap(input, out (int x, int y) start, out (int x, int y) end);
+			var heightMap = CreateHeightMap(input, out v2i start, out v2i end);
 
 			// part1
-			var prev = BreadthFirstSearch.Create(heightMap, start, connectionCheck: CheckHeight);
-			var path = BreadthFirstSearch.Path(start, end, prev);
-			long? answer1 = path.Length;
+			var bfs = new BreadthFirstSearch(heightMap, start, CheckHeight);
+			bfs.StepFull();
+
+			long? answer1 = bfs.Path(end).Length;
 
 			// part2
 			long answer2 = long.MaxValue;
@@ -24,8 +26,10 @@ namespace Ujeby.AoC.App.Year2022.Day12
 				if (heightMap[y, x] != 1)
 					continue;
 
-				var tmpPrev = BreadthFirstSearch.Create(heightMap, (x, y), connectionCheck: CheckHeight);
-				var length = BreadthFirstSearch.Path((x, y), end, tmpPrev)?.Length;
+				bfs = new BreadthFirstSearch(heightMap, new(x,y), CheckHeight);
+				bfs.StepFull();
+
+				var length = bfs.Path(end)?.Length;
 				if (length.HasValue && length.Value < answer2)
 					answer2 = length.Value;
 			}
@@ -33,13 +37,13 @@ namespace Ujeby.AoC.App.Year2022.Day12
 			return (answer1?.ToString(), answer2.ToString());
 		}
 
-		public static bool CheckHeight((int x, int y) n1, (int x, int y) n2, int[,] weights) 
-			=> weights[n1.y, n1.x] <= weights[n2.y, n2.x] || weights[n1.y, n1.x] == weights[n2.y, n2.x] + 1;
+		public static bool CheckHeight(v2i a, v2i b, int[,] weights) 
+			=> weights[a.Y, a.X] <= weights[b.Y, b.X] || weights[a.Y, a.X] == weights[b.Y, b.X] + 1;
 
-		public static int[,] CreateHeightMap(string[] input, out (int x, int y) start, out (int x, int y) end)
+		public static int[,] CreateHeightMap(string[] input, out v2i start, out v2i end)
 		{
-			start = (0, 0);
-			end = (0, 0);
+			start = new(0, 0);
+			end = new(0, 0);
 
 			var map = new int[input.Length, input.First().Length];
 			for (var y = 0; y < map.GetLength(0); y++)
@@ -50,12 +54,12 @@ namespace Ujeby.AoC.App.Year2022.Day12
 					if (input[y][x] == 'S')
 					{
 						height = 0;
-						start = (x, y);
+						start = new(x, y);
 					}
 					else if (input[y][x] == 'E')
 					{
 						height = 'z' - 'a';
-						end = (x, y);
+						end = new(x, y);
 					}
 
 					// there can be only 1 zero, start position

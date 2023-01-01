@@ -10,8 +10,13 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			// part1
 			var riskMap = CreateRiskMap(input, input.Length);
 			var end = new v2i(riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1);
-			var dist = Dijkstra.Create(riskMap, new(0, 0), out _);
-			long? answer1 = dist[end.Y, end.X];
+
+			var dijkstra = new Dijkstra(riskMap, new v2i(0, 0), end);
+			while (dijkstra.Step())
+			{
+			}
+
+			long? answer1 = dijkstra.Dist[end.Y, end.X];
 
 			// part2
 			// TODO 2021/15 p2 OPTIMIZE (63s)
