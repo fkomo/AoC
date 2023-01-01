@@ -10,7 +10,7 @@ namespace Ujeby.AoC.App
 				.Run(new IPuzzle[]
 				{
 					new Year2020.Day01.ReportRepair()				{ Answer = new string[] { "927684", "292093004" } },
-					new Year2020.Day02.Puzzle202002()				{ Answer = new string[] { null, null } },
+					new Year2020.Day02.PasswordPhilosophy()			{ Answer = new string[] { "474", "745" } },
 					new Year2020.Day03.Puzzle202003()				{ Answer = new string[] { null, null } },
 					new Year2020.Day04.Puzzle202004()				{ Answer = new string[] { null, null } },
 					new Year2020.Day05.Puzzle202005()				{ Answer = new string[] { null, null } },

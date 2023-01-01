@@ -44,31 +44,5 @@ namespace Ujeby.AoC.App.Year2020.Day01
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
-
-		//private static long FindSum(long[] n, int n1, int from, int to, long sum = 2020)
-		//{
-		//	var mid = (from + to) / 2;
-		//	var midSum = n[mid] + n[n1];
-		//	if (midSum == sum)
-		//		return n[mid];
-
-		//	if (midSum < sum)
-		//	{
-
-		//	}
-		//	else
-		//	{
-
-		//	}
-
-		//	for (var n2 = from; n2 < n.Length && !answer1.HasValue; n2++)
-		//	{
-		//		if (n1 == n2)
-		//			continue;
-
-		//		if (n[n1] + n[n2] == 2020)
-		//			answer1 = n[n1] * n[n2];
-		//	}
-		//}
 	}
 }
