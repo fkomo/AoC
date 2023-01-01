@@ -43,30 +43,35 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
+			var ui = new List<TextLine>();
+
 			DrawGrid();
 
 			// height map
-			var maxHeight = 'z' - 'a' + 2;
-			for (var y = 0; y < _heightMap.GetLength(0); y++)
-				for (var x = 0; x < _heightMap.GetLength(1); x++)
-					DrawGridCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
+			if (_heightMap != null)
+			{
+				var maxHeight = 'z' - 'a' + 2;
+				for (var y = 0; y < _heightMap.GetLength(0); y++)
+					for (var x = 0; x < _heightMap.GetLength(1); x++)
+						DrawGridCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
+
+				if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _heightMap.GetLength(1) &&
+					(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _heightMap.GetLength(0))
+				{
+					var height = _heightMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X];
+					ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
+				}
+			}
 
 			// path
-			foreach (var (x, y) in _bfsPath)
-				DrawGridCell(x, y, fill: new v4f(1, 1, 1, 0.5));
+			if (_bfsPath != null)
+			{
+				ui.Add(new Text($"bfs path: {_bfsPath.Length}"));
+				foreach (var (x, y) in _bfsPath)
+					DrawGridCell(x, y, fill: new v4f(1, 1, 1, 0.5));
+			}
 
 			DrawGridMouseCursor();
-
-			var ui = new List<TextLine>();
-
-			ui.Add(new Text($"bfs path: {_bfsPath.Length}"));
-
-			if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _heightMap.GetLength(1) && 
-				(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _heightMap.GetLength(0))
-			{
-				var height = _heightMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X];
-				ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
-			}
 
 			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
 		}
@@ -79,13 +84,17 @@ namespace Ujeby.AoC.Vis.App
 		protected override void LeftMouseDown()
 		{
 			var m = MouseGridPositionDiscrete;
-			_heightMap[m.Y, m.X]++;
 
-			_bfsPath = null;
+			if (_heightMap != null)
+			{
+				_heightMap[m.Y, m.X] = Math.Min('z' - 'a', _heightMap[m.Y, m.X] + 1);
+				_bfsPath = null;
+			}
 		}
 
 		protected override void LeftMouseUp()
 		{
+
 		}
 	}
 }

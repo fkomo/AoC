@@ -20,13 +20,6 @@ namespace Ujeby.AoC.Vis.App
 						new Dictionary<string, IRunnable[]>
 						{
 							{ 
-								"2020", 
-								new IRunnable[]
-								{
-									new Dummy(windowSize),
-								}
-							},
-							{ 
 								"2021", 
 								new IRunnable[]
 								{
