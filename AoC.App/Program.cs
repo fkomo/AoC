@@ -9,6 +9,31 @@ namespace Ujeby.AoC.App
 			new AdventOfCode(2020)
 				.Run(new IPuzzle[]
 				{
+					new Year2020.Day01.ReportRepair()				{ Answer = new string[] { "927684", "292093004" } },
+					new Year2020.Day02.Puzzle202002()				{ Answer = new string[] { null, null } },
+					new Year2020.Day03.Puzzle202003()				{ Answer = new string[] { null, null } },
+					new Year2020.Day04.Puzzle202004()				{ Answer = new string[] { null, null } },
+					new Year2020.Day05.Puzzle202005()				{ Answer = new string[] { null, null } },
+					new Year2020.Day06.Puzzle202006()				{ Answer = new string[] { null, null } },
+					new Year2020.Day07.Puzzle202007()				{ Answer = new string[] { null, null } },
+					new Year2020.Day08.Puzzle202008()				{ Answer = new string[] { null, null } },
+					new Year2020.Day09.Puzzle202009()				{ Answer = new string[] { null, null } },
+					new Year2020.Day10.Puzzle202010()				{ Answer = new string[] { null, null } },
+					new Year2020.Day11.Puzzle202011()				{ Answer = new string[] { null, null } },
+					new Year2020.Day12.Puzzle202012()				{ Answer = new string[] { null, null } },
+					new Year2020.Day13.Puzzle202013()				{ Answer = new string[] { null, null } },
+					new Year2020.Day14.Puzzle202014()				{ Answer = new string[] { null, null } },
+					new Year2020.Day15.Puzzle202015()				{ Answer = new string[] { null, null } },
+					new Year2020.Day16.Puzzle202016()				{ Answer = new string[] { null, null } },
+					new Year2020.Day17.Puzzle202017()				{ Answer = new string[] { null, null } },
+					new Year2020.Day18.Puzzle202018()				{ Answer = new string[] { null, null } },
+					new Year2020.Day19.Puzzle202019()				{ Answer = new string[] { null, null } },
+					new Year2020.Day20.Puzzle202020()				{ Answer = new string[] { null, null } },
+					new Year2020.Day21.Puzzle202021()				{ Answer = new string[] { null, null } },
+					new Year2020.Day22.Puzzle202022()				{ Answer = new string[] { null, null } },
+					new Year2020.Day23.Puzzle202023()				{ Answer = new string[] { null, null } },
+					new Year2020.Day24.Puzzle202024()				{ Answer = new string[] { null, null } },
+					new Year2020.Day25.Puzzle202025()				{ Answer = new string[] { null, null } },
 					// TODO 2020
 				});
 
