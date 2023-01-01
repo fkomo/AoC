@@ -34,7 +34,7 @@ namespace Ujeby.AoC.Common
 				var answers = $"-={{ {answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"} }}=-";
 
 				// padding
-				var padding = string.Join("", Enumerable.Repeat("-", 97 - title.Length - answers.Length));
+				var padding = string.Join("", Enumerable.Repeat("-", (AdventOfCode.ConsoleWidth - 23) - title.Length - answers.Length));
 				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 0);
 
 				// answers

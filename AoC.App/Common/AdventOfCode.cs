@@ -29,11 +29,13 @@
 			}
 		}
 
+		public const int ConsoleWidth = 99;
+
 		public void Run(IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
 			Log.ChristmasHeader(_title,
-				length: 120);
+				length: ConsoleWidth);
 			Log.Line();
 
 			var stars = 0;
@@ -57,7 +59,7 @@
 				Log.Line();
 				Log.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
 					textColor: ConsoleColor.Yellow,
-					length: 120);
+					length: ConsoleWidth);
 			}
 		}
 
