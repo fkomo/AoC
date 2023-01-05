@@ -67,7 +67,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown()
 		{
-			_apple = new((int)MouseGridPositionDiscrete.X, (int)MouseGridPositionDiscrete.Y);
+			_apple = new((int)Grid.MousePositionDiscrete.X, (int)Grid.MousePositionDiscrete.Y);
 		}
 	}
 }

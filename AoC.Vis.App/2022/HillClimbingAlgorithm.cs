@@ -31,8 +31,8 @@ namespace Ujeby.AoC.Vis.App
 			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 			
-			MinorGridSize = 10;
-			MoveGridCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * MinorGridSize);
+			Grid.MinorSize = 10;
+			Grid.MoveCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * Grid.MinorSize);
 
 			_bfs = new BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 		}
@@ -61,10 +61,10 @@ namespace Ujeby.AoC.Vis.App
 					for (var x = 0; x < _heightMap.GetLength(1); x++)
 						DrawGridCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
 
-				if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _heightMap.GetLength(1) &&
-					(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _heightMap.GetLength(0))
+				if ((int)Grid.MousePositionDiscrete.X >= 0 && (int)Grid.MousePositionDiscrete.X < _heightMap.GetLength(1) &&
+					(int)Grid.MousePositionDiscrete.Y >= 0 && (int)Grid.MousePositionDiscrete.Y < _heightMap.GetLength(0))
 				{
-					var height = _heightMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X];
+					var height = _heightMap[(int)Grid.MousePositionDiscrete.Y, (int)Grid.MousePositionDiscrete.X];
 					ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
 				}
 			}
@@ -100,7 +100,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseUp()
 		{
-			var m = MouseGridPositionDiscrete;
+			var m = Grid.MousePositionDiscrete;
 
 			if (_heightMap != null)
 			{

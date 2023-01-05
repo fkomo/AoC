@@ -39,8 +39,8 @@ namespace Ujeby.AoC.Vis.App
 				AoC.App.Year2022.Day22.MonkeyMap.ReadDirections(input),
 				new(Array.IndexOf(_map[0], '.'), 0, 0));
 
-			MinorGridSize = 5;
-			MoveGridCenter(new v2i(_map.First().Length, _map.Length) / 2 * MinorGridSize);
+			Grid.MinorSize = 5;
+			Grid.MoveCenter(new v2i(_map.First().Length, _map.Length) / 2 * Grid.MinorSize);
 		}
 
 		protected override void Update()
@@ -80,7 +80,7 @@ namespace Ujeby.AoC.Vis.App
 			{
 				if (_pathToDraw < _path.Length)
 				{
-					SetGridCenter(_path[_pathToDraw].ToV2i() * MinorGridSize);
+					Grid.SetCenter(_path[_pathToDraw].ToV2i() * Grid.MinorSize);
 					_pathToDraw++;
 				}
 

@@ -59,8 +59,8 @@ namespace Ujeby.AoC.Vis.App
 			_map = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.GetMapInTime(0, _blizzards, _mapSize);
 			_mapUsage = new int[_mapSize.Y, _mapSize.X];
 
-			MinorGridSize = 12;
-			SetGridCenter(_mapSize / 2 * MinorGridSize);
+			Grid.MinorSize = 12;
+			Grid.SetCenter(_mapSize / 2 * Grid.MinorSize);
 		}
 
 		protected override void Update()

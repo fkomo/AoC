@@ -69,7 +69,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown()
 		{
-			_dir = MouseGridPositionDiscrete;
+			_dir = Grid.MousePositionDiscrete;
 			_dir.Y = -_dir.Y;
 
 			_hit = Ujeby.AoC.App.Year2021.Day17.TrickShot.SimThrow(_dir, _target, out _path);

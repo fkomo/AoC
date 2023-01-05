@@ -23,14 +23,14 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			MinorGridSize = 4;
+			Grid.MinorSize = 4;
 
 			var input = new AoC.App.Year2022.Day23.UnstableDiffusion().ReadInput();
 			_elves = AoC.App.Year2022.Day23.UnstableDiffusion.ParseElves(input);
 
 			var min = new v2i(_elves.Min(e => e.Position.X), _elves.Min(e => e.Position.Y));
 			var max = new v2i(_elves.Max(e => e.Position.X), _elves.Max(e => e.Position.Y));
-			MoveGridCenter((max + min) / 2 * MinorGridSize);
+			Grid.MoveCenter((max + min) / 2 * Grid.MinorSize);
 
 			_step = 0;
 			_direction = 0;
@@ -47,7 +47,7 @@ namespace Ujeby.AoC.Vis.App
 
 				var min = new v2i(_elves.Min(e => e.Position.X), _elves.Min(e => e.Position.Y));
 				var max = new v2i(_elves.Max(e => e.Position.X), _elves.Max(e => e.Position.Y));
-				SetGridCenter((max + min) / 2 * MinorGridSize);
+				Grid.SetCenter((max + min) / 2 * Grid.MinorSize);
 			}
 		}
 

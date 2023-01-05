@@ -48,8 +48,8 @@ namespace Ujeby.AoC.Vis.App
 			if (_useAStar)
 				_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
 
-			MinorGridSize = 2;
-			MoveGridCenter(new v2i(_riskMap.GetLength(1), _riskMap.GetLength(0)) / 2 * MinorGridSize);
+			Grid.MinorSize = 2;
+			Grid.MoveCenter(new v2i(_riskMap.GetLength(1), _riskMap.GetLength(0)) / 2 * Grid.MinorSize);
 		}
 
 		protected override void Update()
@@ -132,7 +132,7 @@ namespace Ujeby.AoC.Vis.App
 
 			var ui = new List<TextLine>();
 
-			var m = MouseGridPositionDiscrete;
+			var m = Grid.MousePositionDiscrete;
 			if ((int)m.X >= 0 && (int)m.X < _riskMap.GetLength(0) &&
 				(int)m.Y >= 0 && (int)m.Y < _riskMap.GetLength(0))
 			{
@@ -149,7 +149,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseUp()
 		{
-			var m = MouseGridPositionDiscrete;
+			var m = Grid.MousePositionDiscrete;
 			var size = new v2i(_riskMap.GetLength(0), _riskMap.GetLength(0));
 
 			// user path

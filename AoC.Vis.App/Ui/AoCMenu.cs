@@ -62,8 +62,8 @@ namespace Ujeby.AoC.Vis.App.Ui
 				{
 					var itemSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, items[i]);
 
-					if (MouseWindowPosition.X < sectionTopLeft.X || MouseWindowPosition.Y < sectionTopLeft.Y ||
-						MouseWindowPosition.X > sectionTopLeft.X + itemSize.X || MouseWindowPosition.Y > sectionTopLeft.Y + itemSize.Y)
+					if (MousePosition.X < sectionTopLeft.X || MousePosition.Y < sectionTopLeft.Y ||
+						MousePosition.X > sectionTopLeft.X + itemSize.X || MousePosition.Y > sectionTopLeft.Y + itemSize.Y)
 					{
 						sectionTopLeft.Y += itemSize.Y;
 						continue;
