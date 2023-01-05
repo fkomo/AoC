@@ -1,12 +1,12 @@
 using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.Year2021.Day24
+namespace Ujeby.AoC.App.Year2021.Day20
 {
-	public class Puzzle202124 : PuzzleBase
+	public class TrenchMap : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
-			// TODO 2021/24
+			// TODO 2021/20
 
 			// part1
 			long? answer1 = null;

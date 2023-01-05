@@ -1,12 +1,12 @@
 using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.Year2021.Day21
+namespace Ujeby.AoC.App.Year2021.Day24
 {
-	public class Puzzle202121 : PuzzleBase
+	public class ArithmeticLogicUnit : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
-			// TODO 2021/21
+			// TODO 2021/24
 
 			// part1
 			long? answer1 = null;
