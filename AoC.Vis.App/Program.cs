@@ -1,6 +1,6 @@
 ﻿using Ujeby.AoC.Vis.App.Ui;
+using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
-using Ujeby.Graphics.Sdl.Interfaces;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App

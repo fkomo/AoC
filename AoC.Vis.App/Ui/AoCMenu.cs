@@ -1,6 +1,6 @@
 ﻿using Ujeby.Graphics.Entities;
+using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
-using Ujeby.Graphics.Sdl.Interfaces;
 using Ujeby.Tools;
 using Ujeby.Vectors;
 

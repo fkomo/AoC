@@ -1,4 +1,5 @@
 ﻿using Ujeby.AoC.Common;
+using Ujeby.Tools;
 
 namespace Ujeby.AoC.App.Year2022.Day13
 {
@@ -39,8 +40,8 @@ namespace Ujeby.AoC.App.Year2022.Day13
 				else if (array1 == "[]" && array2 == "[]")
 					return 0;
 
-				var p1Values = SplitArray(array1[1..^1]);
-				var p2Values = SplitArray(array2[1..^1]);
+				var p1Values = array1[1..^1].SplitNestedArrays();
+				var p2Values = array2[1..^1].SplitNestedArrays();
 
 				if (p1Values.Length == 1 && p2Values.Length == 1 &&
 					int.TryParse(p1Values.Single(), out int int1) && int.TryParse(p2Values.Single(), out int int2))
@@ -77,53 +78,6 @@ namespace Ujeby.AoC.App.Year2022.Day13
 					return -1;
 
 				return 0;
-			}
-
-			private static string[] SplitArray(string raw)
-			{
-				if (raw.All(c => c == ',' || char.IsDigit(c)))
-					return raw.Split(',');
-
-				var result = new List<string>();
-
-				string item = null;
-				for (var i = 0; i < raw.Length; i++)
-				{
-					if (raw[i] == '[')
-					{
-						var c = 1;
-						var i2 = i + 1;
-						while (c > 0)
-						{
-							if (raw[i2] == '[')
-								c++;
-							else if (raw[i2] == ']')
-								c--;
-
-							i2++;
-						}
-
-						result.Add(raw.Substring(i, i2 - i));
-						i = i2 - 1;
-					}
-					else
-					{
-						if (raw[i] == ',')
-						{
-							if (item != null)
-								result.Add(item);
-
-							item = null;
-						}
-						else
-							item += raw[i];
-					}
-				}
-
-				if (item != null)
-					result.Add(item);
-
-				return result.ToArray();
 			}
 		}
 	}
