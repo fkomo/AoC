@@ -34,18 +34,12 @@ namespace Ujeby.AoC.App.Year2022.Day16
 
 			dist = Alg.FloydWarshall.ShortestPath(dist);
 
-			Debug.Line($"dist after floyd-warshall:");
-			for (var y = 0; y < valveNames.Length; y++)
-			{
-				var line = $"{dist[y, 0],3}";
-				for (var x = 1; x < valveNames.Length; x++)
-					line += $" {dist[y, x],3}";
-				Debug.Line(line);
-			}
-			Debug.Line();
+			foreach (var toRemove in valves.Where(v => v.Key != "AA" && v.Value.FlowRate == 0).Select(v => v.Key))
+				valves.Remove(toRemove);
 
 			// part1
-			long? answer1 = MoveToValve(valves, dist, valves["AA"].Idx, Array.Empty<string>(), out _);
+			long? answer1 = MoveToValve(valves, dist, "AA", Array.Empty<string>(), out string[] path);
+			Debug.Line(string.Join(", ", path));
 
 			// part2
 			long? answer2 = null;
@@ -85,57 +79,45 @@ namespace Ujeby.AoC.App.Year2022.Day16
 			return valves;
 		}
 
-		private static int PressureReleased(Dictionary<string, Valve> valves, int minutes, params string[] opened)
-			=> minutes * opened.Sum(v => valves[v].FlowRate);
-
-		private static int MoveToValve(Dictionary<string, Valve> valves, int[,] dist, int valveIdx, string[] opened, out string[] path,
-			int pressureReleased = 0, int minutesLeft = 30)
+		private static int MoveToValve(Dictionary<string, Valve> valves, int[,] dist,
+			string valveName, string[] opened, out string[] path, 
+			int openedFlowRate = 0, int pressureReleased = 0, int minutesLeft = 30)
 		{
-			var valveNames = valves.Keys.ToArray();
-			//Debug.Line($"{minutesLeft,2}min left - {valveNames[currentIdx]} - '{ string.Join(',', opened) }' => { pressureReleased }");
+			var valve = valves[valveName];
 
-			Valve nextValve = GetNextValve(valves, dist, valveIdx, opened, minutesLeft);
-			if (nextValve == null)
-			{
-				if (valveIdx != 0)
-					opened = opened.Concat(new[] { valveNames[valveIdx] }).ToArray();
-				pressureReleased += PressureReleased(valves, minutesLeft, opened);
-
-				//Debug.Line($" 0min left - {valveNames[currentIdx]} - '{string.Join(',', opened)}' => {pressureReleased}");
-
-				path = opened;
-				Debug.Line($"{string.Join(',', path)} => {pressureReleased}");
-
-				return pressureReleased;
-			}
-
-			var d = dist[valveIdx, nextValve.Idx] + 1;
-			pressureReleased += PressureReleased(valves, d, opened) + PressureReleased(valves, d, valveNames[valveIdx]);
-			if (valveIdx != 0)
-				opened = opened.Concat(new[] { valveNames[valveIdx] }).ToArray();
-
-			return MoveToValve(valves, dist, nextValve.Idx,
-				opened, out path, pressureReleased, minutesLeft - d);
-		}
-
-		private static Valve GetNextValve(Dictionary<string, Valve> valves, int[,] dist, int currentIdx, string[] opened, int minutesLeft)
-		{
-			Valve bestRoute = null;
 			var bestPressure = int.MinValue;
-			foreach (var v in valves.Values)
+			var bestPath = Array.Empty<string>();
+
+			foreach (var nextValve in valves.Values)
 			{
-				if (v.Idx == currentIdx || v.FlowRate == 0 || opened.Contains(v.Name))
+				var d = dist[valve.Idx, nextValve.Idx] + 1;
+
+				if (nextValve.Idx == valve.Idx || opened.Contains(nextValve.Name) || (d + 1) >= minutesLeft)
 					continue;
 
-				var pressure = PressureReleased(valves, minutesLeft - (dist[currentIdx, v.Idx] + 1), opened.Concat(new[] { v.Name }).ToArray());
-				if (pressure > bestPressure)
+				var p = MoveToValve(valves, dist, nextValve.Name, 
+					opened.Concat(new[] { valveName }).ToArray(),
+					out path,
+					openedFlowRate: openedFlowRate + valve.FlowRate,
+					pressureReleased: pressureReleased + d * (valve.FlowRate + openedFlowRate),
+					minutesLeft: minutesLeft - d);
+
+				if (p > bestPressure)
 				{
-					bestRoute = v;
-					bestPressure = pressure;
+					bestPressure = p;
+					bestPath = path.ToArray();
 				}
 			}
 
-			return bestRoute;
+			// all valves are open
+			if (bestPressure == int.MinValue)
+			{
+				path = opened.Concat(new[] { valveName }).ToArray();
+				return pressureReleased + minutesLeft * (openedFlowRate + valve.FlowRate);
+			}
+
+			path = bestPath.ToArray();
+			return bestPressure;
 		}
 	}
 }
