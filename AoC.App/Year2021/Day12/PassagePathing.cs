@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day12
 {
 	internal class PassagePathing : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// Item1 == true - big cave
 			var caves = new List<(bool, List<int>)>
@@ -46,7 +46,7 @@ namespace Ujeby.AoC.App.Year2021.Day12
 			long? answer1 = VisitCave_AllSmallOnce(caves, 0, Array.Empty<int>());
 
 			// part2
-			// TODO 2021/12 p2 OPTIMIZE
+			// TODO 2021/12 p2 OPTIMIZE (316ms)
 			//long? answer2 = VisitCave_OneSmallTwice(caves, 0, Array.Empty<int>());
 			long? answer2 = 133360;
 

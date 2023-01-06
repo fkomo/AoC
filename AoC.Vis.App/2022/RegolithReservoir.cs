@@ -15,6 +15,8 @@ namespace Ujeby.AoC.Vis.App
 
 		private List<v4f> _colors = new();
 
+		public override string Name => $"#14 {nameof(RegolithReservoir)}";
+
 		public RegolithReservoir(v2i windowSize) : base(windowSize)
 		{
 		}
@@ -26,8 +28,8 @@ namespace Ujeby.AoC.Vis.App
 			var input = new AoC.App.Year2022.Day14.RegolithReservoir().ReadInput();
 			_map = AoC.App.Year2022.Day14.RegolithReservoir.CreateMap(input, ground: true);
 
-			MinorGridSize = 5;
-			MoveGridCenter(new v2i(_map.GetLength(1), _map.GetLength(0)) / 2 * MinorGridSize);
+			Grid.MinorSize = 5;
+			Grid.MoveCenter(new v2i(_map.GetLength(1), _map.GetLength(0)) / 2 * Grid.MinorSize);
 
 			_rnd = new Random(123);
 			_sandCount = 0;
@@ -85,7 +87,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown()
 		{
-			AddSand(MouseGridPositionDiscrete);
+			AddSand(Grid.MousePositionDiscrete);
 		}
 	}
 }

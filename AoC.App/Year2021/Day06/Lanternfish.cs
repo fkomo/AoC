@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day06
 {
 	internal class Lanternfish : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var inputB = input.First().Split(',').Select(s => byte.Parse(s)).ToArray();
 

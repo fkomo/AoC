@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics;
+﻿using Ujeby.AoC.App.Year2022.Day12;
+using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -9,12 +10,15 @@ namespace Ujeby.AoC.Vis.App
 	{
 		private int[,] _heightMap;
 
-		private long[,] _dijkstraDist;
-		private (int x, int y)[] _dijkstraPath = null;
-		private (int x, int y)[] _bfsPath = null;
+		private const int _stepsPerFrame = 10;
 
-		private (int x, int y) _start;
-		private (int x, int y) _end;
+		private BreadthFirstSearch _bfs;
+		private v2i[] _bfsPath = null;
+
+		private v2i _start;
+		private v2i _end;
+
+		public override string Name => $"#12 {nameof(HillClimbingAlgorithm)}";
 
 		public HillClimbingAlgorithm(v2i windowSize) : base(windowSize)
 		{
@@ -27,72 +31,60 @@ namespace Ujeby.AoC.Vis.App
 			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
 			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 			
-			MinorGridSize = 10;
-			MoveGridCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * MinorGridSize);
+			Grid.MinorSize = 10;
+			Grid.MoveCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * Grid.MinorSize);
 
-			// TODO render progress of search algs, not just result
+			_bfs = new BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 		}
 
 		protected override void Update()
 		{
-			if (_dijkstraPath == null)
+			if (_bfsPath == null && _bfs != null)
 			{
-				_dijkstraDist = AoC.App.Year2021.Day15.Dijkstra.Create(_heightMap, _start,
-					connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
-
-				_dijkstraPath = AoC.App.Year2021.Day15.Dijkstra.Path(_start, _end, _heightMap, _dijkstraDist,
-					connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
-			}
-
-			if (_bfsPath == null)
-			{
-				var bfsPrev = AoC.App.Year2022.Day12.BreadthFirstSearch.Create(_heightMap, _start,
-					connectionCheck: AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
-				_bfsPath = AoC.App.Year2022.Day12.BreadthFirstSearch.Path(_start, _end, bfsPrev);
+				for (var i = 0; i < _stepsPerFrame; i++)
+					if (!_bfs.Step())
+						_bfsPath = _bfs.Path(_end);
 			}
 		}
 
 		protected override void Render()
 		{
+			var ui = new List<TextLine>();
+
 			DrawGrid();
 
 			// height map
-			var maxHeight = 'z' - 'a' + 2;
-			for (var y = 0; y < _heightMap.GetLength(0); y++)
-				for (var x = 0; x < _heightMap.GetLength(1); x++)
-					DrawGridCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
+			if (_heightMap != null)
+			{
+				var maxHeight = 'z' - 'a' + 2;
+				for (var y = 0; y < _heightMap.GetLength(0); y++)
+					for (var x = 0; x < _heightMap.GetLength(1); x++)
+						DrawGridCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
 
-			// dijkstra distance map
-			//var maxDist = _dijkstraDist.Cast<long>().Where(l => l < long.MaxValue).Max() + 1;
-			//for (var y = 0; y < _dijkstraDist.GetLength(0); y++)
-			//	for (var x = 0; x < _dijkstraDist.GetLength(1); x++)
-			//	{
-			//		if (_dijkstraDist[y, x] == long.MaxValue)
-			//			continue;
-			//		var color = HeatMap.GetColorForValue(_dijkstraDist[y, x], maxDist);
-			//		DrawGridCell(x, -y, color.R, color.G, color.B, 0x77);
-			//	}
+				if ((int)Grid.MousePositionDiscrete.X >= 0 && (int)Grid.MousePositionDiscrete.X < _heightMap.GetLength(1) &&
+					(int)Grid.MousePositionDiscrete.Y >= 0 && (int)Grid.MousePositionDiscrete.Y < _heightMap.GetLength(0))
+				{
+					var height = _heightMap[(int)Grid.MousePositionDiscrete.Y, (int)Grid.MousePositionDiscrete.X];
+					ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
+				}
+			}
 
 			// path
-			foreach (var (x, y) in _bfsPath)
-				DrawGridCell(x, y, fill: new v4f(1, 1, 1, 0.5));
-
-			foreach (var (x, y) in _dijkstraPath)
-				DrawGridCell(x, y, fill: new v4f(1, 0, 0, 0.5));
+			if (_bfsPath != null)
+			{
+				ui.Add(new Text($"bfs path: {_bfsPath.Length}"));
+				foreach (var p in _bfsPath)
+					DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(1, 1, 1, .5));
+			}
+			else if (_bfs != null)
+			{
+				for (var y = 0; y < _bfs.Size.Y; y++)
+					for (var x = 0; x < _bfs.Size.X; x++)
+						if (_bfs.Visited[y, x])
+							DrawGridCell((int)x, (int)y, fill: new v4f(.5, .5, .5, .5));
+			}
 
 			DrawGridMouseCursor();
-
-			var ui = new List<TextLine>();
-
-			ui.Add(new Text($"dijkstra path: {_dijkstraPath.Length}"));
-			ui.Add(new Text($"bfs path: {_bfsPath.Length}"));
-
-			if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _heightMap.GetLength(1) && 
-				(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _heightMap.GetLength(0))
-			{
-				var height = _heightMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X];
-				ui.Add(new Text($"height: {height}/{(char)('a' + height - 1)}"));
-			}
 
 			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
 		}
@@ -104,15 +96,19 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown()
 		{
-			var m = MouseGridPositionDiscrete;
-			_heightMap[m.Y, m.X]++;
-
-			_bfsPath = null;
-			_dijkstraPath = null;
 		}
 
 		protected override void LeftMouseUp()
 		{
+			var m = Grid.MousePositionDiscrete;
+
+			if (_heightMap != null)
+			{
+				_heightMap[m.Y, m.X] = Math.Min('z' - 'a', _heightMap[m.Y, m.X] + 1);
+
+				_bfsPath = null;
+				_bfs = new BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+			}
 		}
 	}
 }

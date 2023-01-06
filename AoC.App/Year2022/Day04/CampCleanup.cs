@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day04
 {
 	internal class CampCleanup : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var inputP = input.Select(l => l.Split(',').Select(p =>
 			{

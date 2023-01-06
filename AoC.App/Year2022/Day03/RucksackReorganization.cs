@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day03
 {
 	internal class RucksackReorganization : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
 			long answer1 = input

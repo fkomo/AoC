@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day13
 {
     internal class TransparentOrigami : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var points = new List<int[]>();
 			var i = 0;

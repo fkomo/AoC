@@ -1,63 +1,91 @@
-﻿using Ujeby.AoC.App.Year2022.Day09;
+﻿using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2022.Day12
 {
-	public static class BreadthFirstSearch
+	public class BreadthFirstSearch
 	{
-		public static (int x, int y)?[,] Create(int[,] map, (int x, int y) start,
-			Func<(int x, int y), (int x, int y), int[,], bool> connectionCheck = null)
+		public readonly v2i Size;
+		public readonly v2i Start;
+
+		private readonly int[,] _map;
+		private readonly Func<v2i, v2i, int[,], bool> _connectionCheck;
+
+		public bool[,] Visited { get; private set; }
+
+		private Queue<v2i> _queue;
+		private v2i _p;
+
+		public v2i?[,] Prev { get; private set; }
+
+		public BreadthFirstSearch(int[,] map, v2i start, Func<v2i, v2i, int[,], bool> connectionCheck)
 		{
-			var visited = new bool[map.GetLength(0), map.GetLength(1)];
-			var queue = new Queue<(int x, int y)>();
+			Size = new v2i(map.GetLength(1), map.GetLength(0));
+			Start = start;
 
-			var prev = new (int x, int y)?[map.GetLength(0), map.GetLength(1)];
+			_map = map;
+			_connectionCheck = connectionCheck;
 
-			visited[start.y, start.x] = true;
+			Visited = new bool[Size.Y, Size.X];
+			_queue = new Queue<v2i>();
 
-			var p = start;
-			do
-			{
-				if (queue.Any())
-					p = queue.Dequeue();
+			Prev = new v2i?[Size.Y, Size.X];
 
-				foreach (var dir in Directions.NSWE)
-				{
-					var x1 = dir.Value[0] + p.x;
-					var y1 = dir.Value[1] + p.y;
+			Visited[Start.Y, Start.X] = true;
 
-					// visited or out of bounds
-					if (x1 < 0 || y1 < 0 || x1 == map.GetLength(1) || y1 == map.GetLength(0) || visited[y1, x1])
-						continue;
-
-					if (connectionCheck != null && connectionCheck((x1, y1), p, map) == false)
-						continue;
-
-					visited[y1, x1] = true;
-					queue.Enqueue((x1, y1));
-					prev[y1, x1] = p;
-				}
-			}
-			while (queue.Count > 0);
-
-			return prev;
+			_p = Start;
 		}
 
-		public static (int x, int y)[] Path((int x, int y) start, (int x, int y) end, (int x, int y)?[,] prev)
+		public bool Step()
 		{
-			var path = new List<(int x, int y)>();
+			if (_queue.Any())
+				_p = _queue.Dequeue();
+
+			var rightDownLeftUpLength = v2i.RightDownLeftUp.Length;
+			for (var vDir = 0; vDir < rightDownLeftUpLength; vDir++)
+			{
+				var p1 = _p + v2i.RightDownLeftUp[vDir];
+
+				// visited or out of bounds
+				if (p1.X < 0 || p1.Y < 0 || p1.X == Size.X || p1.Y == Size.Y || Visited[p1.Y, p1.X])
+					continue;
+
+				if (_connectionCheck(p1, _p, _map) == false)
+					continue;
+
+				Visited[p1.Y, p1.X] = true;
+				_queue.Enqueue(p1);
+				Prev[p1.Y, p1.X] = _p;
+			}
+
+			if (_queue.Count <= 0)
+				return false;
+
+			return true;
+		}
+
+		public v2i[] Path(v2i end)
+		{
+			var path = new List<v2i>();
 			var p = end;
-			while (p.x != start.x || p.y != start.y)
+			while (p.X != Start.X || p.Y != Start.Y)
 			{
 				path.Add(p);
 
-				if (!prev[p.y, p.x].HasValue)
+				if (!Prev[p.Y, p.X].HasValue)
 					return null;
 
-				p = prev[p.y, p.x].Value;
+				p = Prev[p.Y, p.X].Value;
 			}
 
 			path.Reverse();
 			return path.ToArray();
+		}
+
+		public void StepFull()
+		{
+			while (Step())
+			{
+			}
 		}
 	}
 }

@@ -5,7 +5,7 @@ namespace Ujeby.AoC.App.Year2022.Day07
 {
 	internal class NoSpaceLeftOnDevice : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var root = new DirEntry
 			{

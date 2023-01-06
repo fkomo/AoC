@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day15
 {
 	public class BeaconExclusionZone : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// [0] sensor, [1] beacon
 			var sbs = input.Select(l => l["Sensor at x=".Length..].Replace(" closest beacon is at x=", string.Empty)
@@ -37,13 +37,14 @@ namespace Ujeby.AoC.App.Year2022.Day15
 			Debug.Line();
 			Debug.Line($"[{min.x};{min.y}]x[{max.x};{max.y}]");
 
+			// TODO 2022/15 OPTIMIZE (3s)
+
 			// part1
-			// TODO 2022/15 p1 OPTIMIZE
 //#if _DEBUG_SAMPLE
 //			PrintMap(sbsDist, sbs, min, max);
 //			var scanY = 10;
 //#else
-//						var scanY = 2000000;
+//			var scanY = 2000000;
 //#endif
 //			long? answer1 = 0;
 //			for (var x = min.x; x <= max.x; x++)
@@ -64,7 +65,6 @@ namespace Ujeby.AoC.App.Year2022.Day15
 			long? answer1 = 5166077;
 
 			// part2
-			// TODO 2022/15 p2 OPTIMIZE
 //#if _DEBUG_SAMPLE
 //			var area = (x: 20, y: 20);
 //#else

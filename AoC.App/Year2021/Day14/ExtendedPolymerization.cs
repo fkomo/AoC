@@ -6,7 +6,7 @@ namespace Ujeby.AoC.App.Year2021.Day14
 {
 	internal class ExtendedPolymerization : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var template = input[0];
 			var rules = input.Skip(2).Select(s => s.Split(" -> "))

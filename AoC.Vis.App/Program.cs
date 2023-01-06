@@ -1,6 +1,6 @@
-﻿using Ujeby.AoC.Vis.App.Common;
+﻿using Ujeby.AoC.Vis.App.Ui;
+using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
-using Ujeby.Graphics.Sdl.Interfaces;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
@@ -20,23 +20,18 @@ namespace Ujeby.AoC.Vis.App
 						new Dictionary<string, IRunnable[]>
 						{
 							{ 
-								"2020", 
-								new IRunnable[]
-								{
-									new Dummy(windowSize),
-								}
-							},
-							{ 
 								"2021", 
 								new IRunnable[]
 								{
 									new Chitron(windowSize),
+									new TrickShot(windowSize),
 								}
 							},
 							{ 
 								"2022", 
 								new IRunnable[]
 								{
+									new BlizzardBasin(windowSize),
 									new RopeBridge(windowSize),
 									new HillClimbingAlgorithm(windowSize),
 									new RegolithReservoir(windowSize),

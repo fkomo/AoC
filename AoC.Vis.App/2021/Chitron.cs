@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics.Entities;
+﻿using Ujeby.AoC.App.Year2021.Day15;
+using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -7,8 +8,23 @@ namespace Ujeby.AoC.Vis.App
 	internal class Chitron : Sdl2Loop
 	{
 		private int[,] _riskMap;
-		private long[,] _dist;
-		private (int x, int y)[] _path;
+
+		private bool _useAStar = true;
+		private bool _useDijkstra = true;
+
+		private const int _stepsPerFrame = 10;
+
+		private Dijkstra _dijkstra;
+		private v2i[] _dijkstraPath = null;
+
+		private AStar _aStar;
+		private v2i[] _aStarPath = null;
+
+		private int _userPoints = 0;
+		private v2i _start = new();
+		private v2i _end = new();
+
+		public override string Name => $"#15 {nameof(Chitron)}";
 
 		public Chitron(v2i windowSize) : base(windowSize)
 		{
@@ -23,16 +39,40 @@ namespace Ujeby.AoC.Vis.App
 			_riskMap = AoC.App.Year2021.Day15.Chitron.CreateRiskMap(input, input.Length);
 			_riskMap = AoC.App.Year2021.Day15.Chitron.EnlargeRiskMap(_riskMap, input.Length, 5);
 
-			_dist = AoC.App.Year2021.Day15.Dijkstra.Create(_riskMap, (0,0));
-			_path = AoC.App.Year2021.Day15.Dijkstra.Path((0, 0), (_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1), _riskMap, _dist);
+			_start = new(0, 0);
+			_end = new(_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1);
 
-			MinorGridSize = 8;
+			if (_useDijkstra)
+				_dijkstra = new Dijkstra(_riskMap, _start, _end);
+	
+			if (_useAStar)
+				_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
 
-			// TODO Init with progressbar (iterate with update/render)
+			Grid.MinorSize = 2;
+			Grid.MoveCenter(new v2i(_riskMap.GetLength(1), _riskMap.GetLength(0)) / 2 * Grid.MinorSize);
 		}
 
 		protected override void Update()
 		{
+			if (_useAStar && _aStarPath == null && _aStar != null)
+			{
+				for (var i = 0; i < _stepsPerFrame; i++)
+					if (!_aStar.Step())
+					{
+						_aStarPath = _aStar.Path();
+						break;
+					}
+			}
+
+			if (_useDijkstra && _dijkstraPath == null && _dijkstra != null)
+			{
+				for (var i = 0; i < _stepsPerFrame; i++)
+					if (!_dijkstra.Step())
+					{
+						_dijkstraPath = _dijkstra.Path();
+						break;
+					}
+			}
 		}
 
 		protected override void Render()
@@ -42,27 +82,61 @@ namespace Ujeby.AoC.Vis.App
 			for (var y = 0; y < _riskMap.GetLength(1); y++)
 				for (var x = 0; x < _riskMap.GetLength(0); x++)
 				{
-					var color = new v4f(1.0 / (10 - _riskMap[y, x]));
-					color.W = 0.5f;
+					var color = new v4f(1.0 / (10 - _riskMap[y, x]))
+					{
+						W = 0.5f
+					};
 
 					DrawGridCell(x, y, fill: color);
 				}
 
-			foreach (var (x, y) in _path)
-				DrawGridCell(x, y, fill: new v4f(0, 1, 0, 0.5f));
+			if (_userPoints != 0)
+			{
+				if (_userPoints > 0)
+					DrawGridCell((int)_start.X, (int)_start.Y, fill: new v4f(0, 0, 1, 1));
+				if (_userPoints > 1)
+					DrawGridCell((int)_end.X, (int)_end.Y, fill: new v4f(1, 0, 0, 1));
+			}
+
+			if (_useDijkstra)
+			{
+				if (_dijkstraPath != null)
+					foreach (var p in _dijkstraPath)
+						DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 1, 0, .5));
+
+				else if (_dijkstra != null)
+				{
+					for (var y = 0; y < _dijkstra.Size.Y; y++)
+						for (var x = 0; x < _dijkstra.Size.X; x++)
+							if (_dijkstra.Visited[y, x])
+								DrawGridCell((int)x, (int)y, fill: new v4f(0, 1, 0, .5));
+				}
+			}
+
+			if (_useAStar)
+			{
+				if (_aStarPath != null)
+					foreach (var p in _aStarPath)
+						DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 0, 1, .5));
+
+				else if (_aStar != null)
+				{
+					for (var y = 0; y < _aStar.Size.Y; y++)
+						for (var x = 0; x < _aStar.Size.X; x++)
+							if (_aStar.Visited[y, x])
+								DrawGridCell((int)x, (int)y, fill: new v4f(1, 0, 0, .5));
+				}
+			}
 
 			DrawGridMouseCursor();
 
-			var ui = new List<TextLine>
-			{
-				new Text($"path distance: {_dist[_dist.GetLength(0) - 1, _dist.GetLength(0) - 1]}")
-			};
+			var ui = new List<TextLine>();
 
-			if ((int)MouseGridPositionDiscrete.X >= 0 && (int)MouseGridPositionDiscrete.X < _riskMap.GetLength(0) && 
-				(int)MouseGridPositionDiscrete.Y >= 0 && (int)MouseGridPositionDiscrete.Y < _riskMap.GetLength(0))
+			var m = Grid.MousePositionDiscrete;
+			if ((int)m.X >= 0 && (int)m.X < _riskMap.GetLength(0) &&
+				(int)m.Y >= 0 && (int)m.Y < _riskMap.GetLength(0))
 			{
-				ui.Add(new Text($"risk: {_riskMap[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
-				ui.Add(new Text($"distance: {_dist[(int)MouseGridPositionDiscrete.Y, (int)MouseGridPositionDiscrete.X]}"));
+				ui.Add(new Text($"risk: {_riskMap[(int)m.Y, (int)m.X]}"));
 			}
 
 			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
@@ -71,6 +145,39 @@ namespace Ujeby.AoC.Vis.App
 		protected override void Destroy()
 		{
 			ShowCursor();
+		}
+
+		protected override void LeftMouseUp()
+		{
+			var m = Grid.MousePositionDiscrete;
+			var size = new v2i(_riskMap.GetLength(0), _riskMap.GetLength(0));
+
+			// user path
+			if ((int)m.X >= 0 && (int)m.X < size.X && (int)m.Y >= 0 && (int)m.Y < size.Y)
+			{
+				if (_userPoints == 1)
+				{
+					_end = new(m.X, m.Y);
+					_userPoints = 2;
+
+					if (_useAStar)
+					{
+						_aStarPath = null;
+						_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
+					}
+
+					if (_useDijkstra)
+					{
+						_dijkstraPath = null;
+						_dijkstra = new Dijkstra(_riskMap, _start, _end);
+					}
+				}
+				else
+				{
+					_start = new(m.X, m.Y);
+					_userPoints = 1;
+				}
+			}
 		}
 	}
 }

@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day14
 {
 	public class RegolithReservoir : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
 			var map = CreateMap(input); 

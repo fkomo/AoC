@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2022.Day21
 {
 	public class MonkeyMath : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var monkeys = input.ToDictionary(
 				line => line[..line.IndexOf(':')],

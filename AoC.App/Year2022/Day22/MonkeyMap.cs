@@ -14,7 +14,7 @@ namespace Ujeby.AoC.App.Year2022.Day22
 			{ 3, v2i.Down }
 		};
 
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var map = CreateMap(input);
 			var directions = ReadDirections(input);

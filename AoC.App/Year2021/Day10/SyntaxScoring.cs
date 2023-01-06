@@ -4,7 +4,7 @@ namespace Ujeby.AoC.App.Year2021.Day10
 {
 	internal class SyntaxScoring : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var tags = new char[][] 
 			{ 

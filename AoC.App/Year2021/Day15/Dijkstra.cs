@@ -1,99 +1,98 @@
-﻿using Ujeby.AoC.App.Year2022.Day09;
+﻿using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2021.Day15
 {
-	public static class Dijkstra
+	public class Dijkstra
 	{
-		public static long[,] Create(int[,] weights, (int x, int y) start,
-			Func<(int x, int y), (int x, int y), int[,], bool> connectionCheck = null)
+		private readonly int[,] _weights;
+		private readonly v2i Start;
+		private readonly v2i End;
+
+		public readonly v2i Size;
+
+		public int[,] Prev { get; private set; }
+		public long[,] Dist { get; private set; }
+		public bool[,] Visited { get; private set; }
+
+		private List<v2i> _unvisited;
+
+		public Dijkstra(int[,] weights, v2i start, v2i end)
 		{
-			var dist = new long[weights.GetLength(0), weights.GetLength(1)];
-			for (var y = 0; y < weights.GetLength(0); y++)
-				for (var x = 0; x < weights.GetLength(1); x++)
-					dist[y, x] = long.MaxValue;
+			_weights = weights;
+			Start = start;
+			End = end;
+			Size = new v2i(_weights.GetLength(1), _weights.GetLength(0));
 
-			var visited = new bool[weights.GetLength(0), weights.GetLength(1)];
+			Prev = new int[Size.Y, Size.X]; // 0, 1, 2, 3 (RightDownLeftUp)
+			Dist = new long[Size.Y, Size.X];
 
-			dist[start.y, start.x] = 0;
+			Visited = new bool[Size.Y, Size.X];
+			_unvisited = new List<v2i>();
 
-			long shortestDist;
-			var shortest = start;
-			do
-			{
-				// visit
-				foreach (var dir in Directions.NSWE)
+			for (int i = 0, y = 0; y < Size.Y; y++)
+				for (var x = 0; x < Size.X; x++, i++)
 				{
-					var x1 = dir.Value[0] + shortest.x;
-					var y1 = dir.Value[1] + shortest.y;
+					Dist[y, x] = long.MaxValue;
+					Prev[y, x] = -1;
 
-					// visited or out of bounds
-					if (x1 < 0 || y1 < 0 || x1 == weights.GetLength(1) || y1 == weights.GetLength(0) || visited[y1, x1])
-						continue;
-
-					if (connectionCheck != null && connectionCheck((x1, y1), shortest, weights) == false)
-						continue;
-
-					var r = dist[shortest.y, shortest.x] + weights[y1, x1];
-					if (r < dist[y1, x1])
-						dist[y1, x1] = r;
+					_unvisited.Add(new(x, y));
 				}
-				visited[shortest.y, shortest.x] = true;
 
-				// find next, shortest and not visited
-				shortestDist = long.MaxValue;
-				for (var y = 0; y < weights.GetLength(0); y++)
-					for (var x = 0; x < weights.GetLength(1); x++)
-					{
-						if (visited[y, x])
-							continue;
-
-						if (dist[y, x] <= shortestDist)
-						{
-							shortestDist = dist[y, x];
-							shortest = (x, y);
-						}
-					}
-			}
-			while (shortestDist != long.MaxValue);
-
-			return dist;
+			Dist[Start.Y, Start.X] = 0;
 		}
 
-		public static (int x, int y)[] Path((int x, int y) start, (int x, int y) end, int[,] weights, long[,] dist, 
-			Func<(int x, int y), (int x, int y), int[,], bool> connectionCheck = null)
+		public bool Step()
 		{
-			var path = new List<(int x, int y)>();
+			if (!_unvisited.Any())
+				return false;
 
-			var pos = end;
-			var bestDist = long.MaxValue;
-			do
+			var uMinIdx = -1;
+			var uMinDist = long.MaxValue;
+			for (var uIdx = 0; uIdx < _unvisited.Count; uIdx++)
 			{
-				(int x, int y)? nextPos = null;
-				foreach (var dir in Directions.NSWE)
+				var qq = _unvisited[uIdx];
+				if (Dist[qq.Y, qq.X] < uMinDist)
 				{
-					var x1 = dir.Value[0] + pos.x;
-					var y1 = dir.Value[1] + pos.y;
-					if (x1 < 0 || y1 < 0 || x1 == weights.GetLength(1) || y1 == weights.GetLength(0))
-						continue;
-
-					if (path.Any() && path.Last().x == x1 && path.Last().y == y1)
-						continue;
-
-					if (connectionCheck != null && connectionCheck(pos, (x1, y1), weights) == false)
-						continue;
-
-					if (dist[y1, x1] <= bestDist)
-					{
-						bestDist = dist[y1, x1];
-						nextPos = (x1, y1);
-					}
+					uMinIdx = uIdx;
+					uMinDist = Dist[qq.Y, qq.X];
 				}
-
-				pos = nextPos.Value;
-
-				path.Add(pos);
 			}
-			while (pos.x != start.x || pos.y != start.y);
+			var u = _unvisited[uMinIdx];
+			_unvisited.RemoveAt(uMinIdx);
+			Visited[u.Y, u.X] = true;
+
+			//if (u == End)
+			//	return false;
+
+			var rightDownLeftUpLength = v2i.RightDownLeftUp.Length;
+			for (var vDir = 0; vDir < rightDownLeftUpLength; vDir++)
+			{
+				var v = u + v2i.RightDownLeftUp[vDir];
+
+				// visited or out of bounds
+				if (v.X < 0 || v.Y < 0 || v.X == Size.X || v.Y == Size.Y || Visited[v.Y, v.X])
+					continue;
+
+				var d = Dist[u.Y, u.X] + _weights[v.Y, v.X];
+				if (d < Dist[v.Y, v.X])
+				{
+					Dist[v.Y, v.X] = d;
+					Prev[v.Y, v.X] = (vDir + 2) % rightDownLeftUpLength;
+				}
+			}
+
+			return true;
+		}
+
+		public v2i[] Path()
+		{
+			List<v2i> path = new()
+			{
+				End
+			};
+
+			while (path.Last() != Start)
+				path.Add(path.Last() + v2i.RightDownLeftUp[Prev[path.Last().Y, path.Last().X]]);
 
 			path.Reverse();
 			return path.ToArray();

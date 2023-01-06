@@ -5,7 +5,7 @@ namespace Ujeby.AoC.App.Year2021.Day09
 {
 	internal class SmokeBasin : PuzzleBase
 	{
-		protected override (string, string) SolveProblem(string[] input)
+		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var w = input.First().Length;
 			var h = input.Length;
