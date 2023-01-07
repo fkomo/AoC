@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Common;
+﻿using System.Linq;
+using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day16
 {
@@ -34,15 +35,52 @@ namespace Ujeby.AoC.App.Year2022.Day16
 
 			dist = Alg.FloydWarshall.ShortestPath(dist);
 
+			Debug.Line($"all valves ({valves.Count}): {string.Join(", ", valves.Keys)}");
+
 			foreach (var toRemove in valves.Where(v => v.Key != "AA" && v.Value.FlowRate == 0).Select(v => v.Key))
 				valves.Remove(toRemove);
 
+			Debug.Line($"nonZero valves ({valves.Count}): {string.Join(", ", valves.Keys)}");
+
 			// part1
-			long? answer1 = MoveToValve(valves, dist, "AA", Array.Empty<string>(), out string[] path);
-			Debug.Line(string.Join(", ", path));
+			long? answer1 = MoveToValve(valves, dist, "AA", Array.Empty<string>(), Array.Empty<string>(), out string[] path);
+			Debug.Line($"part1 path: {string.Join(", ", path)}");
 
 			// part2
-			long? answer2 = null;
+			long? answer2 = long.MinValue;
+
+			var noStartValves = valves.Where(v => v.Key != "AA").Select(vk => vk.Key).ToArray();
+
+			var answer2Path1 = Array.Empty<string>();
+			var answer2Path2 = Array.Empty<string>();
+
+			var halfLength = noStartValves.Length / 2;
+
+			var kComb = GetKCombs(noStartValves, halfLength);
+			// only half of combinations is needed (the other will be mirrored)
+			kComb = kComb.Take(kComb.Length / 2).ToArray();
+
+			Debug.Line($"{kComb.Length} unique k-combinations of length={halfLength}");
+
+			foreach (var valves1 in kComb)
+			{
+				var p1 = MoveToValve(valves, dist, "AA",
+					Array.Empty<string>(), valves1, out string[] path1,
+					minutesLeft: 26);
+
+				var p2 = MoveToValve(valves, dist, "AA",
+					Array.Empty<string>(), noStartValves.Except(valves1).ToArray(), out string[] path2,
+					minutesLeft: 26);
+
+				if ((p1 + p2) > answer2)
+				{
+					answer2 = p1 + p2;
+					answer2Path1 = path1;
+					answer2Path2 = path2;
+				}
+			}
+			Debug.Line($"part2 path1 (you):      {string.Join(", ", answer2Path1)}");
+			Debug.Line($"part2 path2 (elephant): {string.Join(", ", answer2Path2)}");
 
 			Debug.Line();
 
@@ -80,7 +118,7 @@ namespace Ujeby.AoC.App.Year2022.Day16
 		}
 
 		private static int MoveToValve(Dictionary<string, Valve> valves, int[,] dist,
-			string valveName, string[] opened, out string[] path, 
+			string valveName, string[] opened, string[] ignore, out string[] path,
 			int openedFlowRate = 0, int pressureReleased = 0, int minutesLeft = 30)
 		{
 			var valve = valves[valveName];
@@ -92,11 +130,12 @@ namespace Ujeby.AoC.App.Year2022.Day16
 			{
 				var d = dist[valve.Idx, nextValve.Idx] + 1;
 
-				if (nextValve.Idx == valve.Idx || opened.Contains(nextValve.Name) || (d + 1) >= minutesLeft)
+				if (nextValve.Idx == valve.Idx || opened.Contains(nextValve.Name) || d >= minutesLeft || ignore.Contains(nextValve.Name))
 					continue;
 
-				var p = MoveToValve(valves, dist, nextValve.Name, 
-					opened.Concat(new[] { valveName }).ToArray(),
+				var p = MoveToValve(valves, dist, nextValve.Name,
+					(valveName != "AA") ? opened.Concat(new[] { valveName }).ToArray() : opened,
+					ignore,
 					out path,
 					openedFlowRate: openedFlowRate + valve.FlowRate,
 					pressureReleased: pressureReleased + d * (valve.FlowRate + openedFlowRate),
@@ -112,12 +151,23 @@ namespace Ujeby.AoC.App.Year2022.Day16
 			// all valves are open
 			if (bestPressure == int.MinValue)
 			{
-				path = opened.Concat(new[] { valveName }).ToArray();
+				path = (valveName != "AA") ? opened.Concat(new[] { valveName }).ToArray() : opened;
 				return pressureReleased + minutesLeft * (openedFlowRate + valve.FlowRate);
 			}
 
 			path = bestPath.ToArray();
 			return bestPressure;
+		}
+
+		static T[][] GetKCombs<T>(T[] list, int length)
+			where T : IComparable
+		{
+			if (length == 1)
+				return list.Select(t => new T[] { t }).ToArray();
+
+			return GetKCombs(list, length - 1)
+				.SelectMany(t => list.Where(o => o.CompareTo(t.Last()) > 0), (t1, t2) => t1.Concat(new T[] { t2 }).ToArray())
+				.ToArray();
 		}
 	}
 }
