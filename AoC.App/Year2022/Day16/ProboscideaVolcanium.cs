@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using Ujeby.Alg;
 using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day16
@@ -11,6 +11,9 @@ namespace Ujeby.AoC.App.Year2022.Day16
 		public Valve[] Valves;
 	}
 
+	/// <summary>
+	/// inspiration: https://observablehq.com/@a791ad12e8a3e3b4/advent-of-code-2022-day-16
+	/// </summary>
 	public class ProboscideaVolcanium : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -56,7 +59,7 @@ namespace Ujeby.AoC.App.Year2022.Day16
 
 			var halfLength = noStartValves.Length / 2;
 
-			var kComb = GetKCombs(noStartValves, halfLength);
+			var kComb = Combinatorics.KCombinations(noStartValves, halfLength).ToArray();
 			// only half of combinations is needed (the other will be mirrored)
 			kComb = kComb.Take(kComb.Length / 2).ToArray();
 
@@ -65,7 +68,7 @@ namespace Ujeby.AoC.App.Year2022.Day16
 			foreach (var valves1 in kComb)
 			{
 				var p1 = MoveToValve(valves, dist, "AA",
-					Array.Empty<string>(), valves1, out string[] path1,
+					Array.Empty<string>(), valves1.ToArray(), out string[] path1,
 					minutesLeft: 26);
 
 				var p2 = MoveToValve(valves, dist, "AA",
@@ -159,15 +162,6 @@ namespace Ujeby.AoC.App.Year2022.Day16
 			return bestPressure;
 		}
 
-		static T[][] GetKCombs<T>(T[] list, int length)
-			where T : IComparable
-		{
-			if (length == 1)
-				return list.Select(t => new T[] { t }).ToArray();
 
-			return GetKCombs(list, length - 1)
-				.SelectMany(t => list.Where(o => o.CompareTo(t.Last()) > 0), (t1, t2) => t1.Concat(new T[] { t2 }).ToArray())
-				.ToArray();
-		}
 	}
 }
