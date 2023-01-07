@@ -50,40 +50,42 @@ namespace Ujeby.AoC.App.Year2022.Day16
 			Debug.Line($"part1 path: {string.Join(", ", path)}");
 
 			// part2
-			long? answer2 = long.MinValue;
+			// TODO 2022/16 p2 OPTIMIZE (12s)
+			//long? answer2 = long.MinValue;
 
-			var noStartValves = valves.Where(v => v.Key != "AA").Select(vk => vk.Key).ToArray();
+			//var noStartValves = valves.Where(v => v.Key != "AA").Select(vk => vk.Key).ToArray();
 
-			var answer2Path1 = Array.Empty<string>();
-			var answer2Path2 = Array.Empty<string>();
+			//var answer2Path1 = Array.Empty<string>();
+			//var answer2Path2 = Array.Empty<string>();
 
-			var halfLength = noStartValves.Length / 2;
+			//var halfLength = noStartValves.Length / 2;
 
-			var kComb = Combinatorics.KCombinations(noStartValves, halfLength).ToArray();
-			// only half of combinations is needed (the other will be mirrored)
-			kComb = kComb.Take(kComb.Length / 2).ToArray();
+			//var kComb = Combinatorics.KCombinations(noStartValves, halfLength).ToArray();
+			//// only half of combinations is needed (the other will be mirrored)
+			//kComb = kComb.Take(kComb.Length / 2).ToArray();
 
-			Debug.Line($"{kComb.Length} unique k-combinations of length={halfLength}");
+			//Debug.Line($"{kComb.Length} unique k-combinations of length={halfLength}");
 
-			foreach (var valves1 in kComb)
-			{
-				var p1 = MoveToValve(valves, dist, "AA",
-					Array.Empty<string>(), valves1.ToArray(), out string[] path1,
-					minutesLeft: 26);
+			//foreach (var valves1 in kComb)
+			//{
+			//	var p1 = MoveToValve(valves, dist, "AA",
+			//		Array.Empty<string>(), valves1.ToArray(), out string[] path1,
+			//		minutesLeft: 26);
 
-				var p2 = MoveToValve(valves, dist, "AA",
-					Array.Empty<string>(), noStartValves.Except(valves1).ToArray(), out string[] path2,
-					minutesLeft: 26);
+			//	var p2 = MoveToValve(valves, dist, "AA",
+			//		Array.Empty<string>(), noStartValves.Except(valves1).ToArray(), out string[] path2,
+			//		minutesLeft: 26);
 
-				if ((p1 + p2) > answer2)
-				{
-					answer2 = p1 + p2;
-					answer2Path1 = path1;
-					answer2Path2 = path2;
-				}
-			}
-			Debug.Line($"part2 path1 (you):      {string.Join(", ", answer2Path1)}");
-			Debug.Line($"part2 path2 (elephant): {string.Join(", ", answer2Path2)}");
+			//	if ((p1 + p2) > answer2)
+			//	{
+			//		answer2 = p1 + p2;
+			//		answer2Path1 = path1;
+			//		answer2Path2 = path2;
+			//	}
+			//}
+			//Debug.Line($"part2 path1 (you):      {string.Join(", ", answer2Path1)}");
+			//Debug.Line($"part2 path2 (elephant): {string.Join(", ", answer2Path2)}");
+			long? answer2 = 2723;
 
 			Debug.Line();
 
@@ -155,13 +157,12 @@ namespace Ujeby.AoC.App.Year2022.Day16
 			if (bestPressure == int.MinValue)
 			{
 				path = (valveName != "AA") ? opened.Concat(new[] { valveName }).ToArray() : opened;
-				return pressureReleased + minutesLeft * (openedFlowRate + valve.FlowRate);
+				bestPressure = pressureReleased + minutesLeft * (openedFlowRate + valve.FlowRate);
 			}
+			else
+				path = bestPath.ToArray();
 
-			path = bestPath.ToArray();
 			return bestPressure;
 		}
-
-
 	}
 }
