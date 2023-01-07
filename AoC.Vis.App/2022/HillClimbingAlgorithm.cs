@@ -12,7 +12,7 @@ namespace Ujeby.AoC.Vis.App
 
 		private const int _stepsPerFrame = 10;
 
-		private BreadthFirstSearch _bfs;
+		private Alg.BreadthFirstSearch _bfs;
 		private v2i[] _bfsPath = null;
 
 		private v2i _start;
@@ -34,7 +34,7 @@ namespace Ujeby.AoC.Vis.App
 			Grid.MinorSize = 10;
 			Grid.MoveCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * Grid.MinorSize);
 
-			_bfs = new BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+			_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 		}
 
 		protected override void Update()
@@ -107,7 +107,7 @@ namespace Ujeby.AoC.Vis.App
 				_heightMap[m.Y, m.X] = Math.Min('z' - 'a', _heightMap[m.Y, m.X] + 1);
 
 				_bfsPath = null;
-				_bfs = new BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+				_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
 			}
 		}
 	}

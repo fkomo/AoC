@@ -10,7 +10,7 @@ namespace Ujeby.AoC.App.Year2022.Day12
 			var heightMap = CreateHeightMap(input, out v2i start, out v2i end);
 
 			// part1
-			var bfs = new BreadthFirstSearch(heightMap, start, CheckHeight);
+			var bfs = new Alg.BreadthFirstSearch(heightMap, start, CheckHeight);
 			bfs.StepFull();
 
 			long? answer1 = bfs.Path(end).Length;
@@ -25,7 +25,7 @@ namespace Ujeby.AoC.App.Year2022.Day12
 				if (heightMap[y, x] != 1)
 					continue;
 
-				bfs = new BreadthFirstSearch(heightMap, new(x,y), CheckHeight);
+				bfs = new Alg.BreadthFirstSearch(heightMap, new(x,y), CheckHeight);
 				bfs.StepFull();
 
 				var length = bfs.Path(end)?.Length;

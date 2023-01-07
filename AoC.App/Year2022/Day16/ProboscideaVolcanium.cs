@@ -12,7 +12,7 @@ namespace Ujeby.AoC.App.Year2022.Day16
 	}
 
 	/// <summary>
-	/// inspiration: https://observablehq.com/@a791ad12e8a3e3b4/advent-of-code-2022-day-16
+	/// inspired by https://observablehq.com/@a791ad12e8a3e3b4/advent-of-code-2022-day-16
 	/// </summary>
 	public class ProboscideaVolcanium : PuzzleBase
 	{
