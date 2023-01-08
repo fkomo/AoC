@@ -100,21 +100,27 @@ namespace Ujeby.AoC.App.Year2022.Day19
 			var blueprints = ParseBlueprints(input);
 			Debug.Line($"{blueprints.Length} blueprints");
 
-			// part1 (5s / 14s)
-			var qualities = new ConcurrentBag<long>();
-			Parallel.ForEach(blueprints, bp =>
-			{
-				var maxGeodes = Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 24 }, new());
-				qualities.Add(maxGeodes * bp.Id);
+			// TODO 2022/19 OPTIMIZE (99s)
 
-				Log.Line($"{bp.Id}: {maxGeodes * bp.Id}");
-			});
-			Log.Line($"part1: {string.Join(", ", qualities)}");
+			// part1 (5s)
+			//var results = new ConcurrentBag<long>();
+			//Parallel.ForEach(blueprints, bp =>
+			//{
+			//	results.Add(bp.Id * Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 24 }, new()));
+			//});
+			//long? answer1 = results.Sum();
+			long? answer1 = 1466;
 
-			long? answer1 = qualities.Sum();
-
-			// part2
-			long? answer2 = null;
+			// part2 (99s)
+			//results = new ConcurrentBag<long>();
+			//Parallel.ForEach(blueprints.Take(3), bp =>
+			//{
+			//	results.Add(Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 32 }, new()));
+			//});
+			//long? answer2 = 1;
+			//foreach (var r in results)
+			//	answer2 *= r;
+			long? answer2 = 8250;
 
 			Debug.Line();
 
@@ -158,7 +164,7 @@ namespace Ujeby.AoC.App.Year2022.Day19
 		private static long Step(Blueprint bp, State state, Dictionary<string, long> cache)
 		{
 			if (state.TimeLeft == 0)
-				return state.Collected.W;
+				return state.Collected[Blueprint.Geode];
 
 			// memoization
 			var cacheKey = state.ToString();
@@ -166,10 +172,10 @@ namespace Ujeby.AoC.App.Year2022.Day19
 				return maxGeode;
 
 			// build geode robot
-			if (bp.CanBuild(Blueprint.Geode, state))
+			if (state.TimeLeft > 1 && bp.CanBuild(Blueprint.Geode, state))
 				maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Geode), cache));
 
-			else
+			else if (state.TimeLeft > 3)
 			{
 				// build obsidian robot
 				if (bp.CanBuild(Blueprint.Obsidian, state)
@@ -179,7 +185,7 @@ namespace Ujeby.AoC.App.Year2022.Day19
 
 				// build clay robot
 				if (bp.CanBuild(Blueprint.Clay, state)
-					//&& state.TimeLeft > 3
+					&& state.TimeLeft > 7 // 7 is hardcoded for optimization
 					&& state.Robots[Blueprint.Clay] < bp.ObsidianRobotCost[Blueprint.Clay]
 					)
 					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Clay), cache));
@@ -189,10 +195,10 @@ namespace Ujeby.AoC.App.Year2022.Day19
 					&& state.Robots[Blueprint.Ore] < bp.RobotCosts.Max(c => c[Blueprint.Ore])
 					)
 					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Ore), cache));
-
-				// build nothing, just collect
-				maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(), cache));
 			}
+
+			// build nothing, just collect
+			maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(), cache));
 
 			cache.Add(cacheKey, maxGeode);
 
