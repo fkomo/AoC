@@ -11,7 +11,7 @@ namespace Ujeby.AoC.App.Year2021.Day15
 			var riskMap = CreateRiskMap(input, input.Length);
 			var end = new v2i(riskMap.GetLength(0) - 1, riskMap.GetLength(1) - 1);
 
-			var dijkstra = new Dijkstra(riskMap, new v2i(0, 0), end);
+			var dijkstra = new Alg.Dijkstra(riskMap, new v2i(0, 0), end);
 			while (dijkstra.Step())
 			{
 			}

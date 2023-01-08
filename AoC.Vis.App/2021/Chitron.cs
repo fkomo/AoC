@@ -14,10 +14,10 @@ namespace Ujeby.AoC.Vis.App
 
 		private const int _stepsPerFrame = 10;
 
-		private Dijkstra _dijkstra;
+		private Alg.Dijkstra _dijkstra;
 		private v2i[] _dijkstraPath = null;
 
-		private AStar _aStar;
+		private Alg.AStar _aStar;
 		private v2i[] _aStarPath = null;
 
 		private int _userPoints = 0;
@@ -43,10 +43,10 @@ namespace Ujeby.AoC.Vis.App
 			_end = new(_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1);
 
 			if (_useDijkstra)
-				_dijkstra = new Dijkstra(_riskMap, _start, _end);
+				_dijkstra = new Alg.Dijkstra(_riskMap, _start, _end);
 	
 			if (_useAStar)
-				_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
+				_aStar = new Alg.AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
 
 			Grid.MinorSize = 2;
 			Grid.MoveCenter(new v2i(_riskMap.GetLength(1), _riskMap.GetLength(0)) / 2 * Grid.MinorSize);
@@ -163,13 +163,13 @@ namespace Ujeby.AoC.Vis.App
 					if (_useAStar)
 					{
 						_aStarPath = null;
-						_aStar = new AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
+						_aStar = new Alg.AStar(_riskMap, _start, _end, (a, b) => v2i.ManhDistance(a, b));
 					}
 
 					if (_useDijkstra)
 					{
 						_dijkstraPath = null;
-						_dijkstra = new Dijkstra(_riskMap, _start, _end);
+						_dijkstra = new Alg.Dijkstra(_riskMap, _start, _end);
 					}
 				}
 				else

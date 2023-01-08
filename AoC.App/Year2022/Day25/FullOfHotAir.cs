@@ -10,8 +10,7 @@ namespace Ujeby.AoC.App.Year2022.Day25
 			var answer1 = DecToSnafu(input.Sum(line => SnafuToDec(line)));
 
 			// part2
-			// TODO 2022/25 p2
-			string answer2 = null;
+			string answer2 = "*";
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
