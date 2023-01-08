@@ -5,8 +5,8 @@ namespace Ujeby.AoC.Vis.App
 {
 	internal class RopeBridge : Sdl2Loop
 	{
-		private (int x, int y)? _apple = null;
-		private (int x, int y)[] _snake;
+		private v2i? _apple = null;
+		private v2i[] _snake;
 
 		public override string Name => $"#09 {nameof(RopeBridge)}";
 
@@ -18,29 +18,29 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false); 
 			
-			_snake = new (int x, int y)[20];
+			_snake = new v2i[20];
 		}
 
 		protected override void Update()
 		{
 			if (_apple.HasValue)
 			{
-				var dirx = _apple.Value.x - _snake[0].x;
+				var dir = _apple.Value - _snake[0];
+				var dirAbs = dir.Abs();
 
-				if (dirx != 0)
-					dirx /= Math.Abs(dirx);
+				if (dir.X != 0)
+					dir.X /= dirAbs.X;
 
-				var diry = _apple.Value.y - _snake[0].y;
-				if (diry != 0)
-					diry /= Math.Abs(diry);
+				if (dir.Y != 0)
+					dir.Y /= dirAbs.Y;
 
-				if (dirx == 0 && diry == 0)
+				if (dir.X == 0 && dir.Y == 0)
 				{
 					_apple = null;
 					return;
 				}
 
-				AoC.App.Year2022.Day09.RopeBridge.SimulateRope(_snake, dirx, diry);
+				AoC.App.Year2022.Day09.RopeBridge.SimulateRope(_snake, dir);
 			}
 		}
 
@@ -50,12 +50,12 @@ namespace Ujeby.AoC.Vis.App
 
 			// target
 			if (_apple.HasValue)
-				DrawGridCell(_apple.Value.x, _apple.Value.y, fill: new v4f(0, 1, 0, 0.5f));
+				DrawGridCell((int)_apple.Value.X, (int)_apple.Value.Y, fill: new v4f(0, 1, 0, .5));
 
 			// rope
 			for (var p = 1; p < _snake.Length; p++)
-				DrawGridCell(_snake[p].x, _snake[p].y, fill: new v4f(1, 1, 1, 0.5f));
-			DrawGridCell(_snake[0].x, _snake[0].y, fill: new v4f(1, 0, 0, 0.5f));
+				DrawGridCell((int)_snake[p].X, (int)_snake[p].Y, fill: new v4f(1, 1, 1, .5));
+			DrawGridCell((int)_snake[0].X, (int)_snake[0].Y, fill: new v4f(1, 0, 0, .5));
 
 			DrawGridMouseCursor();
 		}

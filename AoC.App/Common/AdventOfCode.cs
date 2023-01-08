@@ -4,11 +4,11 @@
 	{
 		public string Session { get; set; }
 		
-		private string _title;
+		private readonly string _title;
 
 		private const string _aocUrl = "https://adventofcode.com";
 
-		private static HttpClient _httpClient = new();
+		private readonly static HttpClient _httpClient = new();
 
 		public AdventOfCode(int year)
 		{
@@ -63,7 +63,7 @@
 			}
 		}
 
-		private void DownloadMissingInput(string outputDir, string yearDirPrefix, int year)
+		private static void DownloadMissingInput(string outputDir, string yearDirPrefix, int year)
 		{
 			try
 			{

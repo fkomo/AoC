@@ -1,4 +1,5 @@
 ﻿using Ujeby.AoC.Common;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2022.Day14
 {
@@ -11,7 +12,7 @@ namespace Ujeby.AoC.App.Year2022.Day14
 			long? answer1 = 0;
 			while (true)
 			{
-				var result = AddSand((500, 0), map);
+				var result = AddSand(new(500, 0), map);
 				if (!result.HasValue)
 					break;
 
@@ -23,7 +24,7 @@ namespace Ujeby.AoC.App.Year2022.Day14
 			long? answer2 = 0;
 			while (true)
 			{
-				var result = AddSand((500, 0), map);
+				var result = AddSand(new(500, 0), map);
 				if (!result.HasValue)
 					break;
 
@@ -38,24 +39,24 @@ namespace Ujeby.AoC.App.Year2022.Day14
 		{
 			var lines = input
 				.Select(l =>
-					l.Split(" -> ").Select(p => (x: int.Parse(p[..p.IndexOf(',')]), y: int.Parse(p[(p.IndexOf(',') + 1)..]))).ToArray())
+					l.Split(" -> ").Select(p => new v2i(int.Parse(p[..p.IndexOf(',')]), int.Parse(p[(p.IndexOf(',') + 1)..]))).ToArray())
 				.ToArray();
 
-			var dim = (x: lines.Max(l => l.Max(p => p.x)) * 2, y: lines.Max(l => l.Max(p => p.y)) + 3);
-			var map = new byte[dim.y, dim.x];
+			var dim = new v2i(lines.Max(l => l.Max(p => p.X)) * 2, lines.Max(l => l.Max(p => p.Y)) + 3);
+			var map = new byte[dim.Y, dim.X];
 
 			if (ground)
 				for (var x = 0; x < map.GetLength(1); x++)
-					map[dim.y - 1, x] = (byte)'#';
+					map[dim.Y - 1, x] = (byte)'#';
 
 			foreach (var line in lines)
 			{
 				for (var p = 0; p < line.Length - 1; p++)
 				{
-					if (line[p].x == line[p + 1].x)
+					if (line[p].X == line[p + 1].X)
 					{
-						var from = line[p].y;
-						var to = line[p + 1].y;
+						var from = line[p].Y;
+						var to = line[p + 1].Y;
 
 						if (from > to)
 						{
@@ -65,12 +66,12 @@ namespace Ujeby.AoC.App.Year2022.Day14
 						}
 
 						for (var y = from; y <= to; y++)
-							map[y, line[p].x] = (byte)'#';
+							map[y, line[p].X] = (byte)'#';
 					}
 					else
 					{
-						var from = line[p].x;
-						var to = line[p + 1].x;
+						var from = line[p].X;
+						var to = line[p + 1].X;
 
 						if (from > to)
 						{
@@ -80,7 +81,7 @@ namespace Ujeby.AoC.App.Year2022.Day14
 						}
 
 						for (var x = from; x <= to; x++)
-							map[line[p].y, x] = (byte)'#';
+							map[line[p].Y, x] = (byte)'#';
 					}
 				}
 			}
@@ -88,39 +89,39 @@ namespace Ujeby.AoC.App.Year2022.Day14
 			return map;
 		}
 
-		public static (int x, int y)? AddSand((int x, int y) sand, byte[,] map)
+		public static v2i? AddSand(v2i sand, byte[,] map)
 		{
 			while (true)
 			{
-				if (map[sand.y, sand.x] != 0 || sand.y == map.GetLength(0) - 1)
+				if (map[sand.Y, sand.X] != 0 || sand.Y == map.GetLength(0) - 1)
 					break;
 
-				if (map[sand.y + 1, sand.x] == 0)
-					sand.y++;
+				if (map[sand.Y + 1, sand.X] == 0)
+					sand.Y++;
 
 				else
 				{
-					if (sand.x == 0)
+					if (sand.X == 0)
 						break;
 
-					if (map[sand.y + 1, sand.x - 1] == 0)
+					if (map[sand.Y + 1, sand.X - 1] == 0)
 					{
-						sand.y++;
-						sand.x--;
+						sand.Y++;
+						sand.X--;
 					}
 					else
 					{
-						if (sand.x == map.GetLength(1) - 1)
+						if (sand.X == map.GetLength(1) - 1)
 							break;
 
-						if (map[sand.y + 1, sand.x + 1] == 0)
+						if (map[sand.Y + 1, sand.X + 1] == 0)
 						{
-							sand.y++;
-							sand.x++;
+							sand.Y++;
+							sand.X++;
 						}
 						else
 						{
-							map[sand.y, sand.x] = (byte)'o';
+							map[sand.Y, sand.X] = (byte)'o';
 							return sand;
 						}
 					}

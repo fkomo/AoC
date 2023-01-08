@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Ujeby.AoC.Common;
+using Ujeby.Tools;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2022.Day19
@@ -100,18 +101,17 @@ namespace Ujeby.AoC.App.Year2022.Day19
 			var blueprints = ParseBlueprints(input);
 			Debug.Line($"{blueprints.Length} blueprints");
 
-			// TODO 2022/19 OPTIMIZE (99s)
-
 			// part1 (5s)
-			//var results = new ConcurrentBag<long>();
-			//Parallel.ForEach(blueprints, bp =>
-			//{
-			//	results.Add(bp.Id * Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 24 }, new()));
-			//});
-			//long? answer1 = results.Sum();
-			long? answer1 = 1466;
+			var results = new ConcurrentBag<long>();
+			Parallel.ForEach(blueprints, bp =>
+			{
+				results.Add(bp.Id * Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 24 }, new()));
+			});
+			long? answer1 = results.Sum();
+			//long? answer1 = 1466;
 
 			// part2 (99s)
+			// TODO 2022/19 p2 OPTIMIZE (99s)
 			//results = new ConcurrentBag<long>();
 			//Parallel.ForEach(blueprints.Take(3), bp =>
 			//{
@@ -131,32 +131,14 @@ namespace Ujeby.AoC.App.Year2022.Day19
 		{
 			return input.Select(i =>
 			{
-				var s1 = i.Split(':');
-				var s2 = s1[1].Split('.');
-
+				var n = i.ToNumArray();
 				return new Blueprint()
 				{
-					Id = int.Parse(s1[0]["Blueprint ".Length..]),
-					OreRobotCost = new v4i(
-						int.Parse(s2[0].Split(' ', StringSplitOptions.RemoveEmptyEntries)[4]),
-						0,
-						0,
-						0),
-					ClayRobotCost = new v4i(
-						int.Parse(s2[1].Split(' ', StringSplitOptions.RemoveEmptyEntries)[4]),
-						0,
-						0,
-						0),
-					ObsidianRobotCost = new v4i(
-						int.Parse(s2[2].Split(' ', StringSplitOptions.RemoveEmptyEntries)[4]),
-						int.Parse(s2[2].Split(' ', StringSplitOptions.RemoveEmptyEntries)[7]),
-						0,
-						0),
-					GeodeRobotCost = new v4i(
-						int.Parse(s2[3].Split(' ', StringSplitOptions.RemoveEmptyEntries)[4]),
-						0,
-						int.Parse(s2[3].Split(' ', StringSplitOptions.RemoveEmptyEntries)[7]),
-						0)
+					Id = (int)n[0],
+					OreRobotCost = new v4i(n[1], 0, 0, 0),
+					ClayRobotCost = new v4i(n[2], 0, 0, 0),
+					ObsidianRobotCost = new v4i(n[3], n[4], 0, 0),
+					GeodeRobotCost = new v4i(n[5], 0, n[6], 0)
 				};
 			}).ToArray();
 		}

@@ -5,10 +5,10 @@ namespace Ujeby.AoC.App.Year2022.Day17
 {
 	public class PyroclasticFlow : PuzzleBase
 	{
-		public static char Empty = '.';
+		public const char Empty = '.';
 		private static readonly string EmptyLine = new(Enumerable.Repeat(Empty, 7).ToArray());
 
-		private static char[][,] _rocks = new char[][,]
+		private static readonly char[][,] _rocks = new char[][,]
 		{
 			new char[,]
 			{
@@ -40,7 +40,10 @@ namespace Ujeby.AoC.App.Year2022.Day17
 			},
 		};
 
-		public const int _MIN_PATTERN_LENGTH = 1000;
+		/// <summary>
+		/// NOTE hardcoded optimization by trail/error
+		/// </summary>
+		public const int _MIN_PATTERN_LENGTH = 1650;
 
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
@@ -48,9 +51,7 @@ namespace Ujeby.AoC.App.Year2022.Day17
 			long? answer1 = FallingRocks(2022, input[0]);
 
 			// part2
-			// TODO 2022/17 p2 OPTIMIZE (9s)
-			//long? answer2 = FallingRocks(1000000000000, input[0]);
-			long? answer2 = 1591977077352;
+			long? answer2 = FallingRocks(1000000000000, input[0]);
 
 			return (answer1.ToString(), answer2?.ToString());
 		}

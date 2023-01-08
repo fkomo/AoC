@@ -1,4 +1,5 @@
 using Ujeby.AoC.Common;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2022.Day18
 {
@@ -9,15 +10,15 @@ namespace Ujeby.AoC.App.Year2022.Day18
 			var cubes = input.Select(l =>
 			{
 				var split = l.Split(',');
-				return (x: int.Parse(split[0]), y: int.Parse(split[1]), z: int.Parse(split[2]));
+				return new v3i(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2]));
 			}).ToArray();
 
-			var max = (x: cubes.Max(c => c.x), y: cubes.Max(c => c.y), z: cubes.Max(c => c.z));
+			var max = new v3i(cubes.Max(c => c.X), cubes.Max(c => c.Y), cubes.Max(c => c.Z));
 
 			// 0=air, 1=lava, 2=steam
-			var grid = new byte[max.z + 1, max.y + 1, max.x + 1];
+			var grid = new byte[max.Z + 1, max.Y + 1, max.X + 1];
 			foreach (var cube in cubes)
-				grid[cube.z, cube.y, cube.x] = 1;
+				grid[cube.Z, cube.Y, cube.X] = 1;
 
 			Debug.Line();
 			Debug.Line($"{cubes.Length} cubes in grid [{grid.GetLength(0)}x{grid.GetLength(1)}x{grid.GetLength(2)}]");
@@ -27,20 +28,21 @@ namespace Ujeby.AoC.App.Year2022.Day18
 
 			// part2
 #if _RELEASE || _DEBUG_SAMPLE
-			for (var z = 0; z < grid.GetLength(0); z++)
+			v3i p = new(0);
+			for (; p.Z < grid.GetLength(0); p.Z++)
 			{
-				for (var y = 0; y < grid.GetLength(1); y++)
+				for (; p.Y < grid.GetLength(1); p.Y++)
 				{
-					for (var x = 0; x < grid.GetLength(2); x++)
+					for (; p.X < grid.GetLength(2); p.X++)
 					{
-						if (grid[z, y, x] != 0)
+						if (grid[p.Z, p.Y, p.X] != 0)
 							continue;
 
-						if (x == 0 || y == 0 || z == 0 ||
-							x == grid.GetLength(2) - 1 ||
-							y == grid.GetLength(1) - 1 ||
-							z == grid.GetLength(0) - 1)
-							ExpandSteam((x, y, z), grid);
+						if (p.X == 0 || p.Y == 0 || p.Z == 0 ||
+							p.X == grid.GetLength(2) - 1 ||
+							p.Y == grid.GetLength(1) - 1 ||
+							p.Z == grid.GetLength(0) - 1)
+							ExpandSteam(p, grid);
 					}
 				}
 			}
@@ -55,51 +57,51 @@ namespace Ujeby.AoC.App.Year2022.Day18
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		private static void ExpandSteam((int x, int y, int z) p, byte[,,] grid)
+		private static void ExpandSteam(v3i p, byte[,,] grid)
 		{
-			if (grid[p.z, p.y, p.x] != 0)
+			if (grid[p.Z, p.Y, p.X] != 0)
 				return;
 
-			grid[p.z, p.y, p.x] = 2;
+			grid[p.Z, p.Y, p.X] = 2;
 
-			if (p.z + 1 < grid.GetLength(0) && grid[p.z + 1, p.y, p.x] == 0)
-				ExpandSteam((p.x, p.y, p.z + 1), grid);
+			if (p.Z + 1 < grid.GetLength(0) && grid[p.Z + 1, p.Y, p.X] == 0)
+				ExpandSteam(new(p.X, p.Y, p.Z + 1), grid);
 
-			if (p.z - 1 > 0 && grid[p.z - 1, p.y, p.x] == 0)
-				ExpandSteam((p.x, p.y, p.z - 1), grid);
+			if (p.Z - 1 > 0 && grid[p.Z - 1, p.Y, p.X] == 0)
+				ExpandSteam(new(p.X, p.Y, p.Z - 1), grid);
 
-			if (p.y + 1 < grid.GetLength(1) && grid[p.z, p.y + 1, p.x] == 0)
-				ExpandSteam((p.x, p.y + 1, p.z), grid);
+			if (p.Y + 1 < grid.GetLength(1) && grid[p.Z, p.Y + 1, p.X] == 0)
+				ExpandSteam(new(p.X, p.Y + 1, p.Z), grid);
 
-			if (p.y - 1 > 0 && grid[p.z, p.y - 1, p.x] == 0)
-				ExpandSteam((p.x, p.y - 1, p.z), grid);
+			if (p.Y - 1 > 0 && grid[p.Z, p.Y - 1, p.X] == 0)
+				ExpandSteam(new(p.X, p.Y - 1, p.Z), grid);
 
-			if (p.x + 1 < grid.GetLength(2) && grid[p.z, p.y, p.x + 1] == 0)
-				ExpandSteam((p.x + 1, p.y, p.z), grid);
+			if (p.X + 1 < grid.GetLength(2) && grid[p.Z, p.Y, p.X + 1] == 0)
+				ExpandSteam(new(p.X + 1, p.Y, p.Z), grid);
 
-			if (p.x - 1 > 0 && grid[p.z, p.y, p.x - 1] == 0)
-				ExpandSteam((p.x - 1, p.y, p.z), grid);
+			if (p.X - 1 > 0 && grid[p.Z, p.Y, p.X - 1] == 0)
+				ExpandSteam(new(p.X - 1, p.Y, p.Z), grid);
 		}
 
-		private static long GetSurfaceArea((int x, int y, int z)[] cubes, byte[,,] grid, 
+		private static long GetSurfaceArea(v3i[] cubes, byte[,,] grid, 
 			byte surface = 0)
 		{
 			long result = 0;
 			foreach (var cube in cubes)
 			{
-				if (cube.z + 1 == grid.GetLength(0) || grid[cube.z + 1, cube.y, cube.x] == surface)
+				if (cube.Z + 1 == grid.GetLength(0) || grid[cube.Z + 1, cube.Y, cube.X] == surface)
 					result++;
-				if (cube.z - 1 == -1 || grid[cube.z - 1, cube.y, cube.x] == surface)
-					result++;
-
-				if (cube.y + 1 == grid.GetLength(1) || grid[cube.z, cube.y + 1, cube.x] == surface)
-					result++;
-				if (cube.y - 1 == -1 || grid[cube.z, cube.y - 1, cube.x] == surface)
+				if (cube.Z - 1 == -1 || grid[cube.Z - 1, cube.Y, cube.X] == surface)
 					result++;
 
-				if (cube.x + 1 == grid.GetLength(2) || grid[cube.z, cube.y, cube.x + 1] == surface)
+				if (cube.Y + 1 == grid.GetLength(1) || grid[cube.Z, cube.Y + 1, cube.X] == surface)
 					result++;
-				if (cube.x - 1 == -1 || grid[cube.z, cube.y, cube.x - 1] == surface)
+				if (cube.Y - 1 == -1 || grid[cube.Z, cube.Y - 1, cube.X] == surface)
+					result++;
+
+				if (cube.X + 1 == grid.GetLength(2) || grid[cube.Z, cube.Y, cube.X + 1] == surface)
+					result++;
+				if (cube.X - 1 == -1 || grid[cube.Z, cube.Y, cube.X - 1] == surface)
 					result++;
 			}
 

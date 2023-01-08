@@ -14,10 +14,10 @@ namespace Ujeby.AoC.App.Year2022.Day24
 
 		private static readonly Dictionary<char, v2i> _blizzDir = new()
 		{
-			{ '>', new(1, 0) },
-			{ 'v', new(0, 1) },
-			{ '<', new(-1, 0) },
-			{ '^', new(0, -1) }
+			{ '>', v2i.Right },
+			{ 'v', v2i.Up },
+			{ '<', v2i.Left },
+			{ '^', v2i.Down }
 		};
 
 		private static readonly v2i[] _elfOptions = new v2i[]

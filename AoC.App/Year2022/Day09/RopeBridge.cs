@@ -1,4 +1,5 @@
 ﻿using Ujeby.AoC.Common;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2022.Day09
 {
@@ -15,23 +16,31 @@ namespace Ujeby.AoC.App.Year2022.Day09
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		private long RopePhysics(string[] input, int ropeLength)
+		private static Dictionary<char, v2i> _directions = new()
 		{
-			var rope = new (int x, int y)[ropeLength];
+			{ 'R', v2i.Left },
+			{ 'L', v2i.Right },
+			{ 'D', v2i.Down},
+			{ 'U', v2i.Up },
+		};
+
+		private static long RopePhysics(string[] input, int ropeLength)
+		{
+			var rope = new v2i[ropeLength];
 			
-			HashSet<(int x, int y)> visited = new()
+			HashSet<v2i> visited = new()
 			{
 				rope.Last()
 			};
 
 			foreach (var mov in input)
 			{
-				var dir = Directions.NSWE[mov.Replace('U', 'N').Replace('D', 'S').Replace('L', 'W').Replace('R', 'E')[0]];
-
+				var dir = _directions[mov[0]];
 				var steps = int.Parse(mov[2..]);
+
 				for (var step = 0; step < steps; step++)
 				{
-					rope = SimulateRope(rope, dir[0], dir[1]);
+					rope = SimulateRope(rope, dir);
 					visited.Add(rope.Last());
 				}
 			}
@@ -39,28 +48,26 @@ namespace Ujeby.AoC.App.Year2022.Day09
 			return visited.Count;
 		}
 
-		public static (int x, int y)[] SimulateRope((int x, int y)[] rope, int dx, int dy)
+		public static v2i[] SimulateRope(v2i[] rope, v2i d)
 		{
-			rope[0].x += dx;
-			rope[0].y += dy;
+			rope[0] += d;
 
 			for (var p = 1; p < rope.Length; p++)
 			{
-				dx = rope[p - 1].x - rope[p].x;
-				dy = rope[p - 1].y - rope[p].y;
+				d = rope[p - 1] - rope[p];
+				var dAbs = d.Abs();
 
-				if (Math.Abs(dx) <= 1 && Math.Abs(dy) <= 1)
+				if (dAbs.X <= 1 && dAbs.Y <= 1)
 					continue;
 
-				if (dx == 0)
-					rope[p].y += dy / Math.Abs(dy);
-				else if (dy == 0)
-					rope[p].x += dx / Math.Abs(dx);
+				if (d.X == 0)
+					rope[p].Y += d.Y / dAbs.Y;
+
+				else if (d.Y == 0)
+					rope[p].X += d.X / dAbs.X;
+
 				else
-				{
-					rope[p].x += dx / Math.Abs(dx);
-					rope[p].y += dy / Math.Abs(dy);
-				}
+					rope[p] += d / dAbs;
 			}
 
 			return rope;

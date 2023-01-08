@@ -38,8 +38,6 @@ namespace Ujeby.AoC.App.Year2022.Day15
 			Debug.Line();
 			Debug.Line($"[{min.X};{min.Y}]x[{max.X};{max.Y}]");
 
-			// TODO 2022/15 OPTIMIZE (2s)
-
 			// part1
 #if _DEBUG_SAMPLE
 			//PrintMap(sbsDist, sbs, min, max);
@@ -47,24 +45,24 @@ namespace Ujeby.AoC.App.Year2022.Day15
 #else
 			var scanY = 2000000;
 #endif
-			//long? answer1 = 0;
-			//var p = new v2i(min.X, scanY);
-			//for (; p.X <= max.X; p.X++)
-			//{
-			//	if (sbs.Any(sb => (sb[0].X == p.X && sb[0].Y == scanY) || (sb[1].X == p.X && sb[1].Y == scanY)))
-			//		continue;
+			long? answer1 = 0;
+			var p = new v2i(min.X, scanY);
+			for (; p.X <= max.X; p.X++)
+			{
+				if (sbs.Any(sb => (sb[0].X == p.X && sb[0].Y == scanY) || (sb[1].X == p.X && sb[1].Y == scanY)))
+					continue;
 
-			//	for (var sb = 0; sb < sbs.Length; sb++)
-			//	{
-			//		var d = v2i.ManhDistance(p, sbs[sb][0]);
-			//		if (d <= sbsDist[sb])
-			//		{
-			//			answer1++;
-			//			break;
-			//		}
-			//	}
-			//}
-			long? answer1 = 5166077;
+				for (var sb = 0; sb < sbs.Length; sb++)
+				{
+					var d = v2i.ManhDistance(p, sbs[sb][0]);
+					if (d <= sbsDist[sb])
+					{
+						answer1++;
+						break;
+					}
+				}
+			}
+			//long? answer1 = 5166077;
 
 			// part2
 #if _DEBUG_SAMPLE
@@ -72,49 +70,49 @@ namespace Ujeby.AoC.App.Year2022.Day15
 #else
 			var area = new v2i(4000000);
 #endif
-			//long? answer2 = null;
-			//Parallel.For(0, sbs.Length, (sb, state) =>
-			//{
-			//	long? result = null;
-			//	var edgeDist = sbsDist[sb] + 1;
-			//	for (var i = 0; i < edgeDist; i++)
-			//	{
-			//		result = CheckEdge(new(sbs[sb][0].X - i, sbs[sb][0].Y - edgeDist - i), sb, sbs, sbsDist, area);
-			//		if (result.HasValue)
-			//			break;
+			long? answer2 = null;
+			Parallel.For(0, sbs.Length, (sb, state) =>
+			{
+				long? result = null;
+				var edgeDist = sbsDist[sb] + 1;
+				for (var i = 0; i < edgeDist; i++)
+				{
+					result = CheckEdge(new(sbs[sb][0].X - i, sbs[sb][0].Y - edgeDist - i), sb, sbs, sbsDist, area);
+					if (result.HasValue)
+						break;
 
-			//		if (state.ShouldExitCurrentIteration)
-			//			return;
+					if (state.ShouldExitCurrentIteration)
+						return;
 
-			//		result = CheckEdge(new(sbs[sb][0].X + i, sbs[sb][0].Y + edgeDist - i), sb, sbs, sbsDist, area);
-			//		if (result.HasValue)
-			//			break;
+					result = CheckEdge(new(sbs[sb][0].X + i, sbs[sb][0].Y + edgeDist - i), sb, sbs, sbsDist, area);
+					if (result.HasValue)
+						break;
 
-			//		if (state.ShouldExitCurrentIteration)
-			//			return;
+					if (state.ShouldExitCurrentIteration)
+						return;
 
-			//		result = CheckEdge(new(sbs[sb][0].X - edgeDist + i, sbs[sb][0].Y + i), sb, sbs, sbsDist, area);
-			//		if (result.HasValue)
-			//			break;
+					result = CheckEdge(new(sbs[sb][0].X - edgeDist + i, sbs[sb][0].Y + i), sb, sbs, sbsDist, area);
+					if (result.HasValue)
+						break;
 
-			//		if (state.ShouldExitCurrentIteration)
-			//			return;
+					if (state.ShouldExitCurrentIteration)
+						return;
 
-			//		result = CheckEdge(new(sbs[sb][0].X + edgeDist - i, sbs[sb][0].Y - i), sb, sbs, sbsDist, area);
-			//		if (result.HasValue)
-			//			break;
+					result = CheckEdge(new(sbs[sb][0].X + edgeDist - i, sbs[sb][0].Y - i), sb, sbs, sbsDist, area);
+					if (result.HasValue)
+						break;
 
-			//		if (state.ShouldExitCurrentIteration)
-			//			return;
-			//	}
+					if (state.ShouldExitCurrentIteration)
+						return;
+				}
 
-			//	if (result.HasValue)
-			//	{
-			//		answer2 = result;
-			//		state.Break();
-			//	}
-			//});
-			long? answer2 = 13071206703981;
+				if (result.HasValue)
+				{
+					answer2 = result;
+					state.Break();
+				}
+			});
+			//long? answer2 = 13071206703981;
 
 			Debug.Line();
 
