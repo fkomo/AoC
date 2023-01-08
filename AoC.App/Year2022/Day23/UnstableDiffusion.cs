@@ -31,17 +31,15 @@ namespace Ujeby.AoC.App.Year2022.Day23
 			Debug.Line();
 			PrintElves(elves);
 
-			// TODO 2022/23 OPTIMIZE (34s)
-
 			// part1
-			//for (var r = 0; r < 10; r++)
-			//	elves = Step(elves, r, out _);
-			//var min = new v2i(elves.Min(e => e.Position.X), elves.Min(e => e.Position.Y));
-			//var max = new v2i(elves.Max(e => e.Position.X), elves.Max(e => e.Position.Y));
-			//long? answer1 = ((max - min) + new v2i(1, 1)).Area() - elves.Length;
-			long? answer1 = 3920;
+			for (var r = 0; r < 10; r++)
+				elves = Step(elves, r, out _);
+			var min = new v2i(elves.Min(e => e.Position.X), elves.Min(e => e.Position.Y));
+			var max = new v2i(elves.Max(e => e.Position.X), elves.Max(e => e.Position.Y));
+			long? answer1 = ((max - min) + new v2i(1, 1)).Area() - elves.Length;
 
 			// part2
+			// TODO 2022/23 p2 OPTIMIZE (10s)
 			//long? answer2 = 10;
 			//while (true)
 			//{
@@ -76,12 +74,10 @@ namespace Ujeby.AoC.App.Year2022.Day23
 		{
 			var firstDirection = round % SearchGroups.Count;
 
-			//Debug.Line($"#{round + 1,2}");
-
 			noMovement = false;
 
 			// first half
-			for (var e1 = 0; e1 < elves.Length; e1++)
+			Parallel.For(0, elves.Length, (e1) =>
 			{
 				var neighbour = false;
 				for (var e2 = 0; e2 < elves.Length; e2++)
@@ -97,38 +93,38 @@ namespace Ujeby.AoC.App.Year2022.Day23
 					}
 				}
 
-				if (!neighbour)
-					continue;
-
-				for (var d = 0; d < SearchGroups.Count; d++)
+				if (neighbour)
 				{
-					var targets = SearchGroups[(firstDirection + d) % SearchGroups.Count];
-
-					var free = true;
-					foreach (var target in targets)
+					for (var d = 0; d < SearchGroups.Count; d++)
 					{
-						var destination = elves[e1].Position + target;
-						if (IsElfAt(elves, destination, e1))
+						var targets = SearchGroups[(firstDirection + d) % SearchGroups.Count];
+
+						var free = true;
+						foreach (var target in targets)
 						{
-							free = false;
+							var destination = elves[e1].Position + target;
+							if (IsElfAt(elves, destination, e1))
+							{
+								free = false;
+								break;
+							}
+						}
+
+						if (free)
+						{
+							elves[e1].Move = targets[0];
 							break;
 						}
 					}
-
-					if (free)
-					{
-						elves[e1].Move = targets[0];
-						break;
-					}
 				}
-			}
+			});
 
 			noMovement = elves.All(e => !e.Move.HasValue);
 			if (noMovement)
 				return elves;
 
 			// second half
-			for (var e1 = 0; e1 < elves.Length; e1++)
+			Parallel.For(0, elves.Length, (e1) =>
 			{
 				if (elves[e1].Move.HasValue)
 				{
@@ -153,7 +149,7 @@ namespace Ujeby.AoC.App.Year2022.Day23
 						elves[e1].Steps++;
 					}
 				}
-			}
+			});
 
 			for (var e = 0; e < elves.Length; e++)
 			{
@@ -189,13 +185,8 @@ namespace Ujeby.AoC.App.Year2022.Day23
 			int skip = -1)
 		{
 			for (var e = 0; e < elves.Length; e++)
-			{
-				if (e == skip)
-					continue;
-
-				if (elves[e].Position == at)
+				if (e != skip && elves[e].Position == at)
 					return true;
-			}
 
 			return false;
 		}

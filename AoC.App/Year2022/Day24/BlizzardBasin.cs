@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Ujeby.AoC.Common;
 using Ujeby.Vectors;
 
@@ -114,7 +113,7 @@ namespace Ujeby.AoC.App.Year2022.Day24
 					if (newSpawns.Any(s => s.ToV2i() == p1))
 						continue;
 
-					// TODO 2022/24 OPTIMIZE (280ms)
+					// NOTE 14 is hardcoded (trial&error)
 					if (usage[p1.Y, p1.X] >= 14)
 						continue;
 

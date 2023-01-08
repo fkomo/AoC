@@ -1,4 +1,5 @@
-﻿using Ujeby.Alg;
+﻿using System.Collections.Concurrent;
+using Ujeby.Alg;
 using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2022.Day16
@@ -49,31 +50,29 @@ namespace Ujeby.AoC.App.Year2022.Day16
 				valveIdx: aaIdx);
 
 			// part2
-			// TODO 2022/16 p2 OPTIMIZE (2s)
-			//long? answer2 = long.MinValue;
-			//var noStartIdx = valves.Where(v => v.Key != "AA").Select(vk => vk.Value.Idx).ToArray();
-			//var halfLength = noStartIdx.Length / 2;
+			var noStartIdx = valves.Where(v => v.Key != "AA").Select(vk => vk.Value.Idx).ToArray();
+			var halfLength = noStartIdx.Length / 2;
 
-			//var kComb = Combinatorics.KCombinations(noStartIdx, halfLength).ToArray();
-			//// only half of combinations is needed (the other will be mirrored)
-			//kComb = kComb.Take(kComb.Length / 2).ToArray();
+			var kComb = Combinatorics.KCombinations(noStartIdx, halfLength).ToArray();
+			// only half of combinations is needed (the other will be mirrored)
+			kComb = kComb.Take(kComb.Length / 2).ToArray();
 
-			//Debug.Line($"{kComb.Length} unique k-combinations of length={halfLength}");
+			Debug.Line($"{kComb.Length} unique k-combinations of length={halfLength}");
 
-			//foreach (var valves1 in kComb)
-			//{
-			//	var p1 = MoveToValve(valves, dist, Array.Empty<int>(), valves1.ToArray(),
-			//		valveIdx: aaIdx,
-			//		minutesLeft: 26);
+			var pBag = new ConcurrentBag<int>();
+			Parallel.ForEach(kComb, valves1 =>
+			{
+				var p1 = MoveToValve(valves, dist, Array.Empty<int>(), valves1.ToArray(),
+					valveIdx: aaIdx,
+					minutesLeft: 26);
 
-			//	var p2 = MoveToValve(valves, dist, Array.Empty<int>(), noStartIdx.Except(valves1).ToArray(),
-			//		valveIdx: aaIdx,
-			//		minutesLeft: 26);
+				var p2 = MoveToValve(valves, dist, Array.Empty<int>(), noStartIdx.Except(valves1).ToArray(),
+					valveIdx: aaIdx,
+					minutesLeft: 26);
 
-			//	if ((p1 + p2) > answer2)
-			//		answer2 = p1 + p2;
-			//}
-			long? answer2 = 2723;
+				pBag.Add(p1 + p2);
+			});
+			long? answer2 = pBag.Max();
 
 			Debug.Line();
 
