@@ -1,4 +1,3 @@
-using FFMpegCore.Enums;
 using System.Collections.Concurrent;
 using Ujeby.AoC.Common;
 using Ujeby.Vectors;
@@ -9,6 +8,15 @@ namespace Ujeby.AoC.App.Year2022.Day19
 	{
 		internal class Blueprint
 		{
+			static Blueprint()
+			{
+			}
+
+			public const int Ore = 0;
+			public const int Clay = 1;
+			public const int Obsidian = 2;
+			public const int Geode = 3;
+
 			public int Id;
 
 			public v4i OreRobotCost;
@@ -26,28 +34,17 @@ namespace Ujeby.AoC.App.Year2022.Day19
 
 			public v4i SumCost => OreRobotCost + ClayRobotCost + ObsidianRobotCost + GeodeRobotCost;
 
-			public bool CanBuild(int robotIdx, v4i collected)
+			public bool CanBuild(int robotIdx, State state)
 			{
-				switch (robotIdx)
+				var collected = state.Collected;
+				return robotIdx switch
 				{
-					case 0: return collected.X >= OreRobotCost.X; 
-					case 1: return collected.X >= ClayRobotCost.X;
-					case 2: return collected.X >= ObsidianRobotCost.X && collected.Y >= ObsidianRobotCost.Y;
-					case 3: return collected.X >= ObsidianRobotCost.X && collected.Z >= GeodeRobotCost.Z;
-					default: return false;
-				}
-
-				//var cost = RobotCosts[robotIdx];
-				//for (var c = 0; c < 4; c++)
-				//{
-				//	if (cost[c] == 0)
-				//		continue;
-
-				//	if (cost[c] > collected[c])
-				//		return false;
-				//}
-
-				//return true;
+					Ore => collected.X >= OreRobotCost.X,
+					Clay => collected.X >= ClayRobotCost.X,
+					Obsidian => collected.X >= ObsidianRobotCost.X && collected.Y >= ObsidianRobotCost.Y,
+					Geode => collected.X >= GeodeRobotCost.X && collected.Z >= GeodeRobotCost.Z,
+					_ => false,
+				};
 			}
 
 			public static readonly v4i OreCollectingRobot = new(1, 0, 0, 0);
@@ -65,6 +62,8 @@ namespace Ujeby.AoC.App.Year2022.Day19
 
 		internal struct State
 		{
+			public int TimeLeft;
+
 			/// <summary>
 			///	x: ore
 			///	y: clay
@@ -74,24 +73,21 @@ namespace Ujeby.AoC.App.Year2022.Day19
 			public v4i Collected;
 			public v4i Robots;
 
-			public override string ToString() => $"{Collected},{Robots}";
+			public override string ToString() => $"{TimeLeft}{Collected}{Robots}";
 
-			internal State BuildAndCollect(Blueprint bp, int robotToBuildIdx)
+			internal State Advance(
+				Blueprint bp = null, int? robotToBuildIdx = null)
 			{
 				var result = this;
 
-				result.Collected -= bp.RobotCosts[robotToBuildIdx];
-				result.Robots += Blueprint.Robots[robotToBuildIdx];
-				result.Collected += Robots;
-
-				return result;
-			}
-
-			internal State Collect()
-			{
-				var result = this;
+				if (robotToBuildIdx.HasValue)
+				{
+					result.Collected -= bp.RobotCosts[robotToBuildIdx.Value];
+					result.Robots += Blueprint.Robots[robotToBuildIdx.Value];
+				}
 
 				result.Collected += Robots;
+				result.TimeLeft = TimeLeft - 1;
 
 				return result;
 			}
@@ -104,20 +100,18 @@ namespace Ujeby.AoC.App.Year2022.Day19
 			var blueprints = ParseBlueprints(input);
 			Debug.Line($"{blueprints.Length} blueprints");
 
-			// part1 (14s)
+			// part1 (5s / 14s)
 			var qualities = new ConcurrentBag<long>();
 			Parallel.ForEach(blueprints, bp =>
 			{
-				var cache = new Dictionary<string, State>();
+				var maxGeodes = Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 24 }, new());
+				qualities.Add(maxGeodes * bp.Id);
 
-				var finalState = Step(bp, new State { Robots = new v4i(1, 0, 0, 0) }, cache);
-				qualities.Add(finalState.Collected.W * bp.Id);
-				Log.Line($"{bp.Id}: {finalState.Collected.W * bp.Id}");
+				Log.Line($"{bp.Id}: {maxGeodes * bp.Id}");
 			});
-			Log.Line($"p1: {string.Join(", ", qualities)}");
+			Log.Line($"part1: {string.Join(", ", qualities)}");
 
-			long? answer1 = qualities.Sum(); // 33
-			// 1403 too low
+			long? answer1 = qualities.Sum();
 
 			// part2
 			long? answer2 = null;
@@ -161,74 +155,48 @@ namespace Ujeby.AoC.App.Year2022.Day19
 			}).ToArray();
 		}
 
-		private static State Step(Blueprint bp, State state, Dictionary<string, State> cache,
-			int minutesLeft = 24)
+		private static long Step(Blueprint bp, State state, Dictionary<string, long> cache)
 		{
-			if (minutesLeft == 0)
-				return state;
+			if (state.TimeLeft == 0)
+				return state.Collected.W;
 
 			// memoization
-			var cacheKey = $"{minutesLeft}{state}";
-			if (cache.ContainsKey(cacheKey))
-				return cache[cacheKey];
+			var cacheKey = state.ToString();
+			if (cache.TryGetValue(cacheKey, out long maxGeode))
+				return maxGeode;
 
-			minutesLeft--;
+			// build geode robot
+			if (bp.CanBuild(Blueprint.Geode, state))
+				maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Geode), cache));
 
-			var bs = state;
-			State s;
-
-			var canBuild3 = bp.CanBuild(3, state.Collected);
-			if (!canBuild3 && minutesLeft > 1)
+			else
 			{
-				// build robot 2
-				if (bp.CanBuild(2, state.Collected) && 
-					state.Robots[2] < bp.GeodeRobotCost[2])
-				{
-					s = Step(bp, state.BuildAndCollect(bp, 2), cache,
-						minutesLeft: minutesLeft);
-					if (s.Collected.W > bs.Collected.W)
-						bs = s;
-				}
+				// build obsidian robot
+				if (bp.CanBuild(Blueprint.Obsidian, state)
+					&& state.Robots[Blueprint.Obsidian] < bp.GeodeRobotCost[Blueprint.Obsidian]
+					)
+					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Obsidian), cache));
 
-				// build robot 1
-				if (minutesLeft > 2 && 
-					bp.CanBuild(1, state.Collected) && 
-					state.Robots[1] < bp.ObsidianRobotCost[1])
-				{
-					s = Step(bp, state.BuildAndCollect(bp, 1), cache,
-						minutesLeft: minutesLeft);
-					if (s.Collected.W > bs.Collected.W)
-						bs = s;
-				}
+				// build clay robot
+				if (bp.CanBuild(Blueprint.Clay, state)
+					//&& state.TimeLeft > 3
+					&& state.Robots[Blueprint.Clay] < bp.ObsidianRobotCost[Blueprint.Clay]
+					)
+					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Clay), cache));
 
-				// build robot 0
-				if (bp.CanBuild(0, state.Collected) && 
-					state.Robots[0] < bp.RobotCosts.Max(c => c[0]))
-				{
-					s = Step(bp, state.BuildAndCollect(bp, 0), cache,
-						minutesLeft: minutesLeft);
-					if (s.Collected.W > bs.Collected.W)
-						bs = s;
-				}
-			}
-			// build robot 3
-			else if (minutesLeft > 0 && canBuild3)
-			{
-				s = Step(bp, state.BuildAndCollect(bp, 3), cache,
-					minutesLeft: minutesLeft);
-				if (s.Collected.W > bs.Collected.W)
-					bs = s;
+				// build ore robot
+				if (bp.CanBuild(Blueprint.Ore, state) 
+					&& state.Robots[Blueprint.Ore] < bp.RobotCosts.Max(c => c[Blueprint.Ore])
+					)
+					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Ore), cache));
+
+				// build nothing, just collect
+				maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(), cache));
 			}
 
-			// build nothing, just collect
-			s = Step(bp, state.Collect(), cache,
-				minutesLeft: minutesLeft);
-			if (s.Collected.W > bs.Collected.W)
-				bs = s;
+			cache.Add(cacheKey, maxGeode);
 
-			cache.Add(cacheKey, bs);
-
-			return bs;
+			return maxGeode;
 		}
 	}
 }

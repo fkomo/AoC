@@ -19,7 +19,7 @@ namespace Ujeby.AoC.Common
 			Console.ForegroundColor = textColor;
 
 			Console.WriteLine(lineText);
-			File.AppendAllLines(OutputFile, new string[] { lineText });
+			AddLinesToFile(lineText);
 
 			Console.ForegroundColor = ConsoleColor.White;
 		}
@@ -32,7 +32,7 @@ namespace Ujeby.AoC.Common
 			Console.ForegroundColor = textColor;
 
 			Console.Write(text);
-			File.AppendAllText(OutputFile, text);
+			AddTextToFile(text);
 
 			Console.ForegroundColor = ConsoleColor.White;
 		}
@@ -45,7 +45,7 @@ namespace Ujeby.AoC.Common
 			var text = new string(Enumerable.Repeat(' ', indent.Value).ToArray());
 			
 			Console.Write(text);
-			File.AppendAllText(OutputFile, text);
+			AddTextToFile(text);
 		}
 
 		private static ConsoleColor[] _christmasColors = new ConsoleColor[]
@@ -93,10 +93,28 @@ namespace Ujeby.AoC.Common
 			}
 			Console.ForegroundColor = ConsoleColor.White;
 
-			File.AppendAllText(OutputFile, sb.ToString());
+			AddTextToFile(sb.ToString());
 
 			Console.WriteLine();
-			File.AppendAllLines(OutputFile, new string[] { string.Empty });
+			AddLinesToFile(string.Empty);
+		}
+
+		private static object _fileLock = new();
+
+		private static void AddTextToFile(string text)
+		{
+			lock (_fileLock )
+			{
+				File.AppendAllText(OutputFile, text);
+			}
+		}
+
+		private static void AddLinesToFile(params string[] lines)
+		{
+			lock (_fileLock)
+			{
+				File.AppendAllLines(OutputFile, lines);
+			}
 		}
 	}
 }

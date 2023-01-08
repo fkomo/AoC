@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.Common;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2022.Day15
@@ -43,7 +42,7 @@ namespace Ujeby.AoC.App.Year2022.Day15
 
 			// part1
 #if _DEBUG_SAMPLE
-			PrintMap(sbsDist, sbs, min, max);
+			//PrintMap(sbsDist, sbs, min, max);
 			var scanY = 10;
 #else
 			var scanY = 2000000;
@@ -149,7 +148,7 @@ namespace Ujeby.AoC.App.Year2022.Day15
 			return null;
 		}
 
-		private void PrintMap(int[] sbsDist, v2i[][] sbs, v2i min, v2i max)
+		private void PrintMap(long[] sbsDist, v2i[][] sbs, v2i min, v2i max)
 		{
 			var p = min;
 			for (; p.Y <= max.Y; p.Y++)
