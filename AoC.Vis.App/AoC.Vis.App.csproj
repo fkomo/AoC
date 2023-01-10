@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<Configurations>Debug;Release;Release_2022;Release_2021;Release_2020;Debug_2022;Debug_2021;Debug_2020;Debug.Sample_2020;Debug.Sample_2021;Debug.Sample_2022</Configurations>
 		<!--<Nullable>enable</Nullable>-->
 	</PropertyGroup>
 
