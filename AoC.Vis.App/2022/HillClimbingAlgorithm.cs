@@ -86,7 +86,7 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawGridMouseCursor();
 
-			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
+			DrawText(new v2i(32, 32), ui.ToArray());
 		}
 
 		protected override void Destroy()

@@ -69,7 +69,7 @@ namespace Ujeby.AoC.Vis.App
 
 			var empty = ((max - min) + new v2i(1, 1)).Area() - _elves.Length;
 
-			DrawText(new v2i(32, 32), v2i.Zero, 
+			DrawText(new v2i(32, 32), 
 				new Text($"step: {_step}"),
 				new Text($"movement: {!_noMovement}"),
 				new Text($"area: {min}x{max}"),

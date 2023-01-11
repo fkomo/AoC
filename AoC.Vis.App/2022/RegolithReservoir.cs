@@ -76,7 +76,7 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawGridMouseCursor(style: Graphics.GridCursorStyles.SimpleFill);
 
-			DrawText(new v2i(32, 32), v2i.Zero,
+			DrawText(new v2i(32, 32),
 				new Text($"sand: {_sandCount}"));
 		}
 
