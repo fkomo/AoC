@@ -78,7 +78,7 @@ namespace Ujeby.AoC.App
 					new Year2020.Day02.PasswordPhilosophy()         { Answer = new string[] { "474", "745" } },
 					new Year2020.Day03.TobogganTrajectory()			{ Answer = new string[] { "223", "3517401300" } },
 					new Year2020.Day04.PassportProcessing()         { Answer = new string[] { "245", "133" } },
-					new Year2020.Day05.Puzzle202005()               { Answer = new string[] { null, null } },
+					new Year2020.Day05.BinaryBoarding()             { Answer = new string[] { "826", "678" } },
 					new Year2020.Day06.Puzzle202006()               { Answer = new string[] { null, null } },
 					new Year2020.Day07.Puzzle202007()               { Answer = new string[] { null, null } },
 					new Year2020.Day08.Puzzle202008()               { Answer = new string[] { null, null } },
