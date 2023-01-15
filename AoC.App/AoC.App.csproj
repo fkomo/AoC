@@ -69,12 +69,12 @@
 	<ItemGroup>
 		<PackageReference Include="FFMpegCore" Version="4.8.0" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-		<PackageReference Include="Ujeby" Version="1.8.0" />
+		<PackageReference Include="Ujeby" Version="1.9.0" />
 	</ItemGroup>
 
 	<!--<ItemGroup>
 		<Reference Include="Ujeby">
-			<HintPath>..\..\Ujeby\Deploy\Ujeby.dll</HintPath>
+			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
 	</ItemGroup>-->
 
