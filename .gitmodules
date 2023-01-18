@@ -1,0 +1,3 @@
+[submodule "AoC.App/AoC.Input"]
+	path = AoC.App/AoC.Input
+	url = https://github.com/fkomo/AoC.Input
