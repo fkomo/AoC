@@ -154,7 +154,7 @@ namespace Ujeby.AoC.App.Year2020.Day04
 							throw new NotImplementedException(f[0]);
 					}
 				}
-				catch (Exception ex)
+				catch
 				{
 					Debug.Line(field);
 				}

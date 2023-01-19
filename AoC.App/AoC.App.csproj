@@ -67,8 +67,6 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="FFMpegCore" Version="4.8.0" />
-		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 		<!--<PackageReference Include="Ujeby" Version="1.9.0" />-->
 	</ItemGroup>
 
@@ -79,9 +77,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="ffmpeg.config.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 
 		<Content Include="Year*\**\input*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

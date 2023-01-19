@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Ujeby.AoC.Common;
 using Ujeby.Tools;
 using Ujeby.Vectors;
@@ -12,63 +11,95 @@ namespace Ujeby.AoC.App.Year2021.Day19
 			Debug.Line();
 
 			var scanners = input.Split(string.Empty)
-				.Select(scanner => 
+				.Select(scanner =>
 					AllRotations(scanner.Skip(1).Select(p => new v3i(p.Split(',').Select(pc => long.Parse(pc)).ToArray())).ToArray())
 						.ToArray())
 				.ToArray();
 
 			Debug.Line($"{scanners.Length} scanners");
 
-			// part1
-			var matchedScanners = new ConcurrentDictionary<string, (int s1, int s2, int rs1, int rs2, int bc)>();
-			//Parallel.For(0, scanners.Length, (is1) =>
-			for (var is1 = 0; is1 < scanners.Length; is1++)
+			// scannerIdx, rotationIdx
+			var fixedScanners = new Dictionary<int, (v3i Position, v3i[] Beacons)>()
 			{
-				var match = false;
-				for (var is2 = is1 + 1; is2 < scanners.Length && !match; is2++)
+				{ 0, (Position: new(0, 0, 0), Beacons: scanners[0][0]) },
+			};
+			Debug.Line($"fixed {0:d2}:{0:d2}");
+
+			var fixedBeacons = new List<v3i>();
+			fixedBeacons.AddRange(fixedScanners.First().Value.Beacons);
+
+			while (true)
+			{
+				var fixedBefore = fixedScanners.Count;
+				for (var is2 = 1; is2 < scanners.Length; is2++)
 				{
-					var pairKey = GetPairKey(is1, is2);
-					if (matchedScanners.ContainsKey(pairKey))
+					if (fixedScanners.ContainsKey(is2))
 						continue;
 
-					for (var irs1 = 0; irs1 < scanners[is1].Length && !matchedScanners.ContainsKey(pairKey); irs1++)
-						for (var irs2 = 0; irs2 < scanners[is2].Length && !matchedScanners.ContainsKey(pairKey); irs2++)
+					for (var irs2 = 0; irs2 < scanners[is2].Length; irs2++)
+					{
+						foreach (var fs in fixedScanners)
 						{
-							var overlapping = FindOverlapping(scanners[is1][irs1], scanners[is2][irs2]);
-							if (overlapping != null)
-								matchedScanners.TryAdd(pairKey, (is1, is2, irs1, irs2, overlapping.Length));
+							if (!Overlapps(fs.Value.Beacons, scanners[is2][irs2], out v3i s2Offset, out v3i[] s2fs))
+								continue;
+
+							Debug.Line($"fixed {is2:d2}:{irs2:d2} with {fs.Key:d2}, offset={s2Offset}");
+							fixedScanners.Add(is2, (Position: s2Offset, Beacons: s2fs));
+							fixedBeacons.AddRange(s2fs);
+
+							irs2 = scanners[is2].Length;
+							break;
 						}
+					}
 				}
+
+				Debug.Line($"fixed {fixedScanners.Count}/{scanners.Length}");
+				if (fixedBefore == fixedScanners.Count || fixedScanners.Count == scanners.Length)
+					break;
 			}
-			//);
 
-			foreach (var ms in matchedScanners)
-				Log.Line($"#{ms.Key}: scanners[{ms.Value.s1}/{ms.Value.s2}] with rotation[{ms.Value.rs1}/{ms.Value.rs2}] overlaps {ms.Value.bc} beacons");
-
-			long? answer1 = null;
+			// part1
+			long? answer1 = fixedBeacons.Distinct().Count();
+			//long? answer1 = 483;
 
 			// part2
-			long? answer2 = null;
+			long? answer2 = long.MinValue;
+			foreach (var s1 in fixedScanners)
+				foreach (var s2 in fixedScanners)
+				{
+					if (s1.Key == s2.Key)
+						continue;
+
+					var md = v3i.ManhDistance(s1.Value.Position, s2.Value.Position);
+					if (md > answer2)
+						answer2 = md;
+				}
+			//long? answer2 = 14804;
 
 			Debug.Line();
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		private static string GetPairKey(int is1, int is2) => is1 < is2 ? $"{is1}{is2}" : $"{is2}{is1}";
-
-		private static v3i[] FindOverlapping(v3i[] pa1, v3i[] pa2)
+		private static bool Overlapps(v3i[] pa1, v3i[] pa2, out v3i offset, out v3i[] pa2pa1)
 		{
+			offset = new();
+			pa2pa1 = null;
+
 			for (var ip1 = 0; ip1 < pa1.Length; ip1++)
 				for (var ip2 = 0; ip2 < pa2.Length; ip2++)
 				{
-					var offset = pa2[ip2] - pa1[ip1];
-					var overlapping = pa1.Intersect(pa2.Select(p => p - offset));
-					if (overlapping.Count() >= 12)
-						return overlapping.ToArray();
+					var pa2Offset = pa2[ip2] - pa1[ip1];
+					pa2pa1 = pa2.Select(p => p - pa2Offset).ToArray();
+
+					if (pa1.Intersect(pa2pa1).Count() >= 12)
+					{
+						offset = pa2Offset;
+						return true;
+					}
 				}
 
-			return null;
+			return false;
 		}
 
 		private static IEnumerable<v3i[]> AllRotations(v3i[] points)
