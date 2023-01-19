@@ -15,12 +15,13 @@ namespace Ujeby.AoC.App.Year2021.Day20
 
 			// part1
 			var output = (Image: inputImage, VoidPixel: '.');
-			for (var i = 0; i < 2; i++)
+			var i = 0;
+			for (; i < 2; i++)
 				output = EnhanceImage(output, imageEnhAlg);
 			long? answer1 = output.Image.Sum(line => line.Count(c => c == '#'));
 
 			// part2
-			for (var i = 2; i < 50; i++)
+			for (; i < 50; i++)
 				output = EnhanceImage(output, imageEnhAlg);
 			long? answer2 = output.Image.Sum(line => line.Count(c => c == '#'));
 
@@ -38,30 +39,32 @@ namespace Ujeby.AoC.App.Year2021.Day20
 
 		private static (string[] Image, char VoidPixel) EnhanceImage((string[] Image, char VoidPixel) input, string imageEnhAlg)
 		{
-			var sb = new StringBuilder();
+			var pixelSb = new StringBuilder();
+			var outputLineSb = new StringBuilder();
+
 			var outputImage = new string[input.Image.Length + 2];
 
 			var outputPixel = new v2i(0, 0);
 			for (; outputPixel.Y < outputImage.Length; outputPixel.Y++)
 			{
-				sb.Clear();
+				outputLineSb.Clear();
 				for (outputPixel.X = 0; outputPixel.X < input.Image[0].Length + 2; outputPixel.X++)
 				{
-					var pixel = string.Empty;
+					pixelSb.Clear();
 					foreach (var d in _dir)
 					{
 						var inputPixel = outputPixel + d - 1;
 						if (inputPixel.X < 0 || inputPixel.Y < 0 ||
 							inputPixel.X >= input.Image[0].Length || inputPixel.Y >= input.Image.Length)
-							pixel += input.VoidPixel;
+							pixelSb.Append(input.VoidPixel);
 						else
-							pixel += input.Image[inputPixel.Y][(int)inputPixel.X];
+							pixelSb.Append(input.Image[inputPixel.Y][(int)inputPixel.X]);
 					}
 
-					sb.Append(Enhance(imageEnhAlg, pixel));
+					outputLineSb.Append(Enhance(imageEnhAlg, pixelSb.ToString()));
 				}
 
-				outputImage[outputPixel.Y] = sb.ToString();
+				outputImage[outputPixel.Y] = outputLineSb.ToString();
 			}
 
 			return (Image: outputImage, VoidPixel: input.VoidPixel == '.' ? imageEnhAlg[0] : imageEnhAlg[511]);
