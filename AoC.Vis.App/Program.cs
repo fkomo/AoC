@@ -25,6 +25,7 @@ namespace Ujeby.AoC.Vis.App
 								{
 									new Chitron(windowSize),
 									new TrickShot(windowSize),
+									new TrenchMap(windowSize),
 								}
 							},
 							{ 

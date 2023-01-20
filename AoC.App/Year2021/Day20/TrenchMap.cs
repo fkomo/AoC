@@ -37,7 +37,7 @@ namespace Ujeby.AoC.App.Year2021.Day20
 			v2i.Up + v2i.Left,		v2i.Up,		v2i.Up + v2i.Right,
 		};
 
-		private static (string[] Image, char VoidPixel) EnhanceImage((string[] Image, char VoidPixel) input, string imageEnhAlg)
+		public static (string[] Image, char VoidPixel) EnhanceImage((string[] Image, char VoidPixel) input, string imageEnhAlg)
 		{
 			var pixelSb = new StringBuilder();
 			var outputLineSb = new StringBuilder();
@@ -77,7 +77,7 @@ namespace Ujeby.AoC.App.Year2021.Day20
 			Debug.Line();
 		}
 
-		public static char Enhance(string imageEnhAlg, string input) 
+		private static char Enhance(string imageEnhAlg, string input) 
 			=> imageEnhAlg[(int)Tools.Numbers.BaseToDec(input, baseString: ".#")];
 	}
 }
