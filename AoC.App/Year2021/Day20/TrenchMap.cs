@@ -8,8 +8,6 @@ namespace Ujeby.AoC.App.Year2021.Day20
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
-			Debug.Line();
-
 			var imageEnhAlg = input.First();
 			var inputImage = input.Skip(2).ToArray();
 
@@ -24,8 +22,6 @@ namespace Ujeby.AoC.App.Year2021.Day20
 			for (; i < 50; i++)
 				output = EnhanceImage(output, imageEnhAlg);
 			long? answer2 = output.Image.Sum(line => line.Count(c => c == '#'));
-
-			Debug.Line();
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
