@@ -63,7 +63,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day19.BeaconScanner()              { Answer = new string[] { "483", "14804" } },
 					new Year2021.Day20.TrenchMap()                  { Answer = new string[] { "5571", "17965" } },
 					new Year2021.Day21.DiracDice()                  { Answer = new string[] { "1196172", "106768284484217" } },
-					new Year2021.Day22.ReactorReboot()              { Answer = new string[] { null, null } },
+					new Year2021.Day22.ReactorReboot()              { Answer = new string[] { "591365", null } },
 					new Year2021.Day23.Amphipod()                   { Answer = new string[] { null, null } },
 					new Year2021.Day24.ArithmeticLogicUnit()        { Answer = new string[] { null, null } },
 					new Year2021.Day25.SeaCucumber()                { Answer = new string[] { null, null } },
