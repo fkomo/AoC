@@ -20,7 +20,9 @@ namespace Ujeby.AoC.Common
 				Log.Indent += 2;
 
 				sw.Start();
+
 				var answer = SolvePuzzle(ReadInput());
+
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
 				Log.Indent -= 2;

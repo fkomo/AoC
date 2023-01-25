@@ -7,38 +7,76 @@
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<!--<Nullable>enable</Nullable>-->
-		<Configurations>Debug;Release;Debug.Sample</Configurations>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_DEBUG</DefineConstants>
+		<Configurations>Debug;Release;Debug.Sample;Release_2022;Release_2021;Release_2020;Debug_2022;Debug_2021;Debug_2020;Debug.Sample_2020;Debug.Sample_2021;Debug.Sample_2022</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_RELEASE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2020;_2021;_2022;</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
+	
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2020|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2020</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2021|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2021</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2022|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2022</DefineConstants>
+	</PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2020|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2020</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2021|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2021</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2022|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2022</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2020|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2020</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2021|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2021</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2022|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2022</DefineConstants>
+	</PropertyGroup>
+
 
 	<ItemGroup>
-		<PackageReference Include="FFMpegCore" Version="4.8.0" />
-		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-		<PackageReference Include="Ujeby" Version="1.7.0" />
+		<PackageReference Include="Ujeby" Version="1.10.0" />
 	</ItemGroup>
 
 	<!--<ItemGroup>
 		<Reference Include="Ujeby">
-			<HintPath>..\..\Ujeby\Deploy\Ujeby.dll</HintPath>
+			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
 	</ItemGroup>-->
 
 	<ItemGroup>
-		<Content Include="ffmpeg.config.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 
 		<Content Include="Year*\**\input*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -46,7 +84,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove=".session" />
+		<None Remove=".session" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -13,12 +13,12 @@ namespace Ujeby.AoC.App.Year2022.Day23
 			public long Steps { get; set; } = 0;
 		}
 
-		private static Dictionary<int, v2i[]> SearchGroups = new Dictionary<int, v2i[]>()
+		private static readonly Dictionary<int, v2i[]> SearchGroups = new()
 		{
-			{ 0, new v2i[] { new v2i(0, -1), new v2i(-1, -1), new v2i(1, -1) } },
-			{ 1, new v2i[] { new v2i(0, 1), new v2i(-1, 1), new v2i(1, 1) } },
-			{ 2, new v2i[] { new v2i(-1, 0), new v2i(-1, 1), new v2i(-1, -1) } },
-			{ 3, new v2i[] { new v2i(1, 0), new v2i(1, 1), new v2i(1, -1) } },
+			{ 0, new v2i[] { new(0, -1), new(-1, -1), new(1, -1) } },
+			{ 1, new v2i[] { new(0, 1), new(-1, 1), new(1, 1) } },
+			{ 2, new v2i[] { new(-1, 0), new(-1, 1), new(-1, -1) } },
+			{ 3, new v2i[] { new(1, 0), new(1, 1), new(1, -1) } },
 		};
 
 		protected override (string, string) SolvePuzzle(string[] input)

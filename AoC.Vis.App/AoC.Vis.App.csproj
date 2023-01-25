@@ -6,17 +6,18 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<Configurations>Debug;Release;Release_2022;Release_2021;Release_2020;Debug_2022;Debug_2021;Debug_2020;Debug.Sample_2020;Debug.Sample_2021;Debug.Sample_2022</Configurations>
 		<!--<Nullable>enable</Nullable>-->
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ujeby" Version="1.7.0" />
+		<PackageReference Include="Ujeby" Version="1.10.0" />
 		<PackageReference Include="SDL2-CS.NetCore" Version="2.0.8" />
 	</ItemGroup>
 
 	<!--<ItemGroup>
 		<Reference Include="Ujeby">
-			<HintPath>..\..\Ujeby\Deploy\Ujeby.dll</HintPath>
+			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
 	</ItemGroup>-->
 

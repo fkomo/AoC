@@ -1,5 +1,4 @@
-﻿using Ujeby.AoC.App.Year2021.Day15;
-using Ujeby.Graphics.Entities;
+﻿using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -9,8 +8,8 @@ namespace Ujeby.AoC.Vis.App
 	{
 		private int[,] _riskMap;
 
-		private bool _useAStar = true;
-		private bool _useDijkstra = true;
+		private readonly bool _useAStar = true;
+		private readonly bool _useDijkstra = true;
 
 		private const int _stepsPerFrame = 10;
 
@@ -139,7 +138,7 @@ namespace Ujeby.AoC.Vis.App
 				ui.Add(new Text($"risk: {_riskMap[(int)m.Y, (int)m.X]}"));
 			}
 
-			DrawText(new v2i(32, 32), v2i.Zero, ui.ToArray());
+			DrawText(new(32, 32), HorizontalTextAlign.Left, VerticalTextAlign.Top, ui.ToArray());
 		}
 
 		protected override void Destroy()

@@ -128,7 +128,7 @@ namespace Ujeby.AoC.Vis.App
 			//DrawGridMouseCursor(style: GridCursorStyles.FullRowColumn);
 
 			var p = _path.Last();
-			DrawText(new v2i(32, 32), v2i.Zero, 
+			DrawText(new v2i(32, 32), 
 				new Text($"password: {1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z} (1000 * {p.Y + 1} + 4 * {p.X + 1} + {p.Z})"));
 		}
 		protected override void Destroy()

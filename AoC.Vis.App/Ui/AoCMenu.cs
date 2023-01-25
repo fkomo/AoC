@@ -1,7 +1,6 @@
 ﻿using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
-using Ujeby.Tools;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App.Ui
@@ -39,8 +38,8 @@ namespace Ujeby.AoC.Vis.App.Ui
 		protected override void Render()
 		{
 			var title = new Text(Name) { Color = new v4f(1, 1, 1, 1) };
-			var titleSize = Sdl2Wrapper.CurrentFont.GetTextSize(new(), title);
-			DrawText(new(WindowSize.X / 2 - titleSize.X / 2, WindowSize.Y / 5), new(), title);
+			var titleSize = Sdl2Wrapper.CurrentFont.GetTextSize(title);
+			DrawText(new(WindowSize.X / 2 - titleSize.X / 2, WindowSize.Y / 5), title);
 
 			//DrawRect((int)_windowSize.X / (_items.Keys.Count + 1), 0, (int)_windowSize.X / (_items.Keys.Count + 1), (int)_windowSize.Y, 
 			//	new v4f(0, 1, 0, 0.5f));
@@ -48,6 +47,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 			//	new v4f(0, 0, 1, 0.5f));
 
 			var spacing = new v2i(0, 4);
+			var scale = new v2i(2);
 
 			for (var ix = 0; ix < _items.Keys.Count; ix++)
 			{
@@ -55,12 +55,12 @@ namespace Ujeby.AoC.Vis.App.Ui
 				var sectionCenter = new v2i(WindowSize.X / (_items.Keys.Count + 1) * (ix + 1), WindowSize.Y / 2);
 
 				var items = _items[sectionTitleText].Select(i => new Text(i.Name)).ToArray();
-				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, items);
+				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, items);
 
 				var sectionTopLeft = sectionCenter - itemsSize / 2;
 				for (var i = 0; i < items.Length; i++)
 				{
-					var itemSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, items[i]);
+					var itemSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, items[i]);
 
 					if (MousePosition.X < sectionTopLeft.X || MousePosition.Y < sectionTopLeft.Y ||
 						MousePosition.X > sectionTopLeft.X + itemSize.X || MousePosition.Y > sectionTopLeft.Y + itemSize.Y)
@@ -77,14 +77,14 @@ namespace Ujeby.AoC.Vis.App.Ui
 				}
 
 				var sectionTitle = new Text($"-=#{{ {sectionTitleText} }}#=-") { Color = new v4f(0, 1, 0, 1) };
-				var sectionTitleSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, sectionTitle);
+				var sectionTitleSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, sectionTitle);
 				var titleOffset = new v2i(sectionTitleSize.X / 2, sectionTitleSize.Y + itemsSize.Y / 2);
 
 				// title
-				DrawText(sectionCenter - titleOffset, spacing, sectionTitle);
+				DrawText(sectionCenter - titleOffset, spacing, scale, sectionTitle);
 
 				// items
-				DrawText(sectionCenter - itemsSize / 2, spacing, items);
+				DrawText(sectionCenter - itemsSize / 2, spacing, scale, items);
 			}
 		}
 

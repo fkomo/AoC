@@ -90,20 +90,19 @@ namespace Ujeby.AoC.App.Year2021.Day18
 			long? answer1 = new SnailfishNum(n).Magnitude;
 
 			// part2
-			// TODO 2021/18 p2 OPTIMIZE (840ms)
-			//long? answer2 = long.MinValue;
-			//for (var n1 = 0; n1 < input.Length; n1++)
-			//{
-			//	for (var n2 = 0; n2 < input.Length; n2++)
-			//	{
-			//		if (n1 == n2)
-			//			continue;
-			//		var magnitude = new SnailfishNum(Reduce($"[{input[n1]},{input[n2]}]")).Magnitude;
-			//		if (magnitude > answer2)
-			//			answer2 = magnitude;
-			//	}
-			//}
-			long? answer2 = 4624;
+			long? answer2 = long.MinValue;
+			for (var n1 = 0; n1 < input.Length; n1++)
+			{
+				for (var n2 = 0; n2 < input.Length; n2++)
+				{
+					if (n1 == n2)
+						continue;
+
+					var magnitude = new SnailfishNum(Reduce($"[{input[n1]},{input[n2]}]")).Magnitude;
+					if (magnitude > answer2)
+						answer2 = magnitude;
+				}
+			}
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

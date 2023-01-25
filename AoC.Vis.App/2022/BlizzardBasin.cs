@@ -100,7 +100,7 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawGridMouseCursor();
 
-			DrawText(new v2i(32, 32), v2i.Zero, 
+			DrawText(new v2i(32, 32),
 				new Text($"{_blizzards.Length} blizzards in {_mapSize.X - 2}x{_mapSize.Y - 2} ({new v2i(_mapSize.X - 2, _mapSize.Y - 2).Area()})"),
 				new Text($"time: {_time}"),
 				new Text($"elves: {_elves.Length}"));

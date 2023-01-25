@@ -46,7 +46,7 @@ namespace Ujeby.AoC.Vis.App
 			if (p.X < 0 || p.Y < 0 || p.X >= _map.GetLength(1) || p.Y >= _map.GetLength(0))
 				return;
 
-			for (var i = 0; i < _sandPerFrame && AoC.App.Year2022.Day14.RegolithReservoir.AddSand(((int)p.X, (int)p.Y), _map) != null; i++)
+			for (var i = 0; i < _sandPerFrame && AoC.App.Year2022.Day14.RegolithReservoir.AddSand(p, _map) != null; i++)
 			{
 				_colors.Add(new v4f(0.4 + _rnd.NextDouble() / 2, 0.3 + _rnd.NextDouble() / 2, 0, 0.8f));
 				_sandCount++;
@@ -76,7 +76,7 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawGridMouseCursor(style: Graphics.GridCursorStyles.SimpleFill);
 
-			DrawText(new v2i(32, 32), v2i.Zero,
+			DrawText(new v2i(32, 32),
 				new Text($"sand: {_sandCount}"));
 		}
 

@@ -19,7 +19,7 @@ namespace Ujeby.AoC.App.Year2021.Day16
 
 			// part1
 			// part2
-			long answer2 = ParsePacket(input[0], out long answer1);
+			var answer2 = ParsePacket(input[0], out long answer1);
 
 			return (answer1.ToString(), answer2.ToString());
 		}

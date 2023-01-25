@@ -23,7 +23,7 @@ namespace Ujeby.AoC.App.Year2021.Day11
 						if (map[y][x] > 9 && map[y][x] != 0xff)
 							answer1 += Flash(map, x, y, x, y);
 
-				//VideoOutput.SaveMapToImage(map, i, "part1", _workingDir);
+				//Ujeby.Graphics.VideoOutput.SaveMapToImage(map, i, "part1", _workingDir);
 
 				for (var y = 0; y < input.Length; y++)
 					for (var x = 0; x < input[0].Length; x++)
@@ -52,7 +52,7 @@ namespace Ujeby.AoC.App.Year2021.Day11
 							break;
 						}
 
-				//VideoOutput.SaveMapToImage(map, i, "part2", _workingDir);
+				//Ujeby.Graphics.VideoOutput.SaveMapToImage(map, i, "part2", _workingDir);
 
 				if (answer2 == long.MaxValue)
 				{
@@ -63,8 +63,8 @@ namespace Ujeby.AoC.App.Year2021.Day11
 				}
 			}
 
-			//VideoOutput.CreateVideoFromImages(Path.Combine(_workingDir, "output-part1.mp4"), _workingDir, "part1");
-			//VideoOutput.CreateVideoFromImages(Path.Combine(_workingDir, "output-part2.mp4"), _workingDir, "part2");
+			//Ujeby.Graphics.VideoOutput.CreateVideoFromImages(Path.Combine(_workingDir, "output-part1.mp4"), _workingDir, "part1");
+			//Ujeby.Graphics.VideoOutput.CreateVideoFromImages(Path.Combine(_workingDir, "output-part2.mp4"), _workingDir, "part2");
 
 			return (answer1.ToString(), answer2.ToString());
 		}

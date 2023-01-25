@@ -8,7 +8,7 @@ namespace Ujeby.AoC.Vis.App
 	internal class TrickShot : Sdl2Loop
 	{
 		private v2i[] _path = null;
-		private AABBi _target;
+		private AABox2i _target;
 		private bool _hit = false;
 		private v2i _dir;
 
@@ -57,7 +57,7 @@ namespace Ujeby.AoC.Vis.App
 			DrawGridMouseCursor(
 				style: GridCursorStyles.FullRowColumn);
 
-			DrawText(new v2i(32, 32), v2i.Zero,
+			DrawText(new v2i(32, 32), 
 				new Text($"max height: {_path?.Max(p => p.Y)}"),
 				new Text($"direction: {_dir}"));
 		}
