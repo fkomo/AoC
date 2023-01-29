@@ -3,142 +3,133 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App.Year2021.Day23
 {
-	public struct Amph
+	public class Amphipod : PuzzleBase
 	{
-		public char Type;
-		public v2i Position;
-
-		public Amph(char type, v2i position)
-		{
-			Type = type;
-			Position = position;
-		}
-
-		public override string ToString() => $"{Type}{Position}";
-
-		public static readonly Dictionary<char, int> Energy = new()
+		private static readonly Dictionary<char, int> _amphipodeEnergy = new()
 		{
 			{ 'A', 1 },
 			{ 'B', 10 },
 			{ 'C', 100 },
 			{ 'D', 1000 },
-		};
-	}
+		}; 
 
-	public struct State
-	{
-		public Amph[] Amphipods;
-		public long EnergyUsed;
-		private readonly char[][] _map;
-
-		public State(string[] map)
+		internal record struct Amph(char Type, v2i Position)
 		{
-			EnergyUsed = 0L;
-
-			var amphipods = new List<Amph>();
-			for (var y = 0; y < map.Length; y++)
-				for (var x = 0; x < map[y].Length; x++)
-					if (char.IsLetter(map[y][x]))
-						amphipods.Add(new Amph(map[y][x], new(x, y)));
-			Amphipods = amphipods.ToArray();
-
-			_map = map.Select(l => l.Replace('.', ' ').ToCharArray()).ToArray();
-			Draw();
+			public override string ToString() => $"{Type}{Position}";
 		}
 
-		public State(State prev)
+		internal struct State
 		{
-			EnergyUsed = prev.EnergyUsed;
-			Amphipods = prev.Amphipods.ToArray();
-			_map = prev._map.Select(l => l.ToArray()).ToArray();
-		}
+			public Amph[] Amphipods;
+			public long EnergyUsed;
+			private readonly char[][] _map;
 
-		public void Move(int amphIdx, v2i destination)
-		{
-			_map[Amphipods[amphIdx].Position.Y][(int)Amphipods[amphIdx].Position.X] = ' ';
-			_map[destination.Y][(int)destination.X] = Amphipods[amphIdx].Type;
-
-			EnergyUsed += Amph.Energy[Amphipods[amphIdx].Type] * v2i.ManhDistance(destination, Amphipods[amphIdx].Position);
-			Amphipods[amphIdx].Position = destination;
-		}
-
-		public override string ToString() => $"{EnergyUsed}!{string.Join('+', Amphipods.Select(a => a.ToString()))}";
-
-		public static Dictionary<char, v2i[]> Rooms;
-
-		public void Draw()
-		{
-			Debug.Line(ToString());
-			for (var y = 0; y < _map.Length; y++)
-				Debug.Line(new string(_map[y]));
-			Debug.Line();
-		}
-
-		internal bool Empty(v2i position)
-			=> _map[position.Y][(int)position.X] == ' ';
-
-		internal char OccupiedBy(v2i position)
-			=> _map[position.Y][(int)position.X];
-
-		internal bool Complete()
-		{
-			for (var ia = 0; ia < Amphipods.Length; ia++)
+			public State(string[] map)
 			{
-				var amph = Amphipods[ia];
-				if (amph.Position.Y < 2)
-					return false;
+				EnergyUsed = 0L;
 
-				if (Rooms[amph.Type][0].X != amph.Position.X)
-					return false;
+				var amphipods = new List<Amph>();
+				for (var y = 0; y < map.Length; y++)
+					for (var x = 0; x < map[y].Length; x++)
+						if (char.IsLetter(map[y][x]))
+							amphipods.Add(new Amph(map[y][x], new(x, y)));
+				Amphipods = amphipods.ToArray();
+
+				_map = map.Select(l => l.Replace('.', ' ').ToCharArray()).ToArray();
+				Draw();
 			}
 
-			return true;
-		}
-	}
+			public State(State prev)
+			{
+				EnergyUsed = prev.EnergyUsed;
+				Amphipods = prev.Amphipods.ToArray();
+				_map = prev._map.Select(l => l.ToArray()).ToArray();
+			}
 
-	public class Amphipod : PuzzleBase
-	{
+			public void Move(int amphIdx, v2i destination)
+			{
+				_map[Amphipods[amphIdx].Position.Y][(int)Amphipods[amphIdx].Position.X] = ' ';
+				_map[destination.Y][(int)destination.X] = Amphipods[amphIdx].Type;
+
+				EnergyUsed += _amphipodeEnergy[Amphipods[amphIdx].Type] * v2i.ManhDistance(destination, Amphipods[amphIdx].Position);
+				Amphipods[amphIdx].Position = destination;
+			}
+
+			public override string ToString() => $"{EnergyUsed}!{string.Join('+', Amphipods.Select(a => a.ToString()))}";
+
+			public static Dictionary<char, v2i[]> Rooms;
+
+			public void Draw()
+			{
+				Debug.Line(ToString());
+				for (var y = 0; y < _map.Length; y++)
+					Debug.Line(new string(_map[y]));
+				Debug.Line();
+			}
+
+			internal bool Empty(v2i position)
+				=> _map[position.Y][(int)position.X] == ' ';
+
+			internal char OccupiedBy(v2i position)
+				=> _map[position.Y][(int)position.X];
+
+			internal bool Complete()
+			{
+				for (var ia = 0; ia < Amphipods.Length; ia++)
+				{
+					var amph = Amphipods[ia];
+					if (amph.Position.Y < 2)
+						return false;
+
+					if (Rooms[amph.Type][0].X != amph.Position.X)
+						return false;
+				}
+
+				return true;
+			}
+		}
+
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			Debug.Line();
 
 			// part1
-			//State.Rooms = new Dictionary<char, v2i[]>
-			//{
-			//	{ 'A', Enumerable.Range(2, 2).Select(y => new v2i(3, y)).ToArray() },
-			//	{ 'B', Enumerable.Range(2, 2).Select(y => new v2i(5, y)).ToArray() },
-			//	{ 'C', Enumerable.Range(2, 2).Select(y => new v2i(7, y)).ToArray() },
-			//	{ 'D', Enumerable.Range(2, 2).Select(y => new v2i(9, y)).ToArray() },
-			//};
-			//long? answer1 = Step(new State(input));
+			State.Rooms = new Dictionary<char, v2i[]>
+			{
+				{ 'A', Enumerable.Range(2, 2).Select(y => new v2i(3, y)).ToArray() },
+				{ 'B', Enumerable.Range(2, 2).Select(y => new v2i(5, y)).ToArray() },
+				{ 'C', Enumerable.Range(2, 2).Select(y => new v2i(7, y)).ToArray() },
+				{ 'D', Enumerable.Range(2, 2).Select(y => new v2i(9, y)).ToArray() },
+			};
+			long? answer1 = Step(new State(input));
 
 			// part2
-			//State.Rooms = new Dictionary<char, v2i[]>
-			//{
-			//	{ 'A', Enumerable.Range(2, 4).Select(y => new v2i(3, y)).ToArray() },
-			//	{ 'B', Enumerable.Range(2, 4).Select(y => new v2i(5, y)).ToArray() },
-			//	{ 'C', Enumerable.Range(2, 4).Select(y => new v2i(7, y)).ToArray() },
-			//	{ 'D', Enumerable.Range(2, 4).Select(y => new v2i(9, y)).ToArray() },
-			//};
-			//_cache.Clear();
-			//long? answer2 = Step(
-			//	new State(
-			//		input.Take(3).Concat(new string[]
-			//		{
-			//			"  #D#C#B#A#",
-			//			"  #D#B#A#C#",
-			//		}).Concat(input.Skip(3)).ToArray()));
+			State.Rooms = new Dictionary<char, v2i[]>
+			{
+				{ 'A', Enumerable.Range(2, 4).Select(y => new v2i(3, y)).ToArray() },
+				{ 'B', Enumerable.Range(2, 4).Select(y => new v2i(5, y)).ToArray() },
+				{ 'C', Enumerable.Range(2, 4).Select(y => new v2i(7, y)).ToArray() },
+				{ 'D', Enumerable.Range(2, 4).Select(y => new v2i(9, y)).ToArray() },
+			};
+			_cache.Clear();
+			long? answer2 = Step(
+				new State(
+					input.Take(3).Concat(new string[]
+					{
+						"  #D#C#B#A#",
+						"  #D#B#A#C#",
+					}).Concat(input.Skip(3)).ToArray()));
 
 			// TODO 2021/23 OPTIMIZE (13s)
-			long? answer1 = 10607;
-			long? answer2 = 59071;
+			//long? answer1 = 10607;
+			//long? answer2 = 59071;
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
 		private static readonly Dictionary<string, long> _cache = new();
 
-		public static long Step(State state)
+		private static long Step(State state)
 		{
 			var cacheKey = state.ToString();
 			if (_cache.ContainsKey(cacheKey))
