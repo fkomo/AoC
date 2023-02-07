@@ -5,6 +5,12 @@ namespace Ujeby.AoC.App.Year2021.Day24
 {
 	public class ArithmeticLogicUnit : PuzzleBase
 	{
+		/// <summary>
+		/// https://www.reddit.com/r/adventofcode/comments/rnejv5/2021_day_24_solutions/hs4g15j/
+		/// https://www.ericburden.work/blog/2022/01/05/advent-of-code-2021-day-24/
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			Debug.Line();
