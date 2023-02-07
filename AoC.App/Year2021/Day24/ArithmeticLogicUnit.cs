@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Ujeby.AoC.Common;
 using Ujeby.Vectors;
 
@@ -10,31 +9,71 @@ namespace Ujeby.AoC.App.Year2021.Day24
 		{
 			Debug.Line();
 
-			//var valid = new ConcurrentBag<long>();
-			//var monad = input.Select(i => i.Split(' ').ToArray()).ToArray();
-			//Parallel.For(0L, 88888888888888L, (i, state) =>
-			//{
-			//	var modelN = 99999999999999L - i;
-			//	var modelNStr = modelN.ToString();
-			//	if (!modelNStr.Contains('0') && Valid(modelNStr, monad))
-			//	{
-			//		Log.Line(modelNStr);
-			//		valid.Add(modelN);
-			//		state.Break();
-			//	}
-			//	else if (state.ShouldExitCurrentIteration)
-			//		return;
-			//});
+			var monad = input.Select(i => i.Split(' ').ToArray()).ToArray();
+
+			var p1 = Enumerable.Range(0, 14).Select(n => int.Parse(monad[4 + n * 18][2])).ToArray();
+			var p2 = Enumerable.Range(0, 14).Select(n => int.Parse(monad[5 + n * 18][2])).ToArray();
+			var p3 = Enumerable.Range(0, 14).Select(n => int.Parse(monad[15 + n * 18][2])).ToArray();
 
 			// part1
-			long? answer1 = null;
+			long? answer1 = RecursiveMonadSearch(true, p1, p2, p3);
 
 			// part2
-			long? answer2 = null;
+			long? answer2 = RecursiveMonadSearch(false, p1, p2, p3);
 
 			Debug.Line();
 
 			return (answer1?.ToString(), answer2?.ToString());
+		}
+
+		private static long? RecursiveMonadSearch(bool max, int[] p1, int[] p2, int[] p3,
+			long monad = 0, int mIdx = 0, long z = 0)
+		{
+			if (mIdx == 14)
+				return ValidCompiled(monad, p1, p2, p3) ? monad : null;
+
+			var n = Enumerable.Range(1, 9);
+			if (max)
+				n = n.Reverse();
+
+			foreach (var m in n)
+			{
+				if (p2[mIdx] > 0 || z % 26 == m - p2[mIdx])
+				{
+					var z1 = AluStep(z, m, mIdx, p1, p2, p3);
+					var result = RecursiveMonadSearch(max, p1, p2, p3, 
+						monad: monad * 10 + m, mIdx: mIdx + 1, z: z1);
+
+					if (result != null)
+						return result;
+				}
+			}
+
+			return null;
+		}
+
+		private static bool ValidCompiled(long input, int[] p1, int[] p2, int[] p3)
+			=> ValidCompiled(input.ToString(), p1, p2, p3);
+
+		private static bool ValidCompiled(string input, int[] p1, int[] p2, int[] p3)
+		{
+			var z = 0L;
+			for (var i = 0; i < 14; i++)
+				z = AluStep(z, input[i] - '0', i, p1, p2, p3);
+
+			if (z == 0)
+				Debug.Line(input);
+
+			return z == 0;
+		}
+
+		private static long AluStep(long z, int w, int i, int[] p1, int[] p2, int[] p3)
+		{
+			var x = (z % 26) + p2[i];
+			z /= p1[i];
+			if (x != w)
+				z = z * 26 + w + p3[i];
+			return z;
 		}
 
 		private static bool Valid(string input, string[][] program)
@@ -44,25 +83,20 @@ namespace Ujeby.AoC.App.Year2021.Day24
 			foreach (var i in program)
 			{
 				if (i[0] == "inp")
-				{
-					//Debug.Line($"input[{iIdx}]: {input[iIdx]}");
 					reg[_regToV4iIdx[i[1]]] = input[iIdx++] - '0';
-				}
 				else
-				{
 					reg = _instr[i[0]](i[1], i[2], reg);
-					//Debug.Line($"{i[0]} {i[1]} {i[2],3} {reg}");
-				}
 			}
 
-			var result = reg.Z == 0;
-			//Debug.Line($"{input}: {reg} {result}");
-			return result;
+			if (reg.Z == 0)
+				Debug.Line(input);
+
+			return reg.Z == 0;
 		}
 
 		private static Dictionary<string, Func<string, string, v4i, v4i>> _instr = new()
 		{
-			{ "add", (opL, opR, regIn) => 
+			{ "add", (opL, opR, regIn) =>
 				{
 					if (!long.TryParse(opR, out long r))
 						r = regIn[_regToV4iIdx[opR]];

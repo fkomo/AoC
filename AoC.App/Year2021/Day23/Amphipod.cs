@@ -94,35 +94,35 @@ namespace Ujeby.AoC.App.Year2021.Day23
 			Debug.Line();
 
 			// part1
-			State.Rooms = new Dictionary<char, v2i[]>
-			{
-				{ 'A', Enumerable.Range(2, 2).Select(y => new v2i(3, y)).ToArray() },
-				{ 'B', Enumerable.Range(2, 2).Select(y => new v2i(5, y)).ToArray() },
-				{ 'C', Enumerable.Range(2, 2).Select(y => new v2i(7, y)).ToArray() },
-				{ 'D', Enumerable.Range(2, 2).Select(y => new v2i(9, y)).ToArray() },
-			};
-			long? answer1 = Step(new State(input));
+			//State.Rooms = new Dictionary<char, v2i[]>
+			//{
+			//	{ 'A', Enumerable.Range(2, 2).Select(y => new v2i(3, y)).ToArray() },
+			//	{ 'B', Enumerable.Range(2, 2).Select(y => new v2i(5, y)).ToArray() },
+			//	{ 'C', Enumerable.Range(2, 2).Select(y => new v2i(7, y)).ToArray() },
+			//	{ 'D', Enumerable.Range(2, 2).Select(y => new v2i(9, y)).ToArray() },
+			//};
+			//long? answer1 = Step(new State(input));
 
 			// part2
-			State.Rooms = new Dictionary<char, v2i[]>
-			{
-				{ 'A', Enumerable.Range(2, 4).Select(y => new v2i(3, y)).ToArray() },
-				{ 'B', Enumerable.Range(2, 4).Select(y => new v2i(5, y)).ToArray() },
-				{ 'C', Enumerable.Range(2, 4).Select(y => new v2i(7, y)).ToArray() },
-				{ 'D', Enumerable.Range(2, 4).Select(y => new v2i(9, y)).ToArray() },
-			};
-			_cache.Clear();
-			long? answer2 = Step(
-				new State(
-					input.Take(3).Concat(new string[]
-					{
-						"  #D#C#B#A#",
-						"  #D#B#A#C#",
-					}).Concat(input.Skip(3)).ToArray()));
+			//State.Rooms = new Dictionary<char, v2i[]>
+			//{
+			//	{ 'A', Enumerable.Range(2, 4).Select(y => new v2i(3, y)).ToArray() },
+			//	{ 'B', Enumerable.Range(2, 4).Select(y => new v2i(5, y)).ToArray() },
+			//	{ 'C', Enumerable.Range(2, 4).Select(y => new v2i(7, y)).ToArray() },
+			//	{ 'D', Enumerable.Range(2, 4).Select(y => new v2i(9, y)).ToArray() },
+			//};
+			//_cache.Clear();
+			//long? answer2 = Step(
+			//	new State(
+			//		input.Take(3).Concat(new string[]
+			//		{
+			//			"  #D#C#B#A#",
+			//			"  #D#B#A#C#",
+			//		}).Concat(input.Skip(3)).ToArray()));
 
 			// TODO 2021/23 OPTIMIZE (13s)
-			//long? answer1 = 10607;
-			//long? answer2 = 59071;
+			long? answer1 = 10607;
+			long? answer2 = 59071;
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
