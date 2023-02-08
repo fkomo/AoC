@@ -49,7 +49,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day05.HydrothermalVenture()        { Answer = new string[] { "7085", "20271" } },
 					new Year2021.Day06.Lanternfish()                { Answer = new string[] { "352151", "1601616884019" } },
 					new Year2021.Day07.TheTreacheryOfWhales()       { Answer = new string[] { "355150", "98368490" } },
-					new Year2021.Day08.SevenSegmentSearch()         { Answer = new string[] { "247", null } },
+					new Year2021.Day08.SevenSegmentSearch()         { Answer = new string[] { "247", "933305" } },
 					new Year2021.Day09.SmokeBasin()                 { Answer = new string[] { "444", "1168440" } },
 					new Year2021.Day10.SyntaxScoring()              { Answer = new string[] { "369105", "3999363569" } },
 					new Year2021.Day11.DumboOctopus()               { Answer = new string[] { "1741", "440" } },
@@ -66,7 +66,7 @@ namespace Ujeby.AoC.App
 					new Year2021.Day22.ReactorReboot()              { Answer = new string[] { "591365", "1211172281877240" } },
 					new Year2021.Day23.Amphipod()                   { Answer = new string[] { "10607", "59071" } },
 					new Year2021.Day24.ArithmeticLogicUnit()        { Answer = new string[] { "99196997985942", "84191521311611" } },
-					new Year2021.Day25.SeaCucumber()                { Answer = new string[] { "530", null } },
+					new Year2021.Day25.SeaCucumber()                { Answer = new string[] { "530", "*" } },
 				});
 #endif
 

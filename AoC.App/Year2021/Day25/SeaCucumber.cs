@@ -39,10 +39,7 @@ namespace Ujeby.AoC.App.Year2021.Day25
 				//DrawMap(map, $"{answer1}");
 			}
 
-			// part2
-			long? answer2 = null;
-
-			return (answer1?.ToString(), answer2?.ToString());
+			return (answer1?.ToString(), "*");
 		}
 
 		private static char[,] Move(char seaCucumber, v2i dir, char[,] prev, v2i size, out bool movement)
