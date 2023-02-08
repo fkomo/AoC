@@ -61,19 +61,8 @@ namespace Ujeby.AoC.App.Year2022.Day19
 			};
 		}
 
-		internal struct State
+		internal record struct State(v4i Collected, v4i Robots, int TimeLeft)
 		{
-			public int TimeLeft;
-
-			/// <summary>
-			///	x: ore
-			///	y: clay
-			/// z: obsidian
-			/// w: geode
-			/// </summary>
-			public v4i Collected;
-			public v4i Robots;
-
 			public override string ToString() => $"{TimeLeft}{Collected}{Robots}";
 
 			internal State Advance(
@@ -173,7 +162,7 @@ namespace Ujeby.AoC.App.Year2022.Day19
 					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Clay), cache));
 
 				// build ore robot
-				if (bp.CanBuild(Blueprint.Ore, state) 
+				if (bp.CanBuild(Blueprint.Ore, state)
 					&& state.Robots[Blueprint.Ore] < bp.RobotCosts.Max(c => c[Blueprint.Ore])
 					)
 					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Ore), cache));

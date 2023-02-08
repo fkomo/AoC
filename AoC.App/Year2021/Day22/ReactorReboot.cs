@@ -7,18 +7,9 @@ namespace Ujeby.AoC.App.Year2021.Day22
 {
 	public class ReactorReboot : PuzzleBase
 	{
-		public struct Cuboid
+		internal record struct Cuboid(bool State, AABox3i AABox)
 		{
-			public bool State;
-			public AABox3i AABox;
 			public long Size() => State ? (AABox.Size + 1).Volume() : -(AABox.Size + 1).Volume();
-
-			public Cuboid(bool turnOn, AABox3i aab)
-			{
-				State = turnOn;
-				AABox = aab;
-			}
-
 			public override string ToString() => $"{(State ? "+" : "")}{Size()} {AABox}";
 		}
 

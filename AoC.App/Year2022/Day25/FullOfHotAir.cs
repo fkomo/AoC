@@ -9,10 +9,7 @@ namespace Ujeby.AoC.App.Year2022.Day25
 			// part1
 			var answer1 = DecToSnafu(input.Sum(line => SnafuToDec(line)));
 
-			// part2
-			string answer2 = "*";
-
-			return (answer1?.ToString(), answer2?.ToString());
+			return (answer1?.ToString(), "*");
 		}
 
 		private static long SnafuToDec(string snafu) => Tools.Numbers.BaseToDec(snafu, "=-012", -2);
