@@ -81,7 +81,7 @@ namespace Ujeby.AoC.App
 					new Year2020.Day05.BinaryBoarding()             { Answer = new string[] { "826", "678" } },
 					new Year2020.Day06.CustomCustoms()              { Answer = new string[] { "6297", "3158" } },
 					new Year2020.Day07.HandyHaversacks()            { Answer = new string[] { "128", "20189" } },
-					new Year2020.Day08.Puzzle202008()               { Answer = new string[] { null, null } },
+					new Year2020.Day08.HandheldHalting()            { Answer = new string[] { "2034", "672" } },
 					new Year2020.Day09.Puzzle202009()               { Answer = new string[] { null, null } },
 					new Year2020.Day10.Puzzle202010()               { Answer = new string[] { null, null } },
 					new Year2020.Day11.Puzzle202011()               { Answer = new string[] { null, null } },
