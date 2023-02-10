@@ -7,34 +7,13 @@ namespace Ujeby.AoC.App.Year2020.Day08
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			// part1
-			long? answer1 = 0;
-			var linesExecuted = new List<int>();
-			for (var i = 0; !linesExecuted.Contains(i);)
-			{
-				linesExecuted.Add(i);
-
-				var split = input[i].Split(' ');
-				switch (split[0])
-				{
-					case "nop": 
-						i++;
-						continue;
-					
-					case "acc":
-						answer1 += int.Parse(split[1]);
-						i++;
-						break;
-
-					case "jmp": 
-						i += int.Parse(split[1]);
-						break;
-				}
-			}
+			ComputeAcc(input, out long answer1);
 
 			// part2
-			long? answer2 = null;
+			long answer2 = 0;
 			for (var i = 0; i < input.Length; i++)
 			{
+				var prev = input[i];
 				if (input[i].StartsWith("nop"))
 					input[i] = input[i].Replace("nop", "jmp");
 				else if (input[i].StartsWith("jmp"))
@@ -42,27 +21,23 @@ namespace Ujeby.AoC.App.Year2020.Day08
 				else
 					continue;
 
-				answer2 = ComputeAcc(input);
-				if (answer2.HasValue)
+				if (ComputeAcc(input, out answer2))
 					break;
 
-				if (input[i].StartsWith("nop"))
-					input[i] = input[i].Replace("nop", "jmp");
-				else if (input[i].StartsWith("jmp"))
-					input[i] = input[i].Replace("jmp", "nop");
+				input[i] = prev;
 			}
 
-			return (answer1?.ToString(), answer2?.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 
-		private static long? ComputeAcc(string[] input)
+		private static bool ComputeAcc(string[] input, out long acc)
 		{
-			long? acc = 0;
+			acc = 0;
 			var linesExecuted = new List<int>();
 			for (var i = 0; !linesExecuted.Contains(i);)
 			{
 				if (i >= input.Length)
-					return acc;
+					return true;
 
 				linesExecuted.Add(i);
 
@@ -84,7 +59,7 @@ namespace Ujeby.AoC.App.Year2020.Day08
 				}
 			}
 
-			return null;
+			return false;
 		}
 	}
 }

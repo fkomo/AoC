@@ -90,7 +90,7 @@ namespace Ujeby.AoC.App
 					new Year2020.Day14.Puzzle202014()               { Answer = new string[] { null, null } },
 					new Year2020.Day15.Puzzle202015()               { Answer = new string[] { null, null } },
 					new Year2020.Day16.Puzzle202016()               { Answer = new string[] { null, null } },
-					new Year2020.Day17.Puzzle202017()               { Answer = new string[] { null, null } },
+					new Year2020.Day17.ConwayCubes()				{ Answer = new string[] { null, null } },
 					new Year2020.Day18.Puzzle202018()               { Answer = new string[] { null, null } },
 					new Year2020.Day19.Puzzle202019()               { Answer = new string[] { null, null } },
 					new Year2020.Day20.Puzzle202020()               { Answer = new string[] { null, null } },

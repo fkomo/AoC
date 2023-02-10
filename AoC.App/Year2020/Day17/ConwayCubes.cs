@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App.Year2020.Day17
 {
-	public class Puzzle202017 : PuzzleBase
+	public class ConwayCubes : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
