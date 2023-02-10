@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -17,8 +18,8 @@ namespace Ujeby.AoC.Vis.App
 
 		private int _userPathToDraw = 0;
 		private int _userPoints = 0;
-		private v3i _userStart;
-		private v3i _userEnd;
+		private v3i _userStart = new();
+		private v3i _userEnd = new();
 		private v3i[] _userPath;
 
 		public override string Name => $"#22 {nameof(MonkeyMap)}";
@@ -31,12 +32,12 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new AoC.App.Year2022.Day22.MonkeyMap().ReadInput();
-			_map = AoC.App.Year2022.Day22.MonkeyMap.CreateMap(input);
+			var input = new AoC.App._2022_22.MonkeyMap().ReadInput(AppSettings.InputDirectory);
+			_map = AoC.App._2022_22.MonkeyMap.CreateMap(input);
 
-			_path = AoC.App.Year2022.Day22.MonkeyMap.Travel(
+			_path = AoC.App._2022_22.MonkeyMap.Travel(
 				_map, 
-				AoC.App.Year2022.Day22.MonkeyMap.ReadDirections(input),
+				AoC.App._2022_22.MonkeyMap.ReadDirections(input),
 				new(Array.IndexOf(_map[0], '.'), 0, 0));
 
 			Grid.MinorSize = 5;
@@ -61,7 +62,7 @@ namespace Ujeby.AoC.Vis.App
 
 				if (distance > 0)
 				{
-					_userPath = AoC.App.Year2022.Day22.MonkeyMap.Travel(
+					_userPath = AoC.App._2022_22.MonkeyMap.Travel(
 						_map,
 						new string[] { distance.ToString() },
 						_userStart);

@@ -1,4 +1,4 @@
-﻿using Ujeby.AoC.App.Year2022.Day12;
+﻿using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -28,13 +28,13 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new AoC.App.Year2022.Day12.HillClimbingAlgorithm().ReadInput();
-			_heightMap = AoC.App.Year2022.Day12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
+			var input = new AoC.App._2022_12.HillClimbingAlgorithm().ReadInput(AppSettings.InputDirectory);
+			_heightMap = AoC.App._2022_12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 			
 			Grid.MinorSize = 10;
 			Grid.MoveCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * Grid.MinorSize);
 
-			_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+			_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App._2022_12.HillClimbingAlgorithm.CheckHeight);
 		}
 
 		protected override void Update()
@@ -107,7 +107,7 @@ namespace Ujeby.AoC.Vis.App
 				_heightMap[m.Y, m.X] = Math.Min('z' - 'a', _heightMap[m.Y, m.X] + 1);
 
 				_bfsPath = null;
-				_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App.Year2022.Day12.HillClimbingAlgorithm.CheckHeight);
+				_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App._2022_12.HillClimbingAlgorithm.CheckHeight);
 			}
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics.Entities;
+﻿using Ujeby.AoC.Vis.App.Common;
+using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -24,7 +25,7 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.MinorSize = 5;
 
-			var input = new AoC.App.Year2021.Day20.TrenchMap().ReadInput();
+			var input = new AoC.App._2021_20.TrenchMap().ReadInput(AppSettings.InputDirectory);
 			_imageEnhAlg = input.First();
 			_image = input.Skip(2).ToArray();
 
@@ -36,7 +37,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			if (!_paused)
 			{
-				var enh = AoC.App.Year2021.Day20.TrenchMap.EnhanceImage((_image, '.'), _imageEnhAlg);
+				var enh = AoC.App._2021_20.TrenchMap.EnhanceImage((_image, '.'), _imageEnhAlg);
 
 				_image = enh.Image;
 				_step++;

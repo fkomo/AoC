@@ -6,10 +6,25 @@ namespace Ujeby.AoC.Common
 	{
 		public string[] Answer { get; set; }
 
-		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
-		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.YearYYYY.DayDD.".Length);
+		public int Day => int.Parse(GetType().Namespace.Split('.').Last()[6..]);
+		public int Year => int.Parse(GetType().Namespace.Split('.').Last()[1..^3]);
+		public string Title => GetType().Name;
 
-		public int Solve()
+		protected abstract (string, string) SolvePuzzle(string[] input);
+
+		private string GetInputFile(string inputDirectory)
+		{
+			var inputFile = "input.txt";
+#if _DEBUG_SAMPLE
+			inputFile = "input.sample.txt";
+#endif
+			return Path.Combine(inputDirectory, Year.ToString(), $"{Day:d2}_{inputFile}");
+		}
+
+		public string[] ReadInput(string inputDirectory)
+			=> File.ReadLines(GetInputFile(inputDirectory)).ToArray();
+
+		public int Solve(string inputDirectory)
 		{
 			var result = 0;
 
@@ -19,9 +34,11 @@ namespace Ujeby.AoC.Common
 				Debug.Indent += 2;
 				Log.Indent += 2;
 
+				var input = ReadInput(inputDirectory);
+
 				sw.Start();
 
-				var answer = SolvePuzzle(ReadInput());
+				var answer = SolvePuzzle(input);
 
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
@@ -119,13 +136,7 @@ namespace Ujeby.AoC.Common
 				: (calculated == null ? ConsoleColor.DarkGray : ConsoleColor.White);
 		}
 
-		protected abstract (string, string) SolvePuzzle(string[] input);
-
-		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
-
-		/// <summary>
-		/// 
-		/// </summary>
+		/// <summary></summary>
 		/// <param name="duration">duration in ms</param>
 		/// <returns></returns>
 		private static string DurationToStringSimple(double duration)
@@ -140,17 +151,6 @@ namespace Ujeby.AoC.Common
 				return $"{(int)(duration / 1000)}s";
 
 			return $"{(int)(duration / 60 * 60 * 1000)}h";
-		}
-
-#if _DEBUG_SAMPLE
-		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.sample.txt");
-#else
-		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.txt");
-#endif
-
-		public string[] ReadInput()
-		{
-			return File.ReadLines(_inputFilename).ToArray();
 		}
 	}
 }

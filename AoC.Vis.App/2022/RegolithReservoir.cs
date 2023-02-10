@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics.Entities;
+﻿using Ujeby.AoC.Vis.App.Common;
+using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -25,8 +26,8 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new AoC.App.Year2022.Day14.RegolithReservoir().ReadInput();
-			_map = AoC.App.Year2022.Day14.RegolithReservoir.CreateMap(input, ground: true);
+			var input = new AoC.App._2022_14.RegolithReservoir().ReadInput(AppSettings.InputDirectory);
+			_map = AoC.App._2022_14.RegolithReservoir.CreateMap(input, ground: true);
 
 			Grid.MinorSize = 5;
 			Grid.MoveCenter(new v2i(_map.GetLength(1), _map.GetLength(0)) / 2 * Grid.MinorSize);
@@ -46,7 +47,7 @@ namespace Ujeby.AoC.Vis.App
 			if (p.X < 0 || p.Y < 0 || p.X >= _map.GetLength(1) || p.Y >= _map.GetLength(0))
 				return;
 
-			for (var i = 0; i < _sandPerFrame && AoC.App.Year2022.Day14.RegolithReservoir.AddSand(p, _map) != null; i++)
+			for (var i = 0; i < _sandPerFrame && AoC.App._2022_14.RegolithReservoir.AddSand(p, _map) != null; i++)
 			{
 				_colors.Add(new v4f(0.4 + _rnd.NextDouble() / 2, 0.3 + _rnd.NextDouble() / 2, 0, 0.8f));
 				_sandCount++;

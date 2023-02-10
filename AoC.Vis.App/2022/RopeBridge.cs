@@ -40,7 +40,7 @@ namespace Ujeby.AoC.Vis.App
 					return;
 				}
 
-				AoC.App.Year2022.Day09.RopeBridge.SimulateRope(_snake, dir);
+				AoC.App._2022_09.RopeBridge.SimulateRope(_snake, dir);
 			}
 		}
 

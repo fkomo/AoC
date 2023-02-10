@@ -1,4 +1,6 @@
-﻿using Ujeby.AoC.Vis.App.Ui;
+﻿using Microsoft.Extensions.Configuration;
+using Ujeby.AoC.Vis.App.Common;
+using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -9,6 +11,9 @@ namespace Ujeby.AoC.Vis.App
 	{
 		static void Main()
 		{
+			var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
+			AppSettings.InputDirectory = config["aoc:input"];
+
 			try
 			{
 				v2i windowSize = new(1920, 1080);

@@ -2,30 +2,32 @@
 {
 	public class AdventOfCode
 	{
-		public string Session { get; set; }
-		
+		public readonly int Year;
+		public readonly string Session;
+		public readonly string InputFilesBase;
+
 		private readonly string _title;
 
 		private const string _aocUrl = "https://adventofcode.com";
 
 		private readonly static HttpClient _httpClient = new();
 
-		public AdventOfCode(int year)
+		public AdventOfCode(int year, 
+			string session = null, string inputFilesBase = null)
 		{
 			_title = $"{_aocUrl}/{year}";
+			Year = year;
+			InputFilesBase = inputFilesBase ?? Environment.CurrentDirectory;
 
-			if (string.IsNullOrEmpty(Session))
-			{
-				var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
-				if (File.Exists(sessionFilename))
-					Session = File.ReadAllText(sessionFilename);
-			}
+			Session = session;
+			var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
+			if (File.Exists(sessionFilename))
+				Session = File.ReadAllText(sessionFilename);
 
 			if (!string.IsNullOrEmpty(Session))
 			{
 				_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={Session};");
-
-				DownloadMissingInput(@"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\", "Year", year);
+				DownloadMissingInput(InputFilesBase, year);
 			}
 		}
 
@@ -45,7 +47,7 @@
 				Debug.Indent += 0;
 
 				foreach (var problem in problemsToSolve)
-					stars += problem.Solve();
+					stars += problem.Solve(InputFilesBase);
 			}
 			catch (Exception ex)
 			{
@@ -63,26 +65,15 @@
 			}
 		}
 
-		private static void DownloadMissingInput(string outputDir, string yearDirPrefix, int year)
+		private static void DownloadMissingInput(string outputDir, int year)
 		{
 			try
 			{
 				Log.Indent += 2;
 
-				var programCsFilename = Path.Combine(outputDir, "Program.cs");
-				if (!File.ReadAllText(programCsFilename).Contains($"// TODO {year}"))
-					return;
-
 				for (var day = 1; day <= 25; day++)
-				{
-					var result = DownloadInput(year, day,
-						yearPrefix: yearDirPrefix,
-						rootDir: outputDir);
-					result.Wait();
-
-					if (result.Result)
-						UpdateCodeTemplate(year, day, outputDir, yearDirPrefix);
-				}
+					DownloadInput(year, day, outputDir)
+						.Wait();
 			}
 			catch (Exception ex)
 			{
@@ -94,17 +85,16 @@
 			}
 		}
 
-		private async static Task<bool> DownloadInput(int year, int day,
-			string rootDir = null, string yearPrefix = null)
+		private async static Task<bool> DownloadInput(int year, int day, string desinationDir)
 		{
 			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
 				return false;
 
-			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
+			var path = Path.Combine(desinationDir ?? Environment.CurrentDirectory, year.ToString());
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
-			var inputPath = Path.Combine(path, "input.txt");
+			var inputPath = Path.Combine(path, $"{day:d2}_input.txt");
 			if (!File.Exists(inputPath))
 			{
 				var inputUrl = $"{_aocUrl}/{year}/day/{day}/input";
@@ -119,8 +109,12 @@
 
 					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
 
+					// NOTE trim last character from input
 					File.WriteAllText(inputPath, input[..^1]);
-					File.WriteAllText(Path.Combine(path, "input.sample.txt"), null);
+
+					var sampleInputPath = Path.Combine(path, $"{day:d2}_input.sample.txt");
+					if (!File.Exists(sampleInputPath))
+						File.WriteAllText(sampleInputPath, null);
 				}
 				else
 				{
@@ -132,9 +126,32 @@
 			return true;
 		}
 
-		private static void UpdateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
+		private static void UpdateCode(string codeDir, string yearPrefix, int year)
 		{
-			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
+			try
+			{
+				Log.Indent += 2;
+
+				var programCsFilename = Path.Combine(codeDir, "Program.cs");
+				if (!File.ReadAllText(programCsFilename).Contains($"// TODO {year}"))
+					return;
+
+				for (var day = 1; day <= 25; day++)
+					UpdateCodeTemplate(codeDir, yearPrefix, year, day);
+			}
+			catch (Exception ex)
+			{
+				Log.Line(ex.ToString());
+			}
+			finally
+			{
+				Log.Indent -= 2;
+			}
+		}
+
+		private static void UpdateCodeTemplate(string codeDir, string yearPrefix, int year, int day)
+		{
+			var path = Path.Combine(codeDir, yearPrefix + year.ToString(), $"Day{day:d2}");
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
@@ -143,7 +160,7 @@
 				var puzzleTitle = $"Puzzle{year}{day:d2}";
 
 				var puzzleCs = Path.Combine(path, $"{puzzleTitle}.cs");
-				var template = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Common", "PuzzleTemplate.cs"))
+				var template = File.ReadAllText(Path.Combine(codeDir, "Common", "PuzzleTemplate.cs"))
 					.Replace("YYYY", year.ToString())
 					.Replace("DD", day.ToString("d2"))
 					.Replace("PUZZLETITLE", puzzleTitle);
@@ -151,7 +168,7 @@
 				File.WriteAllText(puzzleCs, template);
 				Log.Line($"{puzzleCs}");
 
-				var programCsFilename = Path.Combine(rootDir, "Program.cs");
+				var programCsFilename = Path.Combine(codeDir, "Program.cs");
 				var programCs = File.ReadAllText(programCsFilename);
 				var todo = $"// TODO {year}";
 				if (programCs.Contains(todo))

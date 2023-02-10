@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
+using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
-using static Ujeby.AoC.App.Year2022.Day24.BlizzardBasin;
+using static Ujeby.AoC.App._2022_24.BlizzardBasin;
 
 namespace Ujeby.AoC.Vis.App
 {
@@ -45,10 +46,10 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new Ujeby.AoC.App.Year2022.Day24.BlizzardBasin().ReadInput();
+			var input = new Ujeby.AoC.App._2022_24.BlizzardBasin().ReadInput(AppSettings.InputDirectory);
 
 			_mapSize = new(input[0].Length, input.Length);
-			_blizzards = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.ParseBlizzards(input);
+			_blizzards = Ujeby.AoC.App._2022_24.BlizzardBasin.ParseBlizzards(input);
 
 			_start = new(1, 0);
 			_end = new(_mapSize.X - 2, _mapSize.Y - 1);
@@ -56,7 +57,7 @@ namespace Ujeby.AoC.Vis.App
 			_elves = new[] { new v3i(_start, 0) };
 			_destination = _end;
 
-			_map = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.GetMapInTime(0, _blizzards, _mapSize);
+			_map = Ujeby.AoC.App._2022_24.BlizzardBasin.GetMapInTime(0, _blizzards, _mapSize);
 			_mapUsage = new int[_mapSize.Y, _mapSize.X];
 
 			Grid.MinorSize = 12;
@@ -120,8 +121,8 @@ namespace Ujeby.AoC.Vis.App
 		{
 			if (_elves.Length != 1 || _elves[0].ToV2i() != _destination)
 			{
-				_map = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.GetMapInTime(_time, _blizzards, _mapSize);
-				_elves = Ujeby.AoC.App.Year2022.Day24.BlizzardBasin.Step(_time, _blizzards, _elves, _mapSize, _destination, _mapUsage);
+				_map = Ujeby.AoC.App._2022_24.BlizzardBasin.GetMapInTime(_time, _blizzards, _mapSize);
+				_elves = Ujeby.AoC.App._2022_24.BlizzardBasin.Step(_time, _blizzards, _elves, _mapSize, _destination, _mapUsage);
 				_time++;
 			}
 			else
