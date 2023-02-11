@@ -1,53 +1,8 @@
 ﻿using Ujeby.AoC.Common;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_09
 {
-	// TODO remove!
-	public static class Directions
-	{
-		/// <summary>
-		/// 4 x,y directions (90deg)
-		/// </summary>
-		public readonly static Dictionary<char, int[]> NSWE = new()
-		{
-			{ 'W', new[] { -1, 0 } },
-			{ 'E', new[] { 1, 0 } },
-			{ 'S', new[] { 0, -1 } },
-			{ 'N', new[] { 0, 1 } },
-
-			//{ 'E', new[] { 1, 0 } },
-			//{ 'S', new[] { 0, -1 } },
-			//{ 'N', new[] { 0, 1 } },
-			//{ 'W', new[] { -1, 0 } },
-		};
-
-		/// <summary>
-		/// 8 x,y directions (45deg)
-		/// </summary>
-		public readonly static Dictionary<string, int[]> All = new()
-		{
-			{ "N", new[] { 0, 1 } },
-			{ "S", new[] { 0, -1 } },
-			{ "W", new[] { -1, 0 } },
-			{ "E", new[] { 1, 0 } },
-			{ "NW", new[] { -1, 1 } },
-			{ "NE", new[] { 1, 1 } },
-			{ "SW", new[] { -1, -1 } },
-			{ "SE", new[] { 1, -1 } },
-		};
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public readonly static Dictionary<char, char> OppositeNSWE = new()
-		{
-			{ 'W', 'E'},
-			{ 'E', 'W' },
-			{ 'S', 'N' },
-			{ 'N', 'S' },
-		};
-	}
-
 	internal class SmokeBasin : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -60,64 +15,61 @@ namespace Ujeby.AoC.App._2021_09
 			for (var y = 0; y < h; y++)
 				for (var x = 0; x < w; x++)
 				{
-					var p = input[y][x];
-					if ((p == '9') ||
-						(x > 0 && input[y][x - 1] < p) ||
-						(y > 0 && input[y - 1][x] < p) ||
-						(x < w - 1 && input[y][x + 1] < p) ||
-						(y < h - 1 && input[y + 1][x] < p))
+					var pInput = input[y][x];
+					if ((pInput == '9') ||
+						(x > 0 && input[y][x - 1] < pInput) ||
+						(y > 0 && input[y - 1][x] < pInput) ||
+						(x < w - 1 && input[y][x + 1] < pInput) ||
+						(y < h - 1 && input[y + 1][x] < pInput))
 						continue;
 
 					// basin
-					answer1 += (p - '0') + 1;
+					answer1 += (pInput - '0') + 1;
 				}
 
 			// part2
 			var basinSizes = new List<long>();
-			for (var y = 0; y < h; y++)
-				for (var x = 0; x < w; x++)
+			var p = new v2i();
+			for (p.Y = 0; p.Y < h; p.Y++)
+				for (p.X = 0; p.X < w; p.X++)
 				{
-					var p = input[y][x];
-					if ((p == '9') ||
-						(x > 0 && input[y][x - 1] < p) ||
-						(y > 0 && input[y - 1][x] < p) ||
-						(x < w - 1 && input[y][x + 1] < p) ||
-						(y < h - 1 && input[y + 1][x] < p))
+					var pInput = input[p.Y][(int)p.X];
+					if ((pInput == '9') ||
+						((int)p.X > 0 && input[p.Y][(int)p.X - 1] < pInput) ||
+						(p.Y > 0 && input[p.Y - 1][(int)p.X] < pInput) ||
+						((int)p.X < w - 1 && input[p.Y][(int)p.X + 1] < pInput) ||
+						(p.Y < h - 1 && input[p.Y + 1][(int)p.X] < pInput))
 						continue;
 
 					// basin
-					basinSizes.Add(BasinSize(input, x, y, 0, 0));
+					basinSizes.Add(BasinSize(input, p, new()));
 				}
 			long answer2 = 1;
 			foreach (var bs in basinSizes.OrderByDescending(s => s).Take(3))
 				answer2 *= bs;
 
-
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		private static int BasinSize(string[] map, int x, int y, int x0, int y0)
+		private static int BasinSize(string[] map, v2i p, v2i p0)
 		{
-			var xy = map[y][x];
+			var pMap = map[p.Y][(int)p.X];
 
 			// mark place x,y as visited
-			map[y] = $"{map[y].Substring(0, x)}X{map[y].Substring(x + 1)}";
+			map[p.Y] = $"{map[p.Y][..(int)p.X]}X{map[p.Y][((int)p.X + 1)..]}";
 
 			var size = 1;
-
-			foreach (var dir in Directions.NSWE.Values)
+			foreach (var dir in v2i.RightDownLeftUp)
 			{
-				if (dir[0] == x0 && dir[1] == y0)
+				if (dir == p0)
 					continue;
 
-				var x1 = x + dir[0];
-				var y1 = y + dir[1];
-
-				if (y1 < 0 || x1 < 0 || x1 >= map.First().Length || y1 >= map.Length ||
-					map[y1][x1] <= xy || map[y1][x1] == '9' || map[y1][x1] == 'X')
+				var p1 = p + dir;
+				if (p1.Y < 0 || p1.X < 0 || p1.X >= map.First().Length || p1.Y >= map.Length ||
+					map[p1.Y][(int)p1.X] <= pMap || map[p1.Y][(int)p1.X] == '9' || map[p1.Y][(int)p1.X] == 'X')
 					continue;
 
-				size += BasinSize(map, x1, y1, dir[0] * -1, dir[1] * -1);
+				size += BasinSize(map, p1, dir * -1);
 			}
 
 			return size;

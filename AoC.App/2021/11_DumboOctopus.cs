@@ -1,58 +1,25 @@
 ﻿using Ujeby.AoC.Common;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_11
 {
-	// TODO remove!
-	public static class Directions
-	{
-		/// <summary>
-		/// 4 x,y directions (90deg)
-		/// </summary>
-		public readonly static Dictionary<char, int[]> NSWE = new()
-		{
-			{ 'W', new[] { -1, 0 } },
-			{ 'E', new[] { 1, 0 } },
-			{ 'S', new[] { 0, -1 } },
-			{ 'N', new[] { 0, 1 } },
-
-			//{ 'E', new[] { 1, 0 } },
-			//{ 'S', new[] { 0, -1 } },
-			//{ 'N', new[] { 0, 1 } },
-			//{ 'W', new[] { -1, 0 } },
-		};
-
-		/// <summary>
-		/// 8 x,y directions (45deg)
-		/// </summary>
-		public readonly static Dictionary<string, int[]> All = new()
-		{
-			{ "N", new[] { 0, 1 } },
-			{ "S", new[] { 0, -1 } },
-			{ "W", new[] { -1, 0 } },
-			{ "E", new[] { 1, 0 } },
-			{ "NW", new[] { -1, 1 } },
-			{ "NE", new[] { 1, 1 } },
-			{ "SW", new[] { -1, -1 } },
-			{ "SE", new[] { 1, -1 } },
-		};
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public readonly static Dictionary<char, char> OppositeNSWE = new()
-		{
-			{ 'W', 'E'},
-			{ 'E', 'W' },
-			{ 'S', 'N' },
-			{ 'N', 'S' },
-		};
-	}
-
 	internal class DumboOctopus : PuzzleBase
 	{
+		private static v2i[] _dir;
+
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			var map = input.Select(l => l.Select(c => (byte)(c - '0')).ToArray()).ToArray();
+
+			_dir = new v2i[8];
+			for (int nIdx = 0, x = -1; x <= 1; x++)
+				for (int y = -1; y <= 1; y++)
+				{
+					if (x == 0 && y == 0)
+						continue;
+
+					_dir[nIdx++] = new(x, y);
+				}
 
 			// part1
 			long answer1 = 0;
@@ -63,10 +30,11 @@ namespace Ujeby.AoC.App._2021_11
 					for (var x = 0; x < input[0].Length; x++)
 						map[y][x]++;
 
-				for (var y = 0; y < input.Length; y++)
-					for (var x = 0; x < input[0].Length; x++)
-						if (map[y][x] > 9 && map[y][x] != 0xff)
-							answer1 += Flash(map, x, y, x, y);
+				var p = new v2i();
+				for (p.Y = 0; p.Y < input.Length; p.Y++)
+					for (p.X = 0; p.X < input[0].Length; p.X++)
+						if (map[p.Y][p.X] > 9 && map[p.Y][p.X] != 0xff)
+							answer1 += Flash(map, p, p);
 
 				//Ujeby.Graphics.VideoOutput.SaveMapToImage(map, i, "part1", _workingDir);
 
@@ -88,10 +56,11 @@ namespace Ujeby.AoC.App._2021_11
 					for (var x = 0; x < input[0].Length; x++)
 						map[y][x]++;
 
-				for (var y = 0; y < input.Length; y++)
-					for (var x = 0; x < input[0].Length; x++)
-						if (map[y][x] > 9 && map[y][x] != 0xff &&
-							Flash(map, x, y, x, y) == n)
+				var p = new v2i();
+				for (p.Y = 0; p.Y < input.Length; p.Y++)
+					for (p.X = 0; p.X < input[0].Length; p.X++)
+						if (map[p.Y][p.X] > 9 && map[p.Y][p.X] != 0xff &&
+							Flash(map, p, p) == n)
 						{
 							answer2 = i;
 							break;
@@ -114,34 +83,28 @@ namespace Ujeby.AoC.App._2021_11
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		private long Flash(byte[][] map, int x, int y, int x0, int y0)
+		private long Flash(byte[][] map, v2i p, v2i p0)
 		{
 			long flashes = 1;
-			map[y][x] = 0xff;
+			map[p.Y][(int)p.X] = 0xff;
 
-			foreach (var dir in Directions.All.Values)
+			foreach (var dir in _dir)
 			{
-				var x1 = x + dir[0];
-				var y1 = y + dir[1];
-
-				if ((x0 == x1 && y0 == y1) ||
-					x1 < 0 || y1 < 0 || x1 == map[0].Length || y1 == map.Length || map[y1][x1] == 0xff)
+				var p1 = p + dir;
+				if ((p0 == p1) || p1.X < 0 || p1.Y < 0 || p1.X == map[0].Length || p1.Y == map.Length || map[p1.Y][(int)p1.X] == 0xff)
 					continue;
 
-				map[y1][x1]++;
+				map[p1.Y][p1.X]++;
 			}
 
-			foreach (var dir in Directions.All.Values)
+			foreach (var dir in _dir)
 			{
-				var x1 = x + dir[0];
-				var y1 = y + dir[1];
-
-				if ((x0 == x1 && y0 == y1) ||
-					x1 < 0 || y1 < 0 || x1 == map[0].Length || y1 == map.Length || map[y1][x1] == 0xff)
+				var p1 = p + dir;
+				if ((p0 == p1) || p1.X < 0 || p1.Y < 0 || p1.X == map[0].Length || p1.Y == map.Length || map[p1.Y][p1.X] == 0xff)
 					continue;
 
-				if (map[y1][x1] > 9)
-					flashes += Flash(map, x1, y1, x, y);
+				if (map[p1.Y][p1.X] > 9)
+					flashes += Flash(map, p1, p);
 			}
 
 			return flashes;
