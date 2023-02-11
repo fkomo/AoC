@@ -96,7 +96,7 @@ namespace Ujeby.AoC.App
 					new _2020_06.CustomCustoms()			{ Answer = new string[] { "6297", "3158" } },
 					new _2020_07.HandyHaversacks()			{ Answer = new string[] { "128", "20189" } },
 					new _2020_08.HandheldHalting()			{ Answer = new string[] { "2034", "672" } },
-					new _2020_17.ConwayCubes()				{ Answer = new string[] { null, null } },
+					new _2020_17.ConwayCubes()				{ Answer = new string[] { "286", "960" } },
 				});
 #endif
 		}
