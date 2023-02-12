@@ -1,6 +1,6 @@
 ﻿using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App.YearYYYY.DayDD
+namespace Ujeby.AoC.App._YYYY_DD
 {
 	public class PUZZLETITLE : PuzzleBase
 	{
