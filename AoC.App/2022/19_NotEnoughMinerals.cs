@@ -5,6 +5,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_19
 {
+	[AoCPuzzle(Year = 2022, Day = 19, Answer1 = "1466", Answer2 = "8250")]
 	public class NotEnoughMinerals : PuzzleBase
 	{
 		internal class Blueprint

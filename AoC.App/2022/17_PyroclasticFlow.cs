@@ -3,6 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_17
 {
+	[AoCPuzzle(Year = 2022, Day = 17, Answer1 = "3202", Answer2 = "1591977077352")]
 	public class PyroclasticFlow : PuzzleBase
 	{
 		public const char Empty = '.';

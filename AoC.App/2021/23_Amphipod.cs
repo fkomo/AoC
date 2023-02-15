@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_23
 {
+	[AoCPuzzle(Year = 2021, Day = 23, Answer1 = "10607", Answer2 = "59071")]
 	public class Amphipod : PuzzleBase
 	{
 		private static readonly Dictionary<char, int> _amphipodeEnergy = new()

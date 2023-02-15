@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2022_03
 {
+	[AoCPuzzle(Year = 2022, Day = 03, Answer1 = "8394", Answer2 = "2413")]
 	internal class RucksackReorganization : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

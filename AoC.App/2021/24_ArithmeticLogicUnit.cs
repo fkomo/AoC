@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_24
 {
+	[AoCPuzzle(Year = 2021, Day = 24, Answer1 = "99196997985942", Answer2 = "84191521311611")]
 	public class ArithmeticLogicUnit : PuzzleBase
 	{
 		/// <summary>

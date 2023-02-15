@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2022_02
 {
+	[AoCPuzzle(Year = 2022, Day = 02, Answer1 = "13484", Answer2 = "13433")]
 	internal class RockPaperScissors : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

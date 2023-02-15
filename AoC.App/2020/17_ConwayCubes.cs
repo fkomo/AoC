@@ -3,10 +3,13 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2020_17
 {
+	[AoCPuzzle(Year = 2020, Day = 17, Answer1 = "286", Answer2 = "960")]
 	public class ConwayCubes : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
+			Debug.Line();
+
 			var activeCubes3d = new List<v3i>();
 			for (var y = 0; y < input.Length; y++)
 				for (var x = 0; x < input[0].Length; x++)

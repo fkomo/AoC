@@ -2,7 +2,8 @@
 
 namespace Ujeby.AoC.App._2021_06
 {
-	internal class Lanternfish : PuzzleBase
+	[AoCPuzzle(Year = 2021, Day = 06, Answer1 = "352151", Answer2 = "1601616884019")]
+	public class Lanternfish : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{

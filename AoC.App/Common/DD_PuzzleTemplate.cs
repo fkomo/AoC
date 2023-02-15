@@ -2,6 +2,9 @@
 
 namespace Ujeby.AoC.App._YYYY_DD
 {
+#if _TEMPLATE
+
+	[AoCPuzzle(Year = YYYY, Day = DD, Answer1 = null, Answer2 = null)]
 	public class PUZZLETITLE : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -17,4 +20,5 @@ namespace Ujeby.AoC.App._YYYY_DD
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 	}
+#endif
 }

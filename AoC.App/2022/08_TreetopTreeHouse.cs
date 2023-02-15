@@ -2,7 +2,8 @@
 
 namespace Ujeby.AoC.App._2022_08
 {
-	internal class TreetopTreeHouse : PuzzleBase
+	[AoCPuzzle(Year = 2022, Day = 08, Answer1 = "1782", Answer2 = "474606")]
+	public class TreetopTreeHouse : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{

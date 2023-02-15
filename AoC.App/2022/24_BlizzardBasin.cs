@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_24
 {
+	[AoCPuzzle(Year = 2022, Day = 24, Answer1 = "343", Answer2 = "960")]
 	public class BlizzardBasin : PuzzleBase
 	{
 		public class Blizzard

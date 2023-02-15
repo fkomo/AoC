@@ -2,9 +2,10 @@
 
 namespace Ujeby.AoC.App._2021_08
 {
+	[AoCPuzzle(Year = 2021, Day = 08, Answer1 = "247", Answer2 = "933305")]
 	internal class SevenSegmentSearch : PuzzleBase
 	{
-		private static Dictionary<string, int> _digits = new Dictionary<string, int>()
+		private static Dictionary<string, int> _digits = new()
 		{
 			{ "abcefg", 0 },
 			{ "cf", 1 },

@@ -2,6 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2020_08
 {
+	[AoCPuzzle(Year = 2020, Day = 08, Answer1 = "2034", Answer2 = "672")]
 	public class HandheldHalting : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

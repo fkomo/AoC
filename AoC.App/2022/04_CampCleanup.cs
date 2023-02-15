@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2022_04
 {
+	[AoCPuzzle(Year = 2022, Day = 04, Answer1 = "651", Answer2 = "956")]
 	internal class CampCleanup : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

@@ -3,9 +3,10 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_07
 {
-	internal class NoSpaceLeftOnDevice : PuzzleBase
+	[AoCPuzzle(Year = 2022, Day = 07, Answer1 = "1086293", Answer2 = "366028")]
+	public class NoSpaceLeftOnDevice : PuzzleBase
 	{
-		internal class DirEntry
+		public class DirEntry
 		{
 			public string Name { get; set; }
 

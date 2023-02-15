@@ -2,7 +2,8 @@
 
 namespace Ujeby.AoC.App._2021_02
 {
-    internal class Dive : PuzzleBase
+	[AoCPuzzle(Year = 2021, Day = 02, Answer1 = "1868935", Answer2 = "1965970888")]
+	public class Dive : PuzzleBase
     {
         protected override (string, string) SolvePuzzle(string[] input)
         {

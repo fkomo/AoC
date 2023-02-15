@@ -2,6 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_20
 {
+	[AoCPuzzle(Year = 2022, Day = 20, Answer1 = "2622", Answer2 = "1538773034088")]
 	public class GrovePositioningSystem : PuzzleBase
 	{
 		internal class Position

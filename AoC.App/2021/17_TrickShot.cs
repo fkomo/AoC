@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_17
 {
+	[AoCPuzzle(Year = 2021, Day = 17, Answer1 = "10011", Answer2 = "2994")]
 	public class TrickShot : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

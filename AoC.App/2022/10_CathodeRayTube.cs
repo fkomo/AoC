@@ -1,9 +1,9 @@
-﻿using Ujeby.AoC.App._2021_13;
-using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_10
 {
-    public class CathodeRayTube : PuzzleBase
+	[AoCPuzzle(Year = 2022, Day = 10, Answer1 = "14540", Answer2 = "EHZFZHCZ")]
+	public class CathodeRayTube : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{

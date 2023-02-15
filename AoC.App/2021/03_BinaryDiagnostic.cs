@@ -2,7 +2,8 @@
 
 namespace Ujeby.AoC.App._2021_03
 {
-	internal class BinaryDiagnostic : PuzzleBase
+	[AoCPuzzle(Year = 2021, Day = 03, Answer1 = "2250414", Answer2 = "6085575")]
+	public class BinaryDiagnostic : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{

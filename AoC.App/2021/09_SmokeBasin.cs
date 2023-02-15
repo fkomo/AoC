@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_09
 {
+	[AoCPuzzle(Year = 2021, Day = 09, Answer1 = "444", Answer2 = "1168440")]
 	internal class SmokeBasin : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

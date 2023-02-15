@@ -4,6 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_19
 {
+	[AoCPuzzle(Year = 2021, Day = 19, Answer1 = "483", Answer2 = "14804")]
 	public class BeaconScanner : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

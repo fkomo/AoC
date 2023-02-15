@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2021_07
 {
+	[AoCPuzzle(Year = 2021, Day = 07, Answer1 = "355150", Answer2 = "98368490")]
 	internal class TheTreacheryOfWhales : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

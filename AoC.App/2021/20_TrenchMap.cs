@@ -4,6 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_20
 {
+	[AoCPuzzle(Year = 2021, Day = 20, Answer1 = "5571", Answer2 = "17965")]
 	public class TrenchMap : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

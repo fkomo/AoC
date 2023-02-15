@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2022_11
 {
+	[AoCPuzzle(Year = 2022, Day = 11, Answer1 = "62491", Answer2 = "17408399184")]
 	public class MonkeyInTheMiddle : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

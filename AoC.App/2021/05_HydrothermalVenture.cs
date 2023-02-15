@@ -4,7 +4,8 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_05
 {
-	internal class HydrothermalVenture : PuzzleBase
+	[AoCPuzzle(Year = 2021, Day = 05, Answer1 = "7085", Answer2 = "20271")]
+	public class HydrothermalVenture : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{

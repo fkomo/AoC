@@ -3,6 +3,7 @@ using Ujeby.Tools;
 
 namespace Ujeby.AoC.App._2020_06
 {
+	[AoCPuzzle(Year = 2020, Day = 06, Answer1 = "6297", Answer2 = "3158")]
 	public class CustomCustoms : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

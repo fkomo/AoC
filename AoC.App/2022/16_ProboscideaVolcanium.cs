@@ -4,19 +4,29 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_16
 {
-	public class Valve
-	{
-		public int Idx;
-		public string Name;
-		public int FlowRate;
-		public Valve[] Valves;
-	}
-
 	/// <summary>
 	/// inspired by https://observablehq.com/@a791ad12e8a3e3b4/advent-of-code-2022-day-16
 	/// </summary>
+	[AoCPuzzle(Year = 2022, Day = 16, Answer1 = "2029", Answer2 = "2723")]
 	public class ProboscideaVolcanium : PuzzleBase
 	{
+		public class Valve
+		{
+			public string Name { get; set; }
+			public int FlowRate { get; set; }
+			public Valve[] Valves { get; set; }
+			public int Idx { get; set; }
+
+			public Valve(string name, int flowRate,
+				Valve[] valves = null, int idx = -1)
+			{
+				Name = name;
+				FlowRate = flowRate;
+				Valves = valves;
+				Idx = idx;
+			}
+		}
+
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
 			Debug.Line();
@@ -82,11 +92,8 @@ namespace Ujeby.AoC.App._2022_16
 		private static Dictionary<string, Valve> ParseValves(string[] input)
 		{
 			var valves = input.Select(v =>
-				new Valve
-				{
-					Name = v.Substring("Valve ".Length, 2),
-					FlowRate = int.Parse(v["Valve AA has flow rate=".Length..].Split(';')[0]),
-				}).ToDictionary(v => v.Name, v => v);
+				new Valve(v.Substring("Valve ".Length, 2), int.Parse(v["Valve AA has flow rate=".Length..].Split(';')[0]))
+				).ToDictionary(v => v.Name, v => v);
 
 			for (var idx = 0; idx < input.Length; idx++)
 			{

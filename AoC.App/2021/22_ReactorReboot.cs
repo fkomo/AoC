@@ -5,6 +5,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_22
 {
+	[AoCPuzzle(Year = 2021, Day = 22, Answer1 = "591365", Answer2 = "1211172281877240")]
 	public class ReactorReboot : PuzzleBase
 	{
 		internal record struct Cuboid(bool State, AABox3i AABox)

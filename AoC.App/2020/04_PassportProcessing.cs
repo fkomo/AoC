@@ -3,6 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2020_04
 {
+	[AoCPuzzle(Year = 2020, Day = 04, Answer1 = "245", Answer2 = "133")]
 	public class PassportProcessing : PuzzleBase
 	{
 		private static string[] _reqFields = new string[]

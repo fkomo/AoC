@@ -3,6 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2021_16
 {
+	[AoCPuzzle(Year = 2021, Day = 16, Answer1 = "945", Answer2 = "10637009915279")]
 	internal class PacketDecoder : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

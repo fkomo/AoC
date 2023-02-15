@@ -2,6 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2020_01
 {
+	[AoCPuzzle(Year = 2020, Day = 01, Answer1 = "927684", Answer2 = "292093004")]
 	public class ReportRepair : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

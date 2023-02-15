@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_09
 {
+	[AoCPuzzle(Year = 2022, Day = 09, Answer1 = "5619", Answer2 = "2376")]
 	public class RopeBridge : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

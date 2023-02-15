@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2020_09
 {
+	[AoCPuzzle(Year = 2020, Day = 09, Answer1 = "1038347917", Answer2 = "137394018")]
 	public class EncodingError : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

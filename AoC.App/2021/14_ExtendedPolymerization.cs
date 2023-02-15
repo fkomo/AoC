@@ -4,6 +4,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2021_14
 {
+	[AoCPuzzle(Year = 2021, Day = 14, Answer1 = "2657", Answer2 = "2911561572630")]
 	internal class ExtendedPolymerization : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

@@ -7,8 +7,8 @@
 		public string Title { get; }
 
 		/// <summary></summary>
-		/// <param name="input"></param>
+		/// <param name="inputStorage"></param>
 		/// <returns>number of right answers / stars</returns>
-		int Solve(string input);
+		int Solve(string inputStorage);
 	}
 }

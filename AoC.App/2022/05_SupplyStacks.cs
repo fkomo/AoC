@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2022_05
 {
+	[AoCPuzzle(Year = 2022, Day = 05, Answer1 = "TLFGBZHCN", Answer2 = "QRQFHFWCL")]
 	internal class SupplyStacks : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

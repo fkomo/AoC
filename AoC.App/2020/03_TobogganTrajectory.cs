@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2020_03
 {
+	[AoCPuzzle(Year = 2020, Day = 03, Answer1 = "223", Answer2 = "3517401300")]
 	public class TobogganTrajectory : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

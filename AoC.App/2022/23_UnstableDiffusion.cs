@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_23
 {
+	[AoCPuzzle(Year = 2022, Day = 23, Answer1 = "3920", Answer2 = "889")]
 	public class UnstableDiffusion : PuzzleBase
 	{
 		public class Elf

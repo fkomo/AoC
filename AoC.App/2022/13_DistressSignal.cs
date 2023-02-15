@@ -3,6 +3,7 @@ using Ujeby.Tools;
 
 namespace Ujeby.AoC.App._2022_13
 {
+	[AoCPuzzle(Year = 2022, Day = 13, Answer1 = "5682", Answer2 = "20304")]
 	public class DistressSignal : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

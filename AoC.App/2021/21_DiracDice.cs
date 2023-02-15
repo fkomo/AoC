@@ -4,6 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_21
 {
+	[AoCPuzzle(Year = 2021, Day = 21, Answer1 = "1196172", Answer2 = "106768284484217")]
 	public class DiracDice : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

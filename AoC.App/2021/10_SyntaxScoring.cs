@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2021_10
 {
+	[AoCPuzzle(Year = 2021, Day = 10, Answer1 = "369105", Answer2 = "3999363569")]
 	internal class SyntaxScoring : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

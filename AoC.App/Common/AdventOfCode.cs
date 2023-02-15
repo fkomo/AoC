@@ -1,42 +1,58 @@
-﻿namespace Ujeby.AoC.Common
+﻿using System.Reflection;
+
+namespace Ujeby.AoC.Common
 {
 	public class AdventOfCode
 	{
-		public readonly int Year;
-		public readonly string Session;
-		public readonly string InputFilesBase;
-
-		private readonly string _title;
+		public const int ConsoleWidth = 99;
 
 		private const string _aocUrl = "https://adventofcode.com";
 
 		private readonly static HttpClient _httpClient = new();
 
-		public AdventOfCode(int year, 
-			string session = null, string inputFilesBase = null)
+		public static void RunAll(
+			string session = null, string inputStorage = null)
 		{
-			_title = $"{_aocUrl}/{year}";
-			Year = year;
-			InputFilesBase = inputFilesBase ?? Environment.CurrentDirectory;
-
-			Session = session;
-			var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
-			if (File.Exists(sessionFilename))
-				Session = File.ReadAllText(sessionFilename);
-
-			if (!string.IsNullOrEmpty(Session))
+			foreach (var aocYear in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())
+				.Where(t => Attribute.IsDefined(t, typeof(AoCPuzzleAttribute)))
+				.OrderBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Day)
+				.GroupBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Year))
 			{
-				_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={Session};");
-				DownloadMissingInput(InputFilesBase, year);
+#if !_2020
+				if (aocYear.Key == 2020)
+					continue;
+#endif
+#if !_2021
+				if (aocYear.Key == 2021)
+					continue;
+#endif
+#if !_2022
+				if (aocYear.Key == 2022)
+					continue;
+#endif
+
+				Run(aocYear.Key,
+					session,
+					inputStorage ?? Environment.CurrentDirectory,
+					aocYear.Select(p => (IPuzzle)Activator.CreateInstance(p)).ToArray());
 			}
 		}
 
-		public const int ConsoleWidth = 99;
-
-		public void Run(IPuzzle[] problemsToSolve)
+		public static void Run(int year, string session, string inputStorage,
+			params IPuzzle[] problemsToSolve)
 		{
+			var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
+			if (File.Exists(sessionFilename))
+				session = File.ReadAllText(sessionFilename);
+
+			if (!string.IsNullOrEmpty(session) && !string.IsNullOrEmpty(inputStorage))
+			{
+				_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
+				DownloadMissingInput(inputStorage, year);
+			}
+
 			Log.Line();
-			Log.ChristmasHeader(_title,
+			Log.ChristmasHeader($"{_aocUrl}/{year}",
 				length: ConsoleWidth);
 			Log.Line();
 
@@ -47,7 +63,7 @@
 				Debug.Indent += 0;
 
 				foreach (var problem in problemsToSolve)
-					stars += problem.Solve(InputFilesBase);
+					stars += problem.Solve(inputStorage);
 			}
 			catch (Exception ex)
 			{
@@ -65,14 +81,14 @@
 			}
 		}
 
-		private static void DownloadMissingInput(string outputDir, int year)
+		private static void DownloadMissingInput(string inputStorage, int year)
 		{
 			try
 			{
 				Log.Indent += 2;
 
 				for (var day = 1; day <= 25; day++)
-					DownloadInput(year, day, outputDir)
+					DownloadInput(year, day, inputStorage)
 						.Wait();
 			}
 			catch (Exception ex)
@@ -85,12 +101,12 @@
 			}
 		}
 
-		private async static Task<bool> DownloadInput(int year, int day, string desinationDir)
+		private async static Task<bool> DownloadInput(int year, int day, string inputStorage)
 		{
 			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
 				return false;
 
-			var path = Path.Combine(desinationDir ?? Environment.CurrentDirectory, year.ToString());
+			var path = Path.Combine(inputStorage, year.ToString());
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 

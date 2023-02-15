@@ -4,6 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_22
 {
+	[AoCPuzzle(Year = 2022, Day = 22, Answer1 = "27492", Answer2 = "78291")]
 	public class MonkeyMap : PuzzleBase
 	{
 		private static Dictionary<long, v2i> _facingToDirection = new()

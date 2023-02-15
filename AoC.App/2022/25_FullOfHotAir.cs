@@ -2,6 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_25
 {
+	[AoCPuzzle(Year = 2022, Day = 25, Answer1 = "121=2=1==0=10=2-20=2", Answer2 = "*")]
 	public class FullOfHotAir : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

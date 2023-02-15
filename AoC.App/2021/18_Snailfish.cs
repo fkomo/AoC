@@ -3,6 +3,7 @@ using Ujeby.Tools;
 
 namespace Ujeby.AoC.App._2021_18
 {
+	[AoCPuzzle(Year = 2021, Day = 18, Answer1 = "4641", Answer2 = "4624")]
 	public class Snailfish : PuzzleBase
 	{
 		public class SnailfishNum

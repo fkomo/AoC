@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_11
 {
+	[AoCPuzzle(Year = 2021, Day = 11, Answer1 = "1741", Answer2 = "440")]
 	internal class DumboOctopus : PuzzleBase
 	{
 		private static v2i[] _dir;

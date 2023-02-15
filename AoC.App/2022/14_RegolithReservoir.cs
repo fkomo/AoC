@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_14
 {
+	[AoCPuzzle(Year = 2022, Day = 14, Answer1 = "774", Answer2 = "22499")]
 	public class RegolithReservoir : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

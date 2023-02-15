@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_12
 {
+	[AoCPuzzle(Year = 2022, Day = 12, Answer1 = "497", Answer2 = "492")]
 	public class HillClimbingAlgorithm : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

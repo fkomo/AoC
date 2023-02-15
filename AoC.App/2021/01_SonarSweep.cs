@@ -2,7 +2,8 @@
 
 namespace Ujeby.AoC.App._2021_01
 {
-    internal class SonarSweep : PuzzleBase
+	[AoCPuzzle(Year = 2021, Day = 01, Answer1 = "1226", Answer2 = "1252")]
+	public class SonarSweep : PuzzleBase
     {
         protected override (string, string) SolvePuzzle(string[] input)
         {

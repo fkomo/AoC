@@ -2,6 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_21
 {
+	[AoCPuzzle(Year = 2022, Day = 21, Answer1 = "43699799094202", Answer2 = "3375719472770")]
 	public class MonkeyMath : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

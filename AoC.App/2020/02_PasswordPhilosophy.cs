@@ -2,7 +2,8 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2020_02
 {
-    public class PasswordPhilosophy : PuzzleBase
+	[AoCPuzzle(Year = 2020, Day = 02, Answer1 = "474", Answer2 = "745")]
+	public class PasswordPhilosophy : PuzzleBase
     {
         protected override (string, string) SolvePuzzle(string[] input)
         {

@@ -2,7 +2,8 @@
 
 namespace Ujeby.AoC.App._2021_13
 {
-    internal class TransparentOrigami : PuzzleBase
+	[AoCPuzzle(Year = 2021, Day = 13, Answer1 = "751", Answer2 = "PGHRKLKL")]
+	internal class TransparentOrigami : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{

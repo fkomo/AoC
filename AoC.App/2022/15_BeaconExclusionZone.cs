@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_15
 {
+	[AoCPuzzle(Year = 2022, Day = 15, Answer1 = "5166077", Answer2 = "13071206703981")]
 	public class BeaconExclusionZone : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

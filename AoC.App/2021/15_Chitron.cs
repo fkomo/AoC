@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_15
 {
+	[AoCPuzzle(Year = 2021, Day = 15, Answer1 = "811", Answer2 = "3012")]
 	public class Chitron : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

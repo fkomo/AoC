@@ -2,6 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2020_07
 {
+	[AoCPuzzle(Year = 2020, Day = 07, Answer1 = "128", Answer2 = "20189")]
 	public class HandyHaversacks : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

@@ -3,6 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_25
 {
+	[AoCPuzzle(Year = 2021, Day = 25, Answer1 = "530", Answer2 = "*")]
 	public class SeaCucumber : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

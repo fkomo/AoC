@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2022_01
 {
+	[AoCPuzzle(Year = 2022, Day = 01, Answer1 = "66306", Answer2 = "195292")]
 	internal class CalorieCounting : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

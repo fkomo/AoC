@@ -2,6 +2,7 @@
 
 namespace Ujeby.AoC.App._2021_12
 {
+	[AoCPuzzle(Year = 2021, Day = 12, Answer1 = "4792", Answer2 = "133360")]
 	internal class PassagePathing : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)

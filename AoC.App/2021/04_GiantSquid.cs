@@ -2,7 +2,8 @@
 
 namespace Ujeby.AoC.App._2021_04
 {
-	internal class GiantSquid : PuzzleBase
+	[AoCPuzzle(Year = 2021, Day = 04, Answer1 = "10680", Answer2 = "31892")]
+	public class GiantSquid : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
 		{

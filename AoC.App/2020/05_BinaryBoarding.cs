@@ -2,6 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2020_05
 {
+	[AoCPuzzle(Year = 2020, Day = 05, Answer1 = "826", Answer2 = "678")]
 	public class BinaryBoarding : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
