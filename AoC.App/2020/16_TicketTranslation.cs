@@ -3,7 +3,7 @@ using Ujeby.Tools;
 
 namespace Ujeby.AoC.App._2020_16
 {
-	[AoCPuzzle(Year = 2020, Day = 16, Answer1 = "20013", Answer2 = null)]
+	[AoCPuzzle(Year = 2020, Day = 16, Answer1 = "20013", Answer2 = "5977293343129")]
 	public class TicketTranslation : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -24,9 +24,26 @@ namespace Ujeby.AoC.App._2020_16
 			var validTickets = tickets.Where(t => ValidTicket(t, validations, out _)).ToList();
 			validTickets.Add(myTicket);
 
-			//var valueOrder = CheckField(Array.Empty<int>(), validations, validTickets.ToArray());
-			//long? answer2 = valueOrder.Take(6).Select(v => myTicket[v]).Aggregate((a, b) => a * b);
-			long? answer2 = null;
+			// dont need whole tickets any more, just columns of ticket values
+			var columns = Enumerable.Range(0, validations.Length)
+				.Select(iCol => validTickets.Select(t => t[iCol]).ToArray()).ToArray();
+
+			// precompute all possible validations for each column
+			var columnValidations = new int[columns.Length][];
+			for (var iCol = 0; iCol < columns.Length; iCol++)
+			{
+				var matchingValidations = new List<int>();
+				for (var iVal = 0; iVal < validations.Length; iVal++)
+					if (columns[iCol].All(v => Validate(v, validations[iVal])))
+						matchingValidations.Add(iVal);
+
+				columnValidations[iCol] = matchingValidations.ToArray();
+			}
+
+			var order = Enumerable.Range(0, columns.Length).Select(x => -1).ToArray();
+			order = FindValueOrderRecursive(0, order, columnValidations.ToArray());
+			long? answer2 = Enumerable.Range(0, 6).Select(x => Array.IndexOf(order, x))
+				.Select(v => myTicket[v]).Aggregate((a, b) => a * b);
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
@@ -52,23 +69,19 @@ namespace Ujeby.AoC.App._2020_16
 			return true;
 		}
 
-		private int[] CheckField(int[] valueOrder, long[][] validations, long[][] tickets)
+		private int[] FindValueOrderRecursive(int i, int[] order, int[][] columnValidations)
 		{
-			if (valueOrder.Length == tickets[0].Length)
-				return valueOrder;
+			if (i == columnValidations.Length)
+				return order;
 
-			var vIdx = valueOrder.Length;
-			var validation = validations[vIdx];
-			for (var v = 0; v < tickets[0].Length; v++)
+			for (var iColVal = 0; iColVal < columnValidations[i].Length; iColVal++)
 			{
-				if (valueOrder.Contains(v))
+				var iVal = columnValidations[i][iColVal];
+				if (order.Contains(iVal))
 					continue;
 
-				var values = tickets.Select(x => x[v]).ToArray();
-				if (values.Any(x => !Validate(x, validation)))
-					continue;
-
-				var result = CheckField(valueOrder.Concat(new[] { v }).ToArray(), validations, tickets);
+				order[i] = iVal;
+				var result = FindValueOrderRecursive(i + 1, order.ToArray(), columnValidations);
 				if (result != null)
 					return result;
 			}

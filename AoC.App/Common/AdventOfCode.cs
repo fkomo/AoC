@@ -18,16 +18,36 @@ namespace Ujeby.AoC.Common
 				.OrderBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Day)
 				.GroupBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Year))
 			{
-#if !_2020
-				if (aocYear.Key == 2020)
+#if !_2022
+				if (aocYear.Key == 2022)
 					continue;
 #endif
 #if !_2021
 				if (aocYear.Key == 2021)
 					continue;
 #endif
-#if !_2022
-				if (aocYear.Key == 2022)
+#if !_2020
+				if (aocYear.Key == 2020)
+					continue;
+#endif
+#if !_2019
+				if (aocYear.Key == 2019)
+					continue;
+#endif
+#if !_2018
+				if (aocYear.Key == 2018)
+					continue;
+#endif
+#if !_2017
+				if (aocYear.Key == 2017)
+					continue;
+#endif
+#if !_2016
+				if (aocYear.Key == 2016)
+					continue;
+#endif
+#if !_2015
+				if (aocYear.Key == 2015)
 					continue;
 #endif
 
@@ -199,7 +219,7 @@ namespace Ujeby.AoC.Common
 			}
 		}
 
-		public async static Task<bool> SendAnswer(int year, int day, int part, string answer)
+		private async static Task<bool> SendAnswer(int year, int day, int part, string answer)
 		{
 			var url = $"{_aocUrl}/{year}/day/{day}/answer";
 
