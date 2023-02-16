@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Common;
+﻿using Ujeby.Alg;
+using Ujeby.AoC.Common;
 using Ujeby.Tools.StringExtensions;
 
 namespace Ujeby.AoC.App._2020_18
@@ -16,47 +17,29 @@ namespace Ujeby.AoC.App._2020_18
 			answer1 = compressedInput.Sum(line => EvalLeftToRight(line)).ToString();
 
 			// part2
-			answer2 = compressedInput.Sum(line => EvalLeftToRight(AddBeforeMul(line))).ToString();
+			// nest all additions in brackets and eval left to right
+			answer2 = compressedInput.Sum(line => EvalLeftToRight(AdditionsInBrackets(line))).ToString();
 
 			return (answer1, answer2);
 		}
 
-		private static string AddBeforeMul(string expression)
+		private static string AdditionsInBrackets(string expression)
 		{
 			for (var i = 0; i < expression.Length; i++)
 			{
 				if (expression[i] == '+')
 				{
-					// left bracket
-					if (char.IsDigit(expression[i - 1]))
-					{
-						if (i == 1)
-							expression = "(" + expression;
-						else
-							expression = expression[0..(i - 1)] + "(" + expression[(i - 1)..];
-						i++;
-					}
-					else// if (expression[i - 1] == ')')
-					{
-						var iStart = expression.IndexOfOpeningBracket(i - 1);
-						if (iStart == 0)
-							expression = "(" + expression;
-						else
-							expression = expression[0..iStart] + "(" + expression[iStart..];
-						i++;
-					}
+					// add left bracket
+					var left = char.IsDigit(expression[i - 1]) ? i - 1 : expression.IndexOfOpeningBracket(i - 1);
+					expression = expression[0..left] + "(" + expression[left..];
+					
+					i++;
 
-					// right bracket
-					if (char.IsDigit(expression[i + 1]))
-						expression = expression[0..(i + 2)] + ")" + expression[(i + 2)..];
-					else// if (expression[i + 1] == '(')
-					{
-						var iEnd = expression.IndexOfClosingBracket(i + 1);
-						expression = expression[0..(iEnd + 1)] + ")" + expression[(iEnd + 1)..];
-					}
+					// add right bracket
+					var right = char.IsDigit(expression[i + 1]) ? i + 2 : expression.IndexOfClosingBracket(i + 1) + 1;
+					expression = expression[0..right] + ")" + expression[right..];
 				}
 			}
-
 
 			return expression;
 		}
