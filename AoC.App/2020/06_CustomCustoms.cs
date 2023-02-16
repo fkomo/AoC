@@ -1,5 +1,5 @@
 using Ujeby.AoC.Common;
-using Ujeby.Tools;
+using Ujeby.Tools.ArrayExtensions;
 
 namespace Ujeby.AoC.App._2020_06
 {

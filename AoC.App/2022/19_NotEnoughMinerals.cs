@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using Ujeby.AoC.Common;
-using Ujeby.Tools;
+using Ujeby.Tools.StringExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_19
