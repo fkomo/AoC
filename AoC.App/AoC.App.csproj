@@ -7,11 +7,11 @@
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<!--<Nullable>enable</Nullable>-->
-		<Configurations>Debug;Release;Debug.Sample;Release_2022;Release_2021;Release_2020;Debug_2022;Debug_2021;Debug_2020;Debug.Sample_2020;Debug.Sample_2021;Debug.Sample_2022</Configurations>
+		<Configurations>Debug;Release;Debug.Sample;Release_2022;Release_2021;Release_2020;Release_2019;Release_2018;Release_2017;Release_2016;Release_2015;Debug_2022;Debug_2021;Debug_2020;Debug_2019;Debug_2018;Debug_2017;Debug_2016;Debug_2015;Debug.Sample_2022;Debug.Sample_2021;Debug.Sample_2020;Debug.Sample_2019;Debug.Sample_2018;Debug.Sample_2017;Debug.Sample_2016;Debug.Sample_2015</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2020;_2021;_2022;</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,44 +23,88 @@
 		<Optimize>False</Optimize>
 	</PropertyGroup>
 
-
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2015|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2015</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2016|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2016</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2017|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2017</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2018|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2018</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2019|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2019</DefineConstants>
+	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2020|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2020</DefineConstants>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2021|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2021</DefineConstants>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2022|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2022</DefineConstants>
 	</PropertyGroup>
 
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2015|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2015</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2016|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2016</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2017|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2017</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2018|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2018</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2019|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2019</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2020|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2020</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2021|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2021</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2022|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2022</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
 
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2015|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2015</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2016|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2016</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2017|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2017</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2018|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2018</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2019|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2019</DefineConstants>
+	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2020|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2020</DefineConstants>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2021|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2021</DefineConstants>
 	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2022|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2022</DefineConstants>
 	</PropertyGroup>
