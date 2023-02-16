@@ -42,7 +42,8 @@ namespace Ujeby.AoC.App._2020_16
 
 			var order = Enumerable.Range(0, columns.Length).Select(x => -1).ToArray();
 			order = FindValueOrderRecursive(0, order, columnValidations.ToArray());
-			long? answer2 = Enumerable.Range(0, 6).Select(x => Array.IndexOf(order, x))
+
+			long? answer2 = Enumerable.Range(0, Math.Clamp(6, 0, validations.Length)).Select(x => Array.IndexOf(order, x))
 				.Select(v => myTicket[v]).Aggregate((a, b) => a * b);
 
 			return (answer1?.ToString(), answer2?.ToString());
