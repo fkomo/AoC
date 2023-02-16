@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # advent of code session
 .session
+/AoC.App/appsettings.json
+/AoC.Vis.App/appsettings.json

@@ -9,14 +9,14 @@ namespace Ujeby.AoC.App
 		{
 			var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
 
-			var input = config["aoc:input"];
 			var session = string.Empty;
 			if (File.Exists(config["aoc:session"]))
 				session = File.ReadAllText(config["aoc:session"]);
 
 			AdventOfCode.RunAll(
 				session: session, 
-				inputStorage: input);
+				inputStorage: config["aoc:input"],
+				code: config["aoc:code"]);
 		}
 	}
 }

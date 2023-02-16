@@ -22,7 +22,7 @@
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
-	
+
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2020|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2020</DefineConstants>
@@ -78,27 +78,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove=".session" />
+	</ItemGroup>
 
-		<Content Include="Year*\**\input*">
+	<ItemGroup>
+		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove=".session" />
-		<None Remove="appsettings.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="appsettings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Update="Common\DD_PuzzleTemplate.cs">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Compile>
+		<Compile Remove="Common\Template\DD_PUZZLETITLE.cs" />
+		<None Include="Common\Template\DD_PUZZLETITLE.cs">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
