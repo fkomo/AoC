@@ -9,12 +9,17 @@ namespace Ujeby.AoC.App
 		{
 			var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
 
-			var session = string.Empty;
-			if (File.Exists(config["aoc:session"]))
-				session = File.ReadAllText(config["aoc:session"]);
+			// download inputs first
+			if (!string.IsNullOrEmpty(config["aoc:input"]) && File.Exists(config["aoc:session"]))
+			{
+				var session = File.ReadAllText(config["aoc:session"]);
+				AdventOfCode.SetAoCSession(session);
+				
+				for (var year = 2015; year <= DateTime.Now.Year; year++)
+					AdventOfCode.DownloadMissingInput(config["aoc:input"], year);
+			}
 
 			AdventOfCode.RunAll(
-				session: session, 
 				inputStorage: config["aoc:input"],
 				code: config["aoc:code"]);
 		}

@@ -13,12 +13,15 @@ namespace Ujeby.AoC.Common
 
 		private readonly static HttpClient _httpClient = new();
 
-		public static void RunAll(
-			string session = null, string inputStorage = null, string code = null)
+		public static void SetAoCSession(string session)
 		{
-			var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
-			if (File.Exists(sessionFilename))
-				session = File.ReadAllText(sessionFilename);
+			_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
+		}
+
+		public static void RunAll(
+			string inputStorage = null, string code = null)
+		{
+			inputStorage ??= Environment.CurrentDirectory;
 
 			foreach (var aocYear in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())
 				.Where(t => Attribute.IsDefined(t, typeof(AoCPuzzleAttribute)))
@@ -57,19 +60,12 @@ namespace Ujeby.AoC.Common
 				if (aocYear.Key == 2015)
 					continue;
 #endif
-
-				if (!string.IsNullOrEmpty(session) && !string.IsNullOrEmpty(inputStorage))
-				{
-					_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
-					DownloadMissingInput(inputStorage, aocYear.Key);
-				}
-
 #if _DEBUG
 				if (!string.IsNullOrEmpty(code))
 					GeneratePuzzleCode(code, aocYear.Key);
 #endif
 				Run(aocYear.Key,
-					inputStorage ?? Environment.CurrentDirectory,
+					inputStorage,
 					aocYear.Select(p => (IPuzzle)Activator.CreateInstance(p)).ToArray());
 			}
 		}
@@ -110,6 +106,9 @@ namespace Ujeby.AoC.Common
 		{
 			try
 			{
+				if (string.IsNullOrEmpty(inputStorage))
+					throw new Exception($"Inpust storage not set!");
+
 				Log.Indent += 2;
 
 				for (var day = 1; day <= 25; day++)

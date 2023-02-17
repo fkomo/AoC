@@ -7,14 +7,13 @@ namespace Ujeby.AoC.App._2015_01
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
-			string answer1 = null, answer2 = null;
-
 			var instructions = input.Single();
 
 			// part1
-			answer1 = (instructions.Count(i => i == '(') - instructions.Count(i => i == ')')).ToString();
+			var answer1 = (instructions.Count(i => i == '(') - instructions.Count(i => i == ')')).ToString();
 
 			// part2
+			string answer2 = null;
 			for (int floor = 0, i = 0; i < instructions.Length; i++)
 			{
 				floor += instructions[i] == '(' ? 1 : -1;

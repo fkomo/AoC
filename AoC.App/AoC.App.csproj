@@ -15,11 +15,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
 
