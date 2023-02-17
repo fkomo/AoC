@@ -1,6 +1,6 @@
-﻿using System.Globalization;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using Ujeby.Tools.ArrayExtensions;
+using Ujeby.Tools.StringExtensions;
 
 namespace Ujeby.AoC.Common
 {
@@ -12,18 +12,29 @@ namespace Ujeby.AoC.Common
 		private const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
 
 		private readonly static HttpClient _httpClient = new();
+		private static bool _aocSessionSet = false;
 
 		public static void SetAoCSession(string session)
 		{
+			if (string.IsNullOrEmpty(session))
+				return;
+
 			_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
+			_aocSessionSet = true;
 		}
 
 		public static void RunAll(
-			string inputStorage = null, string code = null)
+			string inputStorage = null)
 		{
-			inputStorage ??= Environment.CurrentDirectory;
+			if (string.IsNullOrEmpty(inputStorage))
+			{
+				inputStorage = Environment.CurrentDirectory;
+				Log.Line($"Using input storage '{inputStorage}'");
+			}
 
-			foreach (var aocYear in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())
+			foreach (var aocYear in AppDomain.CurrentDomain.GetAssemblies()
+				.Where(a => a.FullName.StartsWith("Ujeby.AoC."))
+				.SelectMany(a => a.GetTypes())
 				.Where(t => Attribute.IsDefined(t, typeof(AoCPuzzleAttribute)))
 				.OrderBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Day)
 				.GroupBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Year))
@@ -60,17 +71,15 @@ namespace Ujeby.AoC.Common
 				if (aocYear.Key == 2015)
 					continue;
 #endif
-#if _DEBUG
-				if (!string.IsNullOrEmpty(code))
-					GeneratePuzzleCode(code, aocYear.Key);
-#endif
 				Run(aocYear.Key,
 					inputStorage,
-					aocYear.Select(p => (IPuzzle)Activator.CreateInstance(p)).ToArray());
+					aocYear.Select(p => (IPuzzle)Activator.CreateInstance(p))
+					.ToArray());
 			}
 		}
 
-		public static void Run(int year, string inputStorage, params IPuzzle[] problemsToSolve)
+		public static void Run(int year, string inputStorage, 
+			params IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
 			Log.ChristmasHeader($"{_aocUrl}/{year}",
@@ -106,10 +115,13 @@ namespace Ujeby.AoC.Common
 		{
 			try
 			{
-				if (string.IsNullOrEmpty(inputStorage))
-					throw new Exception($"Inpust storage not set!");
-
 				Log.Indent += 2;
+
+				if (string.IsNullOrEmpty(inputStorage))
+					throw new ArgumentNullException(nameof(inputStorage), $"Input storage not set!");
+
+				if (!_aocSessionSet)
+					throw new Exception($"AoC session not set!");
 
 				for (var day = 1; day <= 25; day++)
 					DownloadInput(inputStorage, year, day)
@@ -131,8 +143,15 @@ namespace Ujeby.AoC.Common
 			{
 				Log.Indent += 2;
 
+				if (string.IsNullOrEmpty(codePath))
+					throw new Exception($"Path to code ({nameof(codePath)}) not set!");
+
+				if (!_aocSessionSet)
+					throw new Exception($"AoC session not set!");
+
 				for (var day = 1; day <= 25; day++)
-					GeneratePuzzleCodeTemplate(codePath, year, day);
+					GeneratePuzzleCodeTemplate(codePath, year, day)
+						.Wait();
 			}
 			catch (Exception ex)
 			{
@@ -166,7 +185,7 @@ namespace Ujeby.AoC.Common
 				{
 					var input = await response.Content.ReadAsStringAsync();
 
-					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
+					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.White);
 
 					File.WriteAllText(inputPath, input);
 
@@ -184,8 +203,11 @@ namespace Ujeby.AoC.Common
 			return true;
 		}
 
-		private static void GeneratePuzzleCodeTemplate(string codePath, int year, int day)
+		private async static Task GeneratePuzzleCodeTemplate(string codePath, int year, int day)
 		{
+			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
+				return;
+
 			var path = Path.Combine(codePath, year.ToString());
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
@@ -193,6 +215,32 @@ namespace Ujeby.AoC.Common
 			if (!Directory.EnumerateFiles(path, $"{day:d2}_*.cs").Any())
 			{
 				var puzzleTitle = $"ToDo";
+
+				var puzzleUrl = $"{_aocUrl}/{year}/day/{day}";
+				Log.Text($"{puzzleUrl}",
+					textColor: ConsoleColor.Yellow);
+
+				var response = await _httpClient.GetAsync(puzzleUrl);
+				if (response.IsSuccessStatusCode)
+				{
+					var puzzleBody = await response.Content.ReadAsStringAsync();
+
+					var header = puzzleBody.GetTag("<h2>", "</h2>");
+					if (header != null)
+					{
+						var split = header.Split(' ').Skip(3).SkipLast(1).ToArray()
+							.ToPascalCase();
+
+						puzzleTitle = string.Join(string.Empty, split)
+							.StripTags(("&", ";"))
+							.LettersOrDigitsOnly();
+
+						if (char.IsNumber(puzzleTitle[0]))
+							puzzleTitle = "_" + puzzleTitle;
+					}
+
+					Log.Line($" [{puzzleBody.Length}B]", indent: 0, textColor: ConsoleColor.White);
+				}
 
 				var puzzleFilePath = Path.Combine(path,
 					_puzzleFilenameTemplate

@@ -7,21 +7,34 @@ namespace Ujeby.AoC.App
 	{
 		static void Main(string[] args)
 		{
-			var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
+			var config = new ConfigurationBuilder()
+				.AddJsonFile($"appsettings.json")
+				.Build();
 
-			// download inputs first
-			if (!string.IsNullOrEmpty(config["aoc:input"]) && File.Exists(config["aoc:session"]))
+			// set aoc session cookie
+			if (!string.IsNullOrEmpty(config["aoc:session"]) && File.Exists(config["aoc:session"]))
 			{
 				var session = File.ReadAllText(config["aoc:session"]);
 				AdventOfCode.SetAoCSession(session);
-				
+			}
+
+			// download input files
+			if (!string.IsNullOrEmpty(config["aoc:input"]))
+			{
 				for (var year = 2015; year <= DateTime.Now.Year; year++)
 					AdventOfCode.DownloadMissingInput(config["aoc:input"], year);
 			}
 
-			AdventOfCode.RunAll(
-				inputStorage: config["aoc:input"],
-				code: config["aoc:code"]);
+#if _DEBUG
+			// generate (empty) puzzle .cs classes
+			if (!string.IsNullOrEmpty(config["aoc:code"]))
+			{
+				for (var year = 2015; year <= DateTime.Now.Year; year++)
+					AdventOfCode.GeneratePuzzleCode(config["aoc:code"], year);
+			}
+#endif
+			// run all puzzles in solution
+			AdventOfCode.RunAll(config["aoc:input"]);
 		}
 	}
 }
