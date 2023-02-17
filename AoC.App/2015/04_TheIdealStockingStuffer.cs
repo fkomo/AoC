@@ -14,33 +14,26 @@ namespace Ujeby.AoC.App._2015_04
 			var secretKey = input.Single();
 
 			// part1
-			long answer1 = 1;
-			while (true)
-			{
-				var value = $"{secretKey}{answer1}";
-				if (CheckHash(value))
-					break;
-
-				answer1++;
-			}
+			var answer1 = FindZeroHash(secretKey, 1, 5);
 
 			// part2
-			long answer2 = answer1 + 1;
-			while (true)
-			{
-				var value = $"{secretKey}{answer2}";
-				if (CheckHash(value, zeroes: 6))
-					break;
-
-				answer2++;
-			}
+			var answer2 = FindZeroHash(secretKey, answer1 + 1, 6);
 
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		private static bool CheckHash(string value,
-			int zeroes = 5)
+		private static long FindZeroHash(string secretKey, long start, int leadingZeroes)
+		{
+			while (!VerifyHash($"{secretKey}{start++}", leadingZeroes))
+			{ 
+			}
+
+			return start - 1;
+		}
+
+		private static bool VerifyHash(string value, int leadingZeroes)
 			=> Convert.ToHexString(_md5.ComputeHash(Encoding.ASCII.GetBytes(value)))
-				.Take(zeroes).All(c => c == '0');
+				.Take(leadingZeroes)
+				.All(c => c == '0');
 	}
 }
