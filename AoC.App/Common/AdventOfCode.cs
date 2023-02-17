@@ -169,8 +169,7 @@ namespace Ujeby.AoC.Common
 
 					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
 
-					// NOTE trim last character from input
-					File.WriteAllText(inputPath, input[..^1]);
+					File.WriteAllText(inputPath, input);
 
 					var sampleInputPath = Path.Combine(path, $"{day:d2}_input.sample.txt");
 					if (!File.Exists(sampleInputPath))
