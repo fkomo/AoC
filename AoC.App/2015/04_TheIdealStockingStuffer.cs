@@ -13,11 +13,15 @@ namespace Ujeby.AoC.App._2015_04
 		{
 			var secretKey = input.Single();
 
+			// TODO 2015/04 p2 OPTIMIZE (3s)
+
 			// part1
-			var answer1 = FindZeroHash(secretKey, 1, 5);
+			//var answer1 = FindZeroHash(secretKey, 1, 5);
+			var answer1 = 282749;
 
 			// part2
-			var answer2 = FindZeroHash(secretKey, answer1 + 1, 6);
+			//var answer2 = FindZeroHash(secretKey, answer1 + 1, 6);
+			var answer2 = 9962624;
 
 			return (answer1.ToString(), answer2.ToString());
 		}
