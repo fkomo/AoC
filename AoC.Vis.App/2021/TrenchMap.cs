@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Vis.App.Common;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -25,7 +26,7 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.MinorSize = 5;
 
-			var input = new AoC.App._2021_20.TrenchMap().ReadInput(AppSettings.InputDirectory);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2021, 20);
 			_imageEnhAlg = input.First();
 			_image = input.Skip(2).ToArray();
 

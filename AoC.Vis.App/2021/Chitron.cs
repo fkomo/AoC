@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Vis.App.Common;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -34,7 +35,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new AoC.App._2021_15.Chitron().ReadInput(AppSettings.InputDirectory);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2021, 15);
 
 			_riskMap = AoC.App._2021_15.Chitron.CreateRiskMap(input, input.Length);
 			_riskMap = AoC.App._2021_15.Chitron.EnlargeRiskMap(_riskMap, input.Length, 5);

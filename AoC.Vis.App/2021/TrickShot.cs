@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Vis.App.Common;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -23,7 +24,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new Ujeby.AoC.App._2021_17.TrickShot().ReadInput(AppSettings.InputDirectory);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2021, 17);
 			_target = AoC.App._2021_17.TrickShot.CreateTarget(input);
 		}
 

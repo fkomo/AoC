@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Vis.App.Common;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -28,7 +29,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new AoC.App._2022_12.HillClimbingAlgorithm().ReadInput(AppSettings.InputDirectory);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 12);
 			_heightMap = AoC.App._2022_12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
 			
 			Grid.MinorSize = 10;

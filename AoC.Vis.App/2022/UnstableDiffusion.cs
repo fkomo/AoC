@@ -1,4 +1,5 @@
-﻿using Ujeby.AoC.Vis.App.Common;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -26,7 +27,7 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.MinorSize = 4;
 
-			var input = new AoC.App._2022_23.UnstableDiffusion().ReadInput(AppSettings.InputDirectory);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 23);
 			_elves = AoC.App._2022_23.UnstableDiffusion.ParseElves(input);
 
 			var min = new v2i(_elves.Min(e => e.Position.X), _elves.Min(e => e.Position.Y));

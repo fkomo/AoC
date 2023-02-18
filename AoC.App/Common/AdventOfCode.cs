@@ -8,21 +8,6 @@ namespace Ujeby.AoC.Common
 	{
 		public const int ConsoleWidth = 99;
 
-		private const string _aocUrl = "https://adventofcode.com";
-		private const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
-
-		private readonly static HttpClient _httpClient = new();
-		private static bool _aocSessionSet = false;
-
-		public static void SetAoCSession(string session)
-		{
-			if (string.IsNullOrEmpty(session))
-				return;
-
-			_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={session};");
-			_aocSessionSet = true;
-		}
-
 		public static void RunAll(
 			string inputStorage = null)
 		{
@@ -82,7 +67,7 @@ namespace Ujeby.AoC.Common
 			params IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
-			Log.ChristmasHeader($"{_aocUrl}/{year}",
+			Log.ChristmasHeader($"{AoCHttpClient.BaseUrl}/{year}",
 				length: ConsoleWidth);
 			Log.Line();
 
@@ -111,32 +96,6 @@ namespace Ujeby.AoC.Common
 			}
 		}
 
-		public static void DownloadMissingInput(string inputStorage, int year)
-		{
-			try
-			{
-				Log.Indent += 2;
-
-				if (string.IsNullOrEmpty(inputStorage))
-					throw new ArgumentNullException(nameof(inputStorage), $"Input storage not set!");
-
-				if (!_aocSessionSet)
-					throw new Exception($"AoC session not set!");
-
-				for (var day = 1; day <= 25; day++)
-					DownloadInput(inputStorage, year, day)
-						.Wait();
-			}
-			catch (Exception ex)
-			{
-				Log.Line(ex.ToString());
-			}
-			finally
-			{
-				Log.Indent -= 2;
-			}
-		}
-
 		public static void GeneratePuzzleCode(string codePath, int year)
 		{
 			try
@@ -144,10 +103,7 @@ namespace Ujeby.AoC.Common
 				Log.Indent += 2;
 
 				if (string.IsNullOrEmpty(codePath))
-					throw new Exception($"Path to code ({nameof(codePath)}) not set!");
-
-				if (!_aocSessionSet)
-					throw new Exception($"AoC session not set!");
+					throw new Exception($"Path to source code ({nameof(codePath)}) not set!");
 
 				for (var day = 1; day <= 25; day++)
 					GeneratePuzzleCodeTemplate(codePath, year, day)
@@ -163,45 +119,7 @@ namespace Ujeby.AoC.Common
 			}
 		}
 
-		private async static Task<bool> DownloadInput(string inputStorage, int year, int day)
-		{
-			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
-				return false;
-
-			var path = Path.Combine(inputStorage, year.ToString());
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			var inputPath = Path.Combine(path, $"{day:d2}_input.txt");
-			if (!File.Exists(inputPath))
-			{
-				var inputUrl = $"{_aocUrl}/{year}/day/{day}/input";
-
-				Log.Text($"{inputUrl}",
-					textColor: ConsoleColor.Yellow);
-
-				var response = await _httpClient.GetAsync(inputUrl);
-				if (response.IsSuccessStatusCode)
-				{
-					var input = await response.Content.ReadAsStringAsync();
-
-					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.White);
-
-					File.WriteAllText(inputPath, input);
-
-					var sampleInputPath = Path.Combine(path, $"{day:d2}_input.sample.txt");
-					if (!File.Exists(sampleInputPath))
-						File.WriteAllText(sampleInputPath, null);
-				}
-				else
-				{
-					Log.Line($" {response.StatusCode}", indent: 0, textColor: ConsoleColor.Red);
-					return false;
-				}
-			}
-
-			return true;
-		}
+		private const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
 
 		private async static Task GeneratePuzzleCodeTemplate(string codePath, int year, int day)
 		{
@@ -216,11 +134,11 @@ namespace Ujeby.AoC.Common
 			{
 				var puzzleTitle = $"ToDo";
 
-				var puzzleUrl = $"{_aocUrl}/{year}/day/{day}";
+				var puzzleUrl = $"{AoCHttpClient.BaseUrl}/{year}/day/{day}";
 				Log.Text($"{puzzleUrl}",
 					textColor: ConsoleColor.Yellow);
 
-				var response = await _httpClient.GetAsync(puzzleUrl);
+				var response = await AoCHttpClient.GetAsync(puzzleUrl);
 				if (response.IsSuccessStatusCode)
 				{
 					var puzzleBody = await response.Content.ReadAsStringAsync();
@@ -254,28 +172,6 @@ namespace Ujeby.AoC.Common
 				File.WriteAllText(puzzleFilePath, template);
 				Log.Line($"{puzzleFilePath}");
 			}
-		}
-
-		private async static Task<bool> SendAnswer(int year, int day, int part, string answer)
-		{
-			var url = $"{_aocUrl}/{year}/day/{day}/answer";
-
-			var content = new FormUrlEncodedContent(
-				new Dictionary<string, string>
-				{
-					{ "answer", answer },
-					{ "level", part.ToString() }
-				});
-
-			var response = await _httpClient.PostAsync(url, content);
-			if (response.IsSuccessStatusCode)
-			{
-
-			}
-
-			// TODO parse answer response
-
-			return false;
 		}
 	}
 }

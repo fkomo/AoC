@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
@@ -46,7 +47,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new Ujeby.AoC.App._2022_24.BlizzardBasin().ReadInput(AppSettings.InputDirectory);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 24);
 
 			_mapSize = new(input[0].Length, input.Length);
 			_blizzards = Ujeby.AoC.App._2022_24.BlizzardBasin.ParseBlizzards(input);

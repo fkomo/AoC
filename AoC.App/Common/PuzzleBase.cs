@@ -15,18 +15,6 @@ namespace Ujeby.AoC.Common
 
 		protected abstract (string Part1, string Part2) SolvePuzzle(string[] input);
 
-		private string GetInputFile(string inputStorage)
-		{
-			var inputFile = "input.txt";
-#if _DEBUG_SAMPLE
-			inputFile = "input.sample.txt";
-#endif
-			return Path.Combine(inputStorage, Year.ToString(), $"{Day:d2}_{inputFile}");
-		}
-
-		public string[] ReadInput(string inputStorage)
-			=> File.ReadLines(GetInputFile(inputStorage)).ToArray();
-
 		public int Solve(string inputStorage)
 		{
 			var result = 0;
@@ -37,7 +25,7 @@ namespace Ujeby.AoC.Common
 				Debug.Indent += 2;
 				Log.Indent += 2;
 
-				var input = ReadInput(inputStorage);
+				var input = InputProvider.Read(inputStorage, Year, Day);
 
 				sw.Start();
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
@@ -32,7 +33,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new AoC.App._2022_22.MonkeyMap().ReadInput(AppSettings.InputDirectory);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 22);
 			_map = AoC.App._2022_22.MonkeyMap.CreateMap(input);
 
 			_path = AoC.App._2022_22.MonkeyMap.Travel(
