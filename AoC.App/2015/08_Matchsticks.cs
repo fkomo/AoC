@@ -2,30 +2,19 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2015_08
 {
-	[AoCPuzzle(Year = 2015, Day = 08, Answer1 = "1371", Answer2 = null)]
+	[AoCPuzzle(Year = 2015, Day = 08, Answer1 = "1371", Answer2 = "2117")]
 	public class Matchsticks : PuzzleBase
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
-			string answer2 = null;
-
 			// part1
-			var answer1 = input.Sum(i => i.Length);
-			foreach (var str in input)
-			{
-				var str2 = str[1..^1];
-
-				var c1 = CountOccurances(str2, "\\\"");
-				var c2 = CountOccurances(str2, "\\\\");
-				var c3 = CountEscapedASCIIChars(str2);
-				var numOfCharactersInMem = str2.Length - c1 - c2 - c3 * 3;
-
-				answer1 -= numOfCharactersInMem;
-			}
+			var answer1 = input.Sum(i => i.Length) - input.Select(i => i[1..^1])
+				.Sum(i => i.Length - CountOccurances(i, "\\\"") - CountOccurances(i, "\\\\") - CountEscapedASCIIChars(i) * 3);
 
 			// part2
+			var answer2 = input.Sum(i => i.Replace("\\", "\\\\").Replace("\"", "\\\"").Length + 2) - input.Sum(i => i.Length);
 
-			return (answer1.ToString(), answer2);
+			return (answer1.ToString(), answer2.ToString());
 		}
 
 		private static int CountOccurances(string s, string value)
