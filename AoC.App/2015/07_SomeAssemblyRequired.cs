@@ -25,7 +25,7 @@ namespace Ujeby.AoC.App._2015_07
 
 			public long Eval(Dictionary<string, Gate> gates)
 			{
-				Debug.Line(ToString());
+				//Debug.Line(ToString());
 
 				if (Result.HasValue)
 					return Result.Value;
