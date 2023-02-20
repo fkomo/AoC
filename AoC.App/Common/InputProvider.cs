@@ -65,9 +65,16 @@
 			return true;
 		}
 
-		public static string[] Read(string inputStorage, int year, int day) => 
-			File.ReadLines(GetInputFile(inputStorage, year, day))
+		public static string[] Read(string inputStorage, int year, int day)
+		{
+			var input = File.ReadLines(GetInputFile(inputStorage, year, day))
 				.ToArray();
+
+			if (string.IsNullOrWhiteSpace(input.Last()))
+				return input.SkipLast(1).ToArray();
+
+			return input;
+		}
 
 		private static string GetInputFile(string inputStorage, int year, int day)
 		{
