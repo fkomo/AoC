@@ -31,9 +31,8 @@ namespace Ujeby.AoC.App._2015_09
 			var allRoutes = Alg.Combinatorics.Permutations(Enumerable.Range(0, places.Length), places.Length);
 			foreach (var r in allRoutes)
 			{
-				var route = r.ToArray();
-
 				var routeLength = 0;
+				var route = r.ToArray();
 				for (var i = 1; i < route.Length; i++)
 					routeLength += dist[route[i - 1], route[i]];
 
