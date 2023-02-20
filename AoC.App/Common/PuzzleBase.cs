@@ -81,7 +81,7 @@ namespace Ujeby.AoC.Common
 				if (Answer.Part2 != null && Answer.Part2 == solution.Part2)
 					result++;
 			}
-			catch (Exception ex)
+				catch (Exception ex)
 			{
 				Log.Line(ex.ToString());
 			}
