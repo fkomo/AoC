@@ -70,7 +70,7 @@
 			var input = File.ReadLines(GetInputFile(inputStorage, year, day))
 				.ToArray();
 
-			if (string.IsNullOrWhiteSpace(input.Last()))
+			if (input.Any() && string.IsNullOrWhiteSpace(input.Last()))
 				return input.SkipLast(1).ToArray();
 
 			return input;

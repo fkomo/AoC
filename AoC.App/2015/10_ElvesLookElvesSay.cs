@@ -22,8 +22,9 @@ namespace Ujeby.AoC.App._2015_10
 			var sb = new StringBuilder();
 			while (stepCount-- > 0)
 			{
-				for (int cnt = 1, i = 0; i <= start.Length - 1; i++)
+				for (var i = 0; i <= start.Length - 1; i++)
 				{
+					var cnt = 1;
 					var n = start[i];
 					while (i + cnt < start.Length && n == start[i + cnt])
 						cnt++;
