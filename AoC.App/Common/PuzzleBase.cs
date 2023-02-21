@@ -104,10 +104,12 @@ namespace Ujeby.AoC.Common
 		{
 			var elapsedColors = new (int, ConsoleColor)[]
 			{
+				(1000, ConsoleColor.DarkRed),
 				(250, ConsoleColor.Red),
+				(150, ConsoleColor.DarkYellow),
 				(100, ConsoleColor.Yellow),
-				(10, ConsoleColor.Green),
-				(0, ConsoleColor.White),
+				(50, ConsoleColor.DarkGreen),
+				(0, ConsoleColor.Green),
 			};
 
 			var elapsedColor = ConsoleColor.White;

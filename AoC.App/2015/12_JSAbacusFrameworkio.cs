@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using Ujeby.AoC.Common;
 using Ujeby.Tools.StringExtensions;
 
