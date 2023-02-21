@@ -48,9 +48,6 @@ namespace Ujeby.AoC.App._2015_11
 						wrapAround++;
 					}
 				}
-
-				//if (wrapAround > 0)
-				//	throw new Exception($"max password reached! {new string(chars)}, oldPassword={oldPassword}, wrapAround={wrapAround}");
 			}
 
 			return new string(chars);
