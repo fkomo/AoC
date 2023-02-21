@@ -63,14 +63,14 @@ namespace Ujeby.AoC.App._2022_16
 			var noStartIdx = valves.Where(v => v.Key != "AA").Select(vk => vk.Value.Idx).ToArray();
 			var halfLength = noStartIdx.Length / 2;
 
-			var kComb = Combinatorics.KCombinations(noStartIdx, halfLength).ToArray();
+			var comb = Combinatorics.Combinations(noStartIdx, halfLength);
 			// only half of combinations is needed (the other will be mirrored)
-			kComb = kComb.Take(kComb.Length / 2).ToArray();
+			comb = comb.Take(comb.Length / 2).ToArray();
 
-			Debug.Line($"{kComb.Length} unique k-combinations of length={halfLength}");
+			Debug.Line($"{comb.Length} unique combinations of length={halfLength}");
 
 			var pBag = new ConcurrentBag<int>();
-			Parallel.ForEach(kComb, valves1 =>
+			Parallel.ForEach(comb, valves1 =>
 			{
 				var p1 = MoveToValve(valves, dist, Array.Empty<int>(), valves1.ToArray(),
 					valveIdx: aaIdx,
