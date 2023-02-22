@@ -1,4 +1,5 @@
 using Ujeby.AoC.Common;
+using Ujeby.Tools.StringExtensions;
 
 namespace Ujeby.AoC.App._2015_13
 {
@@ -10,11 +11,11 @@ namespace Ujeby.AoC.App._2015_13
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
 			var guests = input.GroupBy(i => i.Split(' ').First())
-				.ToDictionary(i => i.Key, i => i.Select(n =>
-				{
-					var s = n.Split(' ');
-					return new Neighbour(s.Last()[..^1], int.Parse(s[3]) * (s[2] == "gain" ? 1 : -1));
-				}).ToArray());
+				.ToDictionary(
+					i => i.Key, 
+					i => i.ToDictionary(
+						y => y[(y.LastIndexOf(' ') + 1)..^1], 
+						y => y.ToNumArray()[0] * (y.Contains("gain") ? 1 : -1)));
 
 			// part1
 			var seats = Alg.Combinatorics.Permutations(guests.Keys, guests.Count);
@@ -27,15 +28,9 @@ namespace Ujeby.AoC.App._2015_13
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		private static int TableHappiness(string[] seats, Dictionary<string, Neighbour[]> guests)
+		private static long TableHappiness(string[] seats, Dictionary<string, Dictionary<string, long>> happMap)
 		{
-			var happiness = 0;
-
-			var first = seats.First();
-			var last = seats.Last();
-			if (first != "@me" && last != "@me")
-				happiness += guests[first].Single(n => n.Name == last).Happiness;
-
+			var happiness = 0L;
 			for (var i = 0; i < seats.Length; i++)
 			{
 				var current = seats[i];
@@ -44,14 +39,11 @@ namespace Ujeby.AoC.App._2015_13
 
 				var next = seats[(i + 1) % seats.Length];
 				if (next != "@me")
-					happiness += guests[current].Single(n => n.Name == next).Happiness;
+					happiness += happMap[current][next];
 
-				if (i > 0)
-				{
-					var prev = seats[i - 1];
-					if (prev != "@me")
-						happiness += guests[current].Single(n => n.Name == prev).Happiness;
-				}
+				var prev = seats[(i - 1 + seats.Length) % seats.Length];
+				if (prev != "@me")
+					happiness += happMap[current][prev];
 			}
 
 			return happiness;
