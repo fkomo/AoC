@@ -1,10 +1,12 @@
-﻿using Ujeby.Graphics.Entities;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
+using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class Chitron : Sdl2Loop
+    internal class Chitron : Sdl2Loop
 	{
 		private int[,] _riskMap;
 
@@ -33,10 +35,10 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new AoC.App.Year2021.Day15.Chitron().ReadInput();
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2021, 15);
 
-			_riskMap = AoC.App.Year2021.Day15.Chitron.CreateRiskMap(input, input.Length);
-			_riskMap = AoC.App.Year2021.Day15.Chitron.EnlargeRiskMap(_riskMap, input.Length, 5);
+			_riskMap = AoC.App._2021_15.Chitron.CreateRiskMap(input, input.Length);
+			_riskMap = AoC.App._2021_15.Chitron.EnlargeRiskMap(_riskMap, input.Length, 5);
 
 			_start = new(0, 0);
 			_end = new(_riskMap.GetLength(0) - 1, _riskMap.GetLength(0) - 1);

@@ -1,4 +1,6 @@
-﻿using Ujeby.Graphics;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
+using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -7,7 +9,7 @@ namespace Ujeby.AoC.Vis.App
 {
 	internal class UnstableDiffusion : Sdl2Loop
 	{
-		private AoC.App.Year2022.Day23.UnstableDiffusion.Elf[] _elves = null;
+		private AoC.App._2022_23.UnstableDiffusion.Elf[] _elves = null;
 
 		private long _step;
 		private int _direction;
@@ -25,8 +27,8 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.MinorSize = 4;
 
-			var input = new AoC.App.Year2022.Day23.UnstableDiffusion().ReadInput();
-			_elves = AoC.App.Year2022.Day23.UnstableDiffusion.ParseElves(input);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 23);
+			_elves = AoC.App._2022_23.UnstableDiffusion.ParseElves(input);
 
 			var min = new v2i(_elves.Min(e => e.Position.X), _elves.Min(e => e.Position.Y));
 			var max = new v2i(_elves.Max(e => e.Position.X), _elves.Max(e => e.Position.Y));
@@ -40,7 +42,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			if (!_noMovement)
 			{
-				_elves = AoC.App.Year2022.Day23.UnstableDiffusion.Step(_elves, _direction, out _noMovement);
+				_elves = AoC.App._2022_23.UnstableDiffusion.Step(_elves, _direction, out _noMovement);
 
 				_step++;
 				_direction = (int)(_step % 4);

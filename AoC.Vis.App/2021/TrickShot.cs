@@ -1,11 +1,13 @@
-﻿using Ujeby.Graphics;
+﻿using Ujeby.AoC.Common;
+using Ujeby.AoC.Vis.App.Common;
+using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class TrickShot : Sdl2Loop
+    internal class TrickShot : Sdl2Loop
 	{
 		private v2i[] _path = null;
 		private AABox2i _target;
@@ -22,8 +24,8 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(false);
 
-			var input = new Ujeby.AoC.App.Year2021.Day17.TrickShot().ReadInput();
-			_target = Ujeby.AoC.App.Year2021.Day17.TrickShot.CreateTarget(input);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2021, 17);
+			_target = AoC.App._2021_17.TrickShot.CreateTarget(input);
 		}
 
 		protected override void Update()
@@ -72,7 +74,7 @@ namespace Ujeby.AoC.Vis.App
 			_dir = Grid.MousePositionDiscrete;
 			_dir.Y = -_dir.Y;
 
-			_hit = Ujeby.AoC.App.Year2021.Day17.TrickShot.SimThrow(_dir, _target, out _path);
+			_hit = AoC.App._2021_17.TrickShot.SimThrow(_dir, _target, out _path);
 		}
 	}
 }

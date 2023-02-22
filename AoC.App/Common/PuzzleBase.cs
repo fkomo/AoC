@@ -1,15 +1,21 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace Ujeby.AoC.Common
 {
 	public abstract class PuzzleBase : IPuzzle
 	{
-		public string[] Answer { get; set; }
+		public string Title => GetType().Name;
+		public int Day => GetType().GetCustomAttribute<AoCPuzzleAttribute>().Day;
+		public int Year => GetType().GetCustomAttribute<AoCPuzzleAttribute>().Year;
+		
+		private (string Part1, string Part2) Answer 
+			=> (Part1: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer1,
+				Part2: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer2);
 
-		public int Day => int.Parse(GetType().Namespace.Split('.').Last().Replace("Day", null));
-		public string Title => GetType().FullName.Substring("Ujeby.AoC.App.YearYYYY.DayDD.".Length);
+		protected abstract (string Part1, string Part2) SolvePuzzle(string[] input);
 
-		public int Solve()
+		public int Solve(string inputStorage)
 		{
 			var result = 0;
 
@@ -19,9 +25,11 @@ namespace Ujeby.AoC.Common
 				Debug.Indent += 2;
 				Log.Indent += 2;
 
+				var input = InputProvider.Read(inputStorage, Year, Day);
+
 				sw.Start();
 
-				var answer = SolvePuzzle(ReadInput());
+				var solution = SolvePuzzle(input);
 
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
@@ -33,7 +41,7 @@ namespace Ujeby.AoC.Common
 				Log.Text($"#{Day:d2} {Title}", textColor: ConsoleColor.White, indent: 0);
 				Log.Text($" }}=-", textColor: ConsoleColor.Gray, indent: 0);
 
-				var answers = $"-={{ {answer.Item1?.ToString() ?? "?"}, {answer.Item2?.ToString() ?? "?"} }}=-";
+				var answers = $"-={{ {solution.Part1?.ToString() ?? "?"}, {solution.Part2?.ToString() ?? "?"} }}=-";
 
 				// padding
 				var padding = string.Join("", Enumerable.Repeat("-", (AdventOfCode.ConsoleWidth - 23) - title.Length - answers.Length));
@@ -41,9 +49,9 @@ namespace Ujeby.AoC.Common
 
 				// answers
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				Log.Text(answer.Item1?.ToString() ?? "?", textColor: GetAnswerColor(Answer[0], answer.Item1), indent: 0);
+				Log.Text(solution.Part1?.ToString() ?? "?", textColor: GetAnswerColor(Answer.Part1, solution.Part1), indent: 0);
 				Log.Text(", ", textColor: ConsoleColor.White, indent: 0);
-				Log.Text(answer.Item2?.ToString() ?? "?", textColor: GetAnswerColor(Answer[1], answer.Item2), indent: 0);
+				Log.Text(solution.Part2?.ToString() ?? "?", textColor: GetAnswerColor(Answer.Part2, solution.Part2), indent: 0);
 				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
 
 				// padding
@@ -59,21 +67,21 @@ namespace Ujeby.AoC.Common
 
 				// stars
 				var stars = 
-					((Answer[0] != null && Answer[0] == answer.Item1) ? "*" : " ") + 
-					((Answer[1] != null && Answer[1] == answer.Item2) ? "*" : " ");
+					((Answer.Part1 != null && Answer.Part1 == solution.Part1) ? "*" : " ") + 
+					((Answer.Part2 != null && Answer.Part2 == solution.Part2) ? "*" : " ");
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
 				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 0);
 				Log.Text(" }", textColor: ConsoleColor.Gray, indent: 0);
 
 				Log.Line();
 
-				if (Answer[0] != null && Answer[0] == answer.Item1)
+				if (Answer.Part1 != null && Answer.Part1 == solution.Part1)
 					result++;
 
-				if (Answer[1] != null && Answer[1] == answer.Item2)
+				if (Answer.Part2 != null && Answer.Part2 == solution.Part2)
 					result++;
 			}
-			catch (Exception ex)
+				catch (Exception ex)
 			{
 				Log.Line(ex.ToString());
 			}
@@ -96,10 +104,12 @@ namespace Ujeby.AoC.Common
 		{
 			var elapsedColors = new (int, ConsoleColor)[]
 			{
+				(1000, ConsoleColor.DarkRed),
 				(250, ConsoleColor.Red),
+				(150, ConsoleColor.DarkYellow),
 				(100, ConsoleColor.Yellow),
-				(10, ConsoleColor.Green),
-				(0, ConsoleColor.White),
+				(50, ConsoleColor.DarkGreen),
+				(0, ConsoleColor.Green),
 			};
 
 			var elapsedColor = ConsoleColor.White;
@@ -119,13 +129,7 @@ namespace Ujeby.AoC.Common
 				: (calculated == null ? ConsoleColor.DarkGray : ConsoleColor.White);
 		}
 
-		protected abstract (string, string) SolvePuzzle(string[] input);
-
-		protected string _workingDir => Path.Combine(Environment.CurrentDirectory, GetType().FullName.Split('.')[3]);
-
-		/// <summary>
-		/// 
-		/// </summary>
+		/// <summary></summary>
 		/// <param name="duration">duration in ms</param>
 		/// <returns></returns>
 		private static string DurationToStringSimple(double duration)
@@ -140,17 +144,6 @@ namespace Ujeby.AoC.Common
 				return $"{(int)(duration / 1000)}s";
 
 			return $"{(int)(duration / 60 * 60 * 1000)}h";
-		}
-
-#if _DEBUG_SAMPLE
-		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.sample.txt");
-#else
-		protected string _inputFilename => Path.Combine(_workingDir, $"Day{Day:d2}", "input.txt");
-#endif
-
-		public string[] ReadInput()
-		{
-			return File.ReadLines(_inputFilename).ToArray();
 		}
 	}
 }

@@ -1,40 +1,73 @@
-﻿namespace Ujeby.AoC.Common
+﻿using System.Reflection;
+using Ujeby.Tools.ArrayExtensions;
+using Ujeby.Tools.StringExtensions;
+
+namespace Ujeby.AoC.Common
 {
 	public class AdventOfCode
 	{
-		public string Session { get; set; }
-		
-		private readonly string _title;
+		public const int ConsoleWidth = 99;
 
-		private const string _aocUrl = "https://adventofcode.com";
-
-		private readonly static HttpClient _httpClient = new();
-
-		public AdventOfCode(int year)
+		public static void RunAll(
+			string inputStorage = null)
 		{
-			_title = $"{_aocUrl}/{year}";
-
-			if (string.IsNullOrEmpty(Session))
+			if (string.IsNullOrEmpty(inputStorage))
 			{
-				var sessionFilename = Path.Combine(Environment.CurrentDirectory, ".session");
-				if (File.Exists(sessionFilename))
-					Session = File.ReadAllText(sessionFilename);
+				inputStorage = Environment.CurrentDirectory;
+				Log.Line($"Using input storage '{inputStorage}'");
 			}
 
-			if (!string.IsNullOrEmpty(Session))
+			foreach (var aocYear in AppDomain.CurrentDomain.GetAssemblies()
+				.Where(a => a.FullName.StartsWith("Ujeby.AoC."))
+				.SelectMany(a => a.GetTypes())
+				.Where(t => Attribute.IsDefined(t, typeof(AoCPuzzleAttribute)))
+				.OrderBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Day)
+				.GroupBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Year))
 			{
-				_httpClient.DefaultRequestHeaders.Add("Cookie", $"session={Session};");
-
-				DownloadMissingInput(@"c:\Users\filip\source\repos\fkomo\AoC\AoC.App\", "Year", year);
+#if !_2022
+				if (aocYear.Key == 2022)
+					continue;
+#endif
+#if !_2021
+				if (aocYear.Key == 2021)
+					continue;
+#endif
+#if !_2020
+				if (aocYear.Key == 2020)
+					continue;
+#endif
+#if !_2019
+				if (aocYear.Key == 2019)
+					continue;
+#endif
+#if !_2018
+				if (aocYear.Key == 2018)
+					continue;
+#endif
+#if !_2017
+				if (aocYear.Key == 2017)
+					continue;
+#endif
+#if !_2016
+				if (aocYear.Key == 2016)
+					continue;
+#endif
+#if !_2015
+				if (aocYear.Key == 2015)
+					continue;
+#endif
+				Run(aocYear.Key,
+					inputStorage,
+					aocYear.Select(p => (IPuzzle)Activator.CreateInstance(p))
+					.ToArray());
 			}
 		}
 
-		public const int ConsoleWidth = 99;
-
-		public void Run(IPuzzle[] problemsToSolve)
+		public static void Run(int year, string inputStorage, 
+			params IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
-			Log.ChristmasHeader(_title,
+			Log.ChristmasHeader($"{AoCHttpClient.BaseUrl}/{year}",
 				length: ConsoleWidth);
 			Log.Line();
 
@@ -45,7 +78,7 @@
 				Debug.Indent += 0;
 
 				foreach (var problem in problemsToSolve)
-					stars += problem.Solve();
+					stars += problem.Solve(inputStorage);
 			}
 			catch (Exception ex)
 			{
@@ -63,26 +96,18 @@
 			}
 		}
 
-		private static void DownloadMissingInput(string outputDir, string yearDirPrefix, int year)
+		public static void GeneratePuzzleCode(string codePath, int year)
 		{
 			try
 			{
 				Log.Indent += 2;
 
-				var programCsFilename = Path.Combine(outputDir, "Program.cs");
-				if (!File.ReadAllText(programCsFilename).Contains($"// TODO {year}"))
-					return;
+				if (string.IsNullOrEmpty(codePath))
+					throw new Exception($"Path to source code ({nameof(codePath)}) not set!");
 
 				for (var day = 1; day <= 25; day++)
-				{
-					var result = DownloadInput(year, day,
-						yearPrefix: yearDirPrefix,
-						rootDir: outputDir);
-					result.Wait();
-
-					if (result.Result)
-						UpdateCodeTemplate(year, day, outputDir, yearDirPrefix);
-				}
+					GeneratePuzzleCodeTemplate(codePath, year, day)
+						.Wait();
 			}
 			catch (Exception ex)
 			{
@@ -94,98 +119,59 @@
 			}
 		}
 
-		private async static Task<bool> DownloadInput(int year, int day,
-			string rootDir = null, string yearPrefix = null)
+		private const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
+
+		private async static Task GeneratePuzzleCodeTemplate(string codePath, int year, int day)
 		{
 			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
-				return false;
+				return;
 
-			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
+			var path = Path.Combine(codePath, year.ToString());
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
-			var inputPath = Path.Combine(path, "input.txt");
-			if (!File.Exists(inputPath))
+			if (!Directory.EnumerateFiles(path, $"{day:d2}_*.cs").Any())
 			{
-				var inputUrl = $"{_aocUrl}/{year}/day/{day}/input";
+				var puzzleTitle = $"ToDo";
 
-				Log.Text($"{inputUrl}",
+				var puzzleUrl = $"{AoCHttpClient.BaseUrl}/{year}/day/{day}";
+				Log.Text($"{puzzleUrl}",
 					textColor: ConsoleColor.Yellow);
 
-				var response = await _httpClient.GetAsync(inputUrl);
+				var response = await AoCHttpClient.GetAsync(puzzleUrl);
 				if (response.IsSuccessStatusCode)
 				{
-					var input = await response.Content.ReadAsStringAsync();
+					var puzzleBody = await response.Content.ReadAsStringAsync();
 
-					Log.Line($" [{input.Length}B]", indent: 0, textColor: ConsoleColor.Yellow);
+					var header = puzzleBody.GetTag("<h2>", "</h2>");
+					if (header != null)
+					{
+						var split = header.Split(' ').Skip(3).SkipLast(1).ToArray()
+							.ToPascalCase();
 
-					File.WriteAllText(inputPath, input[..^1]);
-					File.WriteAllText(Path.Combine(path, "input.sample.txt"), null);
+						puzzleTitle = string.Join(string.Empty, split)
+							.StripTags(("&", ";"))
+							.LettersOrDigitsOnly();
+
+						if (char.IsNumber(puzzleTitle[0]))
+							puzzleTitle = "_" + puzzleTitle;
+					}
+
+					Log.Line($" [{puzzleBody.Length}B]", indent: 0, textColor: ConsoleColor.White);
 				}
-				else
-				{
-					Log.Line($" {response.StatusCode}", indent: 0, textColor: ConsoleColor.Red);
-					return false;
-				}
-			}
 
-			return true;
-		}
-
-		private static void UpdateCodeTemplate(int year, int day, string rootDir, string yearPrefix)
-		{
-			var path = Path.Combine(rootDir ?? Environment.CurrentDirectory, yearPrefix + year.ToString(), $"Day{day:d2}");
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			if (!Directory.EnumerateFiles(path, "*.cs").Any())
-			{
-				var puzzleTitle = $"Puzzle{year}{day:d2}";
-
-				var puzzleCs = Path.Combine(path, $"{puzzleTitle}.cs");
-				var template = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Common", "PuzzleTemplate.cs"))
+				var puzzleFilePath = Path.Combine(path,
+					_puzzleFilenameTemplate
+						.Replace("DD", day.ToString("d2"))
+						.Replace("PUZZLETITLE", puzzleTitle));
+				var template = File.ReadAllText(Path.Combine(codePath, "Common", "Template", _puzzleFilenameTemplate))
 					.Replace("YYYY", year.ToString())
 					.Replace("DD", day.ToString("d2"))
 					.Replace("PUZZLETITLE", puzzleTitle);
 
-				File.WriteAllText(puzzleCs, template);
-				Log.Line($"{puzzleCs}");
-
-				var programCsFilename = Path.Combine(rootDir, "Program.cs");
-				var programCs = File.ReadAllText(programCsFilename);
-				var todo = $"// TODO {year}";
-				if (programCs.Contains(todo))
-				{
-					programCs = programCs.Replace(todo,
-						$"new Year{year}.Day{day:d2}.{puzzleTitle}()\t\t\t\t{{ Answer = new string[] {{ null, null }} }}," + Environment.NewLine +
-						$"\t\t\t\t\t{todo}");
-
-					File.WriteAllText(programCsFilename, programCs);
-					Log.Line($"{programCsFilename}");
-				}
+				File.WriteAllText(puzzleFilePath, template);
+				Log.Line($"{puzzleFilePath}");
 			}
-		}
-
-		public async static Task<bool> SendAnswer(int year, int day, int part, string answer)
-		{
-			var url = $"{_aocUrl}/{year}/day/{day}/answer";
-
-			var content = new FormUrlEncodedContent(
-				new Dictionary<string, string>
-				{
-					{ "answer", answer },
-					{ "level", part.ToString() }
-				});
-
-			var response = await _httpClient.PostAsync(url, content);
-			if (response.IsSuccessStatusCode)
-			{
-
-			}
-
-			// TODO parse answer response
-
-			return false;
 		}
 	}
 }
