@@ -1,6 +1,5 @@
 using Ujeby.AoC.Common;
 using Ujeby.Tools.StringExtensions;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Ujeby.AoC.App._2015_15
 {
@@ -18,7 +17,7 @@ namespace Ujeby.AoC.App._2015_15
 
 			// part1 & part2
 #if _RELEASE
-			var (answer1, answer2) = FasterButOnlyForRelease(ingredients);
+			var (answer1, answer2) = CheckRecipeReleaseOnly(ingredients);
 #else
 			var (answer1, answer2) = CheckRecipeRec(ingredients, new int[ingredients.Length]);
 #endif
@@ -75,7 +74,7 @@ namespace Ujeby.AoC.App._2015_15
 		/// </summary>
 		/// <param name="ingredients"></param>
 		/// <returns></returns>
-		private static (long, long) FasterButOnlyForRelease(long[][] ingredients)
+		private static (long, long) CheckRecipeReleaseOnly(long[][] ingredients)
 		{
 			var answer1 = 0L;
 			var answer2 = 0L;
