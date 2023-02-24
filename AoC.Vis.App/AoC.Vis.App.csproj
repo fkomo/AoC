@@ -48,10 +48,6 @@
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="2020\" />
-	</ItemGroup>
-
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="copy $(SolutionDir)3rd\SDL2\*.dll $(OutDir)" />
 	</Target>
