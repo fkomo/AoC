@@ -9,7 +9,7 @@ namespace Ujeby.AoC.Vis.App
 	internal class LikeAGIFForYourYard : Sdl2Loop
 	{
 		private long _step;
-		private char[] _lights;
+		private char[][] _lights;
 		private int _size;
 
 		public override string Name => $"#18 {nameof(LikeAGIFForYourYard)}";
@@ -37,7 +37,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			_lights = AoC.App._2015_18.LikeAGIFForYourYard.GameOfLifeStepWithFixedCorners(_lights, _size);
+			_lights = AoC.App._2015_18.LikeAGIFForYourYard.GameOfLifeStepWithFixedCorners(_lights);
 			_step++;
 		}
 
@@ -48,7 +48,7 @@ namespace Ujeby.AoC.Vis.App
 			var p = new v2i();
 			for (p.Y = 0; p.Y < _size; p.Y++)
 				for (p.X = 0; p.X < _size; p.X++)
-					if (_lights[_size * p.Y + p.X] == '#')
+					if (_lights[p.Y][p.X] == '#')
 						DrawGridCell((int)(_size / -2 + p.X), (int)(_size / -2 + p.Y), 
 							fill: new v4f(0.7f));
 
@@ -56,7 +56,7 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawText(new v2i(32, 32), 
 				new Text($"step: {_step}"),
-				new Text($"lights: {_lights.Count(l => l == '#')}"));
+				new Text($"lights: {_lights.Sum(i => i.Count(l => l == '#'))}"));
 		}
 
 		protected override void Destroy()
