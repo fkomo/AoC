@@ -28,6 +28,8 @@ namespace Ujeby.AoC.App._2015_18
 
 			// 1d array 390-420ms
 			// 2d array 
+			// 2d array + 1 (less ifs in neighbour count), longer CreateLights
+			// 
 
 			return (answer1.ToString(), answer2.ToString());
 		}
@@ -40,22 +42,28 @@ namespace Ujeby.AoC.App._2015_18
 			//		lights[i] = input[y][x];
 			//return lights;
 
-			return input.Select(i => i.ToArray()).ToArray();
+			var lights = new char[input.Length + 2][];
+			lights[0] = Enumerable.Repeat('.', input.Length + 2).ToArray();
+			for (var y = 0; y < input.Length; y++)
+				lights[y + 1] = new char[] { '.' }.Concat(input[y]).Concat(new char[] { '.' }).ToArray();
+			lights[^1] = Enumerable.Repeat('.', input.Length + 2).ToArray();
+
+			return lights;
 		}
 
 		public static char[][] GameOfLifeStepWithFixedCorners(char[][] lights)
 		{
-			lights[0][0] = '#';
-			lights[0][^1] = '#';
-			lights[^1][0] = '#';
-			lights[^1][^1] = '#';
+			lights[1][1] = '#';
+			lights[1][^2] = '#';
+			lights[^2][1] = '#';
+			lights[^2][^2] = '#';
 
 			lights = GameOfLifeStep(lights);
 
-			lights[0][0] = '#';
-			lights[0][^1] = '#';
-			lights[^1][0] = '#';
-			lights[^1][^1] = '#';
+			lights[1][1] = '#';
+			lights[1][^2] = '#';
+			lights[^2][1] = '#';
+			lights[^2][^2] = '#';
 
 			return lights;
 		}
@@ -63,23 +71,13 @@ namespace Ujeby.AoC.App._2015_18
 		public static char[][] GameOfLifeStep(char[][] lights)
 		{
 			var next = lights.Select(l => l.ToArray()).ToArray();
-			var size = lights.Length;
+			var size = lights.Length - 2;
 
 			var p = new v2i();
-			for (p.Y = 0; p.Y < size; p.Y++)
-				for (p.X = 0; p.X < size; p.X++)
+			for (p.Y = 1; p.Y <= size; p.Y++)
+				for (p.X = 1; p.X <= size; p.X++)
 				{
-					var ns = 0;
-					foreach (var dir in _dir)
-					{
-						var p1 = p + dir;
-						if (p1.X < 0 || p1.Y < 0 || p1.X == size || p1.Y == size)
-							continue;
-
-						if (lights[p1.Y][p1.X] == '#')
-							ns++;
-					}
-
+					var ns = _dir.Count(d => lights[p.Y + d.Y][(int)(p.X + d.X)] == '#');
 					if ((lights[p.Y][p.X] == '#' && (ns == 2 || ns == 3)) || 
 						(lights[p.Y][p.X] != '#' && ns == 3))
 						next[p.Y][p.X] = '#';
