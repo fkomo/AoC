@@ -3,86 +3,64 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2015_18
 {
-	[AoCPuzzle(Year = 2015, Day = 18, Answer1 = "814", Answer2 = "924")]
+	[AoCPuzzle(Year = 2015, Day = 18, Answer1 = null, Answer2 = null)]
 	public class LikeAGIFForYourYard : PuzzleBase
 	{
-		private static readonly v2i[] _dir = v2i.RightDownLeftUp.Concat(v2i.Corners).ToArray();
+		private static readonly v2i[] _dir = new v2i[]
+		{
+			v2i.Down + v2i.Left,    v2i.Down,		v2i.Down + v2i.Right,
+			v2i.Left,               /*v2i.Zero,*/   v2i.Right,
+			v2i.Up + v2i.Left,      v2i.Up,			v2i.Up + v2i.Right,
+		};
 
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
-			var steps = 100;
-#if _DEBUG_SAMPLE
-			steps = 4;
-#endif
+			string answer1 = null, answer2 = null;
+
+			var lights = input.Select(i => i.ToCharArray()).ToArray();
+
 			// part1
-			var lights = CreateLights(input);
-			for (var i = 1; i <= steps; i++)
-				lights = GameOfLifeStep(lights, input.Length);
-			var answer1 = lights.Count(l => l == '#');
+			var steps = 100;
+			for (var i = 0; i < steps; i++)
+			{
+				var tmp = lights.Select(l => l.ToArray()).ToArray();
 
-			// part2
-			lights = CreateLights(input);
-			for (var i = 1; i <= steps; i++)
-				lights = GameOfLifeStepWithFixedCorners(lights, input.Length);
-			var answer2 = lights.Count(l => l == '#');
-
-			return (answer1.ToString(), answer2.ToString());
-		}
-
-		public static char[] CreateLights(string[] input)
-		{
-			var lights = new char[input.Length * input.Length];
-			for (int i = 0, y = 0; y < input.Length; y++)
-				for (var x = 0; x < input.Length; x++, i++)
-					lights[i] = input[y][x];
-
-			return lights;
-		}
-
-		public static char[] GameOfLifeStepWithFixedCorners(char[] lights, int size)
-		{
-			lights[0] = '#';
-			lights[^1] = '#';
-			lights[size - 1] = '#';
-			lights[size * (size - 1)] = '#';
-
-			lights = GameOfLifeStep(lights, size);
-
-			lights[0] = '#';
-			lights[^1] = '#';
-			lights[size - 1] = '#';
-			lights[size * (size - 1)] = '#';
-
-			return lights;
-		}
-
-		public static char[] GameOfLifeStep(char[] lights, int size)
-		{
-			var next = new char[lights.Length];
-
-			var p = new v2i();
-			for (p.Y = 0; p.Y < size; p.Y++)
-				for (p.X = 0; p.X < size; p.X++)
+				var p = new v2i();
+				for (p.Y = 0; p.Y < input.Length; p.Y++)
 				{
-					var ns = 0;
-					foreach (var dir in _dir)
+					for (p.X = 0; p.X < input.Length; p.X++)
 					{
-						var p1 = p + dir;
-						if (p1.X < 0 || p1.Y < 0 || p1.X == size || p1.Y == size)
-							continue;
+						var neighbours = 0;
+						foreach (var dir in _dir)
+						{
+							var p1 = p + dir;
+							if (p1.X < 0 || p.Y < 0 || p.X == input.Length || p.Y == input.Length)
+								continue;
 
-						if (lights[p1.Y * size + p1.X] == '#')
-							ns++;
+							if (lights[p.Y][p.X] == '#')
+								neighbours++;
+						}
+
+						if (lights[p.Y][p.X] == '#')
+						{
+							if (neighbours == 2 || neighbours == 3)
+								tmp[p.Y][p.X] = '#';
+							else
+								tmp[p.Y][p.X] = '.';
+						}
+						else if (neighbours == 3)
+							tmp[p.Y][p.X] = '#';
+						else
+							tmp[p.Y][p.X] = '.';
 					}
-
-					var i = p.Y * size + p.X;
-					if ((lights[i] == '#' && (ns == 2 || ns == 3)) || (lights[i] != '#' && ns == 3))
-						next[i] = '#';
-					else
-						next[i] = '.';
 				}
 
-			return next;
+				lights = tmp;
+			}
+
+			// part2
+
+			return (answer1, answer2);
 		}
 	}
 }
