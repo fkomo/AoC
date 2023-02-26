@@ -7,6 +7,8 @@ namespace Ujeby.AoC.App._2015_18
 	public class LikeAGIFForYourYard : PuzzleBase
 	{
 		private static readonly v2i[] _dir = v2i.RightDownLeftUp.Concat(v2i.Corners).ToArray();
+		private static readonly v2i[] _dir2 = 
+			v2i.RightDownLeftUp.Concat(v2i.Corners).Concat(new v2i[] { new v2i() }).ToArray();
 
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
@@ -17,14 +19,14 @@ namespace Ujeby.AoC.App._2015_18
 			// part1
 			var lights = CreateLights(input);
 			for (var i = 1; i <= steps; i++)
-				lights = GameOfLifeStep(lights);
-			var answer1 = lights.Sum(i => i.Count(l => l == '#'));
+				lights = GameOfLifeStep(lights.Grid, lights.On);
+			var answer1 = lights.On.Length;
 
 			// part2
 			lights = CreateLights(input);
 			for (var i = 1; i <= steps; i++)
-				lights = GameOfLifeStepWithFixedCorners(lights);
-			var answer2 = lights.Sum(i => i.Count(l => l == '#'));
+				lights = GameOfLifeStepWithFixedCorners(lights.Grid, lights.On);
+			var answer2 = lights.On.Length;
 
 			// 1d array 390-420ms
 			// 2d array 
@@ -34,58 +36,65 @@ namespace Ujeby.AoC.App._2015_18
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		public static char[][] CreateLights(string[] input)
+		public static (char[][] Grid, v2i[] On) CreateLights(string[] input)
 		{
-			//var lights = new char[input.Length * input.Length];
-			//for (int i = 0, y = 0; y < input.Length; y++)
-			//	for (var x = 0; x < input.Length; x++, i++)
-			//		lights[i] = input[y][x];
-			//return lights;
-
 			var lights = new char[input.Length + 2][];
 			lights[0] = Enumerable.Repeat('.', input.Length + 2).ToArray();
 			for (var y = 0; y < input.Length; y++)
 				lights[y + 1] = new char[] { '.' }.Concat(input[y]).Concat(new char[] { '.' }).ToArray();
 			lights[^1] = Enumerable.Repeat('.', input.Length + 2).ToArray();
 
+			var on = new List<v2i>();
+			for (int y = 0; y < lights.Length; y++)
+				for (var x = 0; x < input.Length; x++)
+					if (lights[y][x] == '#')
+						on.Add(new v2i(y, x));
+
+			return (lights, on.ToArray());
+		}
+
+		public static (char[][] Grid, v2i[] On) GameOfLifeStepWithFixedCorners(char[][] grid, v2i[] on)
+		{
+			grid[1][1] = '#';
+			grid[1][^2] = '#';
+			grid[^2][1] = '#';
+			grid[^2][^2] = '#';
+
+			var lights = GameOfLifeStep(grid, on);
+
+			lights.Grid[1][1] = '#';
+			lights.Grid[1][^2] = '#';
+			lights.Grid[^2][1] = '#';
+			lights.Grid[^2][^2] = '#';
+
 			return lights;
 		}
 
-		public static char[][] GameOfLifeStepWithFixedCorners(char[][] lights)
+		public static (char[][] Grid, v2i[] On) GameOfLifeStep(char[][] grid, v2i[] on)
 		{
-			lights[1][1] = '#';
-			lights[1][^2] = '#';
-			lights[^2][1] = '#';
-			lights[^2][^2] = '#';
+			var size = grid.Length - 2;
 
-			lights = GameOfLifeStep(lights);
+			var nextOn = new List<v2i>();
+			var nextGrid = grid.Select(l => l.ToArray()).ToArray();
 
-			lights[1][1] = '#';
-			lights[1][^2] = '#';
-			lights[^2][1] = '#';
-			lights[^2][^2] = '#';
-
-			return lights;
-		}
-
-		public static char[][] GameOfLifeStep(char[][] lights)
-		{
-			var next = lights.Select(l => l.ToArray()).ToArray();
-			var size = lights.Length - 2;
-
-			var p = new v2i();
-			for (p.Y = 1; p.Y <= size; p.Y++)
-				for (p.X = 1; p.X <= size; p.X++)
+			foreach (var light in on)
+			{
+				foreach (var pn in _dir2)
 				{
-					var ns = _dir.Count(d => lights[p.Y + d.Y][(int)(p.X + d.X)] == '#');
-					if ((lights[p.Y][p.X] == '#' && (ns == 2 || ns == 3)) || 
-						(lights[p.Y][p.X] != '#' && ns == 3))
-						next[p.Y][p.X] = '#';
+					var p = pn + light;
+					var ns = _dir.Count(d => grid[p.Y + d.Y][(int)(p.X + d.X)] == '#');
+					if ((grid[p.Y][p.X] == '#' && (ns == 2 || ns == 3)) ||
+						(grid[p.Y][p.X] != '#' && ns == 3))
+					{
+						nextGrid[p.Y][p.X] = '#';
+						nextOn.Add(p);
+					}
 					else
-						next[p.Y][p.X] = '.';
+						nextGrid[p.Y][p.X] = '.';
 				}
+			}
 
-			return next;
+			return (nextGrid, nextOn.Distinct().ToArray());
 		}
 	}
 }
