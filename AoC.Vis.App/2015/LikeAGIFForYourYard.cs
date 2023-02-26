@@ -37,8 +37,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			_lights = AoC.App._2015_18.LikeAGIFForYourYard.GameOfLifeStepWithFixedCorners(_lights);
-			_step++;
+
 		}
 
 		protected override void Render()
@@ -56,12 +55,18 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawText(new v2i(32, 32), 
 				new Text($"step: {_step}"),
-				new Text($"lights: {_lights.Sum(i => i.Count(l => l == '#'))}"));
+				new Text($"lights: {_lights.Sum(i => i.Count(c => c == '#'))}"));
 		}
 
 		protected override void Destroy()
 		{
 			//ShowCursor();
+		}
+
+		protected override void LeftMouseDown()
+		{
+			_lights = AoC.App._2015_18.LikeAGIFForYourYard.GameOfLifeStepWithFixedCorners(_lights);
+			_step++;
 		}
 	}
 }

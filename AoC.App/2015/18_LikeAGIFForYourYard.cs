@@ -6,7 +6,7 @@ namespace Ujeby.AoC.App._2015_18
 	[AoCPuzzle(Year = 2015, Day = 18, Answer1 = "814", Answer2 = "924")]
 	public class LikeAGIFForYourYard : PuzzleBase
 	{
-		private static readonly v2i[] _dir = v2i.RightDownLeftUp.Concat(v2i.Corners).ToArray();
+		private static readonly v2i[] _neighbors = v2i.RightDownLeftUp.Concat(v2i.Corners).ToArray();
 		private static readonly v2i[] _dir2 = 
 			v2i.RightDownLeftUp.Concat(v2i.Corners).Concat(new v2i[] { new v2i() }).ToArray();
 
@@ -19,82 +19,78 @@ namespace Ujeby.AoC.App._2015_18
 			// part1
 			var lights = CreateLights(input);
 			for (var i = 1; i <= steps; i++)
-				lights = GameOfLifeStep(lights.Grid, lights.On);
-			var answer1 = lights.On.Length;
+				lights = GameOfLifeStep(lights);
+			var answer1 = lights.Sum(i => i.Count(c => c == '#'));
 
 			// part2
 			lights = CreateLights(input);
 			for (var i = 1; i <= steps; i++)
-				lights = GameOfLifeStepWithFixedCorners(lights.Grid, lights.On);
-			var answer2 = lights.On.Length;
-
-			// 1d array 390-420ms
-			// 2d array 
-			// 2d array + 1 (less ifs in neighbour count), longer CreateLights
-			// 
+				lights = GameOfLifeStepWithFixedCorners(lights);
+			var answer2 = lights.Sum(i => i.Count(c => c == '#'));
 
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		public static (char[][] Grid, v2i[] On) CreateLights(string[] input)
+		public static char[][] CreateLights(string[] input)
 		{
-			var lights = new char[input.Length + 2][];
-			lights[0] = Enumerable.Repeat('.', input.Length + 2).ToArray();
-			for (var y = 0; y < input.Length; y++)
-				lights[y + 1] = new char[] { '.' }.Concat(input[y]).Concat(new char[] { '.' }).ToArray();
-			lights[^1] = Enumerable.Repeat('.', input.Length + 2).ToArray();
-
-			var on = new List<v2i>();
-			for (int y = 0; y < lights.Length; y++)
-				for (var x = 0; x < input.Length; x++)
-					if (lights[y][x] == '#')
-						on.Add(new v2i(y, x));
-
-			return (lights, on.ToArray());
+			return input.Select(i => i.ToArray()).ToArray();
 		}
 
-		public static (char[][] Grid, v2i[] On) GameOfLifeStepWithFixedCorners(char[][] grid, v2i[] on)
+		public static char[][] GameOfLifeStepWithFixedCorners(char[][] current)
 		{
-			grid[1][1] = '#';
-			grid[1][^2] = '#';
-			grid[^2][1] = '#';
-			grid[^2][^2] = '#';
+			current[0][0] = '#';
+			current[0][^1] = '#';
+			current[^1][0] = '#';
+			current[^1][^1] = '#';
 
-			var lights = GameOfLifeStep(grid, on);
+			var next = GameOfLifeStep(current);
 
-			lights.Grid[1][1] = '#';
-			lights.Grid[1][^2] = '#';
-			lights.Grid[^2][1] = '#';
-			lights.Grid[^2][^2] = '#';
+			next[0][0] = '#';
+			next[0][^1] = '#';
+			next[^1][0] = '#';
+			next[^1][^1] = '#';
 
-			return lights;
+			return next;
 		}
 
-		public static (char[][] Grid, v2i[] On) GameOfLifeStep(char[][] grid, v2i[] on)
+		public static char[][] GameOfLifeStep(char[][] current)
 		{
-			var size = grid.Length - 2;
+			var size = current.Length;
+			var next = current.Select(x => x.ToArray()).ToArray();
 
-			var nextOn = new List<v2i>();
-			var nextGrid = grid.Select(l => l.ToArray()).ToArray();
-
-			foreach (var light in on)
-			{
-				foreach (var pn in _dir2)
+			var p = new v2i();
+			for (p.Y = 0; p.Y < size; p.Y++)
+				for (p.X = 0; p.X < size; p.X++)
 				{
-					var p = pn + light;
-					var ns = _dir.Count(d => grid[p.Y + d.Y][(int)(p.X + d.X)] == '#');
-					if ((grid[p.Y][p.X] == '#' && (ns == 2 || ns == 3)) ||
-						(grid[p.Y][p.X] != '#' && ns == 3))
+					// count neighbors
+					var neighbors = 0;
+					foreach (var dir in _neighbors)
 					{
-						nextGrid[p.Y][p.X] = '#';
-						nextOn.Add(p);
+						var p1 = p + dir;
+						if (p1.X < 0 || p1.Y < 0 || p1.X == size || p1.Y == size)
+							continue;
+						if (current[p1.Y][p1.X] == '#')
+							neighbors++;
+					}
+
+					var i = p.Y * size + p.X;
+					if ((current[p.Y][p.X] == '#' && (neighbors == 2 || neighbors == 3)) ||
+						(current[p.Y][p.X] != '#' && neighbors == 3))
+					{
+						next[p.Y][p.X] = '#';
 					}
 					else
-						nextGrid[p.Y][p.X] = '.';
+						next[p.Y][p.X] = '.';
 				}
-			}
 
-			return (nextGrid, nextOn.Distinct().ToArray());
+			return next;
+		}
+
+		public static void Draw(char[][] grid)
+		{
+			for (var y = 0; y < grid.Length; y++)
+				Debug.Line($"{ new string(grid[y]) }");
+			Debug.Line();
 		}
 	}
 }
