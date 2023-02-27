@@ -9,7 +9,6 @@ namespace Ujeby.AoC.Vis.App
 	internal class TrenchMap : Sdl2Loop
 	{
 		private long _step;
-		private bool _paused;
 
 		private string _imageEnhAlg;
 		private string[] _image;
@@ -29,20 +28,11 @@ namespace Ujeby.AoC.Vis.App
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2021, 20);
 			_imageEnhAlg = input.First();
 			_image = input.Skip(2).ToArray();
-
 			_step = 0;
-			_paused = false;
 		}
 
 		protected override void Update()
 		{
-			if (!_paused)
-			{
-				var enh = AoC.App._2021_20.TrenchMap.EnhanceImage((_image, '.'), _imageEnhAlg);
-
-				_image = enh.Image;
-				_step++;
-			}
 		}
 
 		protected override void Render()
@@ -67,7 +57,6 @@ namespace Ujeby.AoC.Vis.App
 
 			DrawText(new v2i(32, 32), 
 				new Text($"step: {_step}"),
-				new Text($"paused: {_paused}"),
 				new Text($"size: {imageSize}"));
 		}
 
@@ -76,9 +65,11 @@ namespace Ujeby.AoC.Vis.App
 			ShowCursor();
 		}
 
-		protected override void LeftMouseUp()
+		protected override void LeftMouseDown()
 		{
-			_paused = !_paused;
+			var enh = AoC.App._2021_20.TrenchMap.EnhanceImage((_image, '.'), _imageEnhAlg);
+			_image = enh.Image;
+			_step++;
 		}
 	}
 }

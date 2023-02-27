@@ -22,7 +22,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			ShowCursor(true);
 
-			Grid.MinorSize = 4;
+			Grid.MinorSize = 8;
 
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2015, 18);
 			_size = input.Length;
@@ -50,6 +50,10 @@ namespace Ujeby.AoC.Vis.App
 					if (_lights[p.Y][p.X])
 						DrawGridCell((int)(_size / -2 + p.X), (int)(_size / -2 + p.Y), 
 							fill: new v4f(0.7f));
+
+			var min = new v2i(_size / -2);
+			var max = new v2i(_size / 2);
+			DrawGridRect(min, new v2i(_size), new v4f(0, 0, 1, 1));
 
 			DrawGridMouseCursor();
 
