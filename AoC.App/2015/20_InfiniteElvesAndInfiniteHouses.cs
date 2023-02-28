@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2015_20
 {
-	[AoCPuzzle(Year = 2015, Day = 20, Answer1 = "786240", Answer2 = null)]
+	[AoCPuzzle(Year = 2015, Day = 20, Answer1 = "786240", Answer2 = "831600")]
 	public class InfiniteElvesAndInfiniteHouses : PuzzleBase
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -11,29 +11,41 @@ namespace Ujeby.AoC.App._2015_20
 
 			// part1
 			long? answer1 = 786240;
-			// TODO 2015/20 p1 OPTIMIZE (930s)
+			// TODO 2015/20 p1 OPTIMIZE (603s)
 			//long? answer1 = null;
-			//for (var h = 2; h < (desiredPresents - 10) / 10 && !answer1.HasValue; h++)
+			//var lastHouse = (desiredPresents - 10) / 10;
+			//answer1 = Parallel.For(2, lastHouse, (h, state) =>
 			//{
-			//	var presents = 10 + h * 10;
+			//	if (state.ShouldExitCurrentIteration && state.LowestBreakIteration < h)
+			//		return;
+
+			//	var presents = 10 * (1 + h);
 			//	for (var i = h - 1; i > 1; i--)
 			//	{
 			//		if (h % i != 0)
 			//			continue;
+
 			//		presents += 10 * i;
 			//		if (presents >= desiredPresents)
-			//		{
-			//			answer1 = h;
-			//			break;
-			//		}
+			//			state.Break();
 			//	}
-			//}
+			//}).LowestBreakIteration;
 
 			// part2
-			long? answer2 = null;
-
-
-			// 952920 too high
+			long? answer2 = long.MaxValue;
+			var houses = new Dictionary<long, long>();
+			for (int e = 1, p = 11; e < desiredPresents && e <= answer2; e++, p += 11)
+				for (int h = e, i = 1; i <= 50 && h < answer2; i++, h += e)
+				{
+					if (!houses.ContainsKey(h))
+						houses.Add(h, p);
+					else
+					{
+						houses[h] += p;
+						if (houses[h] >= desiredPresents && h < answer2.Value)
+							answer2 = h;
+					}
+				}
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}
