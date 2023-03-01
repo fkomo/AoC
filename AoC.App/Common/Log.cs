@@ -8,8 +8,7 @@ namespace Ujeby.AoC.Common
 
 		public static int Indent { get; set; } = 2;
 
-		public static string OutputFile = 
-			Path.Combine(Environment.CurrentDirectory, $"AoC.Output.{DateTime.Now.ToString("yyyy-MM-ddHHmmssfff")}.txt");
+		public static readonly string OutputFile = Path.Combine(Environment.CurrentDirectory, $"AoC.Output.{DateTime.Now:yyyyMMdd_HHmmssfff}.txt");
 
 		public static void Line(
 			string lineText = null, int? indent = null, ConsoleColor textColor = ConsoleColor.White)
