@@ -2,60 +2,78 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2015_24
 {
-	[AoCPuzzle(Year = 2015, Day = 24, Answer1 = "11846773891", Answer2 = null)]
+	[AoCPuzzle(Year = 2015, Day = 24, Answer1 = "11846773891", Answer2 = "80393059")]
 	public class ItHangsInTheBalance : PuzzleBase
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
-			string answer2 = null;
-
 			var packages = input.Select(i => long.Parse(i)).ToArray();
 
 			// part1
-			var answer1 = long.MaxValue;
-			var minG1Count = long.MaxValue;
+			var answer1 = DividePackages(packages, 3);
 
-			var gWeight = packages.Sum() / 3;
-			Debug.Line($"gWeight={gWeight}");
-			for (var g1Length = 2; g1Length < packages.Length - 2; g1Length++)
+			// part2
+			var answer2 = DividePackages(packages, 4);
+
+			return (answer1.ToString(), answer2.ToString());
+		}
+
+		private static long DividePackages(long[] packages, int gCount)
+		{
+			var minQe = long.MaxValue;
+			var minGroupLength = long.MaxValue;
+
+			var weight = packages.Sum() / gCount;
+			Log.Line($"weight={weight}");
+
+			for (var gLength = 1; gLength < packages.Length - (gCount - 1); gLength++)
 			{
-				if (g1Length > minG1Count)
+				if (gLength > minGroupLength)
 					break;
 
-				foreach (var g1 in Alg.Combinatorics.Combinations(packages, g1Length)
-					.Where(g => g.Sum() == gWeight))
+				foreach (var g in Alg.Combinatorics.Combinations(packages, gLength)
+					.Where(g => g.Sum() == weight))
 				{
-					var g23 = packages.Except(g1);
-					if (!DivideTo2Groups(Array.Empty<long>(), g23.ToArray(), gWeight))
+					var gRest = packages.Except(g);
+					if (!IsDivisibleToGroups(Array.Empty<long>(), gRest.ToArray(), weight, gCount - 1))
 						continue;
 
-					var qe = QuantumEntanglement(g1.ToArray());
-					if (qe < answer1)
+					var qe = QuantumEntanglement(g.ToArray());
+					if (qe < minQe)
 					{
-						answer1 = qe;
-						minG1Count = g1Length;
-						Debug.Line($"g1:[{string.Join(", ", g1)}] qe={qe} ... g2/3:[{string.Join(", ", g23)}]");
+						minQe = qe;
+						minGroupLength = gLength;
+						Log.Line($"g1:[{string.Join(", ", g)}] qe={qe} ... gRest:[{string.Join(", ", gRest)}]");
+
+						return minQe;
 					}
 				}
 			}
 
-			// part2
-
-			return (answer1.ToString(), answer2);
+			return minQe;
 		}
 
-		private static bool DivideTo2Groups(long[] g, long[] all, long gWeight)
+		private static bool IsDivisibleToGroups(long[] g, long[] rest, long gWeight, int gCount)
 		{
-			var gSum = g.Sum();
-			if (gSum == gWeight)
+			var weight = g.Sum();
+			if (gCount == 1 && weight == gWeight)
 				return true;
 
-			for (var i = 0; i < all.Length; i++)
+			for (var i = 0; i < rest.Length; i++)
 			{
-				if (g.Contains(all[i]) || gSum + all[i] > gWeight)
+				if (g.Contains(rest[i]))
 					continue;
 
-				if (DivideTo2Groups(new[] { all[i] }.Concat(g).ToArray(), all, gWeight))
+				var newWeight = weight + rest[i];
+				if (newWeight > gWeight)
+					continue;
+
+				var tmp = new[] { rest[i] }.Concat(g).ToArray();
+				if (newWeight == gWeight && IsDivisibleToGroups(Array.Empty<long>(), rest.Except(tmp).ToArray(), gWeight, gCount - 1))
+					return true;
+
+				// newWeight < gWeight
+				else if (IsDivisibleToGroups(tmp, rest, gWeight, gCount))
 					return true;
 			}
 
