@@ -24,7 +24,7 @@ namespace Ujeby.AoC.App._2015_24
 			var minGroupLength = long.MaxValue;
 
 			var weight = packages.Sum() / gCount;
-			Log.Line($"weight={weight}");
+			Debug.Line($"weight={weight}");
 
 			for (var gLength = 1; gLength < packages.Length - (gCount - 1); gLength++)
 			{
@@ -43,7 +43,7 @@ namespace Ujeby.AoC.App._2015_24
 					{
 						minQe = qe;
 						minGroupLength = gLength;
-						Log.Line($"g1:[{string.Join(", ", g)}] qe={qe} ... gRest:[{string.Join(", ", gRest)}]");
+						Debug.Line($"g1:[{string.Join(", ", g)}] qe={qe} ... gRest:[{string.Join(", ", gRest)}]");
 
 						return minQe;
 					}
