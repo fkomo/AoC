@@ -24,8 +24,15 @@ namespace Ujeby.AoC.Vis.App
 					var menu = new AoCMenu(windowSize,
 						new Dictionary<string, IRunnable[]>
 						{
-							{ 
-								"2021", 
+							{
+								"2015",
+								new IRunnable[]
+								{
+									new LikeAGIFForYourYard(windowSize),
+								}
+							},
+							{
+								"2021",
 								new IRunnable[]
 								{
 									new Chitron(windowSize),
@@ -33,8 +40,8 @@ namespace Ujeby.AoC.Vis.App
 									new TrenchMap(windowSize),
 								}
 							},
-							{ 
-								"2022", 
+							{
+								"2022",
 								new IRunnable[]
 								{
 									new BlizzardBasin(windowSize),

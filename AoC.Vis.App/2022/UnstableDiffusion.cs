@@ -40,17 +40,6 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			if (!_noMovement)
-			{
-				_elves = AoC.App._2022_23.UnstableDiffusion.Step(_elves, _direction, out _noMovement);
-
-				_step++;
-				_direction = (int)(_step % 4);
-
-				var min = new v2i(_elves.Min(e => e.Position.X), _elves.Min(e => e.Position.Y));
-				var max = new v2i(_elves.Max(e => e.Position.X), _elves.Max(e => e.Position.Y));
-				Grid.SetCenter((max + min) / 2 * Grid.MinorSize);
-			}
 		}
 
 		protected override void Render()
@@ -77,9 +66,26 @@ namespace Ujeby.AoC.Vis.App
 				new Text($"area: {min}x{max}"),
 				new Text($"empty: {empty}"));
 		}
+
 		protected override void Destroy()
 		{
 			ShowCursor();
+		}
+
+		protected override void LeftMouseDown()
+		{
+			if (!_noMovement)
+			{
+				_elves = AoC.App._2022_23.UnstableDiffusion.Step(_elves, _direction, out _noMovement);
+
+				_step++;
+				_direction = (int)(_step % 4);
+
+				// center grid
+				//var min = new v2i(_elves.Min(e => e.Position.X), _elves.Min(e => e.Position.Y));
+				//var max = new v2i(_elves.Max(e => e.Position.X), _elves.Max(e => e.Position.Y));
+				//Grid.SetCenter((max + min) / 2 * Grid.MinorSize);
+			}
 		}
 	}
 }
