@@ -4,310 +4,219 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2015_22
 {
-	[AoCPuzzle(Year = 2015, Day = 22, Answer1 = null, Answer2 = null)]
+	[AoCPuzzle(Year = 2015, Day = 22, Answer1 = "953", Answer2 = "1289")]
 	public class WizardSimulator20XX : PuzzleBase
 	{
-		public enum SpellsEnum
+		public const int Hp = 0;
+		public const int Mana = 1;
+		public const int Armor = 2;
+		public const int Dmg = 3;
+
+		public enum SpellEnum
 		{
-			MagicMissile = 0,
+			MagicMissile,
 			Drain,
 			Shield,
 			Poison,
 			Recharge
 		};
 
-		public const int Hp = 0;
-		public const int Mana = 1;
-		public const int Armor = 2;
-		public const int Dmg = 3;
+		public record struct Spell(SpellEnum Type, long ManaCost, long Damage, int EffectDuration)
+		{
+			internal bool IsEffect() => EffectDuration > 0;
+			
+			public override string ToString()
+				=> Type.ToString();
+		}
+
+		/// <summary>
+		/// order makes difference! ideal order makes best result (min mana cost) sooner
+		/// </summary>
+		public static readonly Spell[] _spells = new Spell[]
+		{
+			new Spell(SpellEnum.Poison, 173, 0, 6),
+			new Spell(SpellEnum.Recharge, 229, 0, 5),
+			new Spell(SpellEnum.MagicMissile, 53, 4, 0),
+			new Spell(SpellEnum.Drain, 73, 2, 0),
+			new Spell(SpellEnum.Shield, 113, 0, 6),
+		};
 
 		public struct ActiveEffect
 		{
-			public SpellsEnum Effect;
+			public SpellEnum Effect;
 			public int TurnsLeft;
 
-			public ActiveEffect(SpellsEnum effect)
+			public ActiveEffect(Spell effect)
 			{
-				Effect = effect;
-				TurnsLeft = (Spell.Get(effect) as Effect).Duration;
+				Effect = effect.Type;
+				TurnsLeft = effect.EffectDuration;
 			}
 
-			public override string ToString() => $"{Effect}: {TurnsLeft} turns left";
+			public override string ToString() => $"{Effect}/{TurnsLeft}";
 		}
 
 		public struct FightState
 		{
-			public v4i Player;
 			public v4i Boss;
+			public v4i Player;
 			public ActiveEffect[] ActiveEffects;
 
 			public long Turn;
 			public long ManaSpent;
-			public bool BossTurn;
+			public long MinManaSpent;
 
-			public FightState(FightState state)
+			public bool IsBossTurn => Turn % 2 == 0;
+
+			public FightState NextTurn()
 			{
-				Turn = state.Turn + 1;
-				Player = state.Player;
-				Boss = state.Boss;
-				ManaSpent = state.ManaSpent;
-				BossTurn = !state.BossTurn;
-				ActiveEffects = state.ActiveEffects.ToArray();
-			}
+				Debug.Line(ToString());
+				Debug.Indent++;
 
-			public FightState(long manaSpent)
-			{
-				Turn = 0;
-				Player = new();
-				Boss = new();
-				ManaSpent = manaSpent;
-				BossTurn = false;
-				ActiveEffects = Array.Empty<ActiveEffect>();
-			}
-
-			public static FightState Default => new(manaSpent: long.MaxValue);
-
-			internal FightState EndOfTurn()
-			{
-				for (var ae = 0; ae < ActiveEffects.Length; ae++)
+				return new()
 				{
-					var effect = Effect.Get(ActiveEffects[ae].Effect);
-
-					// effect not started yet
-					if (effect.Duration == ActiveEffects[ae].TurnsLeft)
-						continue;
-
-					Player += effect.ToCasterAtTurnEnd();
-					Boss += effect.ToTargetAtTurnEnd();
-				}
-
-				return this;
+					Turn = Turn + 1,
+					Boss = Boss,
+					Player = Player,
+					ManaSpent = ManaSpent,
+					MinManaSpent = MinManaSpent,
+					ActiveEffects = ActiveEffects.ToArray(),
+				};
 			}
 
-			public override string ToString()
-				=> $"#{Turn}/{(BossTurn ? "B" : "P")}: Player={Player}, Boss={Boss}, ManaSpent={ManaSpent}" + Environment.NewLine
-				+ string.Join(" | ", ActiveEffects.Select(ae => ae.ToString()));
-		}
-
-		public abstract class Spell
-		{
-			public long ManaCost { get; init; }
-
-			public Spell(long manaCost)
+			public FightState Copy() => new()
 			{
-				ManaCost = manaCost;
-			}
-
-			public virtual v4i ToCasterAfterCast() => new(0, -ManaCost, 0, 0);
-			public virtual v4i ToTargetAfterCast() => new();
-
-			protected static readonly Dictionary<SpellsEnum, Spell> _allSpells = new()
-			{
-				{ SpellsEnum.MagicMissile, new MagicMissile() },
-				{ SpellsEnum.Drain, new Drain() },
-				{ SpellsEnum.Shield, new Shield() },
-				{ SpellsEnum.Poison, new Poison() },
-				{ SpellsEnum.Recharge, new Recharge() }
+				Turn = Turn,
+				Boss = Boss,
+				Player = Player,
+				ManaSpent = ManaSpent,
+				MinManaSpent = MinManaSpent,
+				ActiveEffects = ActiveEffects.ToArray(),
 			};
 
-			public static Spell Get(SpellsEnum spell) => _allSpells[spell];
-		}
-
-		public class MagicMissile : Spell
-		{
-			public long Damage { get; init; }
-
-			public MagicMissile(long manaCost = 53, long damage = 4) : base(manaCost)
-			{
-				Damage = damage;
-			}
-
-			public override v4i ToTargetAfterCast() => new(-Damage, 0, 0, 0);
-		}
-
-		public class Drain : Spell
-		{
-			public long Damage { get; init; }
-			public long Heal { get; init; }
-
-			public Drain(long manaCost = 73, long damage = 2, long heal = 2) : base(manaCost)
-			{
-				Damage = damage;
-				Heal = heal;
-			}
-
-			public override v4i ToCasterAfterCast() => new(Heal, -ManaCost, 0, 0);
-			public override v4i ToTargetAfterCast() => new(-Damage, 0, 0, 0);
-		}
-
-		public abstract class Effect : Spell
-		{
-			public int Duration { get; init; }
-
-			protected Effect(long manaCost, int duration) : base(manaCost)
-			{
-				Duration = duration;
-			}
-
-			public static new Effect Get(SpellsEnum spell) => _allSpells[spell] as Effect;
-
-			public virtual v4i ToCasterAtTurnStart() => new();
-			public virtual v4i ToCasterAtTurnEnd() => new();
-			public virtual v4i ToTargetAtTurnStart() => new();
-			public virtual v4i ToTargetAtTurnEnd() => new();
-		}
-
-		public class Shield : Effect
-		{
-			public long Armor { get; init; }
-
-			public Shield(long manaCost = 113, int duration = 6, long armor = 7) : base(manaCost, duration)
-			{
-				Armor = armor;
-			}
-
-			public override v4i ToCasterAtTurnStart() => new(0, 0, Armor, 0);
-			public override v4i ToCasterAtTurnEnd() => new(0, 0, -Armor, 0);
-		}
-
-		public class Poison : Effect
-		{
-			public long Damage { get; init; }
-
-			public Poison(long manaCost = 173, int duration = 6, long damage = 3) : base(manaCost, duration)
-			{
-				Damage = damage;
-			}
-
-			public override v4i ToTargetAtTurnStart() => new(-Damage, 0, 0, 0);
-		}
-
-		public class Recharge : Effect
-		{
-			public long Mana { get; init; }
-
-			public Recharge(long manaCost = 229, int duration = 5, long mana = 101) : base(manaCost, duration)
-			{
-				Mana = mana;
-			}
-
-			public override v4i ToCasterAtTurnStart() => new(0, Mana, 0, 0);
+			public override string ToString() =>
+				$"#{Turn} p{Player} x b{Boss} m[{ManaSpent}/{MinManaSpent}]" +
+				$" ae[{string.Join(", ", ActiveEffects.Select(ae => ae.ToString()))}]";
 		}
 
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
-			var boss = new v4i(input[0].ToNumArray()[0], 0, 0, input[1].ToNumArray()[0]);
-#if _DEBUG_SAMPLE
-			var player = new v4i(10, 250, 0, 0);
-#else
-			var player = new v4i(50, 500, 0, 0);
-#endif
-			// part1
-			string answer1 = null;
-			//var answer1 = SimMinManaCost(new FightState
-			//{
-			//	Boss = boss,
-			//	Player = player,
-			//	ManaSpent = 0,
-			//	BossTurn = false,
-			//	ActiveEffects = Array.Empty<ActiveEffect>(),
-			//}).ManaSpent;
+			var initState = new FightState
+			{
+				Turn = 1,
+				Player = new(50, 500, 0, 0),
+				Boss = new(input[0].ToNumArray()[0], 0, 0, input[1].ToNumArray()[0]),
+				ActiveEffects = Array.Empty<ActiveEffect>(),
+				MinManaSpent = long.MaxValue,
+				ManaSpent = 0,
+			};
 
-			// 943 too low
-			string answer2 = null;
+			// part1
+			var answer1 = SimMinManaCost(initState);
 
 			// part2
+			var answer2 = SimMinManaCost(initState, true);
 
-			return (answer1?.ToString(), answer2?.ToString());
+			return (answer1.ToString(), answer2.ToString());
 		}
 
-		private FightState SimMinManaCost(FightState state)
+		private static long SimMinManaCost(FightState state,
+			bool hardMode = false)
 		{
-			// start of turn
+			if (state.ManaSpent >= state.MinManaSpent)
+				return state.MinManaSpent;
 
+			// start of turn
 			// remove expired effects
 			state.ActiveEffects = state.ActiveEffects.Where(e => e.TurnsLeft > 0).ToArray();
 
-			// apply active effects
+			if (hardMode && !state.IsBossTurn)
+			{
+				state.Player[Hp] -= 1;
+				if (state.Player[Hp] <= 0)
+				{
+					Debug.Line("player died");
+					Debug.Indent--;
+
+					return long.MaxValue;
+				}
+			}
+
+			// apply effects
 			for (var ae = 0; ae < state.ActiveEffects.Length; ae++)
-			{
-				var effect = Effect.Get(state.ActiveEffects[ae].Effect);
-				state.Player += effect.ToCasterAtTurnStart();
-				if (state.Player[Hp] <= 0)
-					return FightState.Default; // player died
-
-				state.Boss += effect.ToTargetAtTurnStart();
-				if (state.Boss[Hp] <= 0)
-					return state; // boss died
-
 				state.ActiveEffects[ae].TurnsLeft--;
+
+			if (state.ActiveEffects.Any(ae => ae.Effect == SpellEnum.Recharge))
+				state.Player[Mana] += 101;
+
+			if (state.ActiveEffects.Any(ae => ae.Effect == SpellEnum.Poison))
+			{
+				state.Boss[Hp] -= 3;
+				if (state.Boss[Hp] <= 0)
+				{
+					Debug.Line($"boss died from {SpellEnum.Poison}");
+					Debug.Indent--;
+
+					return state.ManaSpent;
+				}
 			}
 
-			// boss turn, just do damage to player
-			if (state.BossTurn)
+			// boss turn
+			if (state.IsBossTurn)
 			{
-				state.Player[Hp] -= Math.Max(1, state.Boss[Dmg] - state.Player[Armor]);
+				var playerArmor = state.Player[Armor];
+				if (state.ActiveEffects.Any(ae => ae.Effect == SpellEnum.Shield))
+					playerArmor += 7;
+
+				state.Player[Hp] -= Math.Max(1, state.Boss[Dmg] - playerArmor);
 				if (state.Player[Hp] <= 0)
-					return FightState.Default; // player died
+				{
+					Debug.Line("player died");
+					Debug.Indent--;
 
-				// end of boss turn
-				state = state.EndOfTurn();
-				state.BossTurn = false;
-				state.Turn++;
+					return long.MaxValue;
+				}
 
-				Debug.Line(state.ToString());
-
-				// next turn
-				return SimMinManaCost(state);
+				return SimMinManaCost(state.NextTurn(), hardMode);
 			}
 
-			// player turn, fork all possible spells and find best result
-			var bestState = FightState.Default;
-			foreach (var spellEnum in Enum.GetValues<SpellsEnum>())
+			// player turn
+			foreach (var spell in _spells)
 			{
-				// cast new spell
-				var newSpell = Spell.Get(spellEnum);
-
-				// not enough mana
-				if (state.Player[Mana] < newSpell.ManaCost)
+				if (state.Player[Mana] <= spell.ManaCost)
 					continue;
 
-				var newState = new FightState(state);
-				newState.ManaSpent += newSpell.ManaCost;
+				if (spell.IsEffect() && state.ActiveEffects.Any(ae => ae.Effect == spell.Type && ae.TurnsLeft > 0))
+					continue;
 
-				// effect
-				if (newSpell is Effect effect)
+				var fork = state.Copy();
+				fork.Player[Mana] -= spell.ManaCost;
+				fork.ManaSpent += spell.ManaCost;
+
+				if (spell.IsEffect())
+					fork.ActiveEffects = new ActiveEffect[] { new ActiveEffect(spell) }.Concat(fork.ActiveEffects).ToArray();
+
+				else
 				{
-					// cant cast effect that is already active
-					if (newState.ActiveEffects.Any(ae => ae.TurnsLeft > 0 && ae.Effect == spellEnum))
-						continue;
+					if (spell.Type == SpellEnum.Drain)
+						fork.Player[Hp] += 2;
 
-					// add new effect
-					newState.ActiveEffects = new ActiveEffect[] { new ActiveEffect(spellEnum) }.Concat(newState.ActiveEffects).ToArray();
-				}
-				else // spell
-				{
-					newState.Player += newSpell.ToCasterAfterCast();
-					if (newState.Player[Hp] <= 0 || newState.Player[Mana] <= 0) // player died or mana spent
-						return FightState.Default;
-
-					newState.Boss += newSpell.ToTargetAfterCast();
-					if (newState.Boss[Hp] <= 0) // boss died
-						return newState;
+					fork.Boss[Hp] -= spell.Damage;
 				}
 
-				// end of player turn
-				newState = newState.EndOfTurn();
+				var forkResult = fork.ManaSpent;
+				if (fork.Boss[Hp] > 0)
+					forkResult = SimMinManaCost(fork.NextTurn(), hardMode);
+				else
+				{
+					Debug.Line($"boss died from {spell}");
+					Debug.Indent--;
+				}
 
-				Debug.Line(newState.ToString());
-
-				// next turn
-				var finalState = SimMinManaCost(newState);
-				if (finalState.ManaSpent < bestState.ManaSpent)
-					bestState = finalState;
+				state.MinManaSpent = Math.Min(forkResult, state.MinManaSpent);
 			}
 
-			return bestState;
+			Debug.Indent -= 2;
+			return state.MinManaSpent;
 		}
 	}
 }
