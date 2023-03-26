@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2016_01
 {
-	[AoCPuzzle(Year = 2016, Day = 01, Answer1 = "239", Answer2 = null)]
+	[AoCPuzzle(Year = 2016, Day = 01, Answer1 = "239", Answer2 = "141")]
 	public class NoTimeForATaxicab : PuzzleBase
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)

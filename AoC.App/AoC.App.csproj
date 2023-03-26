@@ -112,14 +112,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-		<!--<PackageReference Include="Ujeby" Version="1.*" />-->
+		<PackageReference Include="Ujeby" Version="1.14.1" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 		<Reference Include="Ujeby">
 			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
-	</ItemGroup>
+	</ItemGroup>-->
 
 	<ItemGroup>
 		<None Remove=".session" />
