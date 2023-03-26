@@ -1,5 +1,6 @@
 using Ujeby.AoC.Common;
 using Ujeby.Tools.StringExtensions;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2020_15
 {
@@ -11,7 +12,7 @@ namespace Ujeby.AoC.App._2020_15
 			var spoken = input.Single().ToNumArray();
 			var lastSpokenPosition = spoken.ToDictionary(
 				x => x,
-				x => new int[] { Array.IndexOf(spoken, x) + 1 });
+				x => new v2i(Array.IndexOf(spoken, x) + 1, -1));
 
 			// part1
 			var answer1 = MemoryGame(spoken.Last(), lastSpokenPosition, spoken.Length + 1, 2020);
@@ -22,22 +23,20 @@ namespace Ujeby.AoC.App._2020_15
 			return (answer1.ToString(), answer2.ToString());
 		}
 
-		public static long MemoryGame(long last, Dictionary<long, int[]> spoken, int from, int to)
+		public static long MemoryGame(long last, Dictionary<long, v2i> spoken, long from, long to)
 		{
 			for (var i = from; i <= to; i++)
 			{
-				var spokenBefore = spoken.TryGetValue(last, out int[] recentPositions);
-				if (!spokenBefore || recentPositions.Length == 1)
+				var spokenBefore = spoken.TryGetValue(last, out v2i recentPositions);
+				if (!spokenBefore || recentPositions.Y == -1)
 					last = 0;
 				else
-					last = i - 1 - recentPositions.First();
+					last = i - 1 - recentPositions.X;
 
-				//Debug.Line($"turn #{i}: {last}");
-
-				if (spoken.ContainsKey(last))
-					spoken[last] = new int[] { spoken[last].Last(), i };
+				if (spoken.TryGetValue(last, out v2i recentPositions2))
+					spoken[last] = new v2i(recentPositions2.Y == -1 ? recentPositions2.X : recentPositions2.Y, i);
 				else
-					spoken.Add(last, new int[] { i });
+					spoken.Add(last, new v2i(i, -1));
 			}
 
 			return last;
