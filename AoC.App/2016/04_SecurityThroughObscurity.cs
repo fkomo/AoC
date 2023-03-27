@@ -68,8 +68,11 @@ namespace Ujeby.AoC.App._2016_04
 			var answer1 = validRooms.Sum(r => r.SectorId);
 
 			// part2
+#if _DEBUG_SAMPLE
+			var answer2 = 0;
+#else
 			var answer2 = validRooms.Single(r => r.Decrypt().Contains("northpole")).SectorId;
-
+#endif
 			return (answer1.ToString(), answer2.ToString());
 		}
 	}
