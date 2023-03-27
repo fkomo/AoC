@@ -1,4 +1,3 @@
-using OpenTK.Graphics.OpenGL;
 using Ujeby.AoC.Common;
 using Ujeby.Tools.StringExtensions;
 using Ujeby.Vectors;
