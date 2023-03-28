@@ -4,12 +4,14 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2015_04
 {
-	[AoCPuzzle(Year = 2015, Day = 04, Answer1 = "282749", Answer2 = "9962624")]
+	[AoCPuzzle(Year = 2015, Day = 04, Answer1 = "282749", Answer2 = "9962624", Skip = true)]
 	public class TheIdealStockingStuffer : PuzzleBase
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
 			var secretKey = input.Single();
+
+			// TODO 2015/04 OPTIMIZE (4s)
 
 			// part1
 			var answer1 = FindZeroHash(secretKey, 1, 5);

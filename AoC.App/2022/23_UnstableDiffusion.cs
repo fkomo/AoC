@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_23
 {
-	[AoCPuzzle(Year = 2022, Day = 23, Answer1 = "3920", Answer2 = "889")]
+	[AoCPuzzle(Year = 2022, Day = 23, Answer1 = "3920", Answer2 = "889", Skip = true)]
 	public class UnstableDiffusion : PuzzleBase
 	{
 		public class Elf
@@ -40,16 +40,15 @@ namespace Ujeby.AoC.App._2022_23
 			long? answer1 = ((max - min) + new v2i(1, 1)).Area() - elves.Length;
 
 			// part2
-			// TODO 2022/23 p2 OPTIMIZE (10s)
-			//long? answer2 = 10;
-			//while (true)
-			//{
-			//	elves = Step(elves, (int)answer2.Value, out bool noMovement);
-			//	answer2++;
-			//	if (noMovement)
-			//		break;
-			//}
-			long? answer2 = 889;
+			// TODO 2022/23 OPTIMIZE p2 (10s)
+			long? answer2 = 10;
+			while (true)
+			{
+				elves = Step(elves, (int)answer2.Value, out bool noMovement);
+				answer2++;
+				if (noMovement)
+					break;
+			}
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

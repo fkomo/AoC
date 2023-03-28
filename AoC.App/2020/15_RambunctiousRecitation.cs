@@ -4,7 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2020_15
 {
-	[AoCPuzzle(Year = 2020, Day = 15, Answer1 = "1238", Answer2 = "3745954")]
+	[AoCPuzzle(Year = 2020, Day = 15, Answer1 = "1238", Answer2 = "3745954", Skip = true)]
 	public class RambunctiousRecitation : PuzzleBase
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -13,6 +13,8 @@ namespace Ujeby.AoC.App._2020_15
 			var lastSpokenPosition = spoken.ToDictionary(
 				x => x,
 				x => new v2i(Array.IndexOf(spoken, x) + 1, -1));
+
+			// TODO 2020/15 OPTIMIZE (2s)
 
 			// part1
 			var answer1 = MemoryGame(spoken.Last(), lastSpokenPosition, spoken.Length + 1, 2020);

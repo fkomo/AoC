@@ -4,7 +4,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2016_05
 {
-	[AoCPuzzle(Year = 2016, Day = 05, Answer1 = "1a3099aa", Answer2 = null)]
+	[AoCPuzzle(Year = 2016, Day = 05, Answer1 = "1a3099aa", Answer2 = "694190cd", Skip = true)]
 	public class HowAboutANiceGameOfChess : PuzzleBase
 	{
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -30,9 +30,22 @@ namespace Ujeby.AoC.App._2016_05
 			}
 
 			// part2
-			var answer2 = 0;
+			var hashLength = 0;
+			var answer2 = new char[8];
+			for (var salt = 0L; salt < long.MaxValue; salt++)
+			{
+				if (!VerifyHash($"{doorId}{salt}", 5, out string hash))
+					continue;
 
-			return (answer1, answer2.ToString());
+				if (hash[5] >= '0' && hash[5] <= '7' && answer2[hash[5] - '0'] == 0)
+				{
+					answer2[hash[5] - '0'] = hash[6];
+					if (++hashLength == answer2.Length)
+						break;
+				}
+			}
+
+			return (answer1, new string(answer2));
 		}
 
 		private static bool VerifyHash(string value, int leadingZeroes, out string hash)

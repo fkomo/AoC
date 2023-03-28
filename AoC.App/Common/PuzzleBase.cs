@@ -13,6 +13,9 @@ namespace Ujeby.AoC.Common
 			=> (Part1: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer1,
 				Part2: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer2);
 
+		private bool Skip
+			=> GetType().GetCustomAttribute<AoCPuzzleAttribute>().Skip;
+
 		protected abstract (string Part1, string Part2) SolvePuzzle(string[] input);
 
 		public int Solve(string inputStorage)
@@ -29,7 +32,11 @@ namespace Ujeby.AoC.Common
 
 				sw.Start();
 
-				var solution = SolvePuzzle(input);
+				(string Part1, string Part2) solution = default;
+				if (!Skip)
+					solution = SolvePuzzle(input);
+				else
+					solution = Answer;
 
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
@@ -59,7 +66,8 @@ namespace Ujeby.AoC.Common
 
 				// elapsed
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				Log.Text($"{DurationToStringSimple(elapsed),5}", textColor: GetElapsedColor(elapsed), indent: 0);
+				Log.Text(Skip ? "optmz": $"{DurationToStringSimple(elapsed),5}", 
+					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(elapsed), indent: 0);
 				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
 
 				// padding

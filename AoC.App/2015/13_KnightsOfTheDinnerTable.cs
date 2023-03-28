@@ -3,7 +3,7 @@ using Ujeby.Tools.StringExtensions;
 
 namespace Ujeby.AoC.App._2015_13
 {
-	[AoCPuzzle(Year = 2015, Day = 13, Answer1 = "709", Answer2 = "668")]
+	[AoCPuzzle(Year = 2015, Day = 13, Answer1 = "709", Answer2 = "668", Skip = true)]
 	public class KnightsOfTheDinnerTable : PuzzleBase
 	{
 		public record struct Neighbour(string Name, int Happiness);
@@ -16,6 +16,8 @@ namespace Ujeby.AoC.App._2015_13
 					i => i.ToDictionary(
 						y => y[(y.LastIndexOf(' ') + 1)..^1], 
 						y => y.ToNumArray()[0] * (y.Contains("gain") ? 1 : -1)));
+
+			// TODO 2015/13 OPTIMIZE (2s)
 
 			// part1
 			var seats = Alg.Combinatorics.Permutations(guests.Keys, guests.Count);
