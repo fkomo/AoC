@@ -91,9 +91,9 @@ namespace Ujeby.AoC.App._2022_19
 			var blueprints = ParseBlueprints(input);
 			Debug.Line($"{blueprints.Length} blueprints");
 
-			// TODO 2022/19 OPTIMIZE (105s)
+			// TODO 2022/19 OPTIMIZE (2min)
 
-			// part1 (5s)
+			// part1
 			var results = new ConcurrentBag<long>();
 			Parallel.ForEach(blueprints, bp =>
 			{
@@ -101,7 +101,7 @@ namespace Ujeby.AoC.App._2022_19
 			});
 			long? answer1 = results.Sum();
 
-			// part2 (99s)
+			// part2
 			results = new ConcurrentBag<long>();
 			Parallel.ForEach(blueprints.Take(3), bp =>
 			{

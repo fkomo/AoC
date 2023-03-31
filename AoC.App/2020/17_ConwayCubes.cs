@@ -61,7 +61,7 @@ namespace Ujeby.AoC.App._2020_17
 			Debug.Line();
 
 			// part2
-			// TODO 2020/17 OPTIMIZE p2 (150s)
+			// TODO 2020/17 OPTIMIZE p2 (2min)
 			var activeCubes4d = new List<v4i>();
 			for (var y = 0; y < input.Length; y++)
 				for (var x = 0; x < input[0].Length; x++)

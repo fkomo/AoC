@@ -10,7 +10,7 @@ namespace Ujeby.AoC.App._2015_20
 			var desiredPresents = long.Parse(input.Single());
 
 			// part1
-			// TODO 2015/20 OPTIMIZE p1 (603s)
+			// TODO 2015/20 OPTIMIZE p1 (10min)
 			long? answer1 = null;
 			var lastHouse = (desiredPresents - 10) / 10;
 			answer1 = Parallel.For(2, lastHouse, (h, state) =>

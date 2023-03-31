@@ -132,10 +132,8 @@ namespace Ujeby.AoC.Common
 		}
 
 		private static ConsoleColor GetAnswerColor(string right, string calculated)
-		{
-			return right != null && right != calculated ? ConsoleColor.Red 
-				: (calculated == null ? ConsoleColor.DarkGray : ConsoleColor.White);
-		}
+			=> right != null && right != calculated ? ConsoleColor.Red : 
+				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.White);
 
 		/// <summary></summary>
 		/// <param name="duration">duration in ms</param>
@@ -148,10 +146,13 @@ namespace Ujeby.AoC.Common
 			else if (duration < 1000)
 				return $"{(int)duration}ms";
 
-			else if (duration < 60 * 60 * 1000)
-				return $"{(int)(duration / 1000)}s";
+			else if (duration < (60 * 1000))
+				return $"{(int)(duration / (1000))}s";
 
-			return $"{(int)(duration / 60 * 60 * 1000)}h";
+			else if (duration < (60 * 60 * 1000))
+				return $"{(int)(duration / (60 * 1000))}min";
+
+			return $"{(long)(duration / (60 * 60 * 1000))}h";
 		}
 	}
 }
