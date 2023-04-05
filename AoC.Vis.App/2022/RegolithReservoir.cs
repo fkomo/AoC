@@ -25,7 +25,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			ShowCursor(false);
+			Sdl2Wrapper.ShowCursor(false);
 
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 14);
 			_map = AoC.App._2022_14.RegolithReservoir.CreateMap(input, ground: true);
@@ -57,7 +57,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid(showMinor: false);
+			Grid.Draw(showMinor: false);
 
 			var blockerColor = new v4f(1, 1, 1, .7f);
 
@@ -73,18 +73,18 @@ namespace Ujeby.AoC.Vis.App
 					if (_map[y, x] == (byte)'o')
 						color = _colors[sandIdx++];
 
-					DrawGridCell(x, y, fill: color);
+					Grid.DrawCell(x, y, fill: color);
 				}
 
-			DrawGridMouseCursor(style: Graphics.GridCursorStyles.SimpleFill);
+			Grid.DrawMouseCursor(style: Graphics.GridCursorStyles.SimpleFill);
 
-			DrawText(new v2i(32, 32),
+			Sdl2Wrapper.DrawText(new v2i(32, 32),
 				new Text($"sand: {_sandCount}"));
 		}
 
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseDown()

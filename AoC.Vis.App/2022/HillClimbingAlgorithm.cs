@@ -27,7 +27,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			ShowCursor(false);
+			Sdl2Wrapper.ShowCursor(false);
 
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 12);
 			_heightMap = AoC.App._2022_12.HillClimbingAlgorithm.CreateHeightMap(input, out _start, out _end);
@@ -52,7 +52,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			var ui = new List<TextLine>();
 
-			DrawGrid();
+			Grid.Draw();
 
 			// height map
 			if (_heightMap != null)
@@ -60,7 +60,7 @@ namespace Ujeby.AoC.Vis.App
 				var maxHeight = 'z' - 'a' + 2;
 				for (var y = 0; y < _heightMap.GetLength(0); y++)
 					for (var x = 0; x < _heightMap.GetLength(1); x++)
-						DrawGridCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
+						Grid.DrawCell(x, y, fill: HeatMap.GetColorForValue(_heightMap[y, x], maxHeight, 0.5f));
 
 				if ((int)Grid.MousePositionDiscrete.X >= 0 && (int)Grid.MousePositionDiscrete.X < _heightMap.GetLength(1) &&
 					(int)Grid.MousePositionDiscrete.Y >= 0 && (int)Grid.MousePositionDiscrete.Y < _heightMap.GetLength(0))
@@ -75,31 +75,27 @@ namespace Ujeby.AoC.Vis.App
 			{
 				ui.Add(new Text($"bfs path: {_bfsPath.Length}"));
 				foreach (var p in _bfsPath)
-					DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(1, 1, 1, .5));
+					Grid.DrawCell((int)p.X, (int)p.Y, fill: new v4f(1, 1, 1, .5));
 			}
 			else if (_bfs != null)
 			{
 				for (var y = 0; y < _bfs.Size.Y; y++)
 					for (var x = 0; x < _bfs.Size.X; x++)
 						if (_bfs.Visited[y, x])
-							DrawGridCell((int)x, (int)y, fill: new v4f(.5, .5, .5, .5));
+							Grid.DrawCell((int)x, (int)y, fill: new v4f(.5, .5, .5, .5));
 			}
 
-			DrawGridMouseCursor();
+			Grid.DrawMouseCursor();
 
-			DrawText(new v2i(32, 32), ui.ToArray());
+			Sdl2Wrapper.DrawText(new v2i(32, 32), ui.ToArray());
 		}
 
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseDown()
-		{
-		}
-
-		protected override void LeftMouseUp()
 		{
 			var m = Grid.MousePositionDiscrete;
 
@@ -110,6 +106,11 @@ namespace Ujeby.AoC.Vis.App
 				_bfsPath = null;
 				_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App._2022_12.HillClimbingAlgorithm.CheckHeight);
 			}
+		}
+
+		protected override void LeftMouseUp()
+		{
+
 		}
 	}
 }

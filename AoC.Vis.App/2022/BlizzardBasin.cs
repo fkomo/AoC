@@ -45,7 +45,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			ShowCursor(false);
+			Sdl2Wrapper.ShowCursor(false);
 
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 24);
 
@@ -77,13 +77,13 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid();
+			Grid.Draw();
 
 			var maxMDist = _mapSize.ManhLength();
 			foreach (var e in _elves)
 			{
 				if (_map[e.Y, e.X] == 0)
-					DrawGridCell((int)e.X, (int)e.Y, 
+					Grid.DrawCell((int)e.X, (int)e.Y, 
 						fill: HeatMap.GetColorForValue(v2i.ManhDistance(_destination, e.ToV2i()), maxMDist + 1, .5));
 			}
 
@@ -94,15 +94,15 @@ namespace Ujeby.AoC.Vis.App
 						continue;
 
 					if (_map[y,x] == '#')
-						DrawGridCell(x, y, fill: _wallColor);
+						Grid.DrawCell(x, y, fill: _wallColor);
 
 					else
-						DrawGridCell(x, y, fill: _blizzColors[(char)_map[y, x]]);
+						Grid.DrawCell(x, y, fill: _blizzColors[(char)_map[y, x]]);
 				}
 
-			DrawGridMouseCursor();
+			Grid.DrawMouseCursor();
 
-			DrawText(new v2i(32, 32),
+			Sdl2Wrapper.DrawText(new v2i(32, 32),
 				new Text($"{_blizzards.Length} blizzards in {_mapSize.X - 2}x{_mapSize.Y - 2} ({new v2i(_mapSize.X - 2, _mapSize.Y - 2).Area()})"),
 				new Text($"time: {_time}"),
 				new Text($"elves: {_elves.Length}"));
@@ -110,7 +110,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseDown()

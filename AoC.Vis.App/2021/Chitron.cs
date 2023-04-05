@@ -33,7 +33,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			ShowCursor(false);
+			Sdl2Wrapper.ShowCursor(false);
 
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2021, 15);
 
@@ -78,7 +78,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid();
+			Grid.Draw();
 
 			for (var y = 0; y < _riskMap.GetLength(1); y++)
 				for (var x = 0; x < _riskMap.GetLength(0); x++)
@@ -88,29 +88,29 @@ namespace Ujeby.AoC.Vis.App
 						W = 0.5f
 					};
 
-					DrawGridCell(x, y, fill: color);
+					Grid.DrawCell(x, y, fill: color);
 				}
 
 			if (_userPoints != 0)
 			{
 				if (_userPoints > 0)
-					DrawGridCell((int)_start.X, (int)_start.Y, fill: new v4f(0, 0, 1, 1));
+					Grid.DrawCell((int)_start.X, (int)_start.Y, fill: new v4f(0, 0, 1, 1));
 				if (_userPoints > 1)
-					DrawGridCell((int)_end.X, (int)_end.Y, fill: new v4f(1, 0, 0, 1));
+					Grid.DrawCell((int)_end.X, (int)_end.Y, fill: new v4f(1, 0, 0, 1));
 			}
 
 			if (_useDijkstra)
 			{
 				if (_dijkstraPath != null)
 					foreach (var p in _dijkstraPath)
-						DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 1, 0, .5));
+						Grid.DrawCell((int)p.X, (int)p.Y, fill: new v4f(0, 1, 0, .5));
 
 				else if (_dijkstra != null)
 				{
 					for (var y = 0; y < _dijkstra.Size.Y; y++)
 						for (var x = 0; x < _dijkstra.Size.X; x++)
 							if (_dijkstra.Visited[y, x])
-								DrawGridCell((int)x, (int)y, fill: new v4f(0, 1, 0, .5));
+								Grid.DrawCell((int)x, (int)y, fill: new v4f(0, 1, 0, .5));
 				}
 			}
 
@@ -118,18 +118,18 @@ namespace Ujeby.AoC.Vis.App
 			{
 				if (_aStarPath != null)
 					foreach (var p in _aStarPath)
-						DrawGridCell((int)p.X, (int)p.Y, fill: new v4f(0, 0, 1, .5));
+						Grid.DrawCell((int)p.X, (int)p.Y, fill: new v4f(0, 0, 1, .5));
 
 				else if (_aStar != null)
 				{
 					for (var y = 0; y < _aStar.Size.Y; y++)
 						for (var x = 0; x < _aStar.Size.X; x++)
 							if (_aStar.Visited[y, x])
-								DrawGridCell((int)x, (int)y, fill: new v4f(1, 0, 0, .5));
+								Grid.DrawCell((int)x, (int)y, fill: new v4f(1, 0, 0, .5));
 				}
 			}
 
-			DrawGridMouseCursor();
+			Grid.DrawMouseCursor();
 
 			var ui = new List<TextLine>();
 
@@ -140,12 +140,12 @@ namespace Ujeby.AoC.Vis.App
 				ui.Add(new Text($"risk: {_riskMap[(int)m.Y, (int)m.X]}"));
 			}
 
-			DrawText(new(32, 32), HorizontalTextAlign.Left, VerticalTextAlign.Top, ui.ToArray());
+			Sdl2Wrapper.DrawText(new(32, 32), HorizontalTextAlign.Left, VerticalTextAlign.Top, ui.ToArray());
 		}
 
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseUp()

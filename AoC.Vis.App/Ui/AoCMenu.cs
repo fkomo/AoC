@@ -39,7 +39,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 		{
 			var title = new Text(Name) { Color = new v4f(1, 1, 1, 1) };
 			var titleSize = Sdl2Wrapper.CurrentFont.GetTextSize(title);
-			DrawText(new(WindowSize.X / 2 - titleSize.X / 2, WindowSize.Y / 5), title);
+			Sdl2Wrapper.DrawText(new(WindowSize.X / 2 - titleSize.X / 2, WindowSize.Y / 5), title);
 
 			//DrawRect((int)_windowSize.X / (_items.Keys.Count + 1), 0, (int)_windowSize.X / (_items.Keys.Count + 1), (int)_windowSize.Y, 
 			//	new v4f(0, 1, 0, 0.5f));
@@ -81,10 +81,10 @@ namespace Ujeby.AoC.Vis.App.Ui
 				var titleOffset = new v2i(sectionTitleSize.X / 2, sectionTitleSize.Y + itemsSize.Y / 2);
 
 				// title
-				DrawText(sectionCenter - titleOffset, spacing, scale, sectionTitle);
+				Sdl2Wrapper.DrawText(sectionCenter - titleOffset, spacing, scale, sectionTitle);
 
 				// items
-				DrawText(sectionCenter - itemsSize / 2, spacing, scale, items);
+				Sdl2Wrapper.DrawText(sectionCenter - itemsSize / 2, spacing, scale, items);
 			}
 		}
 

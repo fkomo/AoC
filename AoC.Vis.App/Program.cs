@@ -17,7 +17,8 @@ namespace Ujeby.AoC.Vis.App
 			try
 			{
 				v2i windowSize = new(1920, 1080);
-				Sdl2Wrapper.Init("AoC.Vis", windowSize);
+				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
+				Sdl2Wrapper.CreateFont();
 
 				while (true)
 				{

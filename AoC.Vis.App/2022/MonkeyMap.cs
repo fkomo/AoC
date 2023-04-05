@@ -31,7 +31,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			ShowCursor(false);
+			Sdl2Wrapper.ShowCursor(false);
 
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2022, 22);
 			_map = AoC.App._2022_22.MonkeyMap.CreateMap(input);
@@ -95,7 +95,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid(showAxis: false, showMajor: false);
+			Grid.Draw(showAxis: false, showMajor: false);
 
 			// map
 			for (var y = 0; y < _map.Length; y++)
@@ -109,33 +109,33 @@ namespace Ujeby.AoC.Vis.App
 						case '.': color = new v4f(0.2f); break;
 					};
 
-					DrawGridCell(x, y, fill: color);
+					Grid.DrawCell(x, y, fill: color);
 				}
 
 			// path
 			for (var i = Math.Max(0, _pathToDraw - 1000); i < _pathToDraw; i++)
-				DrawGridCell((int)_path[i].X, (int)_path[i].Y, fill: HeatMap.GetColorForValue(i, _path.Length, .5));
+				Grid.DrawCell((int)_path[i].X, (int)_path[i].Y, fill: HeatMap.GetColorForValue(i, _path.Length, .5));
 
 			// userPath
 			if (_userPoints != 0)
 			{
 				if (_userPoints > 0)
-					DrawGridCell((int)_userStart.X, (int)_userStart.Y, fill: new v4f(0, 0, 1, 1));
+					Grid.DrawCell((int)_userStart.X, (int)_userStart.Y, fill: new v4f(0, 0, 1, 1));
 				if (_userPoints > 1)
-					DrawGridCell((int)_userEnd.X, (int)_userEnd.Y, fill: new v4f(1, 0, 0, 1));
+					Grid.DrawCell((int)_userEnd.X, (int)_userEnd.Y, fill: new v4f(1, 0, 0, 1));
 			}
 			for (var i = 0; i < _userPathToDraw; i++)
-				DrawGridCell((int)_userPath[i].X, (int)_userPath[i].Y, fill: HeatMap.GetColorForValue(i, _userPath.Length, 1));
+				Grid.DrawCell((int)_userPath[i].X, (int)_userPath[i].Y, fill: HeatMap.GetColorForValue(i, _userPath.Length, 1));
 			
-			//DrawGridMouseCursor(style: GridCursorStyles.FullRowColumn);
+			//Grid.DrawMouseCursor(style: GridCursorStyles.FullRowColumn);
 
 			var p = _path.Last();
-			DrawText(new v2i(32, 32), 
+			Sdl2Wrapper.DrawText(new v2i(32, 32), 
 				new Text($"password: {1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z} (1000 * {p.Y + 1} + 4 * {p.X + 1} + {p.Z})"));
 		}
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseDown()
