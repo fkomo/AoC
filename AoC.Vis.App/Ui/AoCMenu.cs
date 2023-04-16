@@ -5,15 +5,15 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App.Ui
 {
-	public class AoCMenu : Sdl2Loop
+	public class AoCMenu : AoCRunnable
 	{
-		private readonly Dictionary<string, IRunnable[]> _items;
+		private readonly Dictionary<string, AoCRunnable[]> _items;
 
 		public AoCMenu(v2i windowSize) : base(windowSize)
 		{
 		}
 
-		public AoCMenu(v2i windowSize, Dictionary<string, IRunnable[]> items) : this(windowSize)
+		public AoCMenu(v2i windowSize, Dictionary<string, AoCRunnable[]> items) : this(windowSize)
 		{
 			_items = items;
 		}
@@ -28,7 +28,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 				_terminate = true;
 		}
 
-		public IRunnable Selected { get; private set; }
+		public AoCRunnable Selected { get; private set; }
 
 		public override string Name => "-=#[ Advent Of Code ]#=-";
 

@@ -1,5 +1,6 @@
 ﻿using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
+using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -7,7 +8,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class HillClimbingAlgorithm : Sdl2Loop
+	internal class HillClimbingAlgorithm : AoCRunnable
 	{
 		private int[,] _heightMap;
 

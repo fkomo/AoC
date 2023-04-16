@@ -1,12 +1,13 @@
 ﻿using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
+using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class TrenchMap : Sdl2Loop
+	internal class TrenchMap : AoCRunnable
 	{
 		private long _step;
 

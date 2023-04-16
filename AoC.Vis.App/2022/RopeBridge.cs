@@ -1,9 +1,10 @@
-﻿using Ujeby.Graphics.Sdl;
+﻿using Ujeby.AoC.Vis.App.Ui;
+using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class RopeBridge : Sdl2Loop
+	internal class RopeBridge : AoCRunnable
 	{
 		private v2i? _apple = null;
 		private v2i[] _snake;

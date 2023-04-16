@@ -23,18 +23,18 @@ namespace Ujeby.AoC.Vis.App
 				while (true)
 				{
 					var menu = new AoCMenu(windowSize,
-						new Dictionary<string, IRunnable[]>
+						new Dictionary<string, AoCRunnable[]>
 						{
 							{
 								"2015",
-								new IRunnable[]
+								new AoCRunnable[]
 								{
 									new LikeAGIFForYourYard(windowSize),
 								}
 							},
 							{
 								"2021",
-								new IRunnable[]
+								new AoCRunnable[]
 								{
 									new Chitron(windowSize),
 									new TrickShot(windowSize),
@@ -43,7 +43,7 @@ namespace Ujeby.AoC.Vis.App
 							},
 							{
 								"2022",
-								new IRunnable[]
+								new AoCRunnable[]
 								{
 									new BlizzardBasin(windowSize),
 									new RopeBridge(windowSize),
@@ -55,12 +55,12 @@ namespace Ujeby.AoC.Vis.App
 							}
 						}
 					);
-					menu.Run(HandleInput);
+					menu.Run();
 
 					if (menu.Selected == null)
 						break;
 
-					menu.Selected.Run(HandleInput);
+					menu.Selected.Run();
 				}
 			}
 			catch (Exception ex)
@@ -71,11 +71,6 @@ namespace Ujeby.AoC.Vis.App
 			{
 				Sdl2Wrapper.Destroy();
 			}
-		}
-
-		private static bool HandleInput()
-		{
-			return true;
 		}
 	}
 }

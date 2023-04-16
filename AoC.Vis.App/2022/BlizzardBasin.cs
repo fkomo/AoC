@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
+using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -9,7 +10,7 @@ using static Ujeby.AoC.App._2022_24.BlizzardBasin;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class BlizzardBasin : Sdl2Loop
+	internal class BlizzardBasin : AoCRunnable
 	{
 		private v2i _mapSize;
 		private Blizzard[] _blizzards = null;
