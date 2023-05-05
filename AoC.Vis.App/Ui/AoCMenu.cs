@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics.Entities;
+﻿using Ujeby.Graphics;
+using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -37,14 +38,13 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 		protected override void Render()
 		{
-			var title = new Text(Name) { Color = new v4f(1, 1, 1, 1) };
-			var titleSize = Sdl2Wrapper.CurrentFont.GetTextSize(title);
-			Sdl2Wrapper.DrawText(new(WindowSize.X / 2 - titleSize.X / 2, WindowSize.Y / 5), title);
+			var cGreen = new v4f(0, .5, 0, 1);
+			var cSelectedItem = new v4f(0, .75, 0, 1);
 
-			//DrawRect((int)_windowSize.X / (_items.Keys.Count + 1), 0, (int)_windowSize.X / (_items.Keys.Count + 1), (int)_windowSize.Y, 
-			//	new v4f(0, 1, 0, 0.5f));
-			//DrawRect(0, (int)_windowSize.Y / 2, (int)_windowSize.X, (int)_windowSize.Y / 2, 
-			//	new v4f(0, 0, 1, 0.5f));
+			var title = new Text(Name, Colors.White, cGreen);
+			Sdl2Wrapper.DrawText(new(WindowSize.X / 2, WindowSize.Y / 5), new(), new v2i(4, 4), 
+				HorizontalTextAlign.Center, VerticalTextAlign.Center, 
+				title);
 
 			var spacing = new v2i(0, 4);
 			var scale = new v2i(2);
@@ -69,14 +69,14 @@ namespace Ujeby.AoC.Vis.App.Ui
 						continue;
 					}
 
-					items[i].Color = new v4f(1, 0, 0, 1);
+					items[i].OutlineColor = cSelectedItem;
 
 					_section = sectionTitleText;
 					_sectionItem = i;
 					break;
 				}
 
-				var sectionTitle = new Text($"-=#{{ {sectionTitleText} }}#=-") { Color = new v4f(0, 1, 0, 1) };
+				var sectionTitle = new Text($"-=#{{ {sectionTitleText} }}#=-", cGreen);
 				var sectionTitleSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, sectionTitle);
 				var titleOffset = new v2i(sectionTitleSize.X / 2, sectionTitleSize.Y + itemsSize.Y / 2);
 

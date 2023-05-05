@@ -56,7 +56,7 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.DrawMouseCursor();
 
-			Sdl2Wrapper.DrawText(new v2i(32, 32), 
+			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"step: {_step}"),
 				new Text($"lights: {_lights.Sum(i => i.Count(c => c))}"));
 		}

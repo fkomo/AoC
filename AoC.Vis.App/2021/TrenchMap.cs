@@ -1,6 +1,7 @@
 ﻿using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
+using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -56,7 +57,7 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.DrawMouseCursor();
 
-			Sdl2Wrapper.DrawText(new v2i(32, 32), 
+			Sdl2Wrapper.DrawText(new v2i(32, 32),
 				new Text($"step: {_step}"),
 				new Text($"size: {imageSize}"));
 		}

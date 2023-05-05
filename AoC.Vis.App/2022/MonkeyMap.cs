@@ -131,7 +131,7 @@ namespace Ujeby.AoC.Vis.App
 			//Grid.DrawMouseCursor(style: GridCursorStyles.FullRowColumn);
 
 			var p = _path.Last();
-			Sdl2Wrapper.DrawText(new v2i(32, 32), 
+			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"password: {1000 * (p.Y + 1) + 4 * (p.X + 1) + p.Z} (1000 * {p.Y + 1} + 4 * {p.X + 1} + {p.Z})"));
 		}
 		protected override void Destroy()

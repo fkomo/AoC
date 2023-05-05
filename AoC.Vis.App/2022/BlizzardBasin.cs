@@ -103,7 +103,7 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.DrawMouseCursor();
 
-			Sdl2Wrapper.DrawText(new v2i(32, 32),
+			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"{_blizzards.Length} blizzards in {_mapSize.X - 2}x{_mapSize.Y - 2} ({new v2i(_mapSize.X - 2, _mapSize.Y - 2).Area()})"),
 				new Text($"time: {_time}"),
 				new Text($"elves: {_elves.Length}"));

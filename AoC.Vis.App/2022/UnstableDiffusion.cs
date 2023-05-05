@@ -61,7 +61,7 @@ namespace Ujeby.AoC.Vis.App
 
 			var empty = ((max - min) + new v2i(1, 1)).Area() - _elves.Length;
 
-			Sdl2Wrapper.DrawText(new v2i(32, 32), 
+			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"step: {_step}"),
 				new Text($"movement: {!_noMovement}"),
 				new Text($"area: {min}x{max}"),

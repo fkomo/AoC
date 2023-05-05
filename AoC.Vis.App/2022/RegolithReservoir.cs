@@ -79,7 +79,7 @@ namespace Ujeby.AoC.Vis.App
 
 			Grid.DrawMouseCursor(style: Graphics.GridCursorStyles.SimpleFill);
 
-			Sdl2Wrapper.DrawText(new v2i(32, 32),
+			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"sand: {_sandCount}"));
 		}
 

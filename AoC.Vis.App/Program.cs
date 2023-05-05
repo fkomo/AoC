@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
-using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -18,7 +17,7 @@ namespace Ujeby.AoC.Vis.App
 			{
 				v2i windowSize = new(1920, 1080);
 				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
-				Sdl2Wrapper.CreateFont();
+				Sdl2Wrapper.SetFont();
 
 				while (true)
 				{
