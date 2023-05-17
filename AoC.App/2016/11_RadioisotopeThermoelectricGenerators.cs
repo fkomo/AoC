@@ -41,12 +41,12 @@ public class RadioisotopeThermoelectricGenerators : PuzzleBase
 		};
 
 		// part1
-		var answer1 = CountSteps(components);
+		string answer1 = null;// CountSteps(components);
 
 		// part2
 		string answer2 = null;
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1?.ToString(), answer2?.ToString());
 	}
 
 	private static Dictionary<string, long> _cache = new();
