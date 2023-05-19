@@ -48,7 +48,7 @@ public class BalanceBots : PuzzleBase
 				}
 			}
 		}
-#if _DEBUG
+#if _DEBUG_SAMPLE
 		var answer1 = bots.Single(x => x.Value.Cmps.Contains((Min: 2, Max: 5))).Key;
 #else
 		var answer1 = bots.Single(x => x.Value.Cmps.Contains((Min: 17, Max: 61))).Key;
