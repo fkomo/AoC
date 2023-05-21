@@ -1,7 +1,7 @@
 ﻿using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
-using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
+using Ujeby.Tools.StringExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App.Ui
@@ -21,6 +21,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 		protected override void Init()
 		{
+			Sdl2Wrapper.ShowCursor(true);
 		}
 
 		protected override void Update()
@@ -39,7 +40,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 		protected override void Render()
 		{
 			var cGreen = new v4f(0, .5, 0, 1);
-			var cSelectedItem = new v4f(0, .75, 0, 1);
+			var cSelectedItem = new v4f(0, .5, 0, 1);
 
 			var title = new Text(Name, Colors.White, cGreen);
 			Sdl2Wrapper.DrawText(new(WindowSize.X / 2, WindowSize.Y / 5), new(), new v2i(4, 4), 
@@ -54,7 +55,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 				var sectionTitleText = _items.Keys.ElementAt(ix);
 				var sectionCenter = new v2i(WindowSize.X / (_items.Keys.Count + 1) * (ix + 1), WindowSize.Y / 2);
 
-				var items = _items[sectionTitleText].Select(i => new Text(i.Name)).ToArray();
+				var items = _items[sectionTitleText].Select(i => new Text(i.Name.SplitCase())).ToArray();
 				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, items);
 
 				var sectionTopLeft = sectionCenter - itemsSize / 2;

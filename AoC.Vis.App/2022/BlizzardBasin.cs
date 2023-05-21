@@ -107,6 +107,8 @@ namespace Ujeby.AoC.Vis.App
 				new Text($"{_blizzards.Length} blizzards in {_mapSize.X - 2}x{_mapSize.Y - 2} ({new v2i(_mapSize.X - 2, _mapSize.Y - 2).Area()})"),
 				new Text($"time: {_time}"),
 				new Text($"elves: {_elves.Length}"));
+
+			base.Render();
 		}
 
 		protected override void Destroy()

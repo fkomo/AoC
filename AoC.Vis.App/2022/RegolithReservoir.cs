@@ -81,6 +81,8 @@ namespace Ujeby.AoC.Vis.App
 
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"sand: {_sandCount}"));
+
+			base.Render();
 		}
 
 		protected override void Destroy()

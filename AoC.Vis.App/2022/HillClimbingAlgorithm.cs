@@ -36,7 +36,8 @@ namespace Ujeby.AoC.Vis.App
 			Grid.MinorSize = 10;
 			Grid.MoveCenter(new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)) / 2 * Grid.MinorSize);
 
-			_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App._2022_12.HillClimbingAlgorithm.CheckHeight);
+			_bfs = new Alg.BreadthFirstSearch(_heightMap, new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)), _start, 
+				AoC.App._2022_12.HillClimbingAlgorithm.CheckHeight);
 		}
 
 		protected override void Update()
@@ -89,6 +90,8 @@ namespace Ujeby.AoC.Vis.App
 			Grid.DrawMouseCursor();
 
 			Sdl2Wrapper.DrawText(new v2i(32, 32), ui.ToArray());
+
+			base.Render();
 		}
 
 		protected override void Destroy()
@@ -105,7 +108,8 @@ namespace Ujeby.AoC.Vis.App
 				_heightMap[m.Y, m.X] = Math.Min('z' - 'a', _heightMap[m.Y, m.X] + 1);
 
 				_bfsPath = null;
-				_bfs = new Alg.BreadthFirstSearch(_heightMap, _start, AoC.App._2022_12.HillClimbingAlgorithm.CheckHeight);
+				_bfs = new Alg.BreadthFirstSearch(_heightMap, new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)), _start, 
+					AoC.App._2022_12.HillClimbingAlgorithm.CheckHeight);
 			}
 		}
 

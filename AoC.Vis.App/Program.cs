@@ -17,7 +17,7 @@ namespace Ujeby.AoC.Vis.App
 			{
 				v2i windowSize = new(1920, 1080);
 				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
-				Sdl2Wrapper.SetFont();
+				Sdl2Wrapper.SetFont(Ujeby.Graphics.Entities.FontNames.Basic7x11);
 
 				while (true)
 				{
@@ -29,6 +29,13 @@ namespace Ujeby.AoC.Vis.App
 								new AoCRunnable[]
 								{
 									new LikeAGIFForYourYard(windowSize),
+								}
+							},
+							{
+								"2016",
+								new AoCRunnable[]
+								{
+									new AMazeOfTwistyLittleCubicles(windowSize),
 								}
 							},
 							{
