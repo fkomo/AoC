@@ -4,7 +4,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2016_14;
 
-[AoCPuzzle(Year = 2016, Day = 14, Answer1 = "15168", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2016, Day = 14, Answer1 = "15168", Answer2 = "20864", Skip = true)]
 public class OneTimePad : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -12,13 +12,26 @@ public class OneTimePad : PuzzleBase
 		var salt = input.Single();
 
 		// part1
+		var answer1 = Get64thKeyIndex(salt);
+
+		// part2
+		var answer2 = Get64thKeyIndex(salt, keyStretching: 2016);
+
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	private static int Get64thKeyIndex(string salt,
+		int keyStretching = 0)
+	{
+		_hashCache.Clear();
+
 		var index = -1;
 		var keysFound = 0;
 		do
 		{
 			index++;
 			var source = salt + index.ToString();
-			var hash = HashCached(source);
+			var hash = Hash(source, keyStretching);
 
 			if (!Same3(hash, out char same3))
 				continue;
@@ -26,7 +39,7 @@ public class OneTimePad : PuzzleBase
 			for (var i = 1; i <= 1000; i++)
 			{
 				var nextSource = salt + (index + i).ToString();
-				var nextHash = HashCached(nextSource);
+				var nextHash = Hash(nextSource, keyStretching);
 				if (Same5(nextHash, same3))
 				{
 					keysFound++;
@@ -36,41 +49,21 @@ public class OneTimePad : PuzzleBase
 			}
 		}
 		while (keysFound < 64);
-		var answer1 = index;
 
-		// part2
-		string answer2 = null;
-
-		return (answer1.ToString(), answer2?.ToString());
+		return index;
 	}
 
-	//private static Dictionary<int, string> _indexedHashCache = new();
-
-	//private static string NextHash(string salt, int lastIndex, out int index)
-	//{
-	//	var nextIndex = lastIndex + 1;
-	//	if (_indexedHashCache.Keys.Last() >= nextIndex)
-	//	{
-	//		index = _indexedHashCache.Keys.Where(x => x > nextIndex).First();
-	//		return _indexedHashCache[index];
-	//	}
-
-	//	index = nextIndex;
-	//	do
-	//	{
-	//		var source = salt + index.ToString();
-	//		var hash = HashCached(source);
-	//	}
-	//	while ();
-	//}
-
 	private static Dictionary<string, string> _hashCache = new();
-	private static string HashCached(string source)
+	private static string Hash(string source, int keyStretching)
 	{
 		if (_hashCache.TryGetValue(source, out string hash))
 			return hash;
 
 		hash = Hash(source);
+
+		for (var i = 0; i < keyStretching; i++)
+			hash = Hash(hash);
+
 		_hashCache.Add(source, hash);
 		return hash;
 	}
