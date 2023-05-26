@@ -5,6 +5,7 @@
 		public int Day { get; }
 		public int Year { get; }
 		public string Title { get; }
+		public bool Skip { get; set; }
 
 		/// <summary></summary>
 		/// <param name="inputStorage"></param>

@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2016_05
@@ -50,7 +48,7 @@ namespace Ujeby.AoC.App._2016_05
 
 		private static bool VerifyHash(string value, int leadingZeroes, out string hash)
 		{
-			hash = Convert.ToHexString(MD5.HashData(Encoding.ASCII.GetBytes(value))).ToLower();
+			hash = Tools.Hashing.SafeHashMd5(value);
 			return hash
 				.Take(leadingZeroes)
 				.All(c => c == '0');

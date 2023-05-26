@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2015_04
@@ -24,16 +22,15 @@ namespace Ujeby.AoC.App._2015_04
 
 		private static long FindZeroHash(string secretKey, long start, int leadingZeroes)
 		{
-			var md5 = MD5.Create(); 
-			while (!VerifyHash(md5, $"{secretKey}{start++}", leadingZeroes))
+			while (!VerifyHash($"{secretKey}{start++}", leadingZeroes))
 			{ 
 			}
 
 			return start - 1;
 		}
 
-		private static bool VerifyHash(MD5 md5, string value, int leadingZeroes)
-			=> Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(value)))
+		private static bool VerifyHash(string value, int leadingZeroes)
+			=> Tools.Hashing.HashMd5(value)
 				.Take(leadingZeroes)
 				.All(c => c == '0');
 	}

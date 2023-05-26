@@ -8,13 +8,23 @@ namespace Ujeby.AoC.Common
 		public string Title => GetType().Name;
 		public int Day => GetType().GetCustomAttribute<AoCPuzzleAttribute>().Day;
 		public int Year => GetType().GetCustomAttribute<AoCPuzzleAttribute>().Year;
-		
-		private (string Part1, string Part2) Answer 
+
+		private (string Part1, string Part2) Answer
 			=> (Part1: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer1,
 				Part2: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer2);
 
-		private bool Skip
-			=> GetType().GetCustomAttribute<AoCPuzzleAttribute>().Skip;
+		private bool _skip;
+
+		public bool Skip
+		{
+			set { _skip = value; }
+			get { return _skip; }
+		}
+
+		public PuzzleBase()
+		{
+			_skip = GetType().GetCustomAttribute<AoCPuzzleAttribute>().Skip;
+		}
 
 		protected abstract (string Part1, string Part2) SolvePuzzle(string[] input);
 
@@ -66,7 +76,7 @@ namespace Ujeby.AoC.Common
 
 				// elapsed
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				Log.Text(Skip ? "optmz": $"{DurationToStringSimple(elapsed),5}", 
+				Log.Text(Skip ? "skip!" : $"{DurationToStringSimple(elapsed),5}",
 					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(elapsed), indent: 0);
 				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
 
@@ -74,8 +84,8 @@ namespace Ujeby.AoC.Common
 				Log.Text("-", textColor: ConsoleColor.DarkGray, indent: 0);
 
 				// stars
-				var stars = 
-					((Answer.Part1 != null && Answer.Part1 == solution.Part1) ? "*" : " ") + 
+				var stars =
+					((Answer.Part1 != null && Answer.Part1 == solution.Part1) ? "*" : " ") +
 					((Answer.Part2 != null && Answer.Part2 == solution.Part2) ? "*" : " ");
 				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
 				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 0);
@@ -89,7 +99,7 @@ namespace Ujeby.AoC.Common
 				if (Answer.Part2 != null && Answer.Part2 == solution.Part2)
 					result++;
 			}
-				catch (Exception ex)
+			catch (Exception ex)
 			{
 				Log.Line(ex.ToString());
 			}
@@ -132,7 +142,7 @@ namespace Ujeby.AoC.Common
 		}
 
 		private static ConsoleColor GetAnswerColor(string right, string calculated)
-			=> right != null && right != calculated ? ConsoleColor.Red : 
+			=> right != null && right != calculated ? ConsoleColor.Red :
 				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.White);
 
 		/// <summary></summary>

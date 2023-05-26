@@ -33,8 +33,12 @@ namespace Ujeby.AoC.App
 					AdventOfCode.GeneratePuzzleCode(config["aoc:code"], year);
 			}
 #endif
+			bool.TryParse(config["aoc:ignoreSkip"], out bool ignoreSkip);
+
 			// run all puzzles in solution
-			AdventOfCode.RunAll(config["aoc:input"]);
+			AdventOfCode.RunAll(
+				inputStorage: config["aoc:input"], 
+				ignoreSkip: ignoreSkip);
 		}
 	}
 }

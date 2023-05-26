@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2016_14;
@@ -59,19 +57,14 @@ public class OneTimePad : PuzzleBase
 		if (_hashCache.TryGetValue(source, out string hash))
 			return hash;
 
-		hash = Hash(source);
+		hash = Tools.Hashing.HashMd5(source);
 
 		for (var i = 0; i < keyStretching; i++)
-			hash = Hash(hash);
+			hash = Tools.Hashing.HashMd5(hash);
 
 		_hashCache.Add(source, hash);
 		return hash;
 	}
-
-	private static MD5 _md5 = MD5.Create();
-
-	private static string Hash(string source)
-		=> Convert.ToHexString(_md5.ComputeHash(Encoding.ASCII.GetBytes(source))).ToLower();
 
 	private static bool Same3(string hash, out char same3)
 	{
