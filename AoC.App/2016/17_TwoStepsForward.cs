@@ -20,6 +20,9 @@ public class TwoStepsForward : PuzzleBase
 		return (answer1.ToString(), answer2.ToString());
 	}
 
+	/// <summary>
+	/// up, down, left, right
+	/// </summary>
 	private static readonly char[] _pathDir = new char[] { 'U', 'D', 'L', 'R' };
 	private static readonly char[] _open = new char[] { 'b', 'c', 'd', 'e', 'f' };
 
@@ -35,7 +38,7 @@ public class TwoStepsForward : PuzzleBase
 		var hash = Hashing.HashMd5(passcode + path);
 		var doors = DoorsOpen(hash);
 
-		for (var i = 0; i < v2i.DownUpLeftRight.Length; i++)
+		for (var i = 0; i < v2i.UpDownLeftRight.Length; i++)
 		{
 			if (min && bestPath != null && bestPath?.Length == path?.Length - 1)
 				break;
@@ -44,7 +47,7 @@ public class TwoStepsForward : PuzzleBase
 			if (doors[i] == 0)
 				continue;
 
-			var nextPos = position + v2i.DownUpLeftRight[i];
+			var nextPos = position + v2i.UpDownLeftRight[i] * new v2i(1, -1); // inv up/down
 
 			// wall
 			if (nextPos.X < 0 || nextPos.Y < 0 || nextPos.X > 3 || nextPos.Y > 3)
