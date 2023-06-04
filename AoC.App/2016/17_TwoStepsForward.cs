@@ -20,12 +20,11 @@ public class TwoStepsForward : PuzzleBase
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	private static char[] _open = new char[] { 'b', 'c', 'd', 'e' , 'f' };
+	private static readonly char[] _pathDir = new char[] { 'U', 'D', 'L', 'R' };
+	private static readonly char[] _open = new char[] { 'b', 'c', 'd', 'e', 'f' };
 
 	private static v4i DoorsOpen(string hash)
 		=> new(hash.Take(4).Select(x => (long)(_open.Contains(x) ? 1 : 0)).ToArray());
-
-	private static char[] _dir = new char[] { 'U', 'D', 'L', 'R' };
 
 	private static string FindPath(v2i position, string passcode, 
 		bool min = true, string path = null, string bestPath = null)
@@ -52,7 +51,7 @@ public class TwoStepsForward : PuzzleBase
 				continue;
 
 			var p = FindPath(nextPos, passcode,
-				path: path + _dir[i],
+				path: path + _pathDir[i],
 				bestPath: bestPath,
 				min: min);
 
