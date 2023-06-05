@@ -24,10 +24,9 @@ public class TwoStepsForward : PuzzleBase
 	/// up, down, left, right
 	/// </summary>
 	private static readonly char[] _pathDir = new char[] { 'U', 'D', 'L', 'R' };
-	private static readonly char[] _open = new char[] { 'b', 'c', 'd', 'e', 'f' };
 
 	private static v4i DoorsOpen(string hash)
-		=> new(hash.Take(4).Select(x => (long)(_open.Contains(x) ? 1 : 0)).ToArray());
+		=> new(hash.Take(4).Select(x => (long)(x >= 'b' ? 1 : 0)).ToArray());
 
 	private static string FindPath(v2i position, string passcode, 
 		bool min = true, string path = null, string bestPath = null)
@@ -61,10 +60,7 @@ public class TwoStepsForward : PuzzleBase
 			if (p == null)
 				continue;
 			
-			if (bestPath == null)
-				bestPath = p;
-
-			else if (min && p.Length < bestPath.Length || !min && p.Length > bestPath.Length)
+			if (bestPath == null || (min && p.Length < bestPath.Length || !min && p.Length > bestPath.Length))
 				bestPath = p;
 		}
 
