@@ -13,20 +13,21 @@ public class AnElephantNamedJoseph : PuzzleBase
 	{
 		var numOfElves = int.Parse(input.Single());
 
+		// part1
 		var elves = Enumerable.Range(1, numOfElves).Select(x => new v2i(x, 1)).ToArray();
 		while (elves.Length > 1)
 		{
 			if (elves.Length % 2 == 0)
 			{
-				var last = elves.Last();
+				var lastPresents = elves[^1][_presents];
 				elves = elves.Where((x, i) => i % 2 == 0).ToArray();
-				elves[^1][_presents] += last[_presents];
+				elves[^1][_presents] += lastPresents;
 			}
 			else
 			{
-				var first = elves.First();
+				var firstPresents = elves[0][_presents];
 				elves = elves.Where((x, i) => i > 0 && i % 2 == 0).ToArray();
-				elves[^1][_presents] += first[_presents] * 2;
+				elves[^1][_presents] += firstPresents * 2;
 			}
 
 			if (elves.Length == 1)
