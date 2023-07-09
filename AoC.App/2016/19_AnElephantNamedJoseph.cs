@@ -36,9 +36,11 @@ public class AnElephantNamedJoseph : PuzzleBase
 			for (var i = 0; i < elves.Length - 1; i++)
 				elves[i][_presents] *= 2;
 		}
-		var answer1 = elves.Single()[_id];
+		var answer1 = elves[0][_id];
 
 		// part2
+
+
 		string answer2 = null;
 
 		return (answer1.ToString(), answer2?.ToString());

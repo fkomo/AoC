@@ -32,6 +32,12 @@ namespace Ujeby.AoC.Common
 		{
 			var result = 0;
 
+#if _DEBUG_SAMPLE
+			// skip (sample) debugging of solved puzzles
+			if (Answer.Part1 != null && Answer.Part2 != null)
+				return result;
+#endif
+
 			var sw = new Stopwatch();
 			try
 			{
