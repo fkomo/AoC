@@ -3,20 +3,36 @@ using Ujeby.Tools.StringExtensions;
 
 namespace Ujeby.AoC.App._2016_21;
 
-[AoCPuzzle(Year = 2016, Day = 21, Answer1 = "gcedfahb", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2016, Day = 21, Answer1 = "gcedfahb", Answer2 = "hegbdcfa", Skip = false)]
 public class ScrambledLettersAndHash : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var password = "abcdefgh".ToArray();
+		var password = "abcdefgh";
 #if _DEBUG_SAMPLE
-		password = "abcde".ToArray();
+		password = "abcde"
 #endif
 		// part1
-		Debug.Line(new string(password));
-		foreach (var instr in input)
+		var answer1 = Scramble(password, input);
+
+		// part2
+		var answer2 = Scramble("fbgdceah", input, reverse: true);
+		// dgebhfca not right
+
+		return (answer1?.ToString(), answer2?.ToString());
+	}
+
+	private static string Scramble(string password, IEnumerable<string> instructions, 
+		bool reverse = false)
+	{
+		var tmp = password.ToArray();
+
+		if (reverse)
+			instructions = instructions.Reverse();
+
+		Debug.Line($"{password}");
+		foreach (var instr in instructions)
 		{
-			Debug.Line(instr);
 			var i = instr
 				.ToNumArray()
 				.Select(x => (int)x)
@@ -27,51 +43,72 @@ public class ScrambledLettersAndHash : PuzzleBase
 				if (instr.Contains("letter"))
 					i = new int[]
 					{
-						Array.IndexOf(password, instr["swap letter ".Length]),
-						Array.IndexOf(password, instr[^1])
+						Array.IndexOf(tmp, instr["swap letter ".Length]),
+						Array.IndexOf(tmp, instr[^1])
 					};
 
-				(password[i[1]], password[i[0]]) = (password[i[0]], password[i[1]]);
+				(tmp[i[1]], tmp[i[0]]) = (tmp[i[0]], tmp[i[1]]);
 			}
 			else if (instr.StartsWith("rotate"))
 			{
 				if (instr.Contains("based"))
 				{
-					var n = Array.IndexOf(password, instr[^1]);
-					password = RotateRight(1 + n + (n >= 4 ? 1 : 0), password);
+					var ci = Array.IndexOf(tmp, instr[^1]);
+
+					if (reverse)
+					{
+						for (var ci2 = 0; ci2 < tmp.Length; ci2++)
+						{
+							if (ci2 == ci)
+								continue;
+
+							var d = 1 + ci2 + (ci2 >= 4 ? 1 : 0);
+							var rDest = (d + ci2) % tmp.Length;
+							if (rDest != ci)
+								continue;
+
+							tmp = RotateLeft(d, tmp);
+							break;
+						}
+					}
+					else
+						tmp = RotateRight(1 + ci + (ci >= 4 ? 1 : 0), tmp);
 				}
 				else
 				{
 					if (instr.Contains("right"))
-						password = RotateRight(i[0], password);
+						tmp = reverse ? RotateLeft(i[0], tmp) : RotateRight(i[0], tmp);
 					else // left
-						password = RotateLeft(i[0], password);
+						tmp = reverse ? RotateRight(i[0], tmp) : RotateLeft(i[0], tmp);
 				}
 			}
 			else if (instr.StartsWith("reverse"))
 			{
-				password = password[0..Math.Max(i[0] - 1, i[0])]
-					.Concat(password[i[0]..(i[1] + 1)].Reverse())
-					.Concat(password[(i[1] + 1)..])
+				tmp = tmp[0..Math.Max(i[0] - 1, i[0])]
+					.Concat(tmp[i[0]..(i[1] + 1)].Reverse())
+					.Concat(tmp[(i[1] + 1)..])
 					.ToArray();
 			}
 			else if (instr.StartsWith("move"))
 			{
-				var m = password[i[0]];
+				if (reverse)
+					(i[0], i[1]) = (i[1], i[0]);
+
+				var m = tmp[i[0]];
 
 				var dir = 1;
 				int x = 0, x2 = 0;
 				if (i[0] > i[1])
 				{
-					x = x2 = password.Length - 1;
+					x = x2 = tmp.Length - 1;
 					dir = -1;
 				}
 
-				for (; x >= 0 && x < password.Length; x += dir, x2 += dir)
+				for (; x >= 0 && x < tmp.Length; x += dir, x2 += dir)
 				{
 					if (x == i[1])
 					{
-						password[x] = m;
+						tmp[x] = m;
 						x2 -= dir;
 					}
 					else
@@ -79,19 +116,15 @@ public class ScrambledLettersAndHash : PuzzleBase
 						if (x == i[0])
 							x2 += dir;
 
-						password[x] = password[x2];
+						tmp[x] = tmp[x2];
 					}
 				}
 			}
-			Debug.Line(new string(password));
-			Debug.Line();
+			Debug.Line($"{new string(tmp)}: {instr}");
 		}
-		var answer1 = new string(password);
 
-		// part2
-		string answer2 = null;
-
-		return (answer1?.ToString(), answer2?.ToString());
+		Debug.Line();
+		return new string(tmp);
 	}
 
 	private static char[] RotateRight(int n, char[] password)
