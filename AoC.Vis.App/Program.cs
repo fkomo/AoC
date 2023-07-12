@@ -36,6 +36,7 @@ namespace Ujeby.AoC.Vis.App
 								new AoCRunnable[]
 								{
 									new AMazeOfTwistyLittleCubicles(windowSize),
+									new GridComputing(windowSize),
 								}
 							},
 							{
