@@ -10,7 +10,7 @@ public class ScrambledLettersAndHash : PuzzleBase
 	{
 		var password = "abcdefgh";
 #if _DEBUG_SAMPLE
-		password = "abcde"
+		password = "abcde";
 #endif
 		// part1
 		var answer1 = Scramble(password, input);

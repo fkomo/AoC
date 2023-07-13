@@ -29,7 +29,14 @@ public class GridComputing : PuzzleBase
 		var answer1 = pairs.Count;
 
 		// part2
-		//var gridSize = new v2i(nodes.Max(x => x.X), nodes.Max(x => x.Y));
+		var gridSize = new v2i(nodes.Max(x => x.X) + 1, nodes.Max(x => x.Y) + 1);
+
+		var i = 0;
+		var grid = new int[gridSize.Y, gridSize.X];
+		for (var y = 0; y < gridSize.Y; y++)
+			for (var x = 0; x < gridSize.X; x++)
+				grid[y,x] = i++;
+
 		string answer2 = null;
 
 		return (answer1.ToString(), answer2?.ToString());
