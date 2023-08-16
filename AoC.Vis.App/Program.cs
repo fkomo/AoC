@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
-using Ujeby.Graphics.Interfaces;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -17,23 +16,32 @@ namespace Ujeby.AoC.Vis.App
 			try
 			{
 				v2i windowSize = new(1920, 1080);
-				Sdl2Wrapper.Init("AoC.Vis", windowSize);
+				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
+				Sdl2Wrapper.SetFont(Ujeby.Graphics.Entities.FontNames.Basic7x11);
 
 				while (true)
 				{
 					var menu = new AoCMenu(windowSize,
-						new Dictionary<string, IRunnable[]>
+						new Dictionary<string, AoCRunnable[]>
 						{
 							{
 								"2015",
-								new IRunnable[]
+								new AoCRunnable[]
 								{
 									new LikeAGIFForYourYard(windowSize),
 								}
 							},
 							{
+								"2016",
+								new AoCRunnable[]
+								{
+									new AMazeOfTwistyLittleCubicles(windowSize),
+									new GridComputing(windowSize),
+								}
+							},
+							{
 								"2021",
-								new IRunnable[]
+								new AoCRunnable[]
 								{
 									new Chitron(windowSize),
 									new TrickShot(windowSize),
@@ -42,7 +50,7 @@ namespace Ujeby.AoC.Vis.App
 							},
 							{
 								"2022",
-								new IRunnable[]
+								new AoCRunnable[]
 								{
 									new BlizzardBasin(windowSize),
 									new RopeBridge(windowSize),
@@ -54,12 +62,12 @@ namespace Ujeby.AoC.Vis.App
 							}
 						}
 					);
-					menu.Run(HandleInput);
+					menu.Run();
 
 					if (menu.Selected == null)
 						break;
 
-					menu.Selected.Run(HandleInput);
+					menu.Selected.Run();
 				}
 			}
 			catch (Exception ex)
@@ -70,11 +78,6 @@ namespace Ujeby.AoC.Vis.App
 			{
 				Sdl2Wrapper.Destroy();
 			}
-		}
-
-		private static bool HandleInput()
-		{
-			return true;
 		}
 	}
 }

@@ -4,7 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_19
 {
-	[AoCPuzzle(Year = 2021, Day = 19, Answer1 = "483", Answer2 = "14804")]
+	[AoCPuzzle(Year = 2021, Day = 19, Answer1 = "483", Answer2 = "14804", Skip = true)]
 	public class BeaconScanner : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -20,62 +20,60 @@ namespace Ujeby.AoC.App._2021_19
 			Debug.Line($"{scanners.Length} scanners");
 
 			// TODO 2021/19 OPTIMIZE (26s)
+
 			// scannerIdx, scannerPosition, scannerBeacons
-			//var fixedScanners = new Dictionary<int, (v3i Position, v3i[] Beacons)>()
-			//{
-			//	{ 0, (Position: new(0, 0, 0), Beacons: scanners[0][0]) },
-			//};
-			//Debug.Line($"fixed {0:d2}:{0:d2}");
+			var fixedScanners = new Dictionary<int, (v3i Position, v3i[] Beacons)>()
+			{
+				{ 0, (Position: new(0, 0, 0), Beacons: scanners[0][0]) },
+			};
+			Debug.Line($"fixed {0:d2}:{0:d2}");
 
-			//var fixedBeacons = new List<v3i>();
-			//fixedBeacons.AddRange(fixedScanners.First().Value.Beacons);
+			var fixedBeacons = new List<v3i>();
+			fixedBeacons.AddRange(fixedScanners.First().Value.Beacons);
 
-			//while (fixedScanners.Count != scanners.Length)
-			//{
-			//	var fixedBefore = fixedScanners.Count;
-			//	for (var is2 = 1; is2 < scanners.Length; is2++)
-			//	{
-			//		if (fixedScanners.ContainsKey(is2))
-			//			continue;
+			while (fixedScanners.Count != scanners.Length)
+			{
+				var fixedBefore = fixedScanners.Count;
+				for (var is2 = 1; is2 < scanners.Length; is2++)
+				{
+					if (fixedScanners.ContainsKey(is2))
+						continue;
 
-			//		for (var irs2 = 0; irs2 < scanners[is2].Length; irs2++)
-			//		{
-			//			foreach (var fs in fixedScanners)
-			//			{
-			//				if (!Overlapps(fs.Value.Beacons, scanners[is2][irs2], out v3i s2Offset, out v3i[] s2fs))
-			//					continue;
+					for (var irs2 = 0; irs2 < scanners[is2].Length; irs2++)
+					{
+						foreach (var fs in fixedScanners)
+						{
+							if (!Overlapps(fs.Value.Beacons, scanners[is2][irs2], out v3i s2Offset, out v3i[] s2fs))
+								continue;
 
-			//				Debug.Line($"fixed {is2:d2}:{irs2:d2} with {fs.Key:d2}, offset={s2Offset}");
-			//				fixedScanners.Add(is2, (Position: s2Offset, Beacons: s2fs));
-			//				fixedBeacons.AddRange(s2fs);
+							Debug.Line($"fixed {is2:d2}:{irs2:d2} with {fs.Key:d2}, offset={s2Offset}");
+							fixedScanners.Add(is2, (Position: s2Offset, Beacons: s2fs));
+							fixedBeacons.AddRange(s2fs);
 
-			//				irs2 = scanners[is2].Length;
-			//				break;
-			//			}
-			//		}
-			//	}
+							irs2 = scanners[is2].Length;
+							break;
+						}
+					}
+				}
 
-			//	Debug.Line($"fixed {fixedScanners.Count}/{scanners.Length}");
-			//}
+				Debug.Line($"fixed {fixedScanners.Count}/{scanners.Length}");
+			}
 
-			//// part1
-			//long? answer1 = fixedBeacons.Distinct().Count();
+			// part1
+			long? answer1 = fixedBeacons.Distinct().Count();
 
-			//// part2
-			//long? answer2 = long.MinValue;
-			//foreach (var s1 in fixedScanners)
-			//	foreach (var s2 in fixedScanners)
-			//	{
-			//		if (s1.Key == s2.Key)
-			//			continue;
+			// part2
+			long? answer2 = long.MinValue;
+			foreach (var s1 in fixedScanners)
+				foreach (var s2 in fixedScanners)
+				{
+					if (s1.Key == s2.Key)
+						continue;
 
-			//		var md = v3i.ManhDistance(s1.Value.Position, s2.Value.Position);
-			//		if (md > answer2)
-			//			answer2 = md;
-			//	}
-
-			long? answer1 = 483;
-			long? answer2 = 14804;
+					var md = v3i.ManhDistance(s1.Value.Position, s2.Value.Position);
+					if (md > answer2)
+						answer2 = md;
+				}
 
 			Debug.Line();
 

@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_23
 {
-	[AoCPuzzle(Year = 2021, Day = 23, Answer1 = "10607", Answer2 = "59071")]
+	[AoCPuzzle(Year = 2021, Day = 23, Answer1 = "10607", Answer2 = "59071", Skip = true)]
 	public class Amphipod : PuzzleBase
 	{
 		private static readonly Dictionary<char, int> _amphipodeEnergy = new()
@@ -94,6 +94,8 @@ namespace Ujeby.AoC.App._2021_23
 		{
 			Debug.Line();
 
+			// TODO 2021/23 OPTIMIZE (13s)
+
 			// part1
 			State.Rooms = new Dictionary<char, v2i[]>
 			{
@@ -102,7 +104,7 @@ namespace Ujeby.AoC.App._2021_23
 				{ 'C', Enumerable.Range(2, 2).Select(y => new v2i(7, y)).ToArray() },
 				{ 'D', Enumerable.Range(2, 2).Select(y => new v2i(9, y)).ToArray() },
 			};
-			//long? answer1 = Step(new State(input));
+			long? answer1 = Step(new State(input));
 
 			// part2
 			State.Rooms = new Dictionary<char, v2i[]>
@@ -113,17 +115,13 @@ namespace Ujeby.AoC.App._2021_23
 				{ 'D', Enumerable.Range(2, 4).Select(y => new v2i(9, y)).ToArray() },
 			};
 			_cache.Clear();
-			//long? answer2 = Step(
-			//	new State(
-			//		input.Take(3).Concat(new string[]
-			//		{
-			//			"  #D#C#B#A#",
-			//			"  #D#B#A#C#",
-			//		}).Concat(input.Skip(3)).ToArray()));
-
-			// TODO 2021/23 OPTIMIZE (13s)
-			long? answer1 = 10607;
-			long? answer2 = 59071;
+			long? answer2 = Step(
+				new State(
+					input.Take(3).Concat(new string[]
+					{
+						"  #D#C#B#A#",
+						"  #D#B#A#C#",
+					}).Concat(input.Skip(3)).ToArray()));
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

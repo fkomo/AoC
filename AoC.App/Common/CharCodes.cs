@@ -1,9 +1,13 @@
 ﻿using System.Text;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Common
 {
 	internal class CharCodes
 	{
+		public static string ToString(v2i size, bool[,] charMap)
+			=> ToString((int)size.X, (int)size.Y, charMap);
+
 		public static string ToString(int width, int height, bool[,] charMap)
 		{
 			var result = string.Empty;
@@ -32,6 +36,9 @@ namespace Ujeby.AoC.Common
 			return result;
 		}
 
+		private static void DrawString(v2i size, bool[,] buffer)
+			=> DrawString((int)size.X, (int)size.Y, buffer);
+
 		public static void DrawString(int width, int height, bool[,] paper)
 		{
 			var line = new StringBuilder();
@@ -49,10 +56,10 @@ namespace Ujeby.AoC.Common
 		}
 
 		/// <summary>
-		/// A B C D E F G H i* J K L m* n* O P q* R s* t* U v* x* y* Z
+		/// A B C D E F G H i* J K L m* n* O P q* R S t* U v* x* y* Z
 		/// * missing
 		/// </summary>
-		public static Dictionary<char, int[,]> _map = new()
+		private static Dictionary<char, int[,]> _map = new()
 		{
 			{ 'A', new int[,]
 				{
@@ -192,6 +199,16 @@ namespace Ujeby.AoC.Common
 					{ 1, 1, 1, 0 },
 					{ 1, 0, 1, 0 },
 					{ 1, 0, 0, 1 }
+				}
+			},
+			{ 'S', new int[,]
+				{
+					{ 0, 1, 1, 1 },
+					{ 1, 0, 0, 0 },
+					{ 1, 0, 0, 0 },
+					{ 0, 1, 1, 0 },
+					{ 0, 0, 0, 1 },
+					{ 1, 1, 1, 0 }
 				}
 			},
 			{ 'U', new int[,]

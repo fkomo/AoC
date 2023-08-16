@@ -1,12 +1,14 @@
 ﻿using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
+using Ujeby.AoC.Vis.App.Ui;
+using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class TrenchMap : Sdl2Loop
+	internal class TrenchMap : AoCRunnable
 	{
 		private long _step;
 
@@ -21,7 +23,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			ShowCursor(false);
+			Sdl2Wrapper.ShowCursor(false);
 
 			Grid.MinorSize = 5;
 
@@ -37,7 +39,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid(showMinor: false);
+			Grid.Draw(showMinor: false);
 
 			var pixelColor = new v4f(.5);
 			var imageSize = new v2i(_image[0].Length, _image.Length);
@@ -48,21 +50,21 @@ namespace Ujeby.AoC.Vis.App
 					if (_image[p.Y][(int)p.X] == '.')
 						continue;
 
-					DrawGridCell(p - imageSize / 2, fill: pixelColor);
+					Grid.DrawCell(p - imageSize / 2, fill: pixelColor);
 				}
 
-			DrawGridRect(imageSize.Inv() / 2, imageSize, new v4f(0, 0, 1, .5));
+			Grid.DrawRect(imageSize.Inv() / 2, imageSize, new v4f(0, 0, 1, .5));
 
-			DrawGridMouseCursor();
+			Grid.DrawMouseCursor();
 
-			DrawText(new v2i(32, 32), 
+			Sdl2Wrapper.DrawText(new v2i(32, 32),
 				new Text($"step: {_step}"),
 				new Text($"size: {imageSize}"));
 		}
 
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseDown()

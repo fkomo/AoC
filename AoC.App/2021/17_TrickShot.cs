@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2021_17
 {
-	[AoCPuzzle(Year = 2021, Day = 17, Answer1 = "10011", Answer2 = "2994")]
+	[AoCPuzzle(Year = 2021, Day = 17, Answer1 = "10011", Answer2 = "2994", Skip = true)]
 	public class TrickShot : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -24,16 +24,15 @@ namespace Ujeby.AoC.App._2021_17
 				}
 
 			// part2
-			// TODO 2021/17 p2 OPTIMIZE (16s)
-			//long? answer2 = 0;
-			//for (var y = target.Bottom; y < answer1.Value; y++)
-			//	for (var x = 1; x <= target.Right; x++)
-			//	{
-			//		var dir = new v2i(x, y);
-			//		if (SimThrow(dir, target, out _))
-			//			answer2++;
-			//	}
-			long? answer2 = 2994;
+			// TODO 2021/17 OPTIMIZE p2 (16s)
+			long? answer2 = 0;
+			for (var y = target.Bottom; y < answer1.Value; y++)
+				for (var x = 1; x <= target.Right; x++)
+				{
+					var dir = new v2i(x, y);
+					if (SimThrow(dir, target, out _))
+						answer2++;
+				}
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

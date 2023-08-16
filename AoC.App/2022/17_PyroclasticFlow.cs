@@ -3,7 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2022_17
 {
-	[AoCPuzzle(Year = 2022, Day = 17, Answer1 = "3202", Answer2 = "1591977077352")]
+	[AoCPuzzle(Year = 2022, Day = 17, Answer1 = "3202", Answer2 = "1591977077352", Skip = true)]
 	public class PyroclasticFlow : PuzzleBase
 	{
 		public const char Empty = '.';
@@ -48,6 +48,8 @@ namespace Ujeby.AoC.App._2022_17
 
 		protected override (string, string) SolvePuzzle(string[] input)
 		{
+			// 2022/17 OPTIMIZE (1s)
+
 			// part1
 			long? answer1 = FallingRocks(2022, input[0]);
 

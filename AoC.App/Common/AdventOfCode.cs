@@ -9,7 +9,7 @@ namespace Ujeby.AoC.Common
 		public const int ConsoleWidth = 99;
 
 		public static void RunAll(
-			string inputStorage = null)
+			string inputStorage = null, bool ignoreSkip = false)
 		{
 			if (string.IsNullOrEmpty(inputStorage))
 			{
@@ -58,12 +58,20 @@ namespace Ujeby.AoC.Common
 #endif
 				Run(aocYear.Key,
 					inputStorage,
-					aocYear.Select(p => (IPuzzle)Activator.CreateInstance(p))
+					aocYear.Select(p =>
+					{
+						var puzzle = (IPuzzle)Activator.CreateInstance(p);
+						
+						if (ignoreSkip)
+							puzzle.Skip = false;
+
+						return puzzle;
+					})
 					.ToArray());
 			}
 		}
 
-		public static void Run(int year, string inputStorage, 
+		public static void Run(int year, string inputStorage,
 			params IPuzzle[] problemsToSolve)
 		{
 			Log.Line();

@@ -1,25 +1,27 @@
-﻿using Ujeby.Graphics.Entities;
-using Ujeby.Graphics.Interfaces;
+﻿using Ujeby.Graphics;
+using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
+using Ujeby.Tools.StringExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App.Ui
 {
-	public class AoCMenu : Sdl2Loop
+	public class AoCMenu : AoCRunnable
 	{
-		private readonly Dictionary<string, IRunnable[]> _items;
+		private readonly Dictionary<string, AoCRunnable[]> _items;
 
 		public AoCMenu(v2i windowSize) : base(windowSize)
 		{
 		}
 
-		public AoCMenu(v2i windowSize, Dictionary<string, IRunnable[]> items) : this(windowSize)
+		public AoCMenu(v2i windowSize, Dictionary<string, AoCRunnable[]> items) : this(windowSize)
 		{
 			_items = items;
 		}
 
 		protected override void Init()
 		{
+			Sdl2Wrapper.ShowCursor(true);
 		}
 
 		protected override void Update()
@@ -28,7 +30,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 				_terminate = true;
 		}
 
-		public IRunnable Selected { get; private set; }
+		public AoCRunnable Selected { get; private set; }
 
 		public override string Name => "-=#[ Advent Of Code ]#=-";
 
@@ -37,14 +39,13 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 		protected override void Render()
 		{
-			var title = new Text(Name) { Color = new v4f(1, 1, 1, 1) };
-			var titleSize = Sdl2Wrapper.CurrentFont.GetTextSize(title);
-			DrawText(new(WindowSize.X / 2 - titleSize.X / 2, WindowSize.Y / 5), title);
+			var cGreen = new v4f(0, .5, 0, 1);
+			var cSelectedItem = new v4f(0, .5, 0, 1);
 
-			//DrawRect((int)_windowSize.X / (_items.Keys.Count + 1), 0, (int)_windowSize.X / (_items.Keys.Count + 1), (int)_windowSize.Y, 
-			//	new v4f(0, 1, 0, 0.5f));
-			//DrawRect(0, (int)_windowSize.Y / 2, (int)_windowSize.X, (int)_windowSize.Y / 2, 
-			//	new v4f(0, 0, 1, 0.5f));
+			var title = new Text(Name, Colors.White, cGreen);
+			Sdl2Wrapper.DrawText(new(WindowSize.X / 2, WindowSize.Y / 5), new(), new v2i(4, 4), 
+				HorizontalTextAlign.Center, VerticalTextAlign.Center, 
+				title);
 
 			var spacing = new v2i(0, 4);
 			var scale = new v2i(2);
@@ -54,7 +55,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 				var sectionTitleText = _items.Keys.ElementAt(ix);
 				var sectionCenter = new v2i(WindowSize.X / (_items.Keys.Count + 1) * (ix + 1), WindowSize.Y / 2);
 
-				var items = _items[sectionTitleText].Select(i => new Text(i.Name)).ToArray();
+				var items = _items[sectionTitleText].Select(i => new Text(i.Name.SplitCase())).ToArray();
 				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, items);
 
 				var sectionTopLeft = sectionCenter - itemsSize / 2;
@@ -69,22 +70,22 @@ namespace Ujeby.AoC.Vis.App.Ui
 						continue;
 					}
 
-					items[i].Color = new v4f(1, 0, 0, 1);
+					items[i].OutlineColor = cSelectedItem;
 
 					_section = sectionTitleText;
 					_sectionItem = i;
 					break;
 				}
 
-				var sectionTitle = new Text($"-=#{{ {sectionTitleText} }}#=-") { Color = new v4f(0, 1, 0, 1) };
+				var sectionTitle = new Text($"-=#{{ {sectionTitleText} }}#=-", cGreen);
 				var sectionTitleSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, sectionTitle);
 				var titleOffset = new v2i(sectionTitleSize.X / 2, sectionTitleSize.Y + itemsSize.Y / 2);
 
 				// title
-				DrawText(sectionCenter - titleOffset, spacing, scale, sectionTitle);
+				Sdl2Wrapper.DrawText(sectionCenter - titleOffset, spacing, scale, sectionTitle);
 
 				// items
-				DrawText(sectionCenter - itemsSize / 2, spacing, scale, items);
+				Sdl2Wrapper.DrawText(sectionCenter - itemsSize / 2, spacing, scale, items);
 			}
 		}
 

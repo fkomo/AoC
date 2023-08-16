@@ -1,21 +1,51 @@
 using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App._2016_18
+namespace Ujeby.AoC.App._2016_18;
+
+[AoCPuzzle(Year = 2016, Day = 18, Answer1 = "1974", Answer2 = "19991126", Skip = false)]
+public class LikeARogue : PuzzleBase
 {
-	[AoCPuzzle(Year = 2016, Day = 18, Answer1 = null, Answer2 = null)]
-	public class LikeARogue : PuzzleBase
+	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
-		{
-			string answer1 = null, answer2 = null;
+		var firstRow = input.Single().Select(x => x == '.').ToArray();
 
-			// TODO 2016/18
+		// part1
+		var answer1 = SafeTilesCount(firstRow, 40);
 
-			// part1
+		// part2
+		var answer2 = SafeTilesCount(firstRow, 400000);
 
-			// part2
-
-			return (answer1, answer2);
-		}
+		return (answer1.ToString(), answer2.ToString());
 	}
+
+	private static int SafeTilesCount(bool[] firstRowSafeTiles, int rowsCount)
+	{
+		var row = firstRowSafeTiles;
+		var count = row.Count(x => x);
+		for (var i = 1; i < rowsCount; i++)
+		{
+			row = NextRowSafeTiles(row);
+			count += row.Count(x => x);
+		}
+
+		return count;
+	}
+
+	private static bool[] NextRowSafeTiles(bool[] prevRowSafeTiles)
+	{
+		var newRowSafeTiles = new bool[prevRowSafeTiles.Length];
+
+		newRowSafeTiles[0] = !IsTrap(false, !prevRowSafeTiles[0], !prevRowSafeTiles[1]);
+		for (var i = 1; i < prevRowSafeTiles.Length - 1; i++)
+			newRowSafeTiles[i] = !IsTrap(!prevRowSafeTiles[i - 1], !prevRowSafeTiles[i], !prevRowSafeTiles[i + 1]);
+		newRowSafeTiles[prevRowSafeTiles.Length - 1] = !IsTrap(!prevRowSafeTiles[^2], !prevRowSafeTiles[^1], false);
+
+		return newRowSafeTiles;
+	}
+
+	private static bool IsTrap(bool leftTrap, bool centerTrap, bool rightTrap) => 
+		(leftTrap && centerTrap && !rightTrap) ||
+		(!leftTrap && centerTrap && rightTrap) ||
+		(leftTrap && !centerTrap && !rightTrap) ||
+		(!leftTrap && !centerTrap && rightTrap);
 }

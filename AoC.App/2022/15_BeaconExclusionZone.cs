@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_15
 {
-	[AoCPuzzle(Year = 2022, Day = 15, Answer1 = "5166077", Answer2 = "13071206703981")]
+	[AoCPuzzle(Year = 2022, Day = 15, Answer1 = "5166077", Answer2 = "13071206703981", Skip = true)]
 	public class BeaconExclusionZone : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -38,6 +38,8 @@ namespace Ujeby.AoC.App._2022_15
 
 			Debug.Line();
 			Debug.Line($"[{min.X};{min.Y}]x[{max.X};{max.Y}]");
+			
+			// TODO 2022/15 OPTIMIZE (4s)
 
 			// part1
 #if _DEBUG_SAMPLE
@@ -63,7 +65,6 @@ namespace Ujeby.AoC.App._2022_15
 					}
 				}
 			}
-			//long? answer1 = 5166077;
 
 			// part2
 #if _DEBUG_SAMPLE
@@ -113,7 +114,6 @@ namespace Ujeby.AoC.App._2022_15
 					state.Break();
 				}
 			});
-			//long? answer2 = 13071206703981;
 
 			Debug.Line();
 
@@ -147,7 +147,7 @@ namespace Ujeby.AoC.App._2022_15
 			return null;
 		}
 
-		private void PrintMap(long[] sbsDist, v2i[][] sbs, v2i min, v2i max)
+		private static void PrintMap(long[] sbsDist, v2i[][] sbs, v2i min, v2i max)
 		{
 			var p = min;
 			for (; p.Y <= max.Y; p.Y++)

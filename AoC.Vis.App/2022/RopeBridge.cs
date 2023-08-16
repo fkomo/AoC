@@ -1,9 +1,10 @@
-﻿using Ujeby.Graphics.Sdl;
+﻿using Ujeby.AoC.Vis.App.Ui;
+using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class RopeBridge : Sdl2Loop
+	internal class RopeBridge : AoCRunnable
 	{
 		private v2i? _apple = null;
 		private v2i[] _snake;
@@ -16,7 +17,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			ShowCursor(false); 
+			Sdl2Wrapper.ShowCursor(false); 
 			
 			_snake = new v2i[20];
 		}
@@ -46,23 +47,23 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			DrawGrid();
+			Grid.Draw();
 
 			// target
 			if (_apple.HasValue)
-				DrawGridCell((int)_apple.Value.X, (int)_apple.Value.Y, fill: new v4f(0, 1, 0, .5));
+				Grid.DrawCell((int)_apple.Value.X, (int)_apple.Value.Y, fill: new v4f(0, 1, 0, .5));
 
 			// rope
 			for (var p = 1; p < _snake.Length; p++)
-				DrawGridCell((int)_snake[p].X, (int)_snake[p].Y, fill: new v4f(1, 1, 1, .5));
-			DrawGridCell((int)_snake[0].X, (int)_snake[0].Y, fill: new v4f(1, 0, 0, .5));
+				Grid.DrawCell((int)_snake[p].X, (int)_snake[p].Y, fill: new v4f(1, 1, 1, .5));
+			Grid.DrawCell((int)_snake[0].X, (int)_snake[0].Y, fill: new v4f(1, 0, 0, .5));
 
-			DrawGridMouseCursor();
+			Grid.DrawMouseCursor();
 		}
 
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseDown()

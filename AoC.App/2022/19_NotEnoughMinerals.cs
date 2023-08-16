@@ -5,7 +5,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_19
 {
-	[AoCPuzzle(Year = 2022, Day = 19, Answer1 = "1466", Answer2 = "8250")]
+	[AoCPuzzle(Year = 2022, Day = 19, Answer1 = "1466", Answer2 = "8250", Skip = true)]
 	public class NotEnoughMinerals : PuzzleBase
 	{
 		internal class Blueprint
@@ -91,26 +91,25 @@ namespace Ujeby.AoC.App._2022_19
 			var blueprints = ParseBlueprints(input);
 			Debug.Line($"{blueprints.Length} blueprints");
 
-			// part1 (5s)
+			// TODO 2022/19 OPTIMIZE (2min)
+
+			// part1
 			var results = new ConcurrentBag<long>();
 			Parallel.ForEach(blueprints, bp =>
 			{
 				results.Add(bp.Id * Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 24 }, new()));
 			});
 			long? answer1 = results.Sum();
-			//long? answer1 = 1466;
 
-			// part2 (99s)
-			// TODO 2022/19 p2 OPTIMIZE (99s)
-			//results = new ConcurrentBag<long>();
-			//Parallel.ForEach(blueprints.Take(3), bp =>
-			//{
-			//	results.Add(Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 32 }, new()));
-			//});
-			//long? answer2 = 1;
-			//foreach (var r in results)
-			//	answer2 *= r;
-			long? answer2 = 8250;
+			// part2
+			results = new ConcurrentBag<long>();
+			Parallel.ForEach(blueprints.Take(3), bp =>
+			{
+				results.Add(Step(bp, new State { Robots = Blueprint.OreCollectingRobot, TimeLeft = 32 }, new()));
+			});
+			long? answer2 = 1;
+			foreach (var r in results)
+				answer2 *= r;
 
 			Debug.Line();
 
