@@ -64,6 +64,7 @@ public class SafeCracking : PuzzleBase
 		var answer1 = new AssembunnyV2(instrRaw).Exec(reg).X;
 
 		// part2
+		// TODO 2016/23 OPTIMIZE p2 (?)
 		var answer2 = new AssembunnyV2(instrRaw).Exec(new v4i(12, 0, 0, 0)).X;
 
 		return (answer1.ToString(), answer2.ToString());
