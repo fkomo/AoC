@@ -20,7 +20,7 @@ namespace Ujeby.AoC.App._2021_07
 				long fuel = 0;
 				for (var i = 0; i < inputN.Length; i++)
 				{
-					fuel += Math.Abs(inputN[i] - m);
+					fuel += System.Math.Abs(inputN[i] - m);
 					if (fuel > answer1)
 						break;
 				}
@@ -35,7 +35,7 @@ namespace Ujeby.AoC.App._2021_07
 				long fuel = 0;
 				for (var i = 0; i < inputN.Length; i++)
 				{
-					for (var d = Math.Abs(inputN[i] - m); d > 0; d--)
+					for (var d = System.Math.Abs(inputN[i] - m); d > 0; d--)
 					{
 						fuel += d;
 						if (fuel > answer2)

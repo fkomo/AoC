@@ -81,6 +81,6 @@ namespace Ujeby.AoC.App._2015_21
 		}
 
 		private static bool Fight(v3i player, v3i boss)
-			=> (player.X / Math.Max(1, boss.Y - player.Z)) >= (boss.X / Math.Max(1, player.Y - boss.Z));
+			=> (player.X / System.Math.Max(1, boss.Y - player.Z)) >= (boss.X / System.Math.Max(1, player.Y - boss.Z));
 	}
 }

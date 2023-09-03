@@ -167,7 +167,7 @@ namespace Ujeby.AoC.App._2015_22
 				if (state.ActiveEffects.Any(ae => ae.Effect == SpellEnum.Shield))
 					playerArmor += 7;
 
-				state.Player[Hp] -= Math.Max(1, state.Boss[Dmg] - playerArmor);
+				state.Player[Hp] -= System.Math.Max(1, state.Boss[Dmg] - playerArmor);
 				if (state.Player[Hp] <= 0)
 				{
 					Debug.Line("player died");
@@ -212,7 +212,7 @@ namespace Ujeby.AoC.App._2015_22
 					Debug.Indent--;
 				}
 
-				state.MinManaSpent = Math.Min(forkResult, state.MinManaSpent);
+				state.MinManaSpent = System.Math.Min(forkResult, state.MinManaSpent);
 			}
 
 			Debug.Indent -= 2;

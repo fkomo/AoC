@@ -82,9 +82,9 @@ namespace Ujeby.AoC.App._2022_17
 				{
 					int x1;
 					if (directions[i] == '<')
-						x1 = Math.Max(x - 1, 0);
+						x1 = System.Math.Max(x - 1, 0);
 					else //if (directions[i] == '>')
-						x1 = Math.Min(x + 1, 7 - rock.GetLength(1));
+						x1 = System.Math.Min(x + 1, 7 - rock.GetLength(1));
 
 					i = (i + 1) % directions.Length;
 

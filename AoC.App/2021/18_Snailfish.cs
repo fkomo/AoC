@@ -56,8 +56,8 @@ namespace Ujeby.AoC.App._2021_18
 				if (Left >= 10)
 				{
 					LeftSnail = new(
-						(int)Math.Floor((decimal)Left.Value / 2),
-						(int)Math.Ceiling((decimal)Left / 2));
+						(int)System.Math.Floor((decimal)Left.Value / 2),
+						(int)System.Math.Ceiling((decimal)Left / 2));
 
 					Left = null;
 					return true;
@@ -68,8 +68,8 @@ namespace Ujeby.AoC.App._2021_18
 				if (Right >= 10)
 				{
 					RightSnail = new(
-						(int)Math.Floor((decimal)Right.Value / 2),
-						(int)Math.Ceiling((decimal)Right / 2));
+						(int)System.Math.Floor((decimal)Right.Value / 2),
+						(int)System.Math.Ceiling((decimal)Right / 2));
 
 					Right = null;
 					return true;

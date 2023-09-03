@@ -105,7 +105,7 @@ namespace Ujeby.AoC.Vis.App
 
 			if (_heightMap != null)
 			{
-				_heightMap[m.Y, m.X] = Math.Min('z' - 'a', _heightMap[m.Y, m.X] + 1);
+				_heightMap[m.Y, m.X] = System.Math.Min('z' - 'a', _heightMap[m.Y, m.X] + 1);
 
 				_bfsPath = null;
 				_bfs = new Alg.BreadthFirstSearch(_heightMap, new v2i(_heightMap.GetLength(1), _heightMap.GetLength(0)), _start, 

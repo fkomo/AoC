@@ -46,7 +46,7 @@ namespace Ujeby.AoC.App._2021_21
 
 			// part2
 			var wins = PlayerTurn(startPosition, new());
-			long? answer2 = Math.Max(wins.X, wins.Y);
+			long? answer2 = System.Math.Max(wins.X, wins.Y);
 
 			return (answer1?.ToString(), answer2?.ToString());
 		}

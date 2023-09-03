@@ -144,7 +144,7 @@ namespace Ujeby.AoC.App._2022_19
 
 			// build geode robot
 			if (state.TimeLeft > 1 && bp.CanBuild(Blueprint.Geode, state))
-				maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Geode), cache));
+				maxGeode = System.Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Geode), cache));
 
 			else if (state.TimeLeft > 3)
 			{
@@ -152,24 +152,24 @@ namespace Ujeby.AoC.App._2022_19
 				if (bp.CanBuild(Blueprint.Obsidian, state)
 					&& state.Robots[Blueprint.Obsidian] < bp.GeodeRobotCost[Blueprint.Obsidian]
 					)
-					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Obsidian), cache));
+					maxGeode = System.Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Obsidian), cache));
 
 				// build clay robot
 				if (bp.CanBuild(Blueprint.Clay, state)
 					&& state.TimeLeft > 7 // 7 is hardcoded for optimization
 					&& state.Robots[Blueprint.Clay] < bp.ObsidianRobotCost[Blueprint.Clay]
 					)
-					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Clay), cache));
+					maxGeode = System.Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Clay), cache));
 
 				// build ore robot
 				if (bp.CanBuild(Blueprint.Ore, state)
 					&& state.Robots[Blueprint.Ore] < bp.RobotCosts.Max(c => c[Blueprint.Ore])
 					)
-					maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Ore), cache));
+					maxGeode = System.Math.Max(maxGeode, Step(bp, state.Advance(bp, Blueprint.Ore), cache));
 			}
 
 			// build nothing, just collect
-			maxGeode = Math.Max(maxGeode, Step(bp, state.Advance(), cache));
+			maxGeode = System.Math.Max(maxGeode, Step(bp, state.Advance(), cache));
 
 			cache.Add(cacheKey, maxGeode);
 

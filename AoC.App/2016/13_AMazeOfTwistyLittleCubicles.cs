@@ -31,7 +31,7 @@ public class AMazeOfTwistyLittleCubicles : PuzzleBase
 	}
 
 	public static bool WallAt(v2i p, long officeDesignerFavNum)
-		=> p.X < 0 || p.Y < 0 || Tools.Numbers.DecToBase(officeDesignerFavNum + p.X * p.X + (3 * p.X) + (2 * p.X * p.Y) + p.Y + (p.Y * p.Y))
+		=> p.X < 0 || p.Y < 0 || Math.DecToBase(officeDesignerFavNum + p.X * p.X + (3 * p.X) + (2 * p.X * p.Y) + p.Y + (p.Y * p.Y))
 			.Count(x => x == '1') % 2 != 0;
 
 	private static readonly Dictionary<v2i, bool> _cache = new();
@@ -63,7 +63,7 @@ public class AMazeOfTwistyLittleCubicles : PuzzleBase
 				continue;
 
 			var s = StepsToDestination(p1, dest, officeDesignerFavNum, new v2i[] { p1 }.Concat(path).ToArray(), maxSteps);
-			maxSteps = Math.Min(s, maxSteps);
+			maxSteps = System.Math.Min(s, maxSteps);
 		}
 
 		return maxSteps;

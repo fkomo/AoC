@@ -84,7 +84,7 @@ public class ScrambledLettersAndHash : PuzzleBase
 			}
 			else if (instr.StartsWith("reverse"))
 			{
-				tmp = tmp[0..Math.Max(i[0] - 1, i[0])]
+				tmp = tmp[0..System.Math.Max(i[0] - 1, i[0])]
 					.Concat(tmp[i[0]..(i[1] + 1)].Reverse())
 					.Concat(tmp[(i[1] + 1)..])
 					.ToArray();

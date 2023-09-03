@@ -195,7 +195,7 @@ namespace Ujeby.AoC.App._2021_16
 				shift = 8;
 			}
 
-			return (ushort)((result >> resultLength - (start % 8) - length) & (uint)(Math.Pow(2, length) - 1));
+			return (ushort)((result >> resultLength - (start % 8) - length) & (uint)(System.Math.Pow(2, length) - 1));
 		}
 	}
 }

@@ -27,7 +27,7 @@ namespace Ujeby.AoC.App._2015_14
 
 			// part1
 			var answer1 = reindeers.Values.Max(r => r[0] *
-				((timeLimit / (r[1] + r[2]) * r[1]) + Math.Min(r[1], timeLimit - (timeLimit / (r[1] + r[2]) * (r[1] + r[2])))));
+				((timeLimit / (r[1] + r[2]) * r[1]) + System.Math.Min(r[1], timeLimit - (timeLimit / (r[1] + r[2]) * (r[1] + r[2])))));
 
 			// part2
 			var race = reindeers.ToDictionary(i => i.Key, i => new RacingReindeer { Flying = i.Value[1] });
