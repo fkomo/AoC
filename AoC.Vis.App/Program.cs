@@ -37,6 +37,7 @@ namespace Ujeby.AoC.Vis.App
 								{
 									new AMazeOfTwistyLittleCubicles(windowSize),
 									new GridComputing(windowSize),
+									new AirDuctSpelunking(windowSize),
 								}
 							},
 							{
