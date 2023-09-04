@@ -41,6 +41,13 @@ namespace Ujeby.AoC.Vis.App
 								}
 							},
 							{
+								"2017",
+								new AoCRunnable[]
+								{
+									new SpiralMemory(windowSize),
+								}
+							},
+							{
 								"2021",
 								new AoCRunnable[]
 								{

@@ -17,7 +17,7 @@ public class SpiralMemory : PuzzleBase
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	private static IEnumerable<v2i> EnumSpiral()
+	public static IEnumerable<v2i> EnumSpiral()
 	{
 		var dir = 0;
 		var axis = 0;
