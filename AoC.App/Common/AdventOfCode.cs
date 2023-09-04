@@ -24,6 +24,10 @@ namespace Ujeby.AoC.Common
 				.OrderBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Day)
 				.GroupBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Year))
 			{
+#if !_2023
+				if (aocYear.Key == 2023)
+					continue;
+#endif
 #if !_2022
 				if (aocYear.Key == 2022)
 					continue;

@@ -19,6 +19,8 @@ namespace Ujeby.AoC.Vis.App
 		private v2i[,][] _path;
 		private int[,] _dist;
 		private int[] _keys;
+		private (int[] Path, long Length)? _shortest;
+		private bool _return = false;
 
 		public override string Name => $"#24 {nameof(AirDuctSpelunking)}";
 
@@ -41,6 +43,8 @@ namespace Ujeby.AoC.Vis.App
 
 			Ujeby.AoC.App._2016_24.AirDuctSpelunking.CreatePaths(_poi, _map, _mapSize, 
 				out _path, out _dist);
+
+			_shortest = Ujeby.AoC.App._2016_24.AirDuctSpelunking.ShortestPath(_poi, _dist, new int[] { 0 });
 		}
 
 		protected override void Update()
@@ -71,15 +75,25 @@ namespace Ujeby.AoC.Vis.App
 				}
 			}
 
-			foreach (var key in _keys)
-			{
-				if (key == 0)
-					continue;
+			//foreach (var key in _keys)
+			//{
+			//	if (key == 0)
+			//		continue;
+			//	var path = _path[0, key];
+			//	var c = HeatMap.GetColorForValue(key, _keys.Length, alpha: 0.5);
+			//	for (var i = 0; i < path.Length; i++)
+			//		Grid.DrawCell(path[i], fill: c);
+			//}
 
-				var path = _path[0, key];
-				var c = HeatMap.GetColorForValue(key, _keys.Length, alpha: 0.5);
-				for (var i = 0; i < path.Length; i++)
-					Grid.DrawCell(path[i], fill: c);
+			if (_shortest != null)
+			{
+				for (var i = 0; i < _shortest.Value.Path.Length - 1; i++)
+				{
+					var path = _path[_shortest.Value.Path[i], _shortest.Value.Path[i + 1]];
+					var c = HeatMap.GetColorForValue(i, _shortest.Value.Path.Length - 1, alpha: 0.5);
+					for (var p = 0; p < path.Length; p++)
+						Grid.DrawCell(path[p], fill: c);
+				}
 			}
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
@@ -87,10 +101,18 @@ namespace Ujeby.AoC.Vis.App
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"{nameof(_mapSize)}: {_mapSize}"),
 				new Text($"{nameof(_poi)}: {_poi.Count}"),
-				new Text($"{nameof(_selected)}: {_selected}")
+				new Text($"{nameof(_selected)}: {_selected}"),
+				new Text($"{nameof(_return)}: {_return}"),
+				new Text($"{nameof(_shortest.Value.Length)}: {_shortest.Value.Length}")
 				);
 
 			base.Render();
+		}
+
+		protected override void LeftMouseUp()
+		{
+			_return = !_return;
+			_shortest = Ujeby.AoC.App._2016_24.AirDuctSpelunking.ShortestPath(_poi, _dist, new int[] { 0 }, ret: _return);
 		}
 
 		protected override void Destroy()

@@ -7,19 +7,19 @@
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<!--<Nullable>enable</Nullable>-->
-		<Configurations>Debug;Release;Debug.Sample;Release_2022;Release_2021;Release_2020;Release_2019;Release_2018;Release_2017;Release_2016;Release_2015;Debug_2022;Debug_2021;Debug_2020;Debug_2019;Debug_2018;Debug_2017;Debug_2016;Debug_2015;Debug.Sample_2022;Debug.Sample_2021;Debug.Sample_2020;Debug.Sample_2019;Debug.Sample_2018;Debug.Sample_2017;Debug.Sample_2016;Debug.Sample_2015</Configurations>
+		<Configurations>Debug;Release;Debug.Sample;Release_2023;Release_2022;Release_2021;Release_2020;Release_2019;Release_2018;Release_2017;Release_2016;Release_2015;Debug_2023;Debug_2022;Debug_2021;Debug_2020;Debug_2019;Debug_2018;Debug_2017;Debug_2016;Debug_2015;Debug.Sample_2023;Debug.Sample_2022;Debug.Sample_2021;Debug.Sample_2020;Debug.Sample_2019;Debug.Sample_2018;Debug.Sample_2017;Debug.Sample_2016;Debug.Sample_2015</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;_2023;</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;_2023;</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2015;_2016;_2017;_2018;_2019;_2020;_2021;_2022;_2023;</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
 
@@ -48,8 +48,11 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2022|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2022</DefineConstants>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_2023|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_2023</DefineConstants>
+	</PropertyGroup>
 
-
+	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2015|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2015</DefineConstants>
 		<Optimize>False</Optimize>
@@ -82,8 +85,12 @@
 		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2022</DefineConstants>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample_2023|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE;_2023</DefineConstants>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
 
-
+	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2015|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2015</DefineConstants>
 	</PropertyGroup>
@@ -108,8 +115,11 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2022|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2022</DefineConstants>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_2023|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;_RELEASE;_2023</DefineConstants>
+	</PropertyGroup>
 
-
+	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
 		<!--<PackageReference Include="Ujeby" Version="*" />-->
