@@ -38,8 +38,6 @@ public class AMazeOfTwistyTrampolinesAllAlike : PuzzleBase
 			answer2++;
 		}
 
-		// 720 too low
-
 		return (answer1.ToString(), answer2.ToString());
 	}
 }
