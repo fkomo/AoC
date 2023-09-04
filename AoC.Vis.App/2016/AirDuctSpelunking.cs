@@ -5,7 +5,6 @@ using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
-using static OpenTK.Graphics.OpenGL.GL;
 
 namespace Ujeby.AoC.Vis.App
 {
