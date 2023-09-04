@@ -26,13 +26,15 @@ public class SpiralMemory : PuzzleBase
 		var position = new v2i(0, 0);
 		yield return position;
 
-		for (var i = 1; ; dir = (dir + 1) % v2i.RightDownLeftUp.Length, axis = (axis + 1) % 2)
+		for (var i = 1; ; dir = ++dir % v2i.RightDownLeftUp.Length, axis = ++axis % 2)
 		{
-			border[dir] += v2i.RightDownLeftUp[dir][axis];
+			var rdlu = v2i.RightDownLeftUp[dir];
+
+			border[dir] += rdlu[axis];
 			var steps = System.Math.Abs(border[dir] - position[axis]);
 			for (var step = 0; step < steps; step++, i++)
 			{
-				position += v2i.RightDownLeftUp[dir];
+				position += rdlu;
 				yield return position;
 			}
 		}
