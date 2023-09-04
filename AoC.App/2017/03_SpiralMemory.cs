@@ -8,13 +8,6 @@ public class SpiralMemory : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		//GetLocation(1);
-		//GetLocation(12);
-		//GetLocation(23);
-		//GetLocation(1024);
-
-		//GetFirstSpiralSumAfter(750);
-
 		// part1
 		var answer1 = GetSpiralLocation(long.Parse(input.Single())).ManhLength();
 
