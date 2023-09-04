@@ -2,19 +2,24 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2017_04;
 
-[AoCPuzzle(Year = 2017, Day = 04, Answer1 = null, Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2017, Day = 04, Answer1 = "325", Answer2 = "119", Skip = false)]
 public class HighEntropyPassphrases : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		// TODO 2017/04
-
 		// part1
-		string answer1 = null;
+		var answer1 = input.Count(pp => pp
+			.Split(' ')
+			.GroupBy(x => x)
+			.All(x => x.Count() == 1));
 
 		// part2
-		string answer2 = null;
+		var answer2 = input.Count(pp => pp
+			.Split(' ')
+			.Select(x => new string(x.OrderBy(w => w).ToArray()))
+			.GroupBy(x => x)
+			.All(x => x.Count() == 1));
 
-		return (answer1?.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
 	}
 }
