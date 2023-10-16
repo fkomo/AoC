@@ -43,17 +43,21 @@ namespace Ujeby.AoC.Vis.App.Ui
 			var cSelectedItem = new v4f(0, .5, 0, 1);
 
 			var title = new Text(Name, Colors.White, cGreen);
-			Sdl2Wrapper.DrawText(new(WindowSize.X / 2, WindowSize.Y / 5), new(), new v2i(4, 4), 
+			Sdl2Wrapper.DrawText(new(WindowSize.X / 2, WindowSize.Y / 10), new(), new v2i(4, 4), 
 				HorizontalTextAlign.Center, VerticalTextAlign.Center, 
 				title);
 
 			var spacing = new v2i(0, 4);
 			var scale = new v2i(2);
 
+			var perLine = 5;
+			var gridSize = new v2i(WindowSize.X / (perLine + 1), WindowSize.Y / ((_items.Keys.Count / perLine) + 2));
+
+			var iy = 0;
 			for (var ix = 0; ix < _items.Keys.Count; ix++)
 			{
 				var sectionTitleText = _items.Keys.ElementAt(ix);
-				var sectionCenter = new v2i(WindowSize.X / (_items.Keys.Count + 1) * (ix + 1), WindowSize.Y / 2);
+				var sectionCenter = new v2i((ix % perLine) + 1, iy + 1) * gridSize;
 
 				var items = _items[sectionTitleText].Select(i => new Text(i.Name.SplitCase())).ToArray();
 				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, items);
@@ -86,6 +90,9 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 				// items
 				Sdl2Wrapper.DrawText(sectionCenter - itemsSize / 2, spacing, scale, items);
+
+				if (ix > 0 && (ix % (perLine - 1)) == 0)
+					iy++;
 			}
 		}
 

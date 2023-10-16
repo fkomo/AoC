@@ -48,6 +48,18 @@ namespace Ujeby.AoC.Vis.App
 								}
 							},
 							{
+								"2018",
+								Array.Empty<AoCRunnable>()
+							},
+							{
+								"2019",
+								Array.Empty<AoCRunnable>()
+							},
+							{
+								"2020",
+								Array.Empty<AoCRunnable>()
+							},
+							{
 								"2021",
 								new AoCRunnable[]
 								{
@@ -67,7 +79,11 @@ namespace Ujeby.AoC.Vis.App
 									new MonkeyMap(windowSize),
 									new UnstableDiffusion(windowSize),
 								}
-							}
+							},
+							{
+								"2023",
+								Array.Empty<AoCRunnable>()
+							},
 						}
 					);
 					menu.Run();
