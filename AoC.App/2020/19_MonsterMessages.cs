@@ -13,6 +13,7 @@ namespace Ujeby.AoC.App._2020_19
 			var msgs = input
 				.Skip(Array.IndexOf(input, string.Empty) + 1)
 				.ToArray();
+			Debug.Line($"{msgs.Length} messages");
 
 			var allRules = input
 				.Take(Array.IndexOf(input, string.Empty))
@@ -20,19 +21,16 @@ namespace Ujeby.AoC.App._2020_19
 					new Rule(Value: x[^2]) :
 					new Rule(Child: x[x.IndexOf(':')..].Split('|').Select(a => a.ToNumArray()).ToArray())
 				);
+			Debug.Line($"{allRules.Count} rules");
 
 			// part1
 			Debug.Line();
 			var answer1 = msgs.Count(x => Match(allRules, x).Result);
 
-			Debug.Line();
-			foreach (var rule in _cache)
-			{
-				Debug.Line($"{rule.Key}: {string.Join(", ", rule.Value)}");
-				//foreach (var match in rule.Value)
-				//	Debug.Line($"{match}", indent: 6);
-			}
-			Debug.Line();
+			//Debug.Line();
+			//foreach (var rule in _cache)
+			//	Debug.Line($"{rule.Key}: {string.Join(", ", rule.Value)}");
+			//Debug.Line();
 
 			// part2
 			allRules.Remove(8);
@@ -49,7 +47,8 @@ namespace Ujeby.AoC.App._2020_19
 				new long[] { 42, 11, 31 }
 			}));
 
-			var answer2 = 0;// msgs.Count(x => Match(allRules, x).Result);
+			Debug.Line();
+			var answer2 = msgs.Count(x => Match(allRules, x).Result);
 
 			return (answer1.ToString(), answer2.ToString());
 		}
@@ -57,21 +56,24 @@ namespace Ujeby.AoC.App._2020_19
 		static Dictionary<long, HashSet<string>> _cache = new();
 
 		private static (bool Result, int Offset) Match(Dictionary<long, Rule> rules, string msg,
-			int index = 0, long ruleId = 0)
+			int index = 0, long ruleId = 0, int recursion = 0)
 		{
+			if (recursion > msg.Length)
+				return (false, 0);
+
 			var rule = rules[ruleId];
 			if (rule.Value.HasValue)
-				return (msg[index] == rule.Value, 1);
+				return (index < msg.Length && msg[index] == rule.Value, 1);
 
-			var offset = 0;
+			var offsetOrOk = 0;
 			var orOk = false;
 			for (var ior = 0; ior < rule.Child.Length; ior++)
 			{
-				offset = 0;
+				var offset = 0;
 				var andOk = true;
 				for (var iand = 0; iand < rule.Child[ior].Length; iand++)
 				{
-					var match = Match(rules, msg, index: index + offset, ruleId: rule.Child[ior][iand]);
+					var match = Match(rules, msg, index: index + offset, ruleId: rule.Child[ior][iand], recursion: recursion + 1);
 					if (!match.Result)
 					{
 						andOk = false;
@@ -83,27 +85,28 @@ namespace Ujeby.AoC.App._2020_19
 				if (andOk)
 				{
 					orOk = true;
-					break;
+					offsetOrOk = offset;
+					//break;
 				}
 			}
 
-			if (ruleId == 0)
+			if (ruleId == 0 && orOk)
 			{
-				if (offset < msg.Length)
+				if (offsetOrOk < msg.Length)
 					orOk = false;
 				else
 					Debug.Line($"{msg}");
 			}
 
-			if (orOk)
-			{
-				if (!_cache.ContainsKey(ruleId))
-					_cache.Add(ruleId, new HashSet<string>(new string[] { msg.Substring(index, offset) }));
-				else
-					_cache[ruleId].Add(msg.Substring(index, offset));
-			}
+			//if (orOk)
+			//{
+			//	if (!_cache.ContainsKey(ruleId))
+			//		_cache.Add(ruleId, new HashSet<string>(new string[] { msg.Substring(index, offsetOrOk) }));
+			//	else
+			//		_cache[ruleId].Add(msg.Substring(index, offsetOrOk));
+			//}
 
-			return (orOk, offset);
+			return (orOk, offsetOrOk);
 		}
 	}
 }

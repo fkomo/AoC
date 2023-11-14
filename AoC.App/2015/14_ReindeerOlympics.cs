@@ -19,10 +19,11 @@ namespace Ujeby.AoC.App._2015_14
 
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
+
 			var timeLimit = 2503;
-#if _DEBUG_SAMPLE
-			timeLimit = 1000;
-#endif
+			// sample
+			//timeLimit = 1000; 
+
 			var reindeers = input.ToDictionary(i => i[..i.IndexOf(' ')], i => i.ToNumArray());
 
 			// part1

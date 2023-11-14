@@ -11,34 +11,51 @@ namespace Ujeby.AoC.App
 				.AddJsonFile($"appsettings.json")
 				.Build();
 
-			// set aoc session cookie
-			if (!string.IsNullOrEmpty(config["aoc:session"]) && File.Exists(config["aoc:session"]))
-			{
-				var session = File.ReadAllText(config["aoc:session"]);
-				AoCHttpClient.SetSession(session);
-			}
-
-			// download input files
-			if (!string.IsNullOrEmpty(config["aoc:input"]))
-			{
-				for (var year = 2015; year <= DateTime.Now.Year; year++)
-					InputProvider.DownloadMissingInput(config["aoc:input"], year);
-			}
-
-#if _DEBUG
-			// generate (empty) puzzle .cs classes
-			if (!string.IsNullOrEmpty(config["aoc:code"]))
-			{
-				for (var year = 2015; year <= DateTime.Now.Year; year++)
-					AdventOfCode.GeneratePuzzleCode(config["aoc:code"], year);
-			}
-#endif
 			_ = bool.TryParse(config["aoc:ignoreSkip"], out bool ignoreSkip);
 
+			string year = null;
+			string inputSuffix = null;
+			bool? skipSolved = null;
+
+			//year = "2020";
+			//inputSuffix = "s";
+			//skipSolved = true;
+
+			if (year == null)
+			{
+				Console.Write($"{Environment.NewLine}  year [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023] ? ");
+				year = Console.ReadLine();
+			}
+
+			if (inputSuffix == null)
+			{
+				Console.Write($"  puzzle input suffix [s(sample)] ? ");
+				inputSuffix = Console.ReadLine();
+			}
+
+			if (inputSuffix == "s")
+				inputSuffix = "sample";
+			if (!string.IsNullOrEmpty(inputSuffix))
+				inputSuffix = "." + inputSuffix;
+
+			if (!skipSolved.HasValue)
+			{
+				Console.Write($"  skip solved [y/n(default)] puzzles ? ");
+				skipSolved = Console.ReadLine() == "y";
+			}
+			
+			Log.Line();
+
+			var years = Array.Empty<int>();
+			if (!string.IsNullOrEmpty(year))
+				years = new int[] { int.Parse(year) };
+
 			// run all puzzles in solution
-			AdventOfCode.RunAll(
-				inputStorage: config["aoc:input"], 
-				ignoreSkip: ignoreSkip);
+			AdventOfCode.RunAll(years,
+				inputStorage: config["aoc:input"],
+				ignoreSkip: ignoreSkip,
+				skipSolved: skipSolved.Value,
+				inputSuffix: inputSuffix);
 		}
 	}
 }

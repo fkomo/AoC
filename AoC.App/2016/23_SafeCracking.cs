@@ -53,11 +53,10 @@ public class SafeCracking : PuzzleBase
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-#if _DEBUG_SAMPLE
-		var reg = new v4i(0, 0, 0, 0);
-#else
 		var reg = new v4i(7, 0, 0, 0);
-#endif
+		// sample
+		//var reg = new v4i(0, 0, 0, 0);
+
 		var instrRaw = input.Select(x => x.Split(' ')).ToArray();
 
 		// part1

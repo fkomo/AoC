@@ -9,9 +9,9 @@ public class ScrambledLettersAndHash : PuzzleBase
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
 		var password = "abcdefgh";
-#if _DEBUG_SAMPLE
-		password = "abcde";
-#endif
+		// sample
+		//var password = "abcde";
+
 		// part1
 		var answer1 = Scramble(password, input);
 

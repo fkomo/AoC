@@ -11,9 +11,9 @@ namespace Ujeby.AoC.App._2015_18
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
 			var steps = 100;
-#if _DEBUG_SAMPLE
-			steps = 4;
-#endif
+			// sample
+			//steps = 4;
+
 			// part1
 			var lights = CreateLights(input);
 			for (var i = 1; i <= steps; i++)

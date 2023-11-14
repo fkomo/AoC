@@ -9,7 +9,11 @@
 
 		/// <summary></summary>
 		/// <param name="inputStorage"></param>
+		/// <param name="inputSuffix"></param>
 		/// <returns>number of right answers / stars</returns>
-		int Solve(string inputStorage);
+		int Solve(string inputStorage, 
+			string inputSuffix = null);
+
+		public (string Part1, string Part2) Answer { get; }
 	}
 }

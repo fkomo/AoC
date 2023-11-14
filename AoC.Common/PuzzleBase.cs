@@ -9,7 +9,7 @@ namespace Ujeby.AoC.Common
 		public int Day => GetType().GetCustomAttribute<AoCPuzzleAttribute>().Day;
 		public int Year => GetType().GetCustomAttribute<AoCPuzzleAttribute>().Year;
 
-		private (string Part1, string Part2) Answer
+		public (string Part1, string Part2) Answer
 			=> (Part1: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer1,
 				Part2: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer2);
 
@@ -28,23 +28,28 @@ namespace Ujeby.AoC.Common
 
 		protected abstract (string Part1, string Part2) SolvePuzzle(string[] input);
 
-		public int Solve(string inputStorage)
+		public int Solve(string inputStorage, 
+			string inputSuffix = null)
 		{
 			var result = 0;
 
-#if _DEBUG_SAMPLE
-			// skip (sample) debugging of solved puzzles
-			if (Answer.Part1 != null && Answer.Part2 != null)
-				return result;
-#endif
+			Log.Indent += 2;
+			Debug.Indent += 2;
+			var indentReset = false;
 
 			var sw = new Stopwatch();
 			try
 			{
-				Debug.Indent += 2;
-				Log.Indent += 2;
 
-				var input = InputProvider.Read(inputStorage, Year, Day);
+				var input = InputProvider.Read(inputStorage, Year, Day, suffix: inputSuffix);
+				if (input?.Any() != true)
+				{
+					Log.Indent -= 2;
+					Debug.Indent -= 2;
+					indentReset = true;
+
+					return result;
+				}
 
 				sw.Start();
 
@@ -57,6 +62,8 @@ namespace Ujeby.AoC.Common
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
 				Log.Indent -= 2;
+				Debug.Indent -= 2;
+				indentReset = true;
 
 				// title
 				var title = $"{{ #{Day:d2} {Title} }}=-";
@@ -107,13 +114,17 @@ namespace Ujeby.AoC.Common
 			}
 			catch (Exception ex)
 			{
-				Log.Line(ex.ToString());
+				Log.Line(ex.ToString(), textColor: ConsoleColor.DarkGray);
 			}
 			finally
 			{
 				sw.Stop();
 
-				Debug.Indent -= 2;
+				if (!indentReset)
+				{
+					Log.Indent -= 2;
+					Debug.Indent -= 2;
+				}
 			}
 
 			return result;

@@ -1,21 +1,20 @@
 using Ujeby.AoC.Common;
 
-namespace Ujeby.AoC.App._2020_21
+namespace Ujeby.AoC.App._2020_21;
+
+[AoCPuzzle(Year = 2020, Day = 21, Answer1 = null, Answer2 = null, Skip = false)]
+public class AllergenAssessment : PuzzleBase
 {
-	[AoCPuzzle(Year = 2020, Day = 21, Answer1 = null, Answer2 = null)]
-	public class AllergenAssessment : PuzzleBase
+	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
-		{
-			string answer1 = null, answer2 = null;
+		// TODO 2020/21
 
-			// TODO 2020/21
+		// part1
+		string answer1 = null;
 
-			// part1
+		// part2
+		string answer2 = null;
 
-			// part2
-
-			return (answer1, answer2);
-		}
+		return (answer1?.ToString(), answer2?.ToString());
 	}
 }

@@ -10,9 +10,8 @@ namespace Ujeby.AoC.App._2020_09
 			var n = input.Select(i => long.Parse(i)).ToArray();
 
 			var preamble = 25;
-#if _DEBUG_SAMPLE
-			preamble = 5;
-#endif
+			// sample
+			//var preamble = 5;
 
 			// part1
 			long? answer1 = FirstInvalid(n, preamble);

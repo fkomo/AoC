@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Common
 {
-	internal class CharCodes
+	public class CharCodes
 	{
 		public static string ToString(v2i size, bool[,] charMap)
 			=> ToString((int)size.X, (int)size.Y, charMap);
@@ -30,7 +30,7 @@ namespace Ujeby.AoC.Common
 					}
 				}
 
-#if _DEBUG
+#if DEBUG
             DrawString(width, height, charMap);
 #endif
 			return result;

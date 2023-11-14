@@ -13,11 +13,11 @@ public class AMazeOfTwistyLittleCubicles : PuzzleBase
 
 		// part1
 		var start = new v2i(1, 1);
-#if _DEBUG_SAMPLE
-		var destination = new v2i(7, 4);
-#else
+
 		var destination = new v2i(31, 39);
-#endif
+		// sample
+		//var destination = new v2i(7, 4);
+
 		var answer1 = StepsToDestination(start, destination, officeDesignerFavNum, new v2i[] { start });
 
 		// part2

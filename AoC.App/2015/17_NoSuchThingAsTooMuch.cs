@@ -8,9 +8,9 @@ namespace Ujeby.AoC.App._2015_17
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
 			var eggnogSize = 150;
-#if _DEBUG_SAMPLE
-			eggnogSize = 25;	
-#endif
+			// sample
+			//eggnogSize = 25;
+
 			var containers = input.Select(i => int.Parse(i)).ToArray();
 
 			// part1

@@ -90,7 +90,7 @@ namespace Ujeby.AoC.App._2022_20
 
 		private static void PrintFile(Position first)
 		{
-#if _DEBUG_SAMPLE
+#if DEBUG
 			Debug.Text($"{first.Number}", indent: 6);
 			var node = first.Neighbour[1];
 			do
