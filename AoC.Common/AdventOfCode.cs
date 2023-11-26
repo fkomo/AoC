@@ -4,7 +4,7 @@ namespace Ujeby.AoC.Common
 {
 	public class AdventOfCode
 	{
-		public const int ConsoleWidth = 99;
+		public const int ConsoleWidth = 100;
 
 		public static void RunAll(int[] years,
 			string inputStorage = null, string inputSuffix = null, bool ignoreSkip = false, bool skipSolved = false)
@@ -45,16 +45,16 @@ namespace Ujeby.AoC.Common
 			params IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
-			Log.ChristmasHeader($"{AoCHttpClient.BaseUrl}/{year}",
-				length: ConsoleWidth);
+			Log.PrintIndent(2);
+			Log.ChristmasPattern("╔");
+			Log.ChristmasHeader($"{AoCHttpClient.BaseUrl}/{year}", length: ConsoleWidth);
+			Log.PrintIndent(2);
+			Log.ChristmasPattern("█");
 			Log.Line();
 
 			var stars = 0;
 			try
 			{
-				Log.Indent += 0;
-				Debug.Indent += 0;
-
 				foreach (var problem in problemsToSolve)
 				{
 					if (skipSolved)
@@ -64,8 +64,9 @@ namespace Ujeby.AoC.Common
 							continue;
 					}
 
+					Log.PrintIndent(2);
+					Log.ChristmasPattern("█");
 					stars += problem.Solve(inputStorage, inputSuffix);
-
 				}
 			}
 			catch (Exception ex)
@@ -74,13 +75,12 @@ namespace Ujeby.AoC.Common
 			}
 			finally
 			{
-				Debug.Indent -= 0;
-				Log.Indent -= 0;
-
+				Log.PrintIndent(2);
+				Log.ChristmasPattern("█");
 				Log.Line();
-				Log.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars",
-					textColor: ConsoleColor.Yellow,
-					length: ConsoleWidth);
+				Log.PrintIndent(2);
+				Log.ChristmasPattern("╚");
+				Log.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars", textColor: ConsoleColor.Yellow, length: 57);
 			}
 		}
 	}

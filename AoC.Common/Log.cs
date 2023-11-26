@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System;
 
 namespace Ujeby.AoC.Common
 {
@@ -37,7 +37,22 @@ namespace Ujeby.AoC.Common
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		private static void PrintIndent(
+		private static readonly (ConsoleColor Color, char Char)[] _christmasColors = new (ConsoleColor, char)[]
+		{
+			(ConsoleColor.DarkRed, '='),
+			(ConsoleColor.Red, '+'),
+			(ConsoleColor.DarkGreen, '*'),
+			(ConsoleColor.DarkGreen, '#'),
+			(ConsoleColor.DarkGreen, '*'),
+			(ConsoleColor.DarkGreen, '#'),
+			(ConsoleColor.Green, '#'),
+			(ConsoleColor.Green, '*'),
+			(ConsoleColor.DarkYellow, '&'),
+			(ConsoleColor.Yellow, '$'),
+			(ConsoleColor.Yellow, '@'),
+		};
+
+		public static void PrintIndent(
 			int? indent = null)
 		{
 			indent ??= Indent;
@@ -48,55 +63,65 @@ namespace Ujeby.AoC.Common
 			AddTextToFile(text);
 		}
 
-		private static ConsoleColor[] _christmasColors = new ConsoleColor[]
+		private static readonly (ConsoleColor Color, char Char)[] _christmasPattern = new (ConsoleColor, char)[]
 		{
-			Console.ForegroundColor = ConsoleColor.DarkRed,
-			Console.ForegroundColor = ConsoleColor.White,
-			Console.ForegroundColor = ConsoleColor.DarkGreen,
-			Console.ForegroundColor = ConsoleColor.Red,
-			Console.ForegroundColor = ConsoleColor.White,
-			Console.ForegroundColor = ConsoleColor.Green,
+			(ConsoleColor.DarkGreen, '*'),
+			(ConsoleColor.DarkGreen, '#'),
+			(ConsoleColor.DarkGreen, '~'),
+			(ConsoleColor.DarkGreen, '='),
+			(ConsoleColor.Green, '#'),
+			(ConsoleColor.Green, '*'),
+			(ConsoleColor.Green, '~'),
+			(ConsoleColor.Green, '='),
+			(ConsoleColor.DarkYellow, '#'),
+			(ConsoleColor.DarkYellow, '*'),
+			(ConsoleColor.DarkYellow, '~'),
+			(ConsoleColor.DarkYellow, '='),
 		};
+
+		public static void ChristmasPattern(string pattern)
+		{
+			var rng = new Random((int)DateTime.Now.Ticks);
+			foreach (var c in pattern)
+			{
+				var r = rng.Next(_christmasPattern.Length);
+				Console.ForegroundColor = _christmasPattern[r].Color;
+				Console.Write(c);
+			}
+			Console.ForegroundColor = ConsoleColor.White;
+		}
+
+		public static void ChristmasText(string text)
+		{
+			var rng = new Random((int)DateTime.Now.Ticks);
+			foreach (var c in text)
+			{
+				var r = rng.Next(_christmasColors.Length);
+				Console.ForegroundColor = _christmasColors[r].Color;
+				Console.Write(c);
+			}
+			Console.ForegroundColor = ConsoleColor.White;
+		}
 
 		public static void ChristmasHeader(string text, 
 			ConsoleColor textColor = ConsoleColor.White, int length = 80)
 		{
-			PrintIndent();
+			var headerPrefixLength = 6;
+			ChristmasPattern(new string(Enumerable.Repeat('■', headerPrefixLength).ToArray()));
 
-			var sb = new StringBuilder();
-			for (var i = 0; i < _christmasColors.Length; i++)
-			{
-				Console.ForegroundColor = _christmasColors[i % _christmasColors.Length];
-
-				Console.Write("#");
-				sb.Append('#');
-			}
-
-			var headerLength = _christmasColors.Length + $"[ {text} ]".Length;
+			var headerLength = headerPrefixLength + $"[ {text} ]".Length;
 			Console.ForegroundColor = ConsoleColor.Green;
-			Console.Write($"[ ");
-			sb.Append("[ ");
+			Console.Write($"{{ ");
 
 			Console.ForegroundColor = textColor;
 			Console.Write(text);
-			sb.Append(text);
 
 			Console.ForegroundColor = ConsoleColor.Green;
-			Console.Write($" ]");
-			sb.Append(" ]");
+			Console.Write($" }}");
 
-			for (var i = 0; i < length - headerLength; i++)
-			{
-				Console.ForegroundColor = _christmasColors[i % _christmasColors.Length];
-				Console.Write("#");
-				sb.Append("#");
-			}
-			Console.ForegroundColor = ConsoleColor.White;
-
-			AddTextToFile(sb.ToString());
+			ChristmasPattern(new string(Enumerable.Repeat('■', length - headerLength).ToArray()));
 
 			Console.WriteLine();
-			AddLinesToFile(string.Empty);
 		}
 
 		private static object _fileLock = new();

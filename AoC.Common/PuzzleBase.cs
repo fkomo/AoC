@@ -13,7 +13,7 @@ namespace Ujeby.AoC.Common
 			=> (Part1: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer1,
 				Part2: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer2);
 
-		private bool _skip;
+		bool _skip;
 
 		public bool Skip
 		{
@@ -33,23 +33,17 @@ namespace Ujeby.AoC.Common
 		{
 			var result = 0;
 
-			Log.Indent += 2;
-			Debug.Indent += 2;
-			var indentReset = false;
-
 			var sw = new Stopwatch();
 			try
 			{
-
 				var input = InputProvider.Read(inputStorage, Year, Day, suffix: inputSuffix);
 				if (input?.Any() != true)
-				{
-					Log.Indent -= 2;
-					Debug.Indent -= 2;
-					indentReset = true;
-
 					return result;
-				}
+
+				// title
+				var title = $"#{Day:d2} {Title}";
+				Log.Text($"#{Day:d2} ", indent: 3);
+				Log.ChristmasText(Title);
 
 				sw.Start();
 
@@ -61,48 +55,27 @@ namespace Ujeby.AoC.Common
 
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
-				Log.Indent -= 2;
-				Debug.Indent -= 2;
-				indentReset = true;
-
-				// title
-				var title = $"{{ #{Day:d2} {Title} }}=-";
-				Log.Text($"{{ ", textColor: ConsoleColor.Gray);
-				Log.Text($"#{Day:d2} {Title}", textColor: ConsoleColor.White, indent: 0);
-				Log.Text($" }}=-", textColor: ConsoleColor.Gray, indent: 0);
-
-				var answers = $"-={{ {solution.Part1?.ToString() ?? "?"}, {solution.Part2?.ToString() ?? "?"} }}=-";
-
-				// padding
-				var padding = string.Join("", Enumerable.Repeat("-", (AdventOfCode.ConsoleWidth - 23) - title.Length - answers.Length));
-				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 0);
-
-				// answers
-				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				Log.Text(solution.Part1?.ToString() ?? "?", textColor: GetAnswerColor(Answer.Part1, solution.Part1), indent: 0);
-				Log.Text(", ", textColor: ConsoleColor.White, indent: 0);
-				Log.Text(solution.Part2?.ToString() ?? "?", textColor: GetAnswerColor(Answer.Part2, solution.Part2), indent: 0);
-				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
-
-				// padding
-				Log.Text("-", textColor: ConsoleColor.DarkGray, indent: 0);
+				var padding = new string(Enumerable.Repeat('~', AdventOfCode.ConsoleWidth - title.Length - 55).ToArray());
+				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 1);
 
 				// elapsed
-				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				Log.Text(Skip ? "skip!" : $"{DurationToStringSimple(elapsed),5}",
-					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(elapsed), indent: 0);
-				Log.Text(" }=-", textColor: ConsoleColor.Gray, indent: 0);
+				var elapsedText = Skip ? "skip!" : $"{DurationToStringSimple(elapsed)}";
+				Log.Text(elapsedText,
+					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(elapsed),
+					indent: 1);
 
-				// padding
-				Log.Text("-", textColor: ConsoleColor.DarkGray, indent: 0);
+				// answers
+				var answer1Text = solution.Part1?.ToString() ?? "?";
+				Log.Text($"{answer1Text,25}", textColor: GetAnswerColor(Answer.Part1, solution.Part1), indent: 5 - elapsedText.Length);
 
 				// stars
 				var stars =
 					((Answer.Part1 != null && Answer.Part1 == solution.Part1) ? "*" : " ") +
 					((Answer.Part2 != null && Answer.Part2 == solution.Part2) ? "*" : " ");
-				Log.Text($"-={{ ", textColor: ConsoleColor.Gray, indent: 0);
-				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 0);
-				Log.Text(" }", textColor: ConsoleColor.Gray, indent: 0);
+				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 1);
+
+				var answer2Text = solution.Part2?.ToString() ?? "?";
+				Log.Text($"{answer2Text}", textColor: GetAnswerColor(Answer.Part2, solution.Part2), indent: 1);
 
 				Log.Line();
 
@@ -119,23 +92,15 @@ namespace Ujeby.AoC.Common
 			finally
 			{
 				sw.Stop();
-
-				if (!indentReset)
-				{
-					Log.Indent -= 2;
-					Debug.Indent -= 2;
-				}
 			}
 
 			return result;
 		}
 
-		private static ConsoleColor GetStarsColor(string stars)
-		{
-			return stars?.Contains('*') == true ? ConsoleColor.Yellow : ConsoleColor.DarkGray;
-		}
+		static ConsoleColor GetStarsColor(string stars)
+			=> stars?.Contains('*') == true ? ConsoleColor.Yellow : ConsoleColor.DarkGray;
 
-		private static ConsoleColor GetElapsedColor(double elapsed)
+		static ConsoleColor GetElapsedColor(double elapsed)
 		{
 			var elapsedColors = new (int, ConsoleColor)[]
 			{
@@ -158,14 +123,14 @@ namespace Ujeby.AoC.Common
 			return elapsedColor;
 		}
 
-		private static ConsoleColor GetAnswerColor(string right, string calculated)
+		static ConsoleColor GetAnswerColor(string right, string calculated)
 			=> right != null && right != calculated ? ConsoleColor.Red :
-				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.White);
+				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.Gray);
 
 		/// <summary></summary>
 		/// <param name="duration">duration in ms</param>
 		/// <returns></returns>
-		private static string DurationToStringSimple(double duration)
+		static string DurationToStringSimple(double duration)
 		{
 			if (duration < 1)
 				return $"{(int)(duration * 1000)}us";
