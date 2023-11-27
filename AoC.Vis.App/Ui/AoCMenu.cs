@@ -81,7 +81,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 					break;
 				}
 
-				var sectionTitle = new Text($"-=#{{ {sectionTitleText} }}#=-", cGreen);
+				var sectionTitle = new Text($"-=#[ {sectionTitleText} ]#=-", cGreen);
 				var sectionTitleSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, sectionTitle);
 				var titleOffset = new v2i(sectionTitleSize.X / 2, sectionTitleSize.Y + itemsSize.Y / 2);
 

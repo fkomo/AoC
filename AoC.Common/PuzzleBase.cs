@@ -38,12 +38,7 @@ namespace Ujeby.AoC.Common
 			{
 				var input = InputProvider.Read(inputStorage, Year, Day, suffix: inputSuffix);
 				if (input?.Any() != true)
-					return result;
-
-				// title
-				var title = $"#{Day:d2} {Title}";
-				Log.Text($"#{Day:d2} ", indent: 3);
-				Log.ChristmasText(Title);
+					return 0;
 
 				sw.Start();
 
@@ -55,29 +50,34 @@ namespace Ujeby.AoC.Common
 
 				var elapsed = sw.Elapsed.TotalMilliseconds;
 
-				var padding = new string(Enumerable.Repeat('~', AdventOfCode.ConsoleWidth - title.Length - 55).ToArray());
-				Log.Text(padding, textColor: ConsoleColor.DarkGray, indent: 1);
-
-				// elapsed
-				var elapsedText = Skip ? "skip!" : $"{DurationToStringSimple(elapsed)}";
-				Log.Text(elapsedText,
-					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(elapsed),
-					indent: 1);
-
-				// answers
-				var answer1Text = solution.Part1?.ToString() ?? "?";
-				Log.Text($"{answer1Text,25}", textColor: GetAnswerColor(Answer.Part1, solution.Part1), indent: 5 - elapsedText.Length);
+				// day number
+				Log.ChristmasPattern("│", 2);
+				var title = $"#{Day:d2} {Title}";
+				Log.Text($"{Day:d2} ", indent: 2);
 
 				// stars
 				var stars =
 					((Answer.Part1 != null && Answer.Part1 == solution.Part1) ? "*" : " ") +
 					((Answer.Part2 != null && Answer.Part2 == solution.Part2) ? "*" : " ");
-				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 1);
+				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 0);
 
+				// title
+				Log.ChristmasText(Title, indent: 1);
+
+				if (solution.Part1 == null && solution.Part2 == null)
+					return 0;
+
+				// elapsed
+				var elapsedText = Skip ? "skip!" : $"{DurationToStringSimple(elapsed)}";
+				Log.Text($"{elapsedText,5}",
+					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(elapsed),
+					indent: AdventOfCode.ConsoleWidth - title.Length - 55);
+
+				// answers
+				var answer1Text = solution.Part1?.ToString() ?? "?";
+				Log.Text($"{answer1Text}", textColor: GetAnswerColor(Answer.Part1, solution.Part1), indent: 1);
 				var answer2Text = solution.Part2?.ToString() ?? "?";
 				Log.Text($"{answer2Text}", textColor: GetAnswerColor(Answer.Part2, solution.Part2), indent: 1);
-
-				Log.Line();
 
 				if (Answer.Part1 != null && Answer.Part1 == solution.Part1)
 					result++;
@@ -87,11 +87,13 @@ namespace Ujeby.AoC.Common
 			}
 			catch (Exception ex)
 			{
-				Log.Line(ex.ToString(), textColor: ConsoleColor.DarkGray);
+				Log.Line();
+				Log.Line(ex.ToString(), textColor: ConsoleColor.Red);
 			}
 			finally
 			{
 				sw.Stop();
+				Log.Line();
 			}
 
 			return result;
@@ -125,7 +127,7 @@ namespace Ujeby.AoC.Common
 
 		static ConsoleColor GetAnswerColor(string right, string calculated)
 			=> right != null && right != calculated ? ConsoleColor.Red :
-				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.Gray);
+				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.DarkGray);
 
 		/// <summary></summary>
 		/// <param name="duration">duration in ms</param>

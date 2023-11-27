@@ -52,7 +52,6 @@ namespace Ujeby.AoC.Common
 
 				Log.Line(line.ToString());
 			}
-			Log.Line();
 		}
 
 		/// <summary>

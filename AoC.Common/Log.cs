@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ujeby.AoC.Common
+﻿namespace Ujeby.AoC.Common
 {
 	public static class Log
 	{
@@ -39,7 +37,7 @@ namespace Ujeby.AoC.Common
 
 		private static readonly (ConsoleColor Color, char Char)[] _christmasColors = new (ConsoleColor, char)[]
 		{
-			(ConsoleColor.DarkRed, '='),
+			//(ConsoleColor.DarkRed, '='),
 			(ConsoleColor.Red, '+'),
 			(ConsoleColor.DarkGreen, '*'),
 			(ConsoleColor.DarkGreen, '#'),
@@ -79,8 +77,11 @@ namespace Ujeby.AoC.Common
 			(ConsoleColor.DarkYellow, '='),
 		};
 
-		public static void ChristmasPattern(string pattern)
+		public static void ChristmasPattern(string pattern, 
+			int? indent = null)
 		{
+			PrintIndent(indent);
+
 			var rng = new Random((int)DateTime.Now.Ticks);
 			foreach (var c in pattern)
 			{
@@ -91,8 +92,11 @@ namespace Ujeby.AoC.Common
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static void ChristmasText(string text)
+		public static void ChristmasText(string text,
+			int? indent = null)
 		{
+			PrintIndent(indent);
+
 			var rng = new Random((int)DateTime.Now.Ticks);
 			foreach (var c in text)
 			{

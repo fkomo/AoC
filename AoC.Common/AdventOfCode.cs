@@ -45,11 +45,11 @@ namespace Ujeby.AoC.Common
 			params IPuzzle[] problemsToSolve)
 		{
 			Log.Line();
-			Log.PrintIndent(2);
-			Log.ChristmasPattern("╔");
-			Log.ChristmasHeader($"{AoCHttpClient.BaseUrl}/{year}", length: ConsoleWidth);
-			Log.PrintIndent(2);
-			Log.ChristmasPattern("█");
+			Log.ChristmasPattern($"┌──[ ", indent: 2);
+			Log.Text($"{AoCHttpClient.BaseUrl}/{year}", indent: 0);
+			Log.ChristmasPattern($" ]", indent: 0);
+			Log.Line();
+			Log.ChristmasPattern("│");
 			Log.Line();
 
 			var stars = 0;
@@ -64,8 +64,6 @@ namespace Ujeby.AoC.Common
 							continue;
 					}
 
-					Log.PrintIndent(2);
-					Log.ChristmasPattern("█");
 					stars += problem.Solve(inputStorage, inputSuffix);
 				}
 			}
@@ -75,12 +73,12 @@ namespace Ujeby.AoC.Common
 			}
 			finally
 			{
-				Log.PrintIndent(2);
-				Log.ChristmasPattern("█");
+				Log.ChristmasPattern("│", indent: 2);
 				Log.Line();
-				Log.PrintIndent(2);
-				Log.ChristmasPattern("╚");
-				Log.ChristmasHeader($"{stars}/{problemsToSolve.Length * 2} stars", textColor: ConsoleColor.Yellow, length: 57);
+				Log.ChristmasPattern($"└──[ ", indent: 2);
+				Log.Text($"{stars}/{problemsToSolve.Length * 2} stars", textColor: ConsoleColor.Yellow, indent: 0);
+				Log.ChristmasPattern($" ]", indent: 0);
+				Log.Line();
 			}
 		}
 	}

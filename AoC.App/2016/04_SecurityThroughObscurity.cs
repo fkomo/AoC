@@ -69,8 +69,6 @@ namespace Ujeby.AoC.App._2016_04
 
 			// part2
 			var answer2 = validRooms.Single(r => r.Decrypt().Contains("northpole")).SectorId;
-			// sample
-			//var answer2 = 0;
 
 			return (answer1.ToString(), answer2.ToString());
 		}

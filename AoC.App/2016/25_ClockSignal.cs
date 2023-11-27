@@ -51,7 +51,7 @@ public class ClockSignal : PuzzleBase
 		{
 			var toOut = _instructions[i].Op(reg, 0);
 
-			Debug.Text($"{toOut} ", indent: 0);
+			Debug.Text($"{toOut} ");
 			if (_lastOut == toOut || (toOut != 0 && toOut != 1))
 				throw new Exception("invalid clock signal");
 
@@ -84,6 +84,8 @@ public class ClockSignal : PuzzleBase
 
 		// part2
 		string answer2 = "*";
+
+		Debug.Line();
 
 		return (answer1.ToString(), answer2?.ToString());
 	}

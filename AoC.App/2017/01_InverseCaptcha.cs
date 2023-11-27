@@ -9,17 +9,6 @@ namespace Ujeby.AoC.App._2017_01
 		{
 			var seq = input.Single();
 
-			//SumNext("1122");
-			//SumNext("1111");
-			//SumNext("1234");
-			//SumNext("91212129");
-
-			//SumHalfwayAround("1212");
-			//SumHalfwayAround("1221");
-			//SumHalfwayAround("123425");
-			//SumHalfwayAround("123123");
-			//SumHalfwayAround("12131415");
-
 			// part1
 			var answer1 = SumNext(seq);
 
