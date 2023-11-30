@@ -53,12 +53,12 @@ namespace Ujeby.AoC.Vis.App
 				long distance = 0;
 				if (_userStart.X == _userEnd.X)
 				{
-					distance = Math.Abs(_userEnd.Y - _userStart.Y);
+					distance = System.Math.Abs(_userEnd.Y - _userStart.Y);
 					_userStart.Z = _userEnd.Y > _userStart.Y ? 1 : 3;
 				}
 				else if (_userStart.Y == _userEnd.Y)
 				{
-					distance = Math.Abs(_userEnd.X - _userStart.X);
+					distance = System.Math.Abs(_userEnd.X - _userStart.X);
 					_userStart.Z = _userEnd.X > _userStart.X ? 0 : 2;
 				}
 
@@ -114,7 +114,7 @@ namespace Ujeby.AoC.Vis.App
 				}
 
 			// path
-			for (var i = Math.Max(0, _pathToDraw - 1000); i < _pathToDraw; i++)
+			for (var i = System.Math.Max(0, _pathToDraw - 1000); i < _pathToDraw; i++)
 				Grid.DrawCell((int)_path[i].X, (int)_path[i].Y, fill: HeatMap.GetColorForValue(i, _path.Length, .5));
 
 			// userPath
@@ -141,7 +141,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown()
 		{
-			_pathToDraw = Math.Max(_pathToDraw - 1, 0);
+			_pathToDraw = System.Math.Max(_pathToDraw - 1, 0);
 		}
 
 		protected override void LeftMouseUp()

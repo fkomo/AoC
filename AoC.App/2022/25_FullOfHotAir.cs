@@ -13,7 +13,7 @@ namespace Ujeby.AoC.App._2022_25
 			return (answer1?.ToString(), "*");
 		}
 
-		private static long SnafuToDec(string snafu) => Tools.Numbers.BaseToDec(snafu, "=-012", -2);
-		private static string DecToSnafu(long dec) => Tools.Numbers.DecToBase(dec, "=-012", -2);
+		private static long SnafuToDec(string snafu) => Math.BaseToDec(snafu, "=-012", -2);
+		private static string DecToSnafu(long dec) => Math.DecToBase(dec, "=-012", -2);
 	}
 }

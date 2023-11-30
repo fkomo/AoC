@@ -19,15 +19,16 @@ namespace Ujeby.AoC.App._2015_14
 
 		protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 		{
+
 			var timeLimit = 2503;
-#if _DEBUG_SAMPLE
-			timeLimit = 1000;
-#endif
+			// sample
+			//timeLimit = 1000; 
+
 			var reindeers = input.ToDictionary(i => i[..i.IndexOf(' ')], i => i.ToNumArray());
 
 			// part1
 			var answer1 = reindeers.Values.Max(r => r[0] *
-				((timeLimit / (r[1] + r[2]) * r[1]) + Math.Min(r[1], timeLimit - (timeLimit / (r[1] + r[2]) * (r[1] + r[2])))));
+				((timeLimit / (r[1] + r[2]) * r[1]) + System.Math.Min(r[1], timeLimit - (timeLimit / (r[1] + r[2]) * (r[1] + r[2])))));
 
 			// part2
 			var race = reindeers.ToDictionary(i => i.Key, i => new RacingReindeer { Flying = i.Value[1] });

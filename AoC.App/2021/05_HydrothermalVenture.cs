@@ -17,8 +17,8 @@ namespace Ujeby.AoC.App._2021_05
 				}).ToArray();
 
 			var size = new v2i(
-				pairs.Select(pair => Math.Max(pair[0].X, pair[1].X)).Max(), 
-				pairs.Select(pair => Math.Max(pair[0].Y, pair[1].Y)).Max()) + 1;
+				pairs.Select(pair => System.Math.Max(pair[0].X, pair[1].X)).Max(), 
+				pairs.Select(pair => System.Math.Max(pair[0].Y, pair[1].Y)).Max()) + 1;
 
 			var map = new int[size.X * size.Y];
 
@@ -28,7 +28,7 @@ namespace Ujeby.AoC.App._2021_05
 				// vertical
 				if (pair[0].X == pair[1].X)
 				{
-					var length = Math.Abs(pair[0].Y - pair[1].Y) + 1;
+					var length = System.Math.Abs(pair[0].Y - pair[1].Y) + 1;
 
 					var y = pair[0].Y;
 					var dy = (pair[0].Y < pair[1].Y) ? 1 : -1;
@@ -38,7 +38,7 @@ namespace Ujeby.AoC.App._2021_05
 				// horizontal
 				else if (pair[0].Y == pair[1].Y)
 				{
-					var length = Math.Abs(pair[0].X - pair[1].X) + 1;
+					var length = System.Math.Abs(pair[0].X - pair[1].X) + 1;
 
 					var x = pair[0].X;
 					var dx = (pair[0].X < pair[1].X) ? 1 : -1;
@@ -52,9 +52,9 @@ namespace Ujeby.AoC.App._2021_05
 			foreach (var pair in pairs)
 			{
 				// diagonal
-				if (Math.Abs(pair[0].X - pair[1].X) == Math.Abs(pair[0].Y - pair[1].Y))
+				if (System.Math.Abs(pair[0].X - pair[1].X) == System.Math.Abs(pair[0].Y - pair[1].Y))
 				{
-					var length = Math.Abs(pair[0].X - pair[1].X) + 1;
+					var length = System.Math.Abs(pair[0].X - pair[1].X) + 1;
 
 					var dx = (pair[0].X < pair[1].X) ? 1 : -1;
 					var dy = (pair[0].Y < pair[1].Y) ? 1 : -1;

@@ -88,7 +88,7 @@ namespace Ujeby.AoC.App._2021_04
 			if (bingoSet.Count(n => n == -1) < 5)
 				return false;
 
-			var bingoSize = (int)Math.Sqrt(bingoSet.Length);
+			var bingoSize = (int)System.Math.Sqrt(bingoSet.Length);
 
 			for (var i = 0; i < bingoSize; i++)
 			{

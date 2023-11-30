@@ -20,12 +20,11 @@ namespace Ujeby.AoC.App._2022_22
 			var map = CreateMap(input);
 			var directions = ReadDirections(input);
 
-#if _DEBUG_SAMPLE
-			Debug.Line();
-			for (var y = 0; y < map.Length; y++)
-				Debug.Line(new string(map[y]));
-			Debug.Line();
-#endif
+			//Debug.Line();
+			//for (var y = 0; y < map.Length; y++)
+			//	Debug.Line(new string(map[y]));
+			//Debug.Line();
+
 			// part1
 			var path = Travel(map, directions, new(Array.IndexOf(map[0], '.'), 0, 0));
 			long? answer1 = 1000 * (path.Last().Y + 1) + 4 * (path.Last().X + 1) + path.Last().Z;
@@ -100,28 +99,28 @@ namespace Ujeby.AoC.App._2022_22
 			{ (p, s) => new(s - 1, s - 1 - p.X), (p, s) => new(p.X, s - 1), (p, s) => new(0, p.X), (p, s) => new(s - 1 - p.X, 0) },
 		};
 
-#if _DEBUG_SAMPLE
-		private static readonly int _faceSize = 4;
+		// sample
+		//private static readonly int _faceSize = 4;
 
-		private static readonly v2i[] _mapFaces = new v2i[]
-		{
-			new (8, 0), new (0, 4), new(4, 4), new(8, 4), new (8, 8), new (12, 8)
-		};
+		//private static readonly v2i[] _mapFaces = new v2i[]
+		//{
+		//	new (8, 0), new (0, 4), new(4, 4), new(8, 4), new (8, 8), new (12, 8)
+		//};
 
-		/// <summary>
-		/// cube face folding
-		/// [sourceFace, sourceFaceEdge] => (destinationFace, destinationFaceEdge)
-		/// </summary>
-		private static readonly v2i[,] _folding = new v2i[6, 4]
-		{
-			{ new(5, 0), new(3, 3), new(2, 3), new(1, 3) },
-			{ new(2, 2), new(4, 1), new(5, 1), new(0, 3) },
-			{ new(3, 2), new(4, 2), new(1, 0), new(0, 2) },
-			{ new(5, 3), new(4, 3), new(2, 0), new(0, 1) },
-			{ new(5, 2), new(1, 1), new(2, 1), new(3, 1) },
-			{ new(0, 0), new(1, 2), new(4, 0), new(3, 0) }
-		};
-#else
+		///// <summary>
+		///// cube face folding
+		///// [sourceFace, sourceFaceEdge] => (destinationFace, destinationFaceEdge)
+		///// </summary>
+		//private static readonly v2i[,] _folding = new v2i[6, 4]
+		//{
+		//	{ new(5, 0), new(3, 3), new(2, 3), new(1, 3) },
+		//	{ new(2, 2), new(4, 1), new(5, 1), new(0, 3) },
+		//	{ new(3, 2), new(4, 2), new(1, 0), new(0, 2) },
+		//	{ new(5, 3), new(4, 3), new(2, 0), new(0, 1) },
+		//	{ new(5, 2), new(1, 1), new(2, 1), new(3, 1) },
+		//	{ new(0, 0), new(1, 2), new(4, 0), new(3, 0) }
+		//};
+
 		private static int _faceSize = 50;
 
 		private static readonly v2i[] _mapFaces = new v2i[]
@@ -142,7 +141,6 @@ namespace Ujeby.AoC.App._2022_22
 			{ new(1, 0), new(5, 0), new(3, 0), new(2, 1) },
 			{ new(4, 1), new(1, 3), new(0, 3), new(3, 1) }
 		};
-#endif
 
 		/// <summary>
 		/// position [X(x-pos), Y(y-pos), Z(direction/facing), W(face)]

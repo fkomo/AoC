@@ -75,6 +75,6 @@ namespace Ujeby.AoC.App._2021_20
 		}
 
 		private static char Enhance(string imageEnhAlg, string input) 
-			=> imageEnhAlg[(int)Tools.Numbers.BaseToDec(input, baseString: ".#")];
+			=> imageEnhAlg[(int)Math.BaseToDec(input, baseString: ".#")];
 	}
 }

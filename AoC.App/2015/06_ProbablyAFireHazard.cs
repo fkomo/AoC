@@ -39,7 +39,7 @@ namespace Ujeby.AoC.App._2015_06
 
 							case false:
 								lights[y, x] = false;
-								lights2[y, x] = Math.Max(0, lights2[y, x] - 1);
+								lights2[y, x] = System.Math.Max(0, lights2[y, x] - 1);
 								break;
 
 							case null:

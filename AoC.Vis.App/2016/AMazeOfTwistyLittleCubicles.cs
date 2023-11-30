@@ -15,13 +15,13 @@ namespace Ujeby.AoC.Vis.App
 		private long _officeDesignerFavNum;
 
 		private v2i _start = new(1, 1);
-#if _DEBUG_SAMPLE
-		private v2i _destination = new(7, 4);
-		private long _maxSteps = 10;
-#else
+
+		// sample
+		//private v2i _destination = new(7, 4);
+		//private long _maxSteps = 10;
+
 		private v2i _destination = new(31, 39);
 		private long _maxSteps = 50;
-#endif
 
 		private v2i[] _path;
 		private Alg.BreadthFirstSearch _bfs;

@@ -10,20 +10,6 @@
 		<Configurations>Debug;Release;Debug.Sample</Configurations>
 	</PropertyGroup>
 
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Sample|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_DEBUG;_DEBUG_SAMPLE</DefineConstants>
-		<Optimize>False</Optimize>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;_RELEASE</DefineConstants>
-	</PropertyGroup>
-
 	<ItemGroup>
 	  <None Remove="appsettings.json" />
 	</ItemGroup>
@@ -36,15 +22,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-		<PackageReference Include="Ujeby" Version="1.17.1" />
+		<!--<PackageReference Include="Ujeby" Version="*" />-->
 		<PackageReference Include="SDL2-CS.NetCore" Version="2.0.8" />
 	</ItemGroup>
 
-	<!--<ItemGroup>
+	<ItemGroup>
 		<Reference Include="Ujeby">
 			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
-	</ItemGroup>-->
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AoC.App\AoC.App.csproj" />

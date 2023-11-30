@@ -43,8 +43,8 @@ namespace Ujeby.AoC.App._2021_17
 				.Split(',').Select(p => p.Split("..").Select(n => int.Parse(n)).ToArray()).ToArray();
 
 			return new AABox2i(
-				new(Math.Min(c[0][0], c[0][1]), Math.Min(c[1][0], c[1][1])),
-				new(Math.Max(c[0][0], c[0][1]), Math.Max(c[1][0], c[1][1])));
+				new(System.Math.Min(c[0][0], c[0][1]), System.Math.Min(c[1][0], c[1][1])),
+				new(System.Math.Max(c[0][0], c[0][1]), System.Math.Max(c[1][0], c[1][1])));
 		}
 
 		public static bool SimThrow(v2i dir, AABox2i target, out v2i[] path)
@@ -67,7 +67,7 @@ namespace Ujeby.AoC.App._2021_17
 				}
 
 				// draft & gravity
-				dir.X = Math.Max(dir.X - 1, 0);
+				dir.X = System.Math.Max(dir.X - 1, 0);
 				dir.Y--;
 			}
 			while (p.X <= target.Right && p.Y >= target.Bottom);

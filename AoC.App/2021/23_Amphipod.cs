@@ -235,7 +235,7 @@ namespace Ujeby.AoC.App._2021_23
 			if (nextState.Complete())
 				return nextState.EnergyUsed;
 
-			return Math.Min(Step(nextState), leastEnergyUsed);
+			return System.Math.Min(Step(nextState), leastEnergyUsed);
 		}
 	}
 }

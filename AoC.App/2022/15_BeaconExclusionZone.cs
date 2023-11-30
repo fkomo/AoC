@@ -42,12 +42,10 @@ namespace Ujeby.AoC.App._2022_15
 			// TODO 2022/15 OPTIMIZE (4s)
 
 			// part1
-#if _DEBUG_SAMPLE
-			//PrintMap(sbsDist, sbs, min, max);
-			var scanY = 10;
-#else
 			var scanY = 2000000;
-#endif
+			// sample
+			//var scanY = 10;
+
 			long? answer1 = 0;
 			var p = new v2i(min.X, scanY);
 			for (; p.X <= max.X; p.X++)
@@ -67,11 +65,10 @@ namespace Ujeby.AoC.App._2022_15
 			}
 
 			// part2
-#if _DEBUG_SAMPLE
-			var area = new v2i(20);
-#else
 			var area = new v2i(4000000);
-#endif
+			// sample
+			//var area = new v2i(20);
+
 			long? answer2 = null;
 			Parallel.For(0, sbs.Length, (sb, state) =>
 			{

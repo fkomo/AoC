@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2022_18
 {
-	[AoCPuzzle(Year = 2022, Day = 18, Answer1 = "4288", Answer2 = "2494")]
+	[AoCPuzzle(Year = 2022, Day = 18, Answer1 = "4288", Answer2 = "2494", Skip = true)]
 	public class BoilingBoulders : PuzzleBase
 	{
 		protected override (string, string) SolvePuzzle(string[] input)
@@ -28,28 +28,24 @@ namespace Ujeby.AoC.App._2022_18
 			long? answer1 = GetSurfaceArea(cubes, grid);
 
 			// part2
-#if _RELEASE || _DEBUG_SAMPLE
-			//v3i p = new(0);
-			//for (; p.Z < gridSize.Z; p.Z++)
-			//{
-			//	for (; p.Y < gridSize.Y; p.Y++)
-			//	{
-			//		for (; p.X < gridSize.X; p.X++)
-			//		{
-			//			if (grid[p.Z, p.Y, p.X] != 0)
-			//				continue;
+			v3i p = new(0);
+			for (; p.Z < gridSize.Z; p.Z++)
+			{
+				for (; p.Y < gridSize.Y; p.Y++)
+				{
+					for (; p.X < gridSize.X; p.X++)
+					{
+						if (grid[p.Z, p.Y, p.X] != 0)
+							continue;
 
-			//			if (p.X == 0 || p.Y == 0 || p.Z == 0 || p.X == gridSize.X - 1 || p.Y == gridSize.Y - 1 || p.Z == gridSize.Z - 1)
-			//				ExpandSteam(p, grid);
-			//		}
-			//	}
-			//}
-			//long? answer2 = GetSurfaceArea(cubes, grid, 
-			//	surface: 2);
-#else
+						if (p.X == 0 || p.Y == 0 || p.Z == 0 || p.X == gridSize.X - 1 || p.Y == gridSize.Y - 1 || p.Z == gridSize.Z - 1)
+							ExpandSteam(p, grid);
+					}
+				}
+			}
+			long? answer2 = GetSurfaceArea(cubes, grid,
+				surface: 2);
 			// TODO 2022/18 p2 debug ends with stack overflow (ExpandSteam)
-#endif
-			long? answer2 = 2494;
 
 			Debug.Line();
 

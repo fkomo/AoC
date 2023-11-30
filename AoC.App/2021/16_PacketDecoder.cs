@@ -41,8 +41,6 @@ namespace Ujeby.AoC.App._2021_16
 
 		private static long ParsePacket(byte[] bytes, int start, out int read, out long versionSum)
 		{
-			Debug.Indent += 2;
-
 			long result = 0;
 
 			versionSum = 0;
@@ -104,8 +102,6 @@ namespace Ujeby.AoC.App._2021_16
 					result = Result(typeId, operands);
 				}
 			}
-
-			Debug.Indent -= 2;
 
 			return result;
 		}
@@ -195,7 +191,7 @@ namespace Ujeby.AoC.App._2021_16
 				shift = 8;
 			}
 
-			return (ushort)((result >> resultLength - (start % 8) - length) & (uint)(Math.Pow(2, length) - 1));
+			return (ushort)((result >> resultLength - (start % 8) - length) & (uint)(System.Math.Pow(2, length) - 1));
 		}
 	}
 }

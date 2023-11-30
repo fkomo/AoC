@@ -11,7 +11,7 @@ namespace Ujeby.AoC.App._2021_03
 				.Select(s => Convert.ToInt32(s, 2)).ToArray();
 
 			var bitCount = input.First().Length;
-			var inputMask = (long)Math.Pow(2, bitCount) - 1;
+			var inputMask = (long)System.Math.Pow(2, bitCount) - 1;
 
 			// part1
 			var shift = 1;

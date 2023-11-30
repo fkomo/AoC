@@ -42,7 +42,7 @@ namespace Ujeby.AoC.App._2022_10
 			var outputy = 0;
 			for (var cycle = 1; i < input.Length; cycle++)
 			{
-				output[outputy, outputx] = Math.Abs(outputx - x) <= 1;
+				output[outputy, outputx] = System.Math.Abs(outputx - x) <= 1;
 				outputx++;
 
 				if (exec != null)

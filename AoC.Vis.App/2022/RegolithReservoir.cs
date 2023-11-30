@@ -45,7 +45,7 @@ namespace Ujeby.AoC.Vis.App
 
 		private void AddSand(v2i p)
 		{
-			p.Y = Math.Max(p.Y, 0);
+			p.Y = System.Math.Max(p.Y, 0);
 			if (p.X < 0 || p.Y < 0 || p.X >= _map.GetLength(1) || p.Y >= _map.GetLength(0))
 				return;
 

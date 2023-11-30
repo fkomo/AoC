@@ -119,7 +119,7 @@ public class RadioisotopeThermoelectricGenerators : PuzzleBase
 		if (prevCompHash == GetCompHash(tmp))
 			return minSteps;
 
-		return Math.Min(minSteps, CountSteps(tmp, minSteps, GetCompHash(components), destFloor, steps));
+		return System.Math.Min(minSteps, CountSteps(tmp, minSteps, GetCompHash(components), destFloor, steps));
 	}
 
 	private static string GetCompHash(Component[] components)

@@ -90,12 +90,12 @@ namespace Ujeby.AoC.App._2022_20
 
 		private static void PrintFile(Position first)
 		{
-#if _DEBUG_SAMPLE
-			Debug.Text($"{first.Number}", indent: 6);
+#if DEBUG
+			Debug.Text($"{first.Number}");
 			var node = first.Neighbour[1];
 			do
 			{
-				Debug.Text($", {node.Number}", indent: 0);
+				Debug.Text($", {node.Number}");
 				node = node.Neighbour[1];
 			} while (node != first);
 			Debug.Line();

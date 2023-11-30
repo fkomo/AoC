@@ -70,8 +70,6 @@ namespace Ujeby.AoC.App._2015_22
 			public FightState NextTurn()
 			{
 				Debug.Line(ToString());
-				Debug.Indent++;
-
 				return new()
 				{
 					Turn = Turn + 1,
@@ -135,8 +133,6 @@ namespace Ujeby.AoC.App._2015_22
 				if (state.Player[Hp] <= 0)
 				{
 					Debug.Line("player died");
-					Debug.Indent--;
-
 					return long.MaxValue;
 				}
 			}
@@ -154,8 +150,6 @@ namespace Ujeby.AoC.App._2015_22
 				if (state.Boss[Hp] <= 0)
 				{
 					Debug.Line($"boss died from {SpellEnum.Poison}");
-					Debug.Indent--;
-
 					return state.ManaSpent;
 				}
 			}
@@ -167,12 +161,10 @@ namespace Ujeby.AoC.App._2015_22
 				if (state.ActiveEffects.Any(ae => ae.Effect == SpellEnum.Shield))
 					playerArmor += 7;
 
-				state.Player[Hp] -= Math.Max(1, state.Boss[Dmg] - playerArmor);
+				state.Player[Hp] -= System.Math.Max(1, state.Boss[Dmg] - playerArmor);
 				if (state.Player[Hp] <= 0)
 				{
 					Debug.Line("player died");
-					Debug.Indent--;
-
 					return long.MaxValue;
 				}
 
@@ -207,15 +199,11 @@ namespace Ujeby.AoC.App._2015_22
 				if (fork.Boss[Hp] > 0)
 					forkResult = SimMinManaCost(fork.NextTurn(), hardMode);
 				else
-				{
 					Debug.Line($"boss died from {spell}");
-					Debug.Indent--;
-				}
 
-				state.MinManaSpent = Math.Min(forkResult, state.MinManaSpent);
+				state.MinManaSpent = System.Math.Min(forkResult, state.MinManaSpent);
 			}
 
-			Debug.Indent -= 2;
 			return state.MinManaSpent;
 		}
 	}

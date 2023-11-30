@@ -49,20 +49,20 @@ namespace Ujeby.AoC.App._2015_15
 					var score = 1L;
 					for (var p = 0; p < props; p++)
 					{
-						score *= Math.Max(0, _idx.Sum(x => idx[x] * ingredients[x][p]));
+						score *= System.Math.Max(0, _idx.Sum(x => idx[x] * ingredients[x][p]));
 						if (score == 0)
 							break;
 					}
 
-					score1 = Math.Max(score, score1);
+					score1 = System.Math.Max(score, score1);
 					if (_idx.Sum(x => idx[x] * ingredients[x][props]) == 500)
-						score2 = Math.Max(score, score2);
+						score2 = System.Math.Max(score, score2);
 				}
 				else
 				{
 					var (s1, s2) = CheckRecipeRec(ingredients, idx, i: i + 1);
-					score1 = Math.Max(s1, score1);
-					score2 = Math.Max(s2, score2);
+					score1 = System.Math.Max(s1, score1);
+					score2 = System.Math.Max(s2, score2);
 				}
 			}
 
@@ -93,7 +93,7 @@ namespace Ujeby.AoC.App._2015_15
 							var score = 1L;
 							for (var i = 0; i < 4; i++)
 							{
-								score *= Math.Max(0,
+								score *= System.Math.Max(0,
 									i1 * ingredients[0][i] +
 									i2 * ingredients[1][i] +
 									i3 * ingredients[2][i] +

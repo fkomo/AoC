@@ -37,7 +37,27 @@ namespace Ujeby.AoC.Vis.App
 								{
 									new AMazeOfTwistyLittleCubicles(windowSize),
 									new GridComputing(windowSize),
+									new AirDuctSpelunking(windowSize),
 								}
+							},
+							{
+								"2017",
+								new AoCRunnable[]
+								{
+									new SpiralMemory(windowSize),
+								}
+							},
+							{
+								"2018",
+								Array.Empty<AoCRunnable>()
+							},
+							{
+								"2019",
+								Array.Empty<AoCRunnable>()
+							},
+							{
+								"2020",
+								Array.Empty<AoCRunnable>()
 							},
 							{
 								"2021",
@@ -59,7 +79,11 @@ namespace Ujeby.AoC.Vis.App
 									new MonkeyMap(windowSize),
 									new UnstableDiffusion(windowSize),
 								}
-							}
+							},
+							{
+								"2023",
+								Array.Empty<AoCRunnable>()
+							},
 						}
 					);
 					menu.Run();

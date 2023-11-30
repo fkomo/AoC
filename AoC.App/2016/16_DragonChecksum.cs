@@ -8,11 +8,9 @@ public class DragonChecksum : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-#if _DEBUG_SAMPLE
-		var diskSize = 20;
-#else
 		var diskSize = 272;
-#endif
+		// sample
+		//var diskSize = 20;
 
 		// part1
 		var answer1 = Checksum(FillDisk(input.Single(), diskSize));
