@@ -126,8 +126,7 @@ namespace Ujeby.AoC.Common
 		}
 
 		static ConsoleColor GetAnswerColor(string right, string calculated)
-			=> right != null && right != calculated ? ConsoleColor.Red :
-				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.DarkGray);
+			=> right != null && right != calculated ? ConsoleColor.Red : ConsoleColor.DarkGray;
 
 		/// <summary></summary>
 		/// <param name="duration">duration in ms</param>

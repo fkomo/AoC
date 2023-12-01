@@ -3,7 +3,7 @@ using Ujeby.Tools.StringExtensions;
 
 namespace Ujeby.AoC.App._2023_01;
 
-[AoCPuzzle(Year = 2023, Day = 01, Answer1 = "55002", Answer2 = "55093", Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 01, Answer1 = "55002", Answer2 = null, Skip = false)]
 public class Trebuchet : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -28,7 +28,10 @@ public class Trebuchet : PuzzleBase
 			"nine"
 		};
 
-		var digitsChars = Enumerable.Range(1, 9).Select(x => (char)('0' + x)).ToArray();
+		var digitsChars = Enumerable
+			.Range(1, 9)
+			.Select(x => (char)('0' + x))
+			.ToArray();
 
 		// replace first and last text digit with its number representation
 		var modifiedInput = input
