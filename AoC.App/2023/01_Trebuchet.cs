@@ -3,7 +3,7 @@ using Ujeby.Tools.StringExtensions;
 
 namespace Ujeby.AoC.App._2023_01;
 
-[AoCPuzzle(Year = 2023, Day = 01, Answer1 = "55002", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 01, Answer1 = "55002", Answer2 = "55093", Skip = false)]
 public class Trebuchet : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)

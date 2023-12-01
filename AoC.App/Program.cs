@@ -17,7 +17,7 @@ namespace Ujeby.AoC.App
 			string inputSuffix = null;
 			bool? skipSolved = null;
 
-			//year = "2020";
+			year = "2023";
 			//inputSuffix = "s";
 			//skipSolved = true;
 
@@ -26,12 +26,16 @@ namespace Ujeby.AoC.App
 				Console.Write($"{Environment.NewLine}  year [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023] ? ");
 				year = Console.ReadLine();
 			}
+			else
+				Console.WriteLine($"{Environment.NewLine}  year: 2023");
 
 			if (inputSuffix == null)
 			{
 				Console.Write($"  puzzle input suffix [s(sample)] ? ");
 				inputSuffix = Console.ReadLine();
 			}
+			else
+				Console.WriteLine($"  puzzle input suffix: {inputSuffix}");
 
 			if (inputSuffix == "s")
 				inputSuffix = "sample";
@@ -43,6 +47,8 @@ namespace Ujeby.AoC.App
 				Console.Write($"  skip solved [y/n(default)] puzzles ? ");
 				skipSolved = Console.ReadLine() == "y";
 			}
+			else
+				Console.WriteLine($"  skip solved puzzles: {inputSuffix}"); 
 			
 			Log.Line();
 
