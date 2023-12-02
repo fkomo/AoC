@@ -15,5 +15,8 @@
 			string inputSuffix = null);
 
 		public (string Part1, string Part2) Answer { get; }
+
+		public (string Part1, string Part2) Solution { get; }
+		public double? Time { get; }
 	}
 }

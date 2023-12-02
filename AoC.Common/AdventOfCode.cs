@@ -31,7 +31,7 @@ namespace Ujeby.AoC.Common
 					aocYear.Select(p =>
 					{
 						var puzzle = (IPuzzle)Activator.CreateInstance(p);
-						
+
 						if (ignoreSkip)
 							puzzle.Skip = false;
 
@@ -42,7 +42,7 @@ namespace Ujeby.AoC.Common
 		}
 
 		public static void Run(int year, string inputStorage, string inputSuffix, bool skipSolved,
-			params IPuzzle[] problemsToSolve)
+			params IPuzzle[] puzzlesToSolve)
 		{
 			Log.Line();
 			Log.ChristmasPattern($"┌──[ ", indent: 2);
@@ -55,16 +55,16 @@ namespace Ujeby.AoC.Common
 			var stars = 0;
 			try
 			{
-				foreach (var problem in problemsToSolve)
+				foreach (var puzzle in puzzlesToSolve)
 				{
 					if (skipSolved)
 					{
 						// skip (sample) debugging of solved puzzles
-						if (problem.Answer.Part1 != null && problem.Answer.Part2 != null)
+						if (puzzle.Answer.Part1 != null && puzzle.Answer.Part2 != null)
 							continue;
 					}
 
-					stars += problem.Solve(inputStorage, inputSuffix);
+					stars += puzzle.Solve(inputStorage, inputSuffix);
 				}
 			}
 			catch (Exception ex)
@@ -76,10 +76,36 @@ namespace Ujeby.AoC.Common
 				Log.ChristmasPattern("│", indent: 2);
 				Log.Line();
 				Log.ChristmasPattern($"└──[ ", indent: 2);
-				Log.Text($"{stars}/{problemsToSolve.Length * 2} stars", textColor: ConsoleColor.Yellow, indent: 0);
+				Log.Text($"{stars}/{puzzlesToSolve.Length * 2} stars", textColor: ConsoleColor.Yellow, indent: 0);
 				Log.ChristmasPattern($" ]", indent: 0);
 				Log.Line();
 			}
+		}
+
+		public static IPuzzle[] AllPuzzles()
+			=> AppDomain.CurrentDomain.GetAssemblies()
+				.Where(a => a.FullName.StartsWith("Ujeby.AoC."))
+				.SelectMany(a => a.GetTypes())
+				.Where(t => Attribute.IsDefined(t, typeof(AoCPuzzleAttribute)))
+				.OrderBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Day)
+				.GroupBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Year)
+				.SelectMany(p => p.Select(x => (IPuzzle)Activator.CreateInstance(x)))
+				.ToArray();
+
+		public static IPuzzle GetInstance(int year, int day)
+		{
+			var puzzle = AppDomain.CurrentDomain.GetAssemblies()
+				.Where(a => a.FullName.StartsWith("Ujeby.AoC."))
+				.SelectMany(a => a.GetTypes())
+				.Where(t => Attribute.IsDefined(t, typeof(AoCPuzzleAttribute)))
+				.SingleOrDefault(x =>
+					x.GetCustomAttribute<AoCPuzzleAttribute>().Year == year &&
+					x.GetCustomAttribute<AoCPuzzleAttribute>().Day == day);
+
+			if (puzzle == null)
+				return null;
+
+			return (IPuzzle)Activator.CreateInstance(puzzle);
 		}
 	}
 }

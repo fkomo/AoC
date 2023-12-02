@@ -3,7 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App
 {
-	class Program
+	public class Program
 	{
 		static void Main(string[] args)
 		{
@@ -62,6 +62,10 @@ namespace Ujeby.AoC.App
 				ignoreSkip: ignoreSkip,
 				skipSolved: skipSolved.Value,
 				inputSuffix: inputSuffix);
+		}
+
+		public static void Init()
+		{
 		}
 	}
 }
