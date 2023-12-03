@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title>AoC.Ui</title>
+	<link href="https://fonts.cdnfonts.com/css/source-code-pro" rel="stylesheet">
+	<script type="text/javascript">
+
+		function onload() {
+			fetch('http://localhost:5500/meta')
+				.then((response) => response.json())
+				.then((json) => render(json));
+		}
+
+		function render(metaJson) {
+			console.log(metaJson);
+
+			var yearsDiv = document.getElementById("years");
+			yearsDiv.innerHTML = '';
+
+			for (let y = 0; y < metaJson.length; y++) {
+				var year = metaJson[y].year;
+
+				yearsDiv.innerHTML += '<h2>' + year + '</h2>';
+				yearsDiv.innerHTML += '<ul>';
+				for (let p = 0; p < metaJson[y].puzzles.length; p++) {
+					var day = metaJson[y].puzzles[p].day;
+
+					yearsDiv.innerHTML += '<li id="' + year + '_' + day + '"></li>';
+
+					execPuzzle(year, day);
+				}
+				yearsDiv.innerHTML += '</ul>';
+			}
+		}
+
+		function execPuzzle(year, day) {
+			fetch('http://localhost:5500/' + year + '/' + day)
+				.then((response) => response.json())
+				.then((json) => puzzleSolved(json));
+		}
+
+		function puzzleSolved(puzzleJson) {
+			console.log(puzzleJson);
+
+			var puzzleDiv = document.getElementById(puzzleJson.meta.year + '_' + puzzleJson.meta.day);
+			puzzleDiv.innerHTML = '#' + puzzleJson.meta.day + ' ' + puzzleJson.meta.title;
+
+			if (puzzleJson.time != null)
+				puzzleDiv.innerHTML += ' ' + puzzleJson.time + 'ms';
+		}
+
+	</script>
+
+	<style type="text/css">
+		body {
+			font-family: "Source Code Pro";
+			background-color: #181d1f;
+			color: #cccccc;
+			padding-left: 32px;
+		}
+
+		li {
+			margin-left: 32px;
+			list-style: none;
+		}
+	</style>
+
+</head>
+<body onload="onload()">
+	<h1>Advent Of Code</h1>
+	<div id="years"></div>
+</body>
+</html>
