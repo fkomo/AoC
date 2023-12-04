@@ -7,48 +7,132 @@
 	<link href="https://fonts.cdnfonts.com/css/source-code-pro" rel="stylesheet">
 	<script type="text/javascript">
 
-		function onload() {
+		function onLoad() {
 			fetch('http://localhost:5500/meta')
 				.then((response) => response.json())
-				.then((json) => render(json));
+				.then((json) => renderYears(json));
 		}
 
-		function render(metaJson) {
-			console.log(metaJson);
+		function renderYears(metaJson) {
+			//console.log(metaJson);
 
-			var yearsDiv = document.getElementById("years");
-			yearsDiv.innerHTML = '';
+			var contentElement = document.getElementById("content");
+			contentElement.innerHTML = '<ul id="years"></ul>';
 
+			var yearsElement = document.getElementById("years");
 			for (let y = 0; y < metaJson.length; y++) {
 				var year = metaJson[y].year;
 
-				yearsDiv.innerHTML += '<h2>' + year + '</h2>';
-				yearsDiv.innerHTML += '<ul>';
-				for (let p = 0; p < metaJson[y].puzzles.length; p++) {
-					var day = metaJson[y].puzzles[p].day;
-
-					yearsDiv.innerHTML += '<li id="' + year + '_' + day + '"></li>';
-
-					execPuzzle(year, day);
-				}
-				yearsDiv.innerHTML += '</ul>';
+				var yearHtml = '<div><h2 onclick="onYearClicked(\'' + year + '\');">[' + year + ']</h2><table class="puzzles" id="puzzles-' + year + '"></table></div>';
+				yearsElement.innerHTML += '<li class="year" id="year-' + year + '">' + yearHtml + '</li>';
 			}
+
+			for (let y = 0; y < metaJson.length; y++)
+				renderYear(metaJson[y].year);
 		}
 
 		function execPuzzle(year, day) {
 			fetch('http://localhost:5500/' + year + '/' + day)
-				.then((response) => response.json())
-				.then((json) => puzzleSolved(json));
+				.then((response) => response.status == 200 ? response.json() : null)
+				.then((json) => renderPuzzle(json));
 		}
 
-		function puzzleSolved(puzzleJson) {
-			console.log(puzzleJson);
+		function renderPuzzle(puzzleJson) {
+			if (puzzleJson == null)
+				return;
 
-			var puzzleDiv = document.getElementById(puzzleJson.meta.year + '_' + puzzleJson.meta.day);
-			puzzleDiv.innerHTML = '#' + puzzleJson.meta.day + ' ' + puzzleJson.meta.title;
+			//console.log(puzzleJson);
 
+			var puzzleElement = document.getElementById('puzzle-' + puzzleJson.meta.year + '-' + puzzleJson.meta.day);
+			puzzleElement.innerHTML = '';
+			puzzleElement.innerHTML += '<td class="day">#' + puzzleJson.meta.day + '</td>';
+
+			var stars = '';
+			if (puzzleJson.meta.answerPart1 != null && puzzleJson.meta.answerPart1 == puzzleJson.part1)
+				stars += '*'
+			if (puzzleJson.meta.answerPart2 != null && puzzleJson.meta.answerPart2 == puzzleJson.part2)
+				stars += '*'
+			puzzleElement.innerHTML += '<td class="stars">' + stars + '</td>';
+
+			var notSolved = stars == '';
+			var partialySolved = stars == '*';
+			var titleClasses = 'title' + (notSolved ? ' notSolved' : '') + (partialySolved ? ' partialySolved' : '');
+			var onClick = 'onPuzzleClicked(\'' + puzzleJson.meta.year + '\', \'' + puzzleJson.meta.day + '\');'
+			puzzleElement.innerHTML += '<td class="' + titleClasses + '" onclick="' + onClick + '">' + puzzleJson.meta.title + '</td>';
+
+			var color1 = {
+				red: 0x00, green: 0xca, blue: 0x36
+			};
+			var color2 = {
+				red: 0xda, green: 0xe4, blue: 0x00
+			};
+			var color3 = {
+				red: 0xce, green: 0x00, blue: 0x00
+			};
+
+			var skip = puzzleJson.time == null && stars != '';
+			var gradient = puzzleJson.time == null ? 1 : Math.min(puzzleJson.time.toFixed(0), 250) / 250;
+			var color = puzzleJson.time != null ? colorGradient(gradient, color1, color2, color3) : '';
+
+			var time = '<td class="time' + (skip ? ' skip' : '') + '" style="' + (!skip ? 'color:' + color : '') + '">';
 			if (puzzleJson.time != null && (puzzleJson.meta.answerPart1 != null || puzzleJson.meta.answerPart2 != null))
-				puzzleDiv.innerHTML += ' ... ' + puzzleJson.time + 'ms';
+				time += puzzleJson.time.toFixed(3) + ' ms';
+			else if (skip)
+				time += 'skip!';
+			puzzleElement.innerHTML += time + '</td>';
+		}
+
+		function colorGradient(fadeFraction, rgbColor1, rgbColor2, rgbColor3) {
+			var color1 = rgbColor1;
+			var color2 = rgbColor2;
+			var fade = fadeFraction;
+
+			// Do we have 3 colors for the gradient? Need to adjust the params.
+			if (rgbColor3) {
+				fade = fade * 2;
+
+				// Find which interval to use and adjust the fade percentage
+				if (fade >= 1) {
+					fade -= 1;
+					color1 = rgbColor2;
+					color2 = rgbColor3;
+				}
+			}
+
+			var diffRed = color2.red - color1.red;
+			var diffGreen = color2.green - color1.green;
+			var diffBlue = color2.blue - color1.blue;
+
+			var gradient = {
+				red: parseInt(Math.floor(color1.red + (diffRed * fade)), 10),
+				green: parseInt(Math.floor(color1.green + (diffGreen * fade)), 10),
+				blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)), 10),
+			};
+
+			return 'rgb(' + gradient.red + ',' + gradient.green + ',' + gradient.blue + ')';
+		}
+
+		function onYearClicked(year) {
+			console.log(year);
+			renderYear(year);
+		}
+
+		function onPuzzleClicked(year, day) {
+			execPuzzle(year, day);
+		}
+
+		function onAoCClicked() {
+			onLoad();
+		}
+
+		function renderYear(year) {
+			var puzzlesElement = document.getElementById('puzzles-' + year);
+			puzzlesElement.innerHTML = '';
+
+			for (let day = 1; day < 25; day++) {
+				puzzlesElement.innerHTML += '<tr class="puzzle" id="puzzle-' + year + '-' + day + '"></tr>';
+				execPuzzle(year, day);
+			}
 		}
 
 	</script>
@@ -61,15 +145,71 @@
 			padding-left: 32px;
 		}
 
-		li {
-			margin-left: 32px;
-			list-style: none;
+		#content {
+			display: flex;
+			justify-content: center;
+		}
+
+		h1 {
+			text-align: center;
+			color: #b2ff75
+		}
+
+		h2:hover, .puzzle:hover, h1:hover {
+			color: white;
+			background-color: #21282b;
+			cursor: pointer;
+		}
+
+		#years {
+			text-align: center;
+			overflow: hidden;
+		}
+
+		.year {
+			display: inline-block;
+			float: left;
+			margin: 0 32px 16px 0;
+		}
+
+		#years {
+			list-style-type: none;
+		}
+
+		.puzzle {
+		}
+
+		.stars {
+			color: #ffe800;
+			text-align: right;
+			padding: 0 4px 0 4px;
+		}
+
+		.time, .day {
+			text-align: right;
+		}
+
+		.skip {
+			color: #65129d;
+		}
+
+		.title {
+			text-align: left;
+			padding-right: 8px;
+		}
+
+		.notSolved {
+			color: #555555;
+		}
+
+		.partialySolved {
+			color: #777777;
 		}
 	</style>
 
 </head>
-<body onload="onload()">
-	<h1>Advent Of Code</h1>
-	<div id="years"></div>
+<body onload="onLoad()">
+	<h1 onclick="onAoCClicked();">~=#{ Advent Of Code }#=~</h1>
+	<div id="content"></div>
 </body>
 </html>
