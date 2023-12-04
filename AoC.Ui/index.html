@@ -47,8 +47,8 @@
 			var puzzleDiv = document.getElementById(puzzleJson.meta.year + '_' + puzzleJson.meta.day);
 			puzzleDiv.innerHTML = '#' + puzzleJson.meta.day + ' ' + puzzleJson.meta.title;
 
-			if (puzzleJson.time != null)
-				puzzleDiv.innerHTML += ' ' + puzzleJson.time + 'ms';
+			if (puzzleJson.time != null && (puzzleJson.meta.answerPart1 != null || puzzleJson.meta.answerPart2 != null))
+				puzzleDiv.innerHTML += ' ... ' + puzzleJson.time + 'ms';
 		}
 
 	</script>

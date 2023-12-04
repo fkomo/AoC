@@ -7,24 +7,20 @@ namespace Ujeby.AoC.App._2023_02;
 [AoCPuzzle(Year = 2023, Day = 02, Answer1 = "1853", Answer2 = "72706", Skip = false)]
 public class CubeConundrum : PuzzleBase
 {
-	enum CubeColors
-	{
-		Red = 0, 
-		Green = 1, 
-		Blue = 2
-	}
-
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
+		var colors = new string[] { "red", "green", "blue" };
+
 		var games = input.ToDictionary(
 			x => x.Split(':')[0].ToNumArray()[0],
 			x => {
-				return x[(x.IndexOf(": ") + 2)..].Split(';')
+				return x[(x.IndexOf(": ") + 2)..]
+					.Split(';')
 					.Select(s => s
 						.Split(',')
 						.Select(c => c.Trim())
 						.ToDictionary(
-							k => (int)Enum.Parse(typeof(CubeColors), k.Split(' ')[1], true), 
+							k => Array.IndexOf(colors, k.Split(' ')[1]), 
 							v => int.Parse(v.Split(' ')[0])))
 					.ToArray();
 			});
