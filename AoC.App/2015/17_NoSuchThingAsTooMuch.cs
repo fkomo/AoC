@@ -16,6 +16,8 @@ namespace Ujeby.AoC.App._2015_17
 			// part1
 			var combinations = new Dictionary<string, int>();
 			var usedIdx = Enumerable.Repeat(-1, containers.Length).ToArray();
+
+			_cache.Clear();
 			FitEggnogRec(eggnogSize, containers, combinations, usedIdx);
 			var answer1 = combinations.Count;
 

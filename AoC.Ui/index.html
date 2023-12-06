@@ -23,7 +23,9 @@
 			for (let y = 0; y < metaJson.length; y++) {
 				var year = metaJson[y].year;
 
-				var yearHtml = '<div><h2 onclick="onYearClicked(\'' + year + '\');">[' + year + ']</h2><table class="puzzles" id="puzzles-' + year + '"></table></div>';
+				var yearH1 = '<div class="star">*</div>{' + year + '}<div class="star">*</div>'
+
+				var yearHtml = '<div><h2 onclick="onYearClicked(\'' + year + '\');">'+yearH1+'</h2><table class="puzzles" id="puzzles-' + year + '"></table></div>';
 				yearsElement.innerHTML += '<li class="year" id="year-' + year + '">' + yearHtml + '</li>';
 			}
 
@@ -48,10 +50,12 @@
 			puzzleElement.innerHTML += '<td class="day">#' + puzzleJson.meta.day + '</td>';
 
 			var stars = '';
-			if (puzzleJson.meta.answerPart1 != null && puzzleJson.meta.answerPart1 == puzzleJson.part1)
+			if (puzzleJson.meta.answerPart1 != null && puzzleJson.meta.answerPart1 == puzzleJson.part1) {
 				stars += '*'
-			if (puzzleJson.meta.answerPart2 != null && puzzleJson.meta.answerPart2 == puzzleJson.part2)
+			}
+			if (puzzleJson.meta.answerPart2 != null && puzzleJson.meta.answerPart2 == puzzleJson.part2) {
 				stars += '*'
+			}
 			puzzleElement.innerHTML += '<td class="stars">' + stars + '</td>';
 
 			var notSolved = stars == '';
@@ -151,7 +155,6 @@
 
 		h1 {
 			text-align: center;
-			color: #b2ff75
 		}
 
 		h2:hover, .puzzle:hover, h1:hover {
@@ -178,10 +181,17 @@
 		.puzzle {
 		}
 
-		.stars {
+		.star, .stars {
 			color: #ffe800;
-			text-align: right;
 			padding: 0 4px 0 4px;
+		}
+
+		.star {
+			display: inline-block;
+		}
+
+		.stars {
+			text-align: right;
 		}
 
 		.time, .day {
