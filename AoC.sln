@@ -18,6 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AoC.Ui", "AoC.Ui", "{5C2AA0
 		AoC.Ui\index.html = AoC.Ui\index.html
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{D522F3B5-72FF-46AE-9524-3B5605A007A9}"
+	ProjectSection(SolutionItems) = preProject
+		clear-log.cmd = clear-log.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
