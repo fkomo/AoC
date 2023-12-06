@@ -7,7 +7,12 @@
 	<link href="https://fonts.cdnfonts.com/css/source-code-pro" rel="stylesheet">
 	<script type="text/javascript">
 
+		var aoc = [];
+
 		function onLoad() {
+
+			aoc = [];
+
 			fetch('http://localhost:5500/meta')
 				.then((response) => response.json())
 				.then((json) => renderYears(json));
@@ -23,10 +28,12 @@
 			for (let y = 0; y < metaJson.length; y++) {
 				var year = metaJson[y].year;
 
-				var yearH1 = '<div class="star">*</div>{' + year + '}<div class="star">*</div>'
+				var yearH1 = '<div id="star1-' + year + '" class="star">*</div>{ ' + year + ' }<div id="star2-' + year + '" class="star">*</div>'
 
-				var yearHtml = '<div><h2 onclick="onYearClicked(\'' + year + '\');">'+yearH1+'</h2><table class="puzzles" id="puzzles-' + year + '"></table></div>';
+				var yearHtml = '<div><h2 onclick="onYearClicked(\'' + year + '\');">' + yearH1 + '</h2><table class="puzzles" id="puzzles-' + year + '"></table></div>';
 				yearsElement.innerHTML += '<li class="year" id="year-' + year + '">' + yearHtml + '</li>';
+
+				aoc.push({ year: year, stars: 0 });
 			}
 
 			for (let y = 0; y < metaJson.length; y++)
@@ -50,19 +57,35 @@
 			puzzleElement.innerHTML += '<td class="day">#' + puzzleJson.meta.day + '</td>';
 
 			var stars = '';
-			if (puzzleJson.meta.answerPart1 != null && puzzleJson.meta.answerPart1 == puzzleJson.part1) {
+			if (puzzleJson.meta.answerPart1 != null && puzzleJson.meta.answerPart1 == puzzleJson.part1)
 				stars += '*'
-			}
-			if (puzzleJson.meta.answerPart2 != null && puzzleJson.meta.answerPart2 == puzzleJson.part2) {
+			if (puzzleJson.meta.answerPart2 != null && puzzleJson.meta.answerPart2 == puzzleJson.part2)
 				stars += '*'
-			}
 			puzzleElement.innerHTML += '<td class="stars">' + stars + '</td>';
+
+			for (var i = 0; i < aoc.length; i++)
+				if (aoc[i].year == puzzleJson.meta.year) {
+					aoc[i].stars += stars == '**' ? 2 : (stars == '*' ? 1 : 0);
+					console.log(puzzleJson.meta.year + '/' + aoc[i].stars)
+
+					if (aoc[i].stars == 50) {
+						var starElement = document.getElementById('star1-' + puzzleJson.meta.year);
+						starElement.style.display = 'inline-block';
+
+						starElement = document.getElementById('star2-' + puzzleJson.meta.year);
+						starElement.style.display = 'inline-block';
+					}
+
+					break;
+				}
 
 			var notSolved = stars == '';
 			var partialySolved = stars == '*';
 			var titleClasses = 'title' + (notSolved ? ' notSolved' : '') + (partialySolved ? ' partialySolved' : '');
-			var onClick = 'onPuzzleClicked(\'' + puzzleJson.meta.year + '\', \'' + puzzleJson.meta.day + '\');'
-			puzzleElement.innerHTML += '<td class="' + titleClasses + '" onclick="' + onClick + '">' + puzzleJson.meta.title + '</td>';
+
+			var puzzleOnClick = '';
+			//var puzzleOnClick = ' onclick="onPuzzleClicked(\'' + puzzleJson.meta.year + '\', \'' + puzzleJson.meta.day + '\');"';
+			puzzleElement.innerHTML += '<td class="' + titleClasses + '"' + puzzleOnClick + '>' + puzzleJson.meta.title + '</td>';
 
 			var color1 = {
 				red: 0x00, green: 0xca, blue: 0x36
@@ -118,6 +141,19 @@
 
 		function onYearClicked(year) {
 			console.log(year);
+
+			var starElement = document.getElementById('star1-' + year);
+			starElement.style.display = 'none';
+
+			starElement = document.getElementById('star2-' + year);
+			starElement.style.display = 'none';
+
+			for (var i = 0; i < aoc.length; i++)
+				if (aoc[i].year == year) {
+					aoc[i].stars = 0;
+					break;
+				}
+
 			renderYear(year);
 		}
 
@@ -133,10 +169,15 @@
 			var puzzlesElement = document.getElementById('puzzles-' + year);
 			puzzlesElement.innerHTML = '';
 
-			for (let day = 1; day < 25; day++) {
-				puzzlesElement.innerHTML += '<tr class="puzzle" id="puzzle-' + year + '-' + day + '"></tr>';
-				execPuzzle(year, day);
+			var tbody = '<tbody>';
+			for (let day = 1; day <= 25; day++) {
+				tbody += '<tr class="puzzle" id="puzzle-' + year + '-' + day + '"></tr>';
 			}
+			tbody += '</tbody>';
+			puzzlesElement.innerHTML = tbody;
+
+			for (let day = 1; day <= 25; day++)
+				execPuzzle(year, day);
 		}
 
 	</script>
@@ -155,13 +196,18 @@
 
 		h1 {
 			text-align: center;
+			margin-bottom: 0;
 		}
 
-		h2:hover, .puzzle:hover, h1:hover {
-			color: white;
-			background-color: #21282b;
-			cursor: pointer;
+		h2 {
+			margin-top: 0;
 		}
+
+			h2:hover, h1:hover {
+				color: white;
+				background-color: #21282b;
+				cursor: pointer;
+			}
 
 		#years {
 			text-align: center;
@@ -169,13 +215,16 @@
 		}
 
 		.year {
+			position: relative;
 			display: inline-block;
-			float: left;
-			margin: 0 32px 16px 0;
+			/* next two lines only for display purposes */
+/*			text-align: center;
+			border: 1px solid red;
+*/			margin: 8px;
 		}
 
 		#years {
-			list-style-type: none;
+			list-style: none;
 		}
 
 		.puzzle {
@@ -187,7 +236,7 @@
 		}
 
 		.star {
-			display: inline-block;
+			display: none;
 		}
 
 		.stars {
