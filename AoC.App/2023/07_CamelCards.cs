@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2023_07;
 
-[AoCPuzzle(Year = 2023, Day = 07, Answer1 = "253313241", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 07, Answer1 = "253313241", Answer2 = "253362743", Skip = false)]
 public class CamelCards : PuzzleBase
 {
 	enum HandType : int
@@ -16,34 +16,11 @@ public class CamelCards : PuzzleBase
 		FiveOfAKind
 	}
 
-	record class CamelHand(string Hand, long Bid, HandType Type)
-	{
-		public override string ToString() => $"{Hand} {Type,-15} {Bid}";
-	}
+	record class CamelHand(string Hand, long Bid, HandType Type);
 
 	class CamelHandComparer : Comparer<CamelHand>
 	{
-		protected char[] _cardStrength;
-
-		public CamelHandComparer() : base()
-		{
-			_cardStrength = new char[]
-			{
-				'2',
-				'3',
-				'4',
-				'5',
-				'6',
-				'7',
-				'8',
-				'9',
-				'T',
-				'J',
-				'Q',
-				'K',
-				'A',
-			};
-		}
+		protected string _cardStrength = "23456789TJQKA";
 
 		public override int Compare(CamelHand x, CamelHand y)
 		{
@@ -58,7 +35,7 @@ public class CamelCards : PuzzleBase
 
 			for (var i = 0; i < x.Hand.Length; i++)
 				if (x.Hand[i] != y.Hand[i])
-					return Array.IndexOf(_cardStrength, x.Hand[i]) > Array.IndexOf(_cardStrength, y.Hand[i]) ? 1 : -1;
+					return _cardStrength.IndexOf(x.Hand[i]) > _cardStrength.IndexOf(y.Hand[i]) ? 1 : -1;
 
 			return 0;
 		}
@@ -66,24 +43,9 @@ public class CamelCards : PuzzleBase
 
 	class CamelHandComparerWithJoker : CamelHandComparer
 	{
-		public CamelHandComparerWithJoker() : base()
+		public CamelHandComparerWithJoker()
 		{
-			_cardStrength = new char[]
-			{
-				'J',
-				'2',
-				'3',
-				'4',
-				'5',
-				'6',
-				'7',
-				'8',
-				'9',
-				'T',
-				'Q',
-				'K',
-				'A',
-			};
+			_cardStrength = "J23456789TQKA";
 		}
 	}
 
@@ -96,33 +58,17 @@ public class CamelCards : PuzzleBase
 		});
 
 		// part1
-		long answer1 = 0;
-		var camelHandComparer = new CamelHandComparer();
-		var oHands = hands
-			.OrderBy(x => x, camelHandComparer)
-			.ToArray();
-
-		for (var i = 0; i < oHands.Length; i++)
-		{
-			var rank = i + 1;
-			answer1 += rank * oHands[i].Bid;
-			//Debug.Line($"{rank,5}: {oHands[i],-30} winning += {rank * oHands[i].Bid}");
-		}
+		var answer1 = hands
+			.OrderBy(x => x, new CamelHandComparer())
+			.Select((x, rank) => (rank + 1) * x.Bid)
+			.Sum();
 
 		// part2
-		long answer2 = 0;
-		var camelHandComparerWithJoker = new CamelHandComparerWithJoker();
-		oHands = hands
+		var answer2 = hands
 			.Select(x => new CamelHand(x.Hand, x.Bid, GetHandTypeWithJoker(x.Hand)))
-			.OrderBy(x => x, camelHandComparerWithJoker)
-			.ToArray();
-
-		for (var i = 0; i < oHands.Length; i++)
-		{
-			var rank = i + 1;
-			answer2 += rank * oHands[i].Bid;
-			Debug.Line($"{rank,5}: {oHands[i],-30} winning += {rank * oHands[i].Bid}");
-		}
+			.OrderBy(x => x, new CamelHandComparerWithJoker())
+			.Select((x, rank) => (rank + 1) * x.Bid)
+			.Sum();
 
 		return (answer1.ToString(), answer2.ToString());
 	}
@@ -149,22 +95,33 @@ public class CamelCards : PuzzleBase
 
 	static HandType GetHandTypeWithJoker(string hand)
 	{
-		var group = hand.GroupBy(x => x).ToArray();
+		var noJokerType = GetHandType(hand);
 
-		if (group.Length == 1)
+		// no joker - no problem
+		if (!hand.Contains('J'))
+			return noJokerType;
+
+		if (noJokerType == HandType.FiveOfAKind || noJokerType == HandType.FullHouse || noJokerType == HandType.FourOfAKind)
 			return HandType.FiveOfAKind;
-		else if (group.Length == 2 && group.Any(x => x.Count() == 4))
-			return HandType.FourOfAKind;
-		else if (group.Length == 2 && group.Any(x => x.Count() == 3))
-			return HandType.FullHouse;
-		else if (group.Length == 3 && group.Any(x => x.Count() == 3))
-			return HandType.ThreeOfAKind;
-		else if (group.Length == 3 && group.Any(x => x.Count() == 2))
-			return HandType.TwoPair;
-		else if (group.Length == 4)
+
+		if (noJokerType == HandType.HighCard)
 			return HandType.OnePair;
 
-		return HandType.HighCard;
+		if (noJokerType == HandType.OnePair)
+			return HandType.ThreeOfAKind;
+
+		if (noJokerType == HandType.TwoPair && hand.Count(x => x == 'J') == 2)
+			return HandType.FourOfAKind;
+
+		if (noJokerType == HandType.TwoPair)
+			return HandType.FullHouse;
+
+		if (noJokerType == HandType.FullHouse && hand.Count(x => x == 'J') == 3)
+			return HandType.FourOfAKind;
+
+		if (noJokerType == HandType.ThreeOfAKind && hand.Count(x => x == 'J') == 1)
+			return HandType.FourOfAKind;
+
+		return HandType.FourOfAKind;
 	}
 }
-
