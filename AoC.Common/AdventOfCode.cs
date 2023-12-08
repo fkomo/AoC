@@ -55,9 +55,10 @@ namespace Ujeby.AoC.Common
 			var stars = 0;
 			try
 			{
-				foreach (var puzzle in puzzlesToSolve)
+				for (var i = 0; i < puzzlesToSolve.Length; i++)
 				{
-					if (skipSolved)
+					var puzzle = puzzlesToSolve[i];
+					if (skipSolved && i != puzzlesToSolve.Length - 1)
 					{
 						// skip (sample) debugging of solved puzzles
 						if (puzzle.Answer.Part1 != null && puzzle.Answer.Part2 != null)

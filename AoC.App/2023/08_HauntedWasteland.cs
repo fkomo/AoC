@@ -1,11 +1,12 @@
+using System.Xml.Linq;
 using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2023_08;
 
-[AoCPuzzle(Year = 2023, Day = 08, Answer1 = "17621", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 08, Answer1 = "17621", Answer2 = "20685524831999", Skip = false)]
 public class HauntedWasteland : PuzzleBase
 {
-	Dictionary<char, int> _dir = new()
+	readonly Dictionary<char, int> _dir = new()
 	{
 		{ 'L', 0 },
 		{ 'R', 1 }
@@ -17,22 +18,39 @@ public class HauntedWasteland : PuzzleBase
 		var network = input.Skip(2).ToDictionary(x => x[..3], x => new string[] { x.Substring(7, 3), x.Substring(12, 3) });
 
 		// part1
-		var nodeId = "AAA";
 		long answer1 = 0;
-		for (var i = 0; i < instructions.Length; i++)
+		if (network.ContainsKey("AAA"))
 		{
-			nodeId = network[nodeId][_dir[instructions[i]]];
-			answer1++;
-			if (nodeId == "ZZZ")
-				break;
-
-			if (i == instructions.Length - 1)
-				i = -1;
+			string node = "AAA";
+			for (int i = 0; node != "ZZZ"; i = (i + 1) % instructions.Length, answer1++)
+				node = network[node][_dir[instructions[i]]];
 		}
 
 		// part2
-		string answer2 = null;
+		long answer2 = 1;
+		var nodes = network.Keys.Where(x => x.EndsWith("A")).ToArray();
+		foreach (var n in nodes)
+		{
+			var i = 0;
+			var node = n;
+			while (!node.EndsWith("Z"))
+				node = network[node][_dir[instructions[i++ % instructions.Length]]];
 
-		return (answer1.ToString(), answer2?.ToString());
+			answer2 = LeastCommonMultiple(answer2, i);
+		}
+
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	static long LeastCommonMultiple(long x, long y)
+	{
+		var max = System.Math.Max(x, y);
+		var min = System.Math.Min(x, y);
+
+		for (long i = 1; i <= min; i++)
+			if (max * i % min == 0)
+				return i * max;
+
+		return min;
 	}
 }
