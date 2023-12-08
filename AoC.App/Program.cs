@@ -19,7 +19,7 @@ namespace Ujeby.AoC.App
 
 			year = "2023";
 			//inputSuffix = "s";
-			//skipSolved = true;
+			skipSolved = true;
 
 			if (year == null)
 			{
