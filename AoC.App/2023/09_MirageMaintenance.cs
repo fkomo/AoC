@@ -20,7 +20,7 @@ public class MirageMaintenance : PuzzleBase
 			var diffs = new List<long[]>();
 
 			var dataset = datasets[d];
-			Debug.Line(string.Join(" ", dataset.Select(x => x.ToString())));
+			//Debug.Line(string.Join(" ", dataset.Select(x => x.ToString())));
 
 			diffs.Add(dataset);
 			while (dataset.Any(x => x != 0))
@@ -30,19 +30,19 @@ public class MirageMaintenance : PuzzleBase
 					newSet[i] = dataset[i + 1] - dataset[i];
 				diffs.Add(newSet);
 				dataset = newSet;
-				Debug.Line(string.Join(" ", dataset.Select(x => x.ToString())));
+				//Debug.Line(string.Join(" ", dataset.Select(x => x.ToString())));
 			}
 
 			long prediction = 0;
 			for (var i = diffs.Count - 2; i >= 0; i--)
 				prediction = diffs[i].Last() + prediction;
-			Debug.Line($"frwrd: {prediction}");
+			//Debug.Line($"frwrd: {prediction}");
 			answer1 += prediction;
 
 			prediction = 0;
 			for (var i = diffs.Count - 2; i >= 0; i--)
 				prediction = diffs[i][0] - prediction;
-			Debug.Line($"bckwrd: {prediction}");
+			//Debug.Line($"bckwrd: {prediction}");
 			answer2 += prediction;
 		}
 
