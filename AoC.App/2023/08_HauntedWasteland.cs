@@ -27,17 +27,18 @@ public class HauntedWasteland : PuzzleBase
 		}
 
 		// part2
-		long answer2 = 1;
-		var nodes = network.Keys.Where(x => x.EndsWith("A")).ToArray();
-		foreach (var n in nodes)
-		{
-			var i = 0;
-			var node = n;
-			while (!node.EndsWith("Z"))
-				node = network[node][_dir[instructions[i++ % instructions.Length]]];
+		var answer2 = network.Keys
+			.Where(x => x.EndsWith("A"))
+			.Select(n =>
+			{
+				var i = 0;
+				var node = n;
+				while (!node.EndsWith("Z"))
+					node = network[node][_dir[instructions[i++ % instructions.Length]]];
 
-			answer2 = Math.LeastCommonMultiple(answer2, i);
-		}
+				return (long)i;
+			})
+			.LeastCommonMultiple();
 
 		return (answer1.ToString(), answer2.ToString());
 	}
