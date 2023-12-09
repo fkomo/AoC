@@ -36,21 +36,9 @@ public class HauntedWasteland : PuzzleBase
 			while (!node.EndsWith("Z"))
 				node = network[node][_dir[instructions[i++ % instructions.Length]]];
 
-			answer2 = LeastCommonMultiple(answer2, i);
+			answer2 = Math.LeastCommonMultiple(answer2, i);
 		}
 
 		return (answer1.ToString(), answer2.ToString());
-	}
-
-	static long LeastCommonMultiple(long x, long y)
-	{
-		var max = System.Math.Max(x, y);
-		var min = System.Math.Min(x, y);
-
-		for (long i = 1; i <= min; i++)
-			if (max * i % min == 0)
-				return i * max;
-
-		return min;
 	}
 }
