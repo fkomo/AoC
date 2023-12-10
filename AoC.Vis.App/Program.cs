@@ -47,18 +47,18 @@ namespace Ujeby.AoC.Vis.App
 									new SpiralMemory(windowSize),
 								}
 							},
-							{
-								"2018",
-								Array.Empty<AoCRunnable>()
-							},
-							{
-								"2019",
-								Array.Empty<AoCRunnable>()
-							},
-							{
-								"2020",
-								Array.Empty<AoCRunnable>()
-							},
+							//{
+							//	"2018",
+							//	Array.Empty<AoCRunnable>()
+							//},
+							//{
+							//	"2019",
+							//	Array.Empty<AoCRunnable>()
+							//},
+							//{
+							//	"2020",
+							//	Array.Empty<AoCRunnable>()
+							//},
 							{
 								"2021",
 								new AoCRunnable[]
@@ -82,7 +82,10 @@ namespace Ujeby.AoC.Vis.App
 							},
 							{
 								"2023",
-								Array.Empty<AoCRunnable>()
+								new AoCRunnable[]
+								{
+									new HauntedWasteland(windowSize)
+								}
 							},
 						}
 					);
