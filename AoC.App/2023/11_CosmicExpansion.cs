@@ -11,22 +11,13 @@ public class CosmicExpansion : PuzzleBase
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var galaxies = new Dictionary<int, v2i[]>();
-		var emptyRows = new List<int>();
+		var galaxies = new Dictionary<int, v2i>();
 		for (var y = 0; y < input.Length; y++)
-		{
-			var empty = true;
 			for (var x = 0; x < input[y].Length; x++)
-			{
 				if (input[y][x] == '#')
-				{
-					galaxies.Add(galaxies.Count + 1, new v2i[] { new v2i(x, y), new v2i(x, y) });
-					empty = false;
-				}
-			}
-			if (empty)
-				emptyRows.Add(y);
-		}
+					galaxies.Add(galaxies.Count + 1, new v2i(x, y) );
+
+		var emptyRows = input.Select((x, i) => x.Any(c => c != '.') ? -1 : i).Where(x => x != -1).ToArray();
 
 		var emptyColumns = new List<int>();
 		for (var x = 0; x < input[0].Length; x++)
@@ -45,38 +36,32 @@ public class CosmicExpansion : PuzzleBase
 		}
 
 		Debug.Line($"{input[0].Length}x{input.Length}: {galaxies.Count} galaxies");
-		Debug.Line($"{emptyRows.Count} empty rows");
+		Debug.Line($"{emptyRows.Length} empty rows");
 		Debug.Line($"{emptyColumns.Count} empty columns");
 
-		var pairs = Ujeby.Alg.Combinatorics.Combinations(galaxies.Keys, 2);
+		var pairs = Ujeby.Alg.Combinatorics.Combinations(galaxies.Keys, 2)
+			.Select(x => x.ToArray())
+			.ToArray();
 		Debug.Line($"{pairs.Length} pairs");
 
 		// part1
-		var agedGalaxies = ExpandUniverse(galaxies, emptyRows.ToArray(), emptyColumns.ToArray());
-		var answer1 = pairs.Sum(x => v2i.ManhDistance(agedGalaxies[x.First()][_exp], agedGalaxies[x.Last()][_exp]));
+		//var agedGalaxies0 = galaxies.ToDictionary(x => x.Key,
+		//	x => x.Value[_origin] + new v2i(emptyColumns.Count(e => e < x.Value[_origin].X), emptyRows.Count(e => e < x.Value[_origin].Y)));
+		
+		var agedGalaxies = ExpandUniverse(galaxies, emptyRows, emptyColumns.ToArray());
+		var answer1 = pairs.Sum(x => v2i.ManhDistance(agedGalaxies[x[0]], agedGalaxies[x[1]]));
 
 		// part2
-		agedGalaxies = ExpandUniverse(galaxies, emptyRows.ToArray(), emptyColumns.ToArray(), 
+		agedGalaxies = ExpandUniverse(galaxies, emptyRows, emptyColumns.ToArray(), 
 			age: 1000000);
-		var answer2 = pairs.Sum(x => v2i.ManhDistance(agedGalaxies[x.First()][_exp], agedGalaxies[x.Last()][_exp]));
+		var answer2 = pairs.Sum(x => v2i.ManhDistance(agedGalaxies[x[0]], agedGalaxies[x[1]]));
 
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	private static Dictionary<int, v2i[]> ExpandUniverse(Dictionary<int, v2i[]> galaxies, int[] emptyRows, int[] emptyColumns, 
+	private static Dictionary<int, v2i> ExpandUniverse(Dictionary<int, v2i> galaxies, int[] emptyRows, int[] emptyColumns, 
 		int age = 2)
-	{
-		var aged = galaxies.ToDictionary(x => x.Key, x => x.Value.ToArray());
-
-		foreach (var row in emptyRows)
-			foreach (var g in aged.Keys)
-				if (aged[g][_origin].Y > row)
-					aged[g][_exp].Y += age - 1;
-		foreach (var column in emptyColumns)
-			foreach (var g in aged.Keys)
-				if (aged[g][_origin].X > column)
-					aged[g][_exp].X += age - 1;
-
-		return aged;
-	}
+		=> galaxies.ToDictionary(
+			x => x.Key,
+			x => x.Value + new v2i(emptyColumns.Count(e => e < x.Value.X), emptyRows.Count(e => e < x.Value.Y)) * (age - 1));
 }
