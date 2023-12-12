@@ -6,9 +6,6 @@ namespace Ujeby.AoC.App._2023_11;
 [AoCPuzzle(Year = 2023, Day = 11, Answer1 = "10494813", Answer2 = "840988812853", Skip = false)]
 public class CosmicExpansion : PuzzleBase
 {
-	const int _origin = 0;
-	const int _exp = 1;
-
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
 		var galaxies = new Dictionary<int, v2i>();
@@ -45,16 +42,13 @@ public class CosmicExpansion : PuzzleBase
 		Debug.Line($"{pairs.Length} pairs");
 
 		// part1
-		//var agedGalaxies0 = galaxies.ToDictionary(x => x.Key,
-		//	x => x.Value[_origin] + new v2i(emptyColumns.Count(e => e < x.Value[_origin].X), emptyRows.Count(e => e < x.Value[_origin].Y)));
-		
 		var agedGalaxies = ExpandUniverse(galaxies, emptyRows, emptyColumns.ToArray());
 		var answer1 = pairs.Sum(x => v2i.ManhDistance(agedGalaxies[x[0]], agedGalaxies[x[1]]));
 
 		// part2
-		agedGalaxies = ExpandUniverse(galaxies, emptyRows, emptyColumns.ToArray(), 
+		var evenMoreAgedGalaxies = ExpandUniverse(galaxies, emptyRows, emptyColumns.ToArray(), 
 			age: 1000000);
-		var answer2 = pairs.Sum(x => v2i.ManhDistance(agedGalaxies[x[0]], agedGalaxies[x[1]]));
+		var answer2 = pairs.Sum(x => v2i.ManhDistance(evenMoreAgedGalaxies[x[0]], evenMoreAgedGalaxies[x[1]]));
 
 		return (answer1.ToString(), answer2.ToString());
 	}
