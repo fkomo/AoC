@@ -38,7 +38,7 @@ public class HotSprings : PuzzleBase
 			string.Join('?', Enumerable.Repeat(record[..record.IndexOf(' ')], 5)),
 			string.Join(',', Enumerable.Repeat(record[(record.IndexOf(' ') + 1)..], 5)).ToNumArray());
 
-	static Dictionary<(int, int, int), long> _cache = new();
+	static readonly Dictionary<(int, int, int), long> _cache = new();
 
 	static long PossibleArrangements(int id, string mask, long[] dmgGroups, 
 		int maskIdx = 0, int dmgGrpIdx = 0)
