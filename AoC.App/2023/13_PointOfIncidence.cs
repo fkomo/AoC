@@ -1,10 +1,10 @@
 using Ujeby.AoC.Common;
-using Ujeby.Graphics.Entities;
 using Ujeby.Tools.ArrayExtensions;
+using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_13;
 
-[AoCPuzzle(Year = 2023, Day = 13, Answer1 = "36015", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 13, Answer1 = "36015", Answer2 = "35335", Skip = false)]
 public class PointOfIncidence : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -34,21 +34,55 @@ public class PointOfIncidence : PuzzleBase
 		}
 #endif
 		// part1
-		var mirrors = patterns
-			.Select(p => (Vertical: Mirror(p.Columns), Horizontal: Mirror(p.Rows)))
+		var reflections = patterns
+			.Select(p => new v2i(Reflection(p.Columns), Reflection(p.Rows)))
 			.ToArray();
-		var answer1 = mirrors.Sum(m => m.Vertical + 100* m.Horizontal);
+		var answer1 = reflections.Sum(m => m.X + 100 * m.Y);
 
 		// part2
-		string answer2 = null;
+		long answer2 = 0;
+		for (var i = 0; i < patterns.Length; i++)
+		{
+			var pattern = patterns[i];
+			var oldReflection = reflections[i];
 
-		return (answer1.ToString(), answer2?.ToString());
+			var newReflectionFound = false;
+			for (var y = 0; y < pattern.Rows.Length; y++)
+			{
+				for (var x = 0; x < pattern.Columns.Length; x++)
+				{
+					var newRows = pattern.Rows.ToArray();
+					var newColumns = pattern.Columns.ToArray();
+
+					// turn mirror at [x;y]
+					newRows[y] ^= (long)System.Math.Pow(2, pattern.Columns.Length - 1 - x);
+					newColumns[x] ^= (long)System.Math.Pow(2, pattern.Rows.Length - 1 - y);
+
+					var newReflection = new v2i(Reflection(newColumns, (int)oldReflection.X), Reflection(newRows, (int)oldReflection.Y));
+					if (newReflection != v2i.Zero)
+					{
+						answer2 += newReflection.X + newReflection.Y * 100;
+						newReflectionFound = true;
+						break;
+					}
+				}
+
+				if (newReflectionFound)
+					break;
+			}
+		}
+
+		return (answer1.ToString(), answer2.ToString());
 	}
 
-	static int Mirror(long[] pattern)
+	static int Reflection(long[] pattern, 
+		int skip = 0)
 	{
 		for (var m = 0; m < pattern.Length - 1; m++)
 		{
+			if (m + 1 == skip)
+				continue;
+
 			if (pattern[m] == pattern[m + 1])
 			{
 				var mirrored = true;
