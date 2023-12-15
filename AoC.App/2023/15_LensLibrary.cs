@@ -1,4 +1,3 @@
-using System.Reflection.Emit;
 using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2023_15;
