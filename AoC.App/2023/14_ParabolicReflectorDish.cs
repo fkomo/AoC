@@ -1,4 +1,5 @@
 using Ujeby.AoC.Common;
+using Ujeby.Tools.ArrayExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_14;
@@ -26,14 +27,10 @@ public class ParabolicReflectorDish : PuzzleBase
 			.ToArray();
 		Debug.Line($"{rocks.Length} rocks [#,O]");
 
-		var loads = new List<long>();
-		var loadsHash = new HashSet<long>();
-
-		var loopStart = -1;
-		var loopStartHashCount = 0;
-
-		var cycles = 200;
-		while (cycles-- > 0)
+		var maxCycles = 200;
+		var loads = new long[maxCycles];
+		var cycle = 0;
+		while (cycle < maxCycles)
 		{
 			// tilt north
 			var stack = Enumerable.Repeat((long)-1, dish.Length).ToArray();
@@ -83,26 +80,18 @@ public class ParabolicReflectorDish : PuzzleBase
 					rocks[i].Pos.X = --stack[rock.Pos.Y];
 			}
 
-			var northLoad = NorthLoad(rocks, input.Length);
-			loads.Add(northLoad);
-			if (!loadsHash.Add(northLoad))
-			{
-				Debug.Line($"#{loads.Count} northLoad: {northLoad} hashCount: {loadsHash.Count}");
-				if (loopStartHashCount != loadsHash.Count)
-				{
-					loopStartHashCount = loadsHash.Count;
-					loopStart = loads.Count - 1;
-				}
-			}
+			loads[cycle++] = NorthLoad(rocks, input.Length);
 		}
 
-		var loadsArray = loads.ToArray();
-		var loopLength = Array.IndexOf(loadsArray, loadsArray[loopStart], loopStart + 1) - loopStart;
-		var loop = loadsArray
-			.Skip(loopStart).Take(loopLength)
-			.ToArray();
+		long answer2 = 0;
+		if (loads.FindRepeatingPattern(out int patternStart, out int patternLength))
+		{
+			var loop = loads
+				.Skip(patternStart).Take(patternLength)
+				.ToArray();
 
-		var answer2 = loop[(1000000000 - loopStart) % loopLength - 1];
+			answer2 = loop[(1000000000 - patternStart) % patternLength - 1];
+		}
 
 		return (answer1.ToString(), answer2.ToString());
 	}
