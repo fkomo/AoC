@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_16;
 
-[AoCPuzzle(Year = 2023, Day = 16, Answer1 = "7046", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 16, Answer1 = "7046", Answer2 = "7313", Skip = false)]
 public class TheFloorWillBeLava : PuzzleBase
 {
 	static readonly char[] _mirrorTiles = new char[] { '/', '\\' };
@@ -40,49 +40,56 @@ public class TheFloorWillBeLava : PuzzleBase
 		var grid = input.Select(x => x.Select(y => y).ToArray()).ToArray();
 
 		// part1
-		var answer1 = Energize(grid);
+		var answer1 = Energize(grid, v2i.Zero, v2i.Right);
 
 		// part2
-		string answer2 = null;
+		var answer2 = long.MinValue;
+		for (var i = 0; i < grid.Length; i++)
+		{
+			answer2 = System.Math.Max(answer2, Energize(grid, new v2i(0, i), v2i.Right));
+			answer2 = System.Math.Max(answer2, Energize(grid, new v2i(grid.Length - 1, i), v2i.Left));
+			answer2 = System.Math.Max(answer2, Energize(grid, new v2i(i, 0), v2i.Up));
+			answer2 = System.Math.Max(answer2, Energize(grid, new v2i(i, grid.Length - 1), v2i.Down));
+		}
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
 	}
 
-	static long Energize(char[][] grid)
+	static long Energize(char[][] grid, v2i origin, v2i dir)
 	{
 		var energized = new HashSet<v2i>();
-		var energizedFrom = new HashSet<(v2i Position, v2i Direction)>();
+		var energizedMirror = new HashSet<(v2i, v2i)>();
 
-		var beams = new Queue<(v2i Position, v2i Dir)>();
-		beams.Enqueue((v2i.Zero, v2i.Right));
+		var beams = new Queue<(v2i beamPos, v2i beamDir)>();
+		beams.Enqueue((origin, dir));
 
 		while (beams.Count != 0)
 		{
-			var beam = beams.Dequeue();
-			while (beam.Position.X >= 0 && beam.Position.Y >= 0 && beam.Position.X < grid.Length && beam.Position.Y < grid.Length)
+			var (beamPos, beamDir) = beams.Dequeue();
+			while (beamPos.X >= 0 && beamPos.Y >= 0 && beamPos.X < grid.Length && beamPos.Y < grid.Length)
 			{
-				energized.Add(beam.Position);
+				energized.Add(beamPos);
 
-				var tile = grid[beam.Position.Y][(int)beam.Position.X];
+				var tile = grid[beamPos.Y][(int)beamPos.X];
 
 				// if this item is already energized with another beam from same direction
-				if (tile != '.' && !energizedFrom.Add((beam.Position, beam.Dir)))
+				if (tile != '.' && !energizedMirror.Add((beamPos, beamDir)))
 					break;
 
 				if (_mirrorTiles.Contains(tile))
-					beam.Dir = _mirror[(tile, beam.Dir)];
+					beamDir = _mirror[(tile, beamDir)];
 	
 				else if (_splitterTiles.Contains(tile))
 				{
-					var split = _splitter[(tile, beam.Dir)];
+					var split = _splitter[(tile, beamDir)];
 					if (split.Length == 2)
 					{
-						beams.Enqueue((beam.Position + split[1], split[1]));
-						beam.Dir = split[0];
+						beams.Enqueue((beamPos + split[1], split[1]));
+						beamDir = split[0];
 					}
 				}
 
-				beam.Position += beam.Dir;
+				beamPos += beamDir;
 			}
 		}
 
