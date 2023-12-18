@@ -84,7 +84,8 @@ namespace Ujeby.AoC.Vis.App
 								"2023",
 								new AoCRunnable[]
 								{
-									new HauntedWasteland(windowSize)
+									new HauntedWasteland(windowSize),
+									new LavaductLagoon(windowSize),
 								}
 							},
 						}

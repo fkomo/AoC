@@ -9,7 +9,9 @@ namespace Ujeby.AoC.Vis.App
 {
     internal class HauntedWasteland : AoCRunnable
 	{
-		public override string Name => $"#08 {nameof(HauntedWasteland)}";
+		AoC.App._2023_08.HauntedWasteland _puzzle = new();
+
+		public override string Name => $"#{_puzzle.Day:d2} {nameof(HauntedWasteland)}";
 
 		Graph _graph;
 
@@ -20,8 +22,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			var puzzle = new AoC.App._2023_08.HauntedWasteland();
-			var input = InputProvider.Read(AppSettings.InputDirectory, puzzle.Year, puzzle.Day);
+			var input = InputProvider.Read(AppSettings.InputDirectory, _puzzle.Year, _puzzle.Day);
 
 			_graph = new Graph();
 			_graph.SetData(input.Skip(2)
