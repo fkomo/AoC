@@ -12,9 +12,10 @@ public class ClumsyCrucible : PuzzleBase
 		var grid = input.Select(y => y.Select(x => x - '0').ToArray()).ToArray();
 
 		// part1
-		var answer1 = MinHeathLoss(grid, new v2i[] { v2i.Zero }, Array.Empty<int>(),
-			minHeatLoss: 2 * input.Length * 9
-			);
+		var answer1 = 0;
+		//var answer1 = MinHeathLoss(grid, new v2i[] { v2i.Zero }, Array.Empty<int>(),
+		//	minHeatLoss: 2 * input.Length * 9
+		//	);
 
 		// part2
 		string answer2 = null;

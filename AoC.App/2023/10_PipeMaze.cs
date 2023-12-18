@@ -1,4 +1,5 @@
 ﻿using Ujeby.AoC.Common;
+using Ujeby.Grid;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_10;
@@ -90,28 +91,9 @@ public class PipeMaze : PuzzleBase
 
 				var left = nextStep.Sides.Contains(s);
 
-				FloodFill(map, dest, left ? _inOutTiles[0] : _inOutTiles[1]);
+				CharMap.FloodFill(map, dest, left ? _inOutTiles[0] : _inOutTiles[1]);
 			}
 		}
-	}
-
-	/// <summary>
-	/// fill empty space with specified tile
-	/// </summary>
-	/// <param name="map"></param>
-	/// <param name="start"></param>
-	/// <param name="tile"></param>
-	static void FloodFill(char[][] map, v2i start, char tile)
-	{
-		if (start.X < 0 || start.Y < 0 || start.X == map[0].Length || start.Y == map.Length)
-			return;
-
-		if (map[start.Y][(int)start.X] == tile || map[start.Y][(int)start.X] != '.')
-			return;
-
-		map[start.Y][(int)start.X] = tile;
-		foreach (var near in _cornersAndSides)
-			FloodFill(map, start + near, tile);
 	}
 
 	/// <summary>
