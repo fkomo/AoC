@@ -7,7 +7,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-    internal class HauntedWasteland : AoCRunnable
+	internal class HauntedWasteland : AoCRunnable
 	{
 		AoC.App._2023_08.HauntedWasteland _puzzle = new();
 
@@ -46,7 +46,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			Grid.Draw(true, false, false);
 
-			_graph.RenderGraph(Grid);
+			_graph.RenderGraph(Grid, new v2i(32, 32));
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.FullRowColumn);
 

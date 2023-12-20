@@ -23,9 +23,58 @@ public class Aplenty : PuzzleBase
 	const string Accepted = "A";
 	const string Rejected = "R";
 
-	record class Rule(string Result, int Prop = -1, char Cmp = '=', long Value = -1);
+	public class Rule
+	{
+		public Rule(string result, int prop = -1, char cmp = '=', long value = -1)
+		{
+			Result = result;
+			Prop = prop;
+			Cmp = cmp;
+			Value = value;
+		}
+
+		public string Result { get; set; }
+		public int Prop { get; set; } = -1;
+		public char Cmp { get; set; } = '=';
+		public long Value { get; set; } = -1;
+	}
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
+	{
+		var workflows = CreateWorkflows(input);
+
+		var ratings = input
+			.Skip(Array.IndexOf(input, string.Empty) + 1)
+			.Select(x => new v4i(x.ToNumArray()))
+			.ToArray();
+		Debug.Line($"{ratings.Length} ratings");
+
+		// part1
+		var answer1 = ratings
+			.Where(x => IsAccepted(x, workflows))
+			.Sum(x => x.X + x.Y + x.Z + x.W);
+
+		// part2
+		long answer2 = 0;
+
+		var wf2 = OptimizeWorkflows(workflows);
+
+		var rating = new v4i(1);
+		for (var x = 1; x <= 4000; x++)
+		{
+			rating[_x] = x;
+			for (var m = 1; m <= 4000; m++)
+			{
+				rating[_m] = m;
+				if (IsAccepted(rating, workflows))
+					answer2++;
+			}
+		}
+
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	public static Dictionary<string, Rule[]> CreateWorkflows(string[] input)
 	{
 		var workflows = input
 			.Take(Array.IndexOf(input, string.Empty))
@@ -43,21 +92,56 @@ public class Aplenty : PuzzleBase
 					.ToArray());
 		Debug.Line($"{workflows.Count} workflows");
 
-		var ratings = input
-			.Skip(Array.IndexOf(input, string.Empty) + 1)
-			.Select(x => new v4i(x.ToNumArray()))
-			.ToArray();
-		Debug.Line($"{ratings.Length} ratings");
+		return workflows;
+	}
 
-		// part1
-		var answer1 = ratings
-			.Where(x => IsAccepted(x, workflows))
-			.Sum(x => x.X + x.Y + x.Z + x.W);
+	public static Dictionary<string, Rule[]> OptimizeWorkflows(Dictionary<string, Rule[]> workflows)
+	{
+		var wf = workflows.ToDictionary(x => x.Key, x => x.Value.ToArray());
 
-		// part2
-		string answer2 = null;
+		var finished = false;
+		while (!finished)
+		{
+			finished = true;
+			foreach (var key in wf.Keys)
+			{
+				// combine multiple results into 1 (if they are all the same)
+				var result = wf[key][0].Result;
+				if (wf[key].All(x => x.Result == result))
+				{
+					wf[key] = new Rule[] { new Rule(result) };
 
-		return (answer1.ToString(), answer2?.ToString());
+					Debug.Line($"{key}: combine rules to {result}");
+					finished = false;
+				}
+
+				if (wf[key].Length == 1 && wf[key][0].Cmp == '=')
+				{
+					var keyResult = wf[key][0].Result;
+					foreach (var key2 in wf.Keys)
+					{
+						if (wf[key2].Any(r => r.Result == key))
+						{
+							for (var i = 0; i < wf[key2].Length; i++)
+								if (wf[key2][i].Result == key)
+								{
+									Debug.Line($"{key2}: update {wf[key2][i].Result} -> {keyResult}");
+									wf[key2][i].Result = keyResult;
+									finished = false;
+								}
+						}
+					}
+
+					Debug.Line($"{key}: remove");
+					wf.Remove(key);
+					finished = false;
+					break;
+				}
+			}
+		}
+
+		Debug.Line($"{wf.Count} optimized workflows!");
+		return wf;
 	}
 
 	static bool IsAccepted(v4i rating, Dictionary<string, Rule[]> workflows)

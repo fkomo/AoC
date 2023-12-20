@@ -86,6 +86,7 @@ namespace Ujeby.AoC.Vis.App
 								{
 									new HauntedWasteland(windowSize),
 									new LavaductLagoon(windowSize),
+									new Aplenty(windowSize),
 								}
 							},
 						}
