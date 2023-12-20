@@ -104,14 +104,9 @@ public class PulsePropagation : PuzzleBase
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var modules = input.ToDictionary(
-			x => x[0] == 'b' ? _broadcaster : x[1..x.IndexOf(' ')],
-			x => Module.Create(x));
-		Debug.Line($"{modules.Count} modules");
-		
-		FixConunctionInput(modules);
-
 		// part1
+		var modules = CreateModules(input);
+
 		var pulses = new v2i(0);
 		var pulseQueue = new Queue<Pulse>();
 		for (var i = 0; i < 1000; i++)
@@ -121,7 +116,7 @@ public class PulsePropagation : PuzzleBase
 			{
 				var pulse = pulseQueue.Dequeue();
 #if DEBUG
-				Debug.Line(pulse.ToString());
+				//Debug.Line(pulse.ToString());
 #endif
 				if (pulse.High)
 					pulses[_high]++;
@@ -141,9 +136,60 @@ public class PulsePropagation : PuzzleBase
 		var answer1 = pulses.Area();
 
 		// part2
-		string answer2 = null;
+		modules = CreateModules(input);
+
+		long? answer2 = null;
+		// TODO 2023/20 p2
 
 		return (answer1.ToString(), answer2?.ToString());
+	}
+
+	static long FewestNumOfPressesToRx(Dictionary<string, Module> modules)
+	{
+		var buttonPresses = 0;
+
+		var lowRx = false;
+		var pulseQueue = new Queue<Pulse>();
+		while (!lowRx)
+		{
+			pulseQueue.Enqueue(new Pulse("button", _broadcaster, false));
+			buttonPresses++;
+
+			while (pulseQueue.Count > 0)
+			{
+				var pulse = pulseQueue.Dequeue();
+
+				// output fix
+				if (pulse.To == "rx")
+				{
+					if (!pulse.High)
+					{
+						lowRx = true;
+						break;
+					}
+
+					continue;
+				}
+
+				var newImp = modules[pulse.To].Process(modules, pulse.High, pulse.From);
+				foreach (var ii in newImp)
+					pulseQueue.Enqueue(ii);
+			}
+		}
+
+		return buttonPresses;
+	}
+
+	static Dictionary<string, Module> CreateModules(string[] input)
+	{
+		var modules = input.ToDictionary(
+			x => x[0] == 'b' ? _broadcaster : x[1..x.IndexOf(' ')],
+			x => Module.Create(x));
+		Debug.Line($"{modules.Count} modules");
+
+		FixConunctionInput(modules);
+
+		return modules;
 	}
 
 	static void FixConunctionInput(Dictionary<string, Module> modules)
@@ -156,6 +202,7 @@ public class PulsePropagation : PuzzleBase
 				.ToArray();
 
 			(con.Value as Conjuncton).SetInputs(inputs);
+			Debug.Line($"conj {con.Key}: {inputs.Length} inputs");
 		}
 	}
 }

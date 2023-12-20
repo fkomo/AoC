@@ -55,12 +55,12 @@ public class Aplenty : PuzzleBase
 			.Sum(x => x.X + x.Y + x.Z + x.W);
 
 		// part2
-		long answer2 = 0;
 		var wf2 = OptimizeWorkflows(workflows);
 
+		long? answer2 = null;
 		// TODO 2023/19 p2
 
-		return (answer1.ToString(), answer2.ToString());
+		return (answer1.ToString(), answer2?.ToString());
 	}
 
 	public static Dictionary<string, Rule[]> CreateWorkflows(string[] input)

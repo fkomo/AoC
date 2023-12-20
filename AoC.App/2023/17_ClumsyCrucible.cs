@@ -12,7 +12,7 @@ public class ClumsyCrucible : PuzzleBase
 		var grid = input.Select(y => y.Select(x => x - '0').ToArray()).ToArray();
 
 		// part1
-		var answer1 = 0;
+		long? answer1 = null;
 		// TODO 2023/17 p1
 
 		//var answer1 = MinHeathLoss(grid, new v2i[] { v2i.Zero }, Array.Empty<int>(),
@@ -20,10 +20,10 @@ public class ClumsyCrucible : PuzzleBase
 		//	);
 
 		// part2
-		string answer2 = null;
+		long? answer2 = null;
 		// TODO 2023/17 p2
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1?.ToString(), answer2?.ToString());
 	}
 
 	static readonly Dictionary<(v2i Pos, int IncomingDir), long> _cache = new();
@@ -104,7 +104,7 @@ public class ClumsyCrucible : PuzzleBase
 			for (var x = 0; x < grid[y].Length; x++)
 			{
 				if (path.Contains(new v2i(x, y)))
-					sb.Append("█");
+					sb.Append('█');
 				else
 					sb.Append(grid[y][x]);
 			}
