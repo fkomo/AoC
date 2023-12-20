@@ -56,20 +56,9 @@ public class Aplenty : PuzzleBase
 
 		// part2
 		long answer2 = 0;
-
 		var wf2 = OptimizeWorkflows(workflows);
 
-		var rating = new v4i(1);
-		for (var x = 1; x <= 4000; x++)
-		{
-			rating[_x] = x;
-			for (var m = 1; m <= 4000; m++)
-			{
-				rating[_m] = m;
-				if (IsAccepted(rating, workflows))
-					answer2++;
-			}
-		}
+		// TODO 2023/19 p2
 
 		return (answer1.ToString(), answer2.ToString());
 	}

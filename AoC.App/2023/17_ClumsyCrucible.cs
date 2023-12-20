@@ -13,12 +13,15 @@ public class ClumsyCrucible : PuzzleBase
 
 		// part1
 		var answer1 = 0;
+		// TODO 2023/17 p1
+
 		//var answer1 = MinHeathLoss(grid, new v2i[] { v2i.Zero }, Array.Empty<int>(),
 		//	minHeatLoss: 2 * input.Length * 9
 		//	);
 
 		// part2
 		string answer2 = null;
+		// TODO 2023/17 p2
 
 		return (answer1.ToString(), answer2?.ToString());
 	}
