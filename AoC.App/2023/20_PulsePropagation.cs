@@ -10,13 +10,13 @@ public class PulsePropagation : PuzzleBase
 	const int _low = 0;
 	const int _high = 1;
 
-	record class Pulse(string From, string To, bool High)
+	public record class Pulse(string From, string To, bool High)
 	{
 		public override string ToString()
 			=> $"{From} -{(High ? "high" : "low")}> {To}";
 	}
 
-	class Module
+	public class Module
 	{
 		public string Name { get; private set; }
 		public string[] Output { get; set; }
@@ -45,7 +45,15 @@ public class PulsePropagation : PuzzleBase
 		}
 	}
 
-	class FlipFlop : Module
+	public class Output : Module
+	{
+		public Output(string name) : base(name, Array.Empty<string>())
+		{
+
+		}
+	}
+
+	public class FlipFlop : Module
 	{
 		public bool State { get; set; }
 
@@ -64,7 +72,7 @@ public class PulsePropagation : PuzzleBase
 		}
 	}
 
-	class Conjuncton : Module
+	public class Conjuncton : Module
 	{
 		public Dictionary<string, bool> Input { get; set; }
 
@@ -89,7 +97,7 @@ public class PulsePropagation : PuzzleBase
 		}
 	}
 
-	class Broadcaster : FlipFlop
+	public class Broadcaster : FlipFlop
 	{
 		public Broadcaster(string[] output) : base(_broadcaster, output)
 		{
@@ -144,43 +152,7 @@ public class PulsePropagation : PuzzleBase
 		return (answer1.ToString(), answer2?.ToString());
 	}
 
-	static long FewestNumOfPressesToRx(Dictionary<string, Module> modules)
-	{
-		var buttonPresses = 0;
-
-		var lowRx = false;
-		var pulseQueue = new Queue<Pulse>();
-		while (!lowRx)
-		{
-			pulseQueue.Enqueue(new Pulse("button", _broadcaster, false));
-			buttonPresses++;
-
-			while (pulseQueue.Count > 0)
-			{
-				var pulse = pulseQueue.Dequeue();
-
-				// output fix
-				if (pulse.To == "rx")
-				{
-					if (!pulse.High)
-					{
-						lowRx = true;
-						break;
-					}
-
-					continue;
-				}
-
-				var newImp = modules[pulse.To].Process(modules, pulse.High, pulse.From);
-				foreach (var ii in newImp)
-					pulseQueue.Enqueue(ii);
-			}
-		}
-
-		return buttonPresses;
-	}
-
-	static Dictionary<string, Module> CreateModules(string[] input)
+	public static Dictionary<string, Module> CreateModules(string[] input)
 	{
 		var modules = input.ToDictionary(
 			x => x[0] == 'b' ? _broadcaster : x[1..x.IndexOf(' ')],
@@ -189,6 +161,11 @@ public class PulsePropagation : PuzzleBase
 
 		FixConunctionInput(modules);
 
+#if DEBUG
+		modules.Add("output", new Output("output"));
+#else
+		modules.Add("rx", new Output("rx"));
+#endif
 		return modules;
 	}
 

@@ -1,4 +1,5 @@
-﻿using Ujeby.Graphics;
+﻿using System.Drawing;
+using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
@@ -22,7 +23,8 @@ namespace Ujeby.AoC.Vis.App.Common
 
 	public class Graph
 	{
-		const int _pickZone = 5;
+		public int PickZone { get; set; } = 5;
+
 		string _selected = null;
 		bool _moving = false;
 
@@ -80,7 +82,7 @@ namespace Ujeby.AoC.Vis.App.Common
 				var p = node.Meta.Position;
 				var fill = Colors.Yellow;
 				fill.W = .2;
-				grid.DrawRect((int)p.X - _pickZone, (int)p.Y - _pickZone, _pickZone * 2 + 1, _pickZone * 2 + 1, Colors.Red, fill);
+				grid.DrawRect((int)p.X - PickZone, (int)p.Y - PickZone, PickZone * 2 + 1, PickZone * 2 + 1, Colors.Red, fill);
 
 				if (uiTopLeft.HasValue)
 				{
@@ -110,7 +112,7 @@ namespace Ujeby.AoC.Vis.App.Common
 					.FirstOrDefault(x =>
 					{
 						var dist = (x.Value.Meta.Position - p).Abs();
-						return dist.X <= _pickZone && dist.Y <= _pickZone;
+						return dist.X <= PickZone && dist.Y <= PickZone;
 					})
 					.Key;
 			}
