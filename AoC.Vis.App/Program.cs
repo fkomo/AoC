@@ -88,6 +88,7 @@ namespace Ujeby.AoC.Vis.App
 									new LavaductLagoon(windowSize),
 									new Aplenty(windowSize),
 									new PulsePropagation(windowSize),
+									new StepCounter(windowSize)
 								}
 							},
 						}

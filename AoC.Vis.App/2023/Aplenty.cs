@@ -53,7 +53,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			Grid.Draw(true, false, false);
 
-			_graph.RenderGraph(Grid, new v2i(32, 64));
+			_graph.Render(Grid, new v2i(32, 64));
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
 

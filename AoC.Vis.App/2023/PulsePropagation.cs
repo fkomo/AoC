@@ -8,7 +8,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
 {
-	internal class PulsePropagation : AoCRunnable
+    internal class PulsePropagation : AoCRunnable
 	{
 		AoC.App._2023_20.PulsePropagation _puzzle = new();
 
@@ -49,7 +49,7 @@ namespace Ujeby.AoC.Vis.App
 		{
 			Grid.Draw(true, false, false);
 
-			_graph.RenderGraph(Grid, new v2i(32, 64));
+			_graph.Render(Grid, new v2i(32, 64));
 
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"{_modules.Count} modules"));

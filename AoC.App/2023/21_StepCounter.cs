@@ -37,34 +37,21 @@ public class StepCounter : PuzzleBase
 
 		// part2
 		long? answer2 = null;
-		// TODO 2023/21 p2
 
+		// TODO 2023/21 p2
 		//plots0 = new HashSet<v2i>() { start };
-		//plots1 = new HashSet<v2i>();
-		//for (var i = 0; i <= 26501365; i++)
+		//for (var i = 0; i <= 1000; i++)
 		//{
-		//	plots1.Clear();
-		//	foreach (var p0 in plots0)
-		//	{
-		//		foreach (var dir in v2i.UpDownLeftRight)
-		//		{
-		//			var p1 = p0 + dir;
-		//			var x = System.Math.Abs(System.Math.Min(p1.X, p1.Y) / input.Length) + 1;
-		//			var pMod = (p0 + dir + (new v2i(input.Length) * x)) % new v2i(input.Length);
-		//			if (input[pMod.Y][(int)pMod.X] == '#')
-		//				continue;
-		//			plots1.Add(p1);
-		//		}
-		//	}
-		//	Log.Line($"#{i,10}: {plots1.Count}");
-		//	(plots1, plots0) = (plots0, plots1);
+		//	var tmpPlots = Step(plots0, input);
+		//	Debug.Line($"{i+1},{tmpPlots.Count},{tmpPlots.Count - plots0.Count}");
+
+		//	plots0 = tmpPlots;
 		//}
-		//answer2 = plots1.Count;
 
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	static v2i GetStart(string[] input)
+	public static v2i GetStart(string[] input)
 	{
 		for (var y = 0; y < input.Length; y++)
 			for (var x = 0; x < input.Length; x++)
@@ -72,5 +59,26 @@ public class StepCounter : PuzzleBase
 					return new v2i(x, y);
 
 		return v2i.Zero;
+	}
+
+	public static HashSet<v2i> Step(HashSet<v2i> plots0, string[] input)
+	{
+		var plots1 = new HashSet<v2i>();
+
+		foreach (var p0 in plots0)
+		{
+			foreach (var dir in v2i.UpDownLeftRight)
+			{
+				var p1 = p0 + dir;
+				var x = System.Math.Abs(System.Math.Min(p1.X, p1.Y) / input.Length) + 1;
+				var pMod = (p0 + dir + (new v2i(input.Length) * x)) % new v2i(input.Length);
+				if (input[pMod.Y][(int)pMod.X] == '#')
+					continue;
+
+				plots1.Add(p1);
+			}
+		}
+
+		return plots1;
 	}
 }
