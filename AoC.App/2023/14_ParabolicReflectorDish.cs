@@ -27,10 +27,9 @@ public class ParabolicReflectorDish : PuzzleBase
 			.ToArray();
 		Debug.Line($"{rocks.Length} rocks [#,O]");
 
-		var maxCycles = 200;
-		var loads = new long[maxCycles];
-		var cycle = 0;
-		while (cycle < maxCycles)
+		var loads = new List<long>();
+		var sw = System.Diagnostics.Stopwatch.StartNew();
+		while (sw.ElapsedMilliseconds < 200) // 200ms should make enough cycles to find repeating pattern
 		{
 			// tilt north
 			var stack = Enumerable.Repeat((long)-1, dish.Length).ToArray();
@@ -80,13 +79,15 @@ public class ParabolicReflectorDish : PuzzleBase
 					rocks[i].Pos.X = --stack[rock.Pos.Y];
 			}
 
-			loads[cycle++] = NorthLoad(rocks, input.Length);
+			loads.Add(NorthLoad(rocks, input.Length));
 		}
+		sw.Stop();
 
 		long answer2 = 0;
-		if (loads.FindRepeatingPattern(out int patternStart, out int patternLength))
+		var loadsArray = loads.ToArray();
+		if (loadsArray.FindRepeatingPattern(out int patternStart, out int patternLength))
 		{
-			var loop = loads
+			var loop = loadsArray
 				.Skip(patternStart).Take(patternLength)
 				.ToArray();
 

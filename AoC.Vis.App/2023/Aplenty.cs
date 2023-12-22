@@ -46,7 +46,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			_graph.Update(Grid);
+			_graph.Update(Grid, MousePosition);
 		}
 
 		protected override void Render()
@@ -70,12 +70,12 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseDown()
 		{
-			_graph.LeftMouseDown();
+			_graph.LeftMouseDown(Grid, MousePosition);
 		}
 
 		protected override void LeftMouseUp()
 		{
-			_graph.LeftMouseUp();
+			_graph.LeftMouseUp(Grid, MousePosition);
 		}
 	}
 }
