@@ -4,76 +4,85 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_22;
 
-[AoCPuzzle(Year = 2023, Day = 22, Answer1 = "499", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 22, Answer1 = "499", Answer2 = "95059", Skip = false)]
 public class SandSlabs : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var slabs = input
+		var bricks = input
 			.Select(x => x.ToNumArray())
 			.Select(x => new AABox3i(new v3i[] { new v3i(x.Take(3).ToArray()), new v3i(x.Skip(3).ToArray()) }))
 			.ToArray();
-		Debug.Line($"{slabs.Length} slabs");
+		Debug.Line($"{bricks.Length} bricks");
+
+		bricks = bricks.OrderBy(x => x.Min.Z).ToArray();
+		var groundSize =
+			new v2i(bricks.Max(x => x.Max.X), bricks.Max(x => x.Max.Y)) -
+			new v2i(bricks.Min(x => x.Min.X), bricks.Min(x => x.Min.Y)) + new v2i(1);
 
 		// part1
-		slabs = slabs.OrderBy(x => x.Min.Z).ToArray();
-		var min = new v2i(slabs.Min(x => x.Min.X), slabs.Min(x => x.Min.Y));
-		var max = new v2i(slabs.Max(x => x.Max.X), slabs.Max(x => x.Max.Y));
-		var xySize = max - min + new v2i(1);
-		Debug.Line($"snapshot size: {min}..{max} => {xySize}");
+		bricks = DropBricks(bricks, groundSize, out _);
 
-		// drop slabs
-		var ground = new long[xySize.Y, xySize.X];
-		for (var s = 0; s < slabs.Length; s++)
-		{
-			var slab = slabs[s];
-			var drop = long.MinValue;
-			for (var y = slab.Min.Y; y <= slab.Max.Y; y++)
-				for (var x = slab.Min.X; x <= slab.Max.X; x++)
-				{
-					if (ground[y, x] > drop)
-						drop = ground[y, x];
-				}
-
-			drop = drop + 1 - slab.Min.Z;
-			slabs[s].Min.Z += drop;
-			slabs[s].Max.Z += drop;
-
-			for (var y = slab.Min.Y; y <= slab.Max.Y; y++)
-				for (var x = slab.Min.X; x <= slab.Max.X; x++)
-					ground[y, x] = slabs[s].Max.Z;
-		}
-
-		var bottomStack = slabs
+		var bottomStack = bricks
 			.GroupBy(x => x.Min.Z)
 			.ToDictionary(x => x.Key, x => x.ToArray());
 
-		var topStack = slabs
+		var topStack = bricks
 			.GroupBy(x => x.Max.Z)
 			.ToDictionary(x => x.Key, x => x.ToArray());
 
-		var answer1 = slabs.Count(s =>
-			// no slabs above
+		var answer1 = bricks.Count(s =>
+			// no bricks above
 			!bottomStack.ContainsKey(s.Max.Z + 1) ||
-			// there are some slabs above but not directly
-			bottomStack[s.Max.Z + 1].All(bs => !XYIntersection(s, bs)) || 
-			// there are some slabs directly above, but also there are other slabs supporting them
+			// there are some bricks above but not directly
+			bottomStack[s.Max.Z + 1].All(bs => !XYIntersection(s, bs)) ||
+			// there are some bricks directly above, but also there are other bricks supporting them
 			bottomStack[s.Max.Z + 1].All(bs => topStack[s.Max.Z].Except(new AABox3i[] { s }).Any(ts => XYIntersection(bs, ts))));
 
 		// part2
-		string answer2 = null;
+		var answer2 = bricks.Sum(s => DroppedBricks(bricks.Where(x => x != s).ToArray(), groundSize));
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	static int DroppedBricks(AABox3i[] bricks, v2i groundSize)
+	{
+		DropBricks(bricks, groundSize, out int dropped);
+		return dropped;
+	}
+
+	static AABox3i[] DropBricks(AABox3i[] bricks, v2i groundSize, out int dropped)
+	{
+		dropped = 0;
+
+		var bottom = new long[groundSize.Y, groundSize.X];
+		for (var s = 0; s < bricks.Length; s++)
+		{
+			var brick = bricks[s];
+			var drop = long.MinValue;
+			for (var y = brick.Min.Y; y <= brick.Max.Y; y++)
+				for (var x = brick.Min.X; x <= brick.Max.X; x++)
+				{
+					if (bottom[y, x] > drop)
+						drop = bottom[y, x];
+				}
+
+			drop = drop + 1 - brick.Min.Z;
+			if (drop != 0)
+			{
+				dropped++;
+				bricks[s].Min.Z += drop;
+				bricks[s].Max.Z += drop;
+			}
+
+			for (var y = brick.Min.Y; y <= brick.Max.Y; y++)
+				for (var x = brick.Min.X; x <= brick.Max.X; x++)
+					bottom[y, x] = bricks[s].Max.Z;
+		}
+
+		return bricks;
 	}
 
 	static bool XYIntersection(AABox3i aab1, AABox3i aab2)
-	{
-		if (aab1.Max.X < aab2.Min.X || aab1.Min.X > aab2.Max.X)
-			return false;
-
-		if (aab1.Max.Y < aab2.Min.Y || aab1.Min.Y > aab2.Max.Y)
-			return false;
-
-		return true;
-	}
+		=> !(aab1.Max.X < aab2.Min.X || aab1.Min.X > aab2.Max.X || aab1.Max.Y < aab2.Min.Y || aab1.Min.Y > aab2.Max.Y);
 }
