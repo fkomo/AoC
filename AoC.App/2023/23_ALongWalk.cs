@@ -17,28 +17,29 @@ public class ALongWalk : PuzzleBase
 		Debug.Line($"map size: {input.Length}x{input.Length}");
 
 		// part1
-		var allPaths = AllPaths(input);
-		Debug.Line($"{allPaths.Length} possible paths");
-		var answer1 = allPaths.Max(x => x.Length) - 1;
+		var answer1 = LongestHike(input);
 
 		// part2
-		string answer2 = null;
+		var answer2 = LongestHike(input, ignoreSlopes: true);
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
 	}
 
-	public static v2i[][] AllPaths(string[] map)
+	public static long LongestHike(string[] map, 
+		bool ignoreSlopes = false, List<v2i[]> allPaths = null)
 	{
 		var start = new v2i(1, 0);
 		var end = new v2i(map.Length - 2, map.Length - 1);
 
-		var allPaths = new List<v2i[]>();
+		var longest = long.MinValue;
 
 		var paths = new Queue<(v2i[] Path, v2i NextDir)>();
 		paths.Enqueue((new v2i[] { new v2i(1, 0) }, v2i.Up));
 		while (paths.Count > 0)
 		{
 			var pq = paths.Dequeue();
+			Debug.Line($"{paths.Count} remaining ...");
+
 			var steps = new List<v2i>(pq.Path);
 			v2i? dir = pq.NextDir;
 
@@ -59,9 +60,18 @@ public class ALongWalk : PuzzleBase
 						if (t == '#')
 							return false;
 
-						// cant go against slope
-						if (_slopes.ContainsKey(t) && d != _slopes[t])
-							return false;
+						if (ignoreSlopes)
+						{
+							// cant step on same tile twice
+							if (steps.Contains(n))
+								return false;
+						}
+						else
+						{
+							// cant go against slope
+							if (_slopes.ContainsKey(t) && d != _slopes[t])
+								return false;
+						}
 
 						// cant go back
 						if (d * -1 == dir.Value)
@@ -77,13 +87,17 @@ public class ALongWalk : PuzzleBase
 					break;
 
 				dir = nextSteps[0];
-				if (nextSteps.Length == 1 && last + dir == end)
+				if (nextSteps.Length == 1 && last + dir.Value == end)
 				{
 					steps.Add(last + dir.Value);
-					allPaths.Add(steps.ToArray());
+					allPaths?.Add(steps.ToArray());
 
 					var totalSteps = steps.Count - 1; // ignore start
-					Debug.Line($"end after {totalSteps}");
+					Log.Line($"{totalSteps}");
+
+					if (totalSteps > longest)
+						longest = totalSteps;
+
 					break;
 				}
 				else
@@ -95,6 +109,6 @@ public class ALongWalk : PuzzleBase
 			}
 		}
 
-		return allPaths.ToArray();
+		return longest;
 	}
 }

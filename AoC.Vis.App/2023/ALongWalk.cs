@@ -18,17 +18,16 @@ namespace Ujeby.AoC.Vis.App
 		private string[] _input;
 		int _currentPath = 0;
 		v2i[][] _allPaths;
-		int _pathStep = 0;
 
 		readonly Stopwatch _sw = Stopwatch.StartNew();
-		const int _frameStep = 2;
+		const int _frameStep = 1;
 
-		Dictionary<char, v4f> _colors = new()
+		readonly Dictionary<char, v4f> _colors = new()
 		{
 			{ '.', new v4f(0) },
 			{ '#', new v4f(1, 1, 1, .2) },
-			{ '>', new v4f(0, 1, 0, .2) },
-			{ 'v', new v4f(0, 0, 1, .2) },
+			{ '>', new v4f(1, 1, 1, 1) },
+			{ 'v', new v4f(1, 1, 1, 1) },
 		};
 
 		protected Gui _gui = new();
@@ -41,7 +40,13 @@ namespace Ujeby.AoC.Vis.App
 		protected override void Init()
 		{
 			_input = InputProvider.Read(AppSettings.InputDirectory, _puzzle.Year, _puzzle.Day);//, ".sample");
-			_allPaths = AoC.App._2023_23.ALongWalk.AllPaths(_input);
+
+			var allPaths = new List<v2i[]>();
+			AoC.App._2023_23.ALongWalk.LongestHike(_input, false, allPaths);
+			_allPaths = allPaths.ToArray();
+
+			Grid.MinorSize = 5;
+			Grid.MoveCenter(new v2i(_input.Length, _input.Length) / 2 * Grid.MinorSize);
 
 			// TODO select path to draw from gui list
 		}
@@ -49,12 +54,6 @@ namespace Ujeby.AoC.Vis.App
 		protected override void Update()
 		{
 			_gui.Update(MousePosition);
-
-			if (_sw.ElapsedMilliseconds >= _frameStep && _pathStep < _allPaths[_currentPath].Length)
-			{
-				_pathStep++;
-				_sw.Restart();
-			}
 		}
 
 		protected override void Render()
@@ -66,30 +65,17 @@ namespace Ujeby.AoC.Vis.App
 					Grid.DrawCell(new v2i(x, y), fill: _colors[_input[y][x]]);
 
 			if (_allPaths != null)
-				DrawPath(_allPaths[_currentPath], length: _pathStep, gradient: true);
+				Grid.DrawCells(_allPaths[_currentPath]);
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
 
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
-				new Text($"{_allPaths.Length} paths"),
-				new Text($"path#{_currentPath} [{_allPaths[_currentPath].Length - 1} steps]")
+				new Text($"path {_currentPath}/{_allPaths.Length - 1} [{_allPaths[_currentPath].Length - 1} steps]")
 				);
 
 			_gui.Render();
 
 			base.Render();
-		}
-
-		private void DrawPath(v2i[] path,
-			int? length = null, bool gradient = false)
-		{
-			length = System.Math.Min(length ?? path.Length, path.Length);
-
-			for (var i = 0; i < length.Value; i++)
-			{
-				var color = gradient ? HeatMap.GetColorForValue(i, length.Value + 1, .8) : Colors.White;
-				Grid.DrawCell(path[i], fill: color);
-			}
 		}
 
 		protected override void Destroy()
@@ -105,9 +91,7 @@ namespace Ujeby.AoC.Vis.App
 		protected override void LeftMouseUp()
 		{
 			_gui.LeftMouseUp(MousePosition);
-
 			_currentPath = (_currentPath + 1) % _allPaths.Length;
-			_pathStep = 0;
 		}
 	}
 }
