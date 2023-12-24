@@ -36,20 +36,20 @@ public class NeverTellMeTheOdds : PuzzleBase
 
 		// part2
 		string answer2 = null;
+		// TODO 2023/24 p2
 
 		return (answer1.ToString(), answer2?.ToString());
 	}
 
 	static bool IntersectsIn(v3i p1, v2f d1, v3i p2, v2f d2, AABox2i collisionArea)
 	{
-		var u = (p1.Y * d2.X + d2.Y * p2.X - p2.Y * d2.X - d2.Y * p1.X) / (double)(d1.X * d2.Y - d1.Y * d2.X);
+		var u = (p1.Y * d2.X + d2.Y * p2.X - p2.Y * d2.X - d2.Y * p1.X) / (d1.X * d2.Y - d1.Y * d2.X);
 		var v = (p1.X + d1.X * u - p2.X) / d2.X;
 
 		if (u > 0 && v > 0)
 		{
 			var p = p1.ToV2f() + d1 * u;
-			if (collisionArea.Min.X <= p.X && collisionArea.Max.X >= p.X &&
-				collisionArea.Min.Y <= p.Y && collisionArea.Max.Y >= p.Y)
+			if (collisionArea.Min.X <= p.X && collisionArea.Max.X >= p.X && collisionArea.Min.Y <= p.Y && collisionArea.Max.Y >= p.Y)
 			{
 				Debug.Line($"collision! {p1}->{d1} X {p2}-{d2}: u={u} v={v}");
 				return true;
