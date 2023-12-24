@@ -5,6 +5,7 @@ using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
+using Ujeby.Tools.StringExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
@@ -42,8 +43,14 @@ namespace Ujeby.AoC.Vis.App
 			_input = InputProvider.Read(AppSettings.InputDirectory, _puzzle.Year, _puzzle.Day);//, ".sample");
 
 			var allPaths = new List<v2i[]>();
-			AoC.App._2023_23.ALongWalk.LongestHike(_input, false, allPaths);
+			AoC.App._2023_23.ALongWalk.LongestHike(_input, allPaths);
 			_allPaths = allPaths.ToArray();
+
+			//var p = "[1;0],[19;19],[13;39],[17;65],[5;89],[9;105],[33;137],[33;109],[35;81],[67;83],[65;61],[35;53],[37;31],[29;5],[61;19],[87;5],[87;35],[81;63],[111;53],[99;37],[105;11],[123;43],[131;57],[137;79],[105;79],[79;87],[87;109],[61;103],[55;131],[83;133],[113;131],[107;105],[135;99],[135;133],[139;140]"
+			//	.Split(',')
+			//	.Select(x => new v2i(x.ToNumArray()))
+			//	.ToArray();
+			//_allPaths = new v2i[][] { p };
 
 			Grid.MinorSize = 5;
 			Grid.MoveCenter(new v2i(_input.Length, _input.Length) / 2 * Grid.MinorSize);
@@ -66,6 +73,9 @@ namespace Ujeby.AoC.Vis.App
 
 			if (_allPaths != null)
 				Grid.DrawCells(_allPaths[_currentPath]);
+
+			for (var i = 1; i < _allPaths[_currentPath].Length; i++)
+				Grid.DrawLine(_allPaths[_currentPath][i - 1], _allPaths[_currentPath][i], Colors.White);
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
 
