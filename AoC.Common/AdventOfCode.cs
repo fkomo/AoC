@@ -58,12 +58,11 @@ namespace Ujeby.AoC.Common
 				for (var i = 0; i < puzzlesToSolve.Length; i++)
 				{
 					var puzzle = puzzlesToSolve[i];
-					if (skipSolved && i != puzzlesToSolve.Length - 1)
-					{
-						// skip (sample) debugging of solved puzzles
-						if (puzzle.Answer.Part1 != null && puzzle.Answer.Part2 != null)
+
+					if (skipSolved 
+						&& puzzle.Answer.Part1 != null
+						&& puzzle.Answer.Part2 != null)
 							continue;
-					}
 
 					stars += puzzle.Solve(inputStorage, inputSuffix);
 				}
