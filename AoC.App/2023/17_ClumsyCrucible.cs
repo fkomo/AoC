@@ -17,7 +17,7 @@ public class ClumsyCrucible : PuzzleBase
 		// TODO 2023/17 OPTIMIZE p1 (12s)
 
 		// part2
-		var answer2 = MinHeatLoss2(grid, new v2i(0), new v2i(grid.Length - 1));
+		var answer2 = MinHeatLossPart2(grid, new v2i(0), new v2i(grid.Length - 1));
 		// TODO 2023/17 OPTIMIZE p2 (2min)
 
 		return (answer1.ToString(), answer2.ToString());
@@ -76,7 +76,7 @@ public class ClumsyCrucible : PuzzleBase
 		return targetCost;
 	}
 
-	static long MinHeatLoss2(int[][] grid, v2i source, v2i target)
+	static long MinHeatLossPart2(int[][] grid, v2i source, v2i target)
 	{
 		var targetCost = long.MaxValue;
 		var stateQueue = new List<(State State, long Cost)>();
@@ -115,17 +115,13 @@ public class ClumsyCrucible : PuzzleBase
 			foreach (var state in nextStates)
 			{
 				if (state.State.Dist >= 4)
-				{
 					if (AddState(minCost, state.State.Pos, new v2i(state.State.Dir.Y, -state.State.Dir.X), 1, out targetCost) ||
 						AddState(minCost, state.State.Pos, new v2i(-state.State.Dir.Y, state.State.Dir.X), 1, out targetCost))
 						return targetCost;
-				}
 
 				if (state.State.Dist < 10)
-				{
 					if (AddState(minCost, state.State.Pos, state.State.Dir, state.State.Dist + 1, out targetCost))
 						return targetCost;
-				}
 			}
 		}
 
