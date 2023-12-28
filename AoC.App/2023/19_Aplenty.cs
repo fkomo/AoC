@@ -4,7 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_19;
 
-[AoCPuzzle(Year = 2023, Day = 19, Answer1 = "389114", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 19, Answer1 = "389114", Answer2 = "125051049836302", Skip = false)]
 public class Aplenty : PuzzleBase
 {
 	const int _x = 0;
@@ -23,49 +23,92 @@ public class Aplenty : PuzzleBase
 	const string Accepted = "A";
 	const string Rejected = "R";
 
-	public class Rule
-	{
-		public Rule(string result, int prop = -1, char cmp = '=', long value = -1)
-		{
-			Result = result;
-			Prop = prop;
-			Cmp = cmp;
-			Value = value;
-		}
-
-		public string Result { get; set; }
-		public int Prop { get; set; } = -1;
-		public char Cmp { get; set; } = '=';
-		public long Value { get; set; } = -1;
-	}
+	public record class Rule(string Result, int Prop = -1, char Cmp = '=', long Value = -1);
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var workflows = CreateWorkflows(input);
+		var wf = CreateWorkflows(input);
+		Debug.Line($"{wf.Count} workflows");
 
+		wf = OptimizeWorkflows(wf);
+		Debug.Line($"{wf.Count} workflows after optimization");
+
+		// part1
 		var ratings = input
 			.Skip(Array.IndexOf(input, string.Empty) + 1)
 			.Select(x => new v4i(x.ToNumArray()))
 			.ToArray();
 		Debug.Line($"{ratings.Length} ratings");
 
-		// part1
 		var answer1 = ratings
-			.Where(x => IsAccepted(x, workflows))
+			.Where(x => IsAccepted(x, wf))
 			.Sum(x => x.X + x.Y + x.Z + x.W);
 
 		// part2
-		var wf2 = OptimizeWorkflows(workflows);
+		var answer2 = AllPossibleCombinations(wf);
 
-		long? answer2 = null;
-		// TODO 2023/19 p2
+		return (answer1.ToString(), answer2.ToString());
+	}
 
-		return (answer1.ToString(), answer2?.ToString());
+	static long AllPossibleCombinations(Dictionary<string, Rule[]> wf)
+	{
+		var count = 0L;
+
+		var queue = new Queue<(string Node, v4i From, v4i To)>();
+		queue.Enqueue(("in", new v4i(1), new v4i(4000)));
+
+		void AddToQueue(string node, v4i from, v4i to)
+		{
+			if (node == Accepted)
+				count +=
+					(to[_x] - from[_x] + 1) *
+					(to[_m] - from[_m] + 1) *
+					(to[_a] - from[_a] + 1) *
+					(to[_s] - from[_s] + 1);
+
+			else if (node != Rejected)
+				queue.Enqueue((node, from, to));
+		}
+
+		while (queue.Any())
+		{
+			var (Node, From, To) = queue.Dequeue();
+			foreach (var r in wf[Node])
+			{
+				switch (r.Cmp)
+				{
+					case '<':
+						{
+							var to = To;
+							to[r.Prop] = r.Value - 1;
+
+							AddToQueue(r.Result, From, to);
+							From[r.Prop] = r.Value;
+						}
+						break;
+
+					case '>':
+						{
+							var from = From;
+							from[r.Prop] = r.Value + 1;
+
+							AddToQueue(r.Result, from, To);
+							To[r.Prop] = r.Value;
+						}
+						break;
+
+					default:
+						AddToQueue(r.Result, From, To);
+						break;
+				}
+			}
+		}
+
+		return count;
 	}
 
 	public static Dictionary<string, Rule[]> CreateWorkflows(string[] input)
-	{
-		var workflows = input
+		=> input
 			.Take(Array.IndexOf(input, string.Empty))
 			.ToDictionary(
 				x => x[..x.IndexOf('{')],
@@ -79,10 +122,6 @@ public class Aplenty : PuzzleBase
 						return new Rule(r);
 					})
 					.ToArray());
-		Debug.Line($"{workflows.Count} workflows");
-
-		return workflows;
-	}
 
 	public static Dictionary<string, Rule[]> OptimizeWorkflows(Dictionary<string, Rule[]> workflows)
 	{
@@ -99,8 +138,6 @@ public class Aplenty : PuzzleBase
 				if (wf[key].All(x => x.Result == result))
 				{
 					wf[key] = new Rule[] { new Rule(result) };
-
-					Debug.Line($"{key}: combine rules to {result}");
 					finished = false;
 				}
 
@@ -114,14 +151,12 @@ public class Aplenty : PuzzleBase
 							for (var i = 0; i < wf[key2].Length; i++)
 								if (wf[key2][i].Result == key)
 								{
-									Debug.Line($"{key2}: update {wf[key2][i].Result} -> {keyResult}");
-									wf[key2][i].Result = keyResult;
+									wf[key2][i] = wf[key2][i] with { Result = keyResult };
 									finished = false;
 								}
 						}
 					}
 
-					Debug.Line($"{key}: remove");
 					wf.Remove(key);
 					finished = false;
 					break;
@@ -129,7 +164,6 @@ public class Aplenty : PuzzleBase
 			}
 		}
 
-		Debug.Line($"{wf.Count} optimized workflows!");
 		return wf;
 	}
 
@@ -174,5 +208,5 @@ public class Aplenty : PuzzleBase
 		}
 
 		return false;
-    }
+	}
 }
