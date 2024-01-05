@@ -36,6 +36,15 @@ public class NeverTellMeTheOdds : PuzzleBase
 					answer1++;
 
 		// part2
+		var answer2 = SolveWithZ3(hailstones);
+
+		// TODO 2023/24 OPTIMZE p2 (25min)
+
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	static long SolveWithZ3((v3i Position, v3i Velocity)[] hailstones)
+	{
 		var ctx = new Context();
 		var solver = ctx.MkSolver();
 
@@ -84,13 +93,10 @@ public class NeverTellMeTheOdds : PuzzleBase
 		solver.Check();
 		var model = solver.Model;
 
-		var answer2 = 
-			long.Parse(model.Eval(rpx).ToString()) + 
-			long.Parse(model.Eval(rpy).ToString()) + 
+		return
+			long.Parse(model.Eval(rpx).ToString()) +
+			long.Parse(model.Eval(rpy).ToString()) +
 			long.Parse(model.Eval(rpz).ToString());
-		// TODO 2023/24 OPTIMZE p2 (25min)
-
-		return (answer1.ToString(), answer2.ToString());
 	}
 
 	static bool IntersectsIn(v3i p1, v2f d1, v3i p2, v2f d2, AABox2i collisionArea)
