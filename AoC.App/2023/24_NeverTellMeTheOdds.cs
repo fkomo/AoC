@@ -1,10 +1,11 @@
+using Microsoft.Z3;
 using Ujeby.AoC.Common;
 using Ujeby.Tools.StringExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_24;
 
-[AoCPuzzle(Year = 2023, Day = 24, Answer1 = "11246", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 24, Answer1 = "11246", Answer2 = "716599937560103", Skip = true)]
 public class NeverTellMeTheOdds : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -28,17 +29,68 @@ public class NeverTellMeTheOdds : PuzzleBase
 			.ToArray();
 
 		// part1
-		long answer1 = 0;
+		var answer1 = 0L;
 		for (var i1 = 0; i1 < hailstones.Length; i1++)
 			for (var i2 = i1 + 1; i2 < hailstones.Length; i2++)
 				if (IntersectsIn(hailstones[i1].Position, directions[i1], hailstones[i2].Position, directions[i2], collisionArea))
 					answer1++;
 
 		// part2
-		string answer2 = null;
-		// TODO 2023/24 p2
+		var ctx = new Context();
+		var solver = ctx.MkSolver();
 
-		return (answer1.ToString(), answer2?.ToString());
+		// rock position
+		var rpx = ctx.MkIntConst("rpx");
+		var rpy = ctx.MkIntConst("rpy");
+		var rpz = ctx.MkIntConst("rpz");
+
+		// rock velocity
+		var rvx = ctx.MkIntConst("rvx");
+		var rvy = ctx.MkIntConst("rvy");
+		var rvz = ctx.MkIntConst("rvz");
+
+		// For each iteration, we will add 3 new equations and one new condition to the solver.
+		// We want to find 9 variables (x, y, z, vx, vy, vz, t0, t1, t2) that satisfy all the equations, so a system of 9 equations is enough.
+		for (var i = 0; i < 3; i++)
+		{
+			var t = ctx.MkIntConst($"t{i}"); // time for the rock to reach the hail
+			var hail = hailstones[i];
+
+			var hpx = ctx.MkInt(hail.Position.X);
+			var hpy = ctx.MkInt(hail.Position.Y);
+			var hpz = ctx.MkInt(hail.Position.Z);
+
+			var hpvx = ctx.MkInt(hail.Velocity.X);
+			var hpvy = ctx.MkInt(hail.Velocity.Y);
+			var hpvz = ctx.MkInt(hail.Velocity.Z);
+
+			// rock path: rp + ti * rv
+			var xLeft = ctx.MkAdd(rpx, ctx.MkMul(t, rvx));
+			var yLeft = ctx.MkAdd(rpy, ctx.MkMul(t, rvy));
+			var zLeft = ctx.MkAdd(rpz, ctx.MkMul(t, rvz));
+
+			// hailstone path: hp + ti * hv
+			var xRight = ctx.MkAdd(hpx, ctx.MkMul(t, hpvx));
+			var yRight = ctx.MkAdd(hpy, ctx.MkMul(t, hpvy));
+			var zRight = ctx.MkAdd(hpz, ctx.MkMul(t, hpvz));
+
+			// rp + ti * rv = hp + t * hv
+			solver.Add(t >= 0);
+			solver.Add(ctx.MkEq(xLeft, xRight));
+			solver.Add(ctx.MkEq(yLeft, yRight));
+			solver.Add(ctx.MkEq(zLeft, zRight));
+		}
+
+		solver.Check();
+		var model = solver.Model;
+
+		var answer2 = 
+			long.Parse(model.Eval(rpx).ToString()) + 
+			long.Parse(model.Eval(rpy).ToString()) + 
+			long.Parse(model.Eval(rpz).ToString());
+		// TODO 2023/24 OPTIMZE p2 (25min)
+
+		return (answer1.ToString(), answer2.ToString());
 	}
 
 	static bool IntersectsIn(v3i p1, v2f d1, v3i p2, v2f d2, AABox2i collisionArea)

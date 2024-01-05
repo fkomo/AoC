@@ -8,6 +8,7 @@
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<!--<Nullable>enable</Nullable>-->
 		<Configurations>Debug;Release;Debug.Sample</Configurations>
+		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>

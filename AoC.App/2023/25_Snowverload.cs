@@ -26,13 +26,12 @@ public class Snowverload : PuzzleBase
 		// part1
 		// sample paths between random nodes and find most used
 		var rnd = new Random(0);
-		var graphNodes = graph.Keys.ToArray();
 		var segmentsBag = new ConcurrentBag<(int From, int To)>();
 		Parallel.For(0, 100, (i) =>
 		{
 			var n1 = rnd.Next(nodes.Length);
 			var n2 = rnd.Next(nodes.Length);
-			var sp = graph.DijkstraShortestPath(n1, n2, nodes: graphNodes);
+			var sp = graph.DijkstraShortestPath(n1, n2);
 			for (var p = 0; p < sp.Length - 1; p++)
 				segmentsBag.Add((System.Math.Min(sp[p], sp[p + 1]), System.Math.Max(sp[p], sp[p + 1])));
 		});

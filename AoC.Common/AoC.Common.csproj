@@ -5,6 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<Platforms>AnyCPU;x64</Platforms>
 		<!--<Nullable>enable</Nullable>-->
 	</PropertyGroup>
 
