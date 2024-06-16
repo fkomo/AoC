@@ -9,14 +9,14 @@
 		<!--<Nullable>enable</Nullable>-->
 	</PropertyGroup>
 
-	<!--<ItemGroup>
-		<PackageReference Include="Ujeby" Version="*" />
-	</ItemGroup>-->
-
 	<ItemGroup>
+		<PackageReference Include="Ujeby" Version="*" />
+	</ItemGroup>
+
+	<!--<ItemGroup>
 		<Reference Include="Ujeby">
 			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
-	</ItemGroup>
+	</ItemGroup>-->
 
 </Project>

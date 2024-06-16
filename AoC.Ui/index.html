@@ -7,6 +7,7 @@
 	<link href="https://fonts.cdnfonts.com/css/source-code-pro" rel="stylesheet">
 	<script type="text/javascript">
 
+		var aocProgess = 0;
 		var aoc = [];
 
 		function onLoad() {
@@ -46,6 +47,10 @@
 				.then((json) => renderPuzzle(json));
 		}
 
+		function float2int(value) {
+			return value | 0;
+		}
+
 		function renderPuzzle(puzzleJson) {
 			if (puzzleJson == null)
 				return;
@@ -65,8 +70,18 @@
 
 			for (var i = 0; i < aoc.length; i++)
 				if (aoc[i].year == puzzleJson.meta.year) {
-					aoc[i].stars += stars == '**' ? 2 : (stars == '*' ? 1 : 0);
-					console.log(puzzleJson.meta.year + '/' + aoc[i].stars)
+
+					var puzzleStars = stars == '**' ? 2 : (stars == '*' ? 1 : 0);
+					aoc[i].stars += puzzleStars;
+					aocProgess += puzzleStars;
+
+					var progress = float2int(100 * (aocProgess / (aoc.length * 50)));
+
+					console.log(puzzleJson.meta.year + '/' + aoc[i].stars);
+
+					var progressElement = document.getElementById('progress');
+					progressElement.style.width = progress + '%';
+					progressElement.innerText = progress + '%' + ' (' + aocProgess + '/' + (aoc.length * 50) + ')';
 
 					if (aoc[i].stars == 50) {
 						var starElement = document.getElementById('star1-' + puzzleJson.meta.year);
@@ -140,6 +155,9 @@
 		}
 
 		function onYearClicked(year) {
+
+			aocProgess = 0;
+
 			console.log(year);
 
 			var starElement = document.getElementById('star1-' + year);
@@ -162,6 +180,9 @@
 		}
 
 		function onAoCClicked() {
+
+			aocProgess = 0;
+
 			onLoad();
 		}
 
@@ -263,10 +284,24 @@
 		.partialySolved {
 			color: #777777;
 		}
+
+		.progress-bar {
+			height: 24px;
+			background-color: #21282b;
+			float: left;
+			text-align: right;
+			font-size: smaller;
+			padding-right: 8px;
+			align-content: center;
+		}
+
 	</style>
 
 </head>
 <body onload="onLoad()">
+	<div style="height:24px;">
+		<div id="progress" class="progress-bar"></div>
+	</div>
 	<h1 onclick="onAoCClicked();">~=#{ Advent Of Code }#=~</h1>
 	<div id="content"></div>
 </body>

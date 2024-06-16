@@ -17,9 +17,9 @@ namespace Ujeby.AoC.App
 			string inputSuffix = null;
 			bool? skipSolved = null;
 
-			year = "2023";
+			year = "2017";
 			//inputSuffix = "s";
-			skipSolved = true;
+			skipSolved = false;
 
 			if (year == null)
 			{

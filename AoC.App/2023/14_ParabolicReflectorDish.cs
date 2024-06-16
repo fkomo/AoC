@@ -29,7 +29,7 @@ public class ParabolicReflectorDish : PuzzleBase
 
 		var loads = new List<long>();
 		var sw = System.Diagnostics.Stopwatch.StartNew();
-		while (sw.ElapsedMilliseconds < 200) // 200ms should make enough cycles to find repeating pattern
+		while (sw.ElapsedMilliseconds < 500) // 200ms should make enough cycles to find repeating pattern
 		{
 			// tilt north
 			var stack = Enumerable.Repeat((long)-1, dish.Length).ToArray();
