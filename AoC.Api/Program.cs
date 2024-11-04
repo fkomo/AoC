@@ -39,10 +39,10 @@ namespace Ujeby.AoC.Api
 				{
 					var context = (HttpContext)state;
 
-					context.Response.Headers.Add("Access-Control-Allow-Origin", context.Request.Headers.Origin);
-					context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
-					context.Response.Headers.Add("Access-Control-Allow-Methods", string.Join(", ", new[] { context.Request.Method }.Union(context.Request.Headers.AccessControlRequestMethod.Select(v => v))));
-					context.Response.Headers.Add("Access-Control-Allow-Headers", string.Join(", ", context.Request.Headers.Select(p => p.Key).Union(context.Request.Headers.AccessControlRequestHeaders.Select(v => v))));
+					context.Response.Headers.Append("Access-Control-Allow-Origin", context.Request.Headers.Origin);
+					context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
+					context.Response.Headers.Append("Access-Control-Allow-Methods", string.Join(", ", new[] { context.Request.Method }.Union(context.Request.Headers.AccessControlRequestMethod.Select(v => v))));
+					context.Response.Headers.Append("Access-Control-Allow-Headers", string.Join(", ", context.Request.Headers.Select(p => p.Key).Union(context.Request.Headers.AccessControlRequestHeaders.Select(v => v))));
 
 					return Task.CompletedTask;
 				}
@@ -72,8 +72,15 @@ namespace Ujeby.AoC.Api
 
 			app.MapGet("/{year}/{day}", (int year, int day) =>
 			{
+				string env = null;
+				var envFilePath = Path.Combine(AppContext.BaseDirectory, "env.txt");
+				if (File.Exists(envFilePath))
+					env = File.ReadAllText(envFilePath);
+
+				var settingsFile = (string.IsNullOrEmpty(env)) ? "appsettings.json" : $"appsettings.{env}.json";
+
 				var config = new ConfigurationBuilder()
-					.AddJsonFile($"appsettings.json")
+					.AddJsonFile(settingsFile)
 					.Build();
 
 				var puzzle = AdventOfCode.GetInstance(year, day);
@@ -94,8 +101,8 @@ namespace Ujeby.AoC.Api
 
 	record class PuzzleResult(
 		PuzzleMeta Meta,
-		string? Part1 = null, 
-		string? Part2 = null, 
+		string Part1 = null, 
+		string Part2 = null, 
 		double? Time = null);
 
 	record class AoCYear(int Year, PuzzleMeta[] Puzzles);

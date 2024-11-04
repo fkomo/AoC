@@ -364,8 +364,11 @@ FodyWeavers.xsd
 
 # advent of code session
 .session
-/AoC.App/appsettings.json
-/AoC.Vis.App/appsettings.json
 
 # aoc log files
 AoC.Output.*.txt
+
+# settings
+/AoC.App/appsettings.*.json
+/AoC.Api/appsettings.*.json
+/AoC.Vis.App/appsettings.*.json

@@ -3,65 +3,72 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App
 {
+	internal class Settings
+	{
+		public const string ConfigSection = "AoC";
+
+		public int[] Years { get; set; }
+
+		public bool? SkipSolved { get; set; } = true;
+		public bool IgnoreSkip { get; set; } = false;
+
+		public string Input { get; set; }
+		public string InputSuffix { get; set; }
+	}
+
 	public class Program
 	{
 		static void Main(string[] args)
 		{
+			string env = null;
+			var envFilePath = Path.Combine(AppContext.BaseDirectory, "env.txt");
+			if (File.Exists(envFilePath))
+				env = File.ReadAllText(envFilePath);
+
+			var settingsFile = (string.IsNullOrEmpty(env)) ? "appsettings.json" : $"appsettings.{env}.json";
+
 			var config = new ConfigurationBuilder()
-				.AddJsonFile($"appsettings.json")
+				.AddJsonFile(settingsFile)
 				.Build();
 
-			_ = bool.TryParse(config["aoc:ignoreSkip"], out bool ignoreSkip);
+			var settings = new Settings();
+			config.Bind(Settings.ConfigSection, settings);
 
-			string year = null;
-			string inputSuffix = null;
-			bool? skipSolved = null;
-
-			year = "2017";
-			//inputSuffix = "s";
-			skipSolved = false;
-
-			if (year == null)
+			if (settings.Years == null || settings.Years.Length < 1)
 			{
-				Console.Write($"{Environment.NewLine}  year [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023] ? ");
-				year = Console.ReadLine();
+				Console.Write($"{Environment.NewLine}  Year [2015, .., {DateTime.Now.Year}] ? ");
+				settings.Years = [int.Parse(Console.ReadLine())];
 			}
 			else
-				Console.WriteLine($"{Environment.NewLine}  year: 2023");
+				Console.WriteLine($"{Environment.NewLine}  Years: {string.Join(", ", settings.Years)}");
 
-			if (inputSuffix == null)
+			if (settings.InputSuffix == null)
 			{
-				Console.Write($"  puzzle input suffix [s(sample)] ? ");
-				inputSuffix = Console.ReadLine();
+				Console.Write($"  Puzzle input suffix [s(sample)] ? ");
+				settings.InputSuffix = Console.ReadLine();
 			}
 			else
-				Console.WriteLine($"  puzzle input suffix: {inputSuffix}");
+				Console.WriteLine($"  Puzzle input suffix: {settings.InputSuffix}");
 
-			if (inputSuffix == "s")
-				inputSuffix = "sample";
-			if (!string.IsNullOrEmpty(inputSuffix))
-				inputSuffix = "." + inputSuffix;
+			if (settings.InputSuffix == "s")
+				settings.InputSuffix = "sample";
 
-			if (!skipSolved.HasValue)
+			if (!string.IsNullOrEmpty(settings.InputSuffix))
+				settings.InputSuffix = "." + settings.InputSuffix;
+
+			if (!settings.SkipSolved.HasValue)
 			{
-				Console.Write($"  skip solved [y/n(default)] puzzles ? ");
-				skipSolved = Console.ReadLine() == "y";
+				Console.Write($"  Skip solved [y/n(default)] puzzles ? ");
+				settings.SkipSolved = Console.ReadLine() == "y";
 			}
 			else
-				Console.WriteLine($"  skip solved puzzles: {inputSuffix}"); 
+				Console.WriteLine($"  Skip solved puzzles: {settings.SkipSolved}"); 
 			
 			Log.Line();
 
-			var years = Array.Empty<int>();
-			if (!string.IsNullOrEmpty(year))
-				years = new int[] { int.Parse(year) };
-
 			// run all puzzles in solution
-			AdventOfCode.RunAll(years,
-				inputStorage: config["aoc:input"],
-				ignoreSkip: ignoreSkip,
-				skipSolved: skipSolved.Value,
-				inputSuffix: inputSuffix);
+			AdventOfCode.RunAll(settings.Years, 
+				inputStorage: settings.Input, ignoreSkip: settings.IgnoreSkip, skipSolved: settings.SkipSolved.Value, inputSuffix: settings.InputSuffix);
 		}
 
 		public static void Init()

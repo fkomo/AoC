@@ -10,8 +10,15 @@ namespace Ujeby.AoC.Vis.App
 	{
 		static void Main()
 		{
-			var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
-			AppSettings.InputDirectory = config["aoc:input"];
+			string env = null;
+			var envFilePath = Path.Combine(AppContext.BaseDirectory, "env.txt");
+			if (File.Exists(envFilePath))
+				env = File.ReadAllText(envFilePath);
+
+			var settingsFile = (string.IsNullOrEmpty(env)) ? "appsettings.json" : $"appsettings.{env}.json";
+
+			var config = new ConfigurationBuilder().AddJsonFile(settingsFile).Build();
+			AppSettings.InputDirectory = config["AoC:Input"];
 
 			try
 			{
