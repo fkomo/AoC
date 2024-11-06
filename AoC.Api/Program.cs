@@ -66,6 +66,7 @@ namespace Ujeby.AoC.Api
 			{
 				return AdventOfCode.AllPuzzles()
 					.GroupBy(x => x.Year)
+					.OrderBy(x => x.Key)
 					.Select(x => new AoCYear(x.Key, x.Select(p => CreateMeta(p)).ToArray()))
 					.ToArray();
 			});
