@@ -12,7 +12,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="appsettings.dev-all.json" />
+	  <None Remove="appsettings.year.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -29,16 +29,16 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
-		<Content Include="..\env.txt" Link="env.txt">
+		<Content Include="..\preset.txt" Link="preset.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.dev-all.json">
+		<Content Include="appsettings.year.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.dev-s.json">
+		<Content Include="appsettings.sample.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.full.json">
+		<Content Include="appsettings.complete.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="appsettings.dev.json">

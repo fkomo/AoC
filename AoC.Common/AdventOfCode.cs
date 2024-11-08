@@ -6,6 +6,21 @@ namespace Ujeby.AoC.Common
 	{
 		public const int ConsoleWidth = 100;
 
+		public static string GetPreset()
+		{
+			var envFilePath = Path.Combine(AppContext.BaseDirectory, "preset.txt");
+			if (File.Exists(envFilePath))
+				return File.ReadAllText(envFilePath);
+
+			return null;
+		}
+
+		public static string GetSettingsFilename()
+		{
+			var preset = GetPreset();
+			return string.IsNullOrEmpty(preset) ? "appsettings.json" : $"appsettings.{preset}.json";
+		}
+
 		public static void RunAll(int[] years,
 			string inputStorage = null, string inputSuffix = null, bool ignoreSkip = false, bool skipSolved = false)
 		{

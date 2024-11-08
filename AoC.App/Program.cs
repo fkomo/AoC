@@ -20,15 +20,9 @@ namespace Ujeby.AoC.App
 	{
 		static void Main(string[] args)
 		{
-			string env = null;
-			var envFilePath = Path.Combine(AppContext.BaseDirectory, "env.txt");
-			if (File.Exists(envFilePath))
-				env = File.ReadAllText(envFilePath);
-
-			var settingsFile = (string.IsNullOrEmpty(env)) ? "appsettings.json" : $"appsettings.{env}.json";
-
 			var config = new ConfigurationBuilder()
-				.AddJsonFile(settingsFile)
+				.AddJsonFile("appsettings.json")
+				.AddJsonFile(AdventOfCode.GetSettingsFilename())
 				.Build();
 
 			var settings = new Settings();

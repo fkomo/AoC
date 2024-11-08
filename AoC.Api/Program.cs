@@ -73,15 +73,9 @@ namespace Ujeby.AoC.Api
 
 			app.MapGet("/{year}/{day}", (int year, int day) =>
 			{
-				string env = null;
-				var envFilePath = Path.Combine(AppContext.BaseDirectory, "env.txt");
-				if (File.Exists(envFilePath))
-					env = File.ReadAllText(envFilePath);
-
-				var settingsFile = (string.IsNullOrEmpty(env)) ? "appsettings.json" : $"appsettings.{env}.json";
-
 				var config = new ConfigurationBuilder()
-					.AddJsonFile(settingsFile)
+					.AddJsonFile("appsettings.json")
+					.AddJsonFile(AdventOfCode.GetSettingsFilename())
 					.Build();
 
 				var puzzle = AdventOfCode.GetInstance(year, day);

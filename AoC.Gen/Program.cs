@@ -7,34 +7,57 @@ namespace Ujeby.AoC.Gen
 {
 	class Program
 	{
+		internal class Settings
+		{
+			public const string ConfigSection = "AoC";
+
+			/// <summary>
+			/// path to AoC.App directory
+			/// </summary>
+			public string Code { get; set; }
+
+			/// <summary>
+			/// path to AoC.Input directory
+			/// </summary>
+			public string Input { get; set; }
+
+			/// <summary>
+			/// path to .session file
+			/// </summary>
+			public string Session { get; set; }
+		}
+
 		static void Main(string[] args)
 		{
 			var config = new ConfigurationBuilder()
 				.AddJsonFile($"appsettings.json")
 				.Build();
 
+			var settings = new Settings();
+			config.Bind(Settings.ConfigSection, settings);
+
 			// set aoc session cookie
-			if (!string.IsNullOrEmpty(config["aoc:session"]) && File.Exists(config["aoc:session"]))
+			if (!string.IsNullOrEmpty(settings.Session) && File.Exists(settings.Session))
 			{
-				var session = File.ReadAllText(config["aoc:session"]);
+				var session = File.ReadAllText(settings.Session);
 				AoCHttpClient.SetSession(session);
 				Log.Line($"Session cookie: {session}");
 			}
 
 			// download input files
-			if (!string.IsNullOrEmpty(config["aoc:input"]))
+			if (!string.IsNullOrEmpty(settings.Input))
 			{
 				Log.Line("Downloading missing input ...");
 				for (var year = 2015; year <= DateTime.Now.Year; year++)
-					DownloadMissingInput(config["aoc:input"], year);
+					DownloadMissingInput(settings.Input, year);
 			}
 
 			// generate (empty) puzzle .cs classes
-			if (!string.IsNullOrEmpty(config["aoc:code"]))
+			if (!string.IsNullOrEmpty(settings.Code))
 			{
 				Log.Line("Generating puzzle code ...");
 				for (var year = 2015; year <= DateTime.Now.Year; year++)
-					GeneratePuzzleCode(config["aoc:code"], year);
+					GeneratePuzzleCode(settings.Code, year);
 			}
 
 			Log.Line("All set!");

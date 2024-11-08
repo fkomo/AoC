@@ -368,7 +368,6 @@ FodyWeavers.xsd
 # aoc log files
 AoC.Output.*.txt
 
-# settings
-/AoC.App/appsettings.*.json
-/AoC.Api/appsettings.*.json
-/AoC.Vis.App/appsettings.*.json
+# aoc settings
+/AoC.App/appsettings.json
+/AoC.Gen/appsettings.json
