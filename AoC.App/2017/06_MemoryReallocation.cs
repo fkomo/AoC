@@ -1,31 +1,11 @@
 using Ujeby.AoC.Common;
+using Ujeby.Tools;
 
 namespace Ujeby.AoC.App._2017_06;
 
 [AoCPuzzle(Year = 2017, Day = 06, Answer1 = "6681", Answer2 = "2392", Skip = false)]
 public class MemoryReallocation : PuzzleBase
 {
-	class ByteArrayComparer : IEqualityComparer<byte[]>
-	{
-		public bool Equals(byte[] a, byte[] b)
-		{
-			for (var i = 0; i < a.Length; i++)
-				if (a[i] != b[i])
-					return false;
-			
-			return true;
-		}
-
-		public int GetHashCode(byte[] a)
-		{
-			uint b = 0;
-			for (int i = 0; i < a.Length; i++)
-				b = ((b << 23) | (b >> 9)) ^ a[i];
-
-			return unchecked((int)b);
-		}
-	}
-
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
 		var banks = input[0].Split('\t').Select(byte.Parse).ToArray();
