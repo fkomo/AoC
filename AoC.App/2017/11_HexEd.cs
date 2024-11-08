@@ -6,41 +6,22 @@ namespace Ujeby.AoC.App._2017_11;
 [AoCPuzzle(Year = 2017, Day = 11, Answer1 = "685", Answer2 = "1457", Skip = false)]
 public class HexEd : PuzzleBase
 {
-	public readonly static v3i N = new(1, 0, -1);
-	public readonly static v3i NE = new(0, 1, -1);
-	public readonly static v3i SE = new(-1, 1, 0);
-	public readonly static v3i S = new(-1, 0, 1);
-	public readonly static v3i SW = new(0, -1, 1);
-	public readonly static v3i NW = new(1, -1, 0);
-
-	public readonly static v3i[] HexaGrid =
-	[
-		N,
-		NE,
-		SE,
-		S,
-		SW,
-		NW
-	];
-
-	readonly static Dictionary<string, v3i> _hexaDirs = new Dictionary<string, v3i>()
+	readonly static Dictionary<string, v3i> _hexaSteps = new()
 	{
-		{ "n", N },
-		{ "ne", NE },
-		{ "se", SE },
-		{ "s", S },
-		{ "sw", SW },
-		{ "nw", NW },
+		{ "n", v3i.N },
+		{ "ne", v3i.NE },
+		{ "se", v3i.SE },
+		{ "s", v3i.S },
+		{ "sw", v3i.SW },
+		{ "nw", v3i.NW },
 	};
-
-	public static long HexGridDistance(v3i a, v3i b) => v3i.ManhDistance(a, b) / 2;
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var path = input[0].Split(',').Select(x => _hexaDirs[x]);
+		var path = input[0].Split(',').Select(x => _hexaSteps[x]);
 
 		// part1
-		var answer1 = HexGridDistance(v3i.Zero, path.Aggregate((x, y) => x + y));
+		var answer1 = v3i.HexGridDistance(v3i.Zero, path.Aggregate((x, y) => x + y));
 
 		// part2
 		var current = v3i.Zero;
@@ -48,7 +29,7 @@ public class HexEd : PuzzleBase
 		foreach (var step in path)
 		{
 			current += step;
-			var dist = HexGridDistance(v3i.Zero, current);
+			var dist = v3i.HexGridDistance(v3i.Zero, current);
 			maxDistance = System.Math.Max(maxDistance, dist);
 		}
 

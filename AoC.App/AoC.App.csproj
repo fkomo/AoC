@@ -19,7 +19,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Z3" Version="4.12.2" />
-		<PackageReference Include="Ujeby" Version="8.*" />
+		<PackageReference Include="Ujeby" Version="8.0.1" />
 	</ItemGroup>
 
 	<!--<ItemGroup>
