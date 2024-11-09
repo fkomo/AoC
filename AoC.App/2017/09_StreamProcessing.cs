@@ -7,7 +7,7 @@ public class StreamProcessing : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		ParseStream(input[0], 1, out _, out int score, out int garbageCount, 1);
+		ParseStream(input[0].AsSpan(), out int score, out int garbageCount);
 
 		// part1
 		var answer1 = score;
@@ -18,39 +18,41 @@ public class StreamProcessing : PuzzleBase
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	static void ParseStream(string stream, int start, out int end, out int score, out int garbageCount, int recursion)
+	static ReadOnlySpan<char> ParseStream(ReadOnlySpan<char> span, out int score, out int garbageCount, int recursion = 0)
 	{
 		garbageCount = 0;
-
-		end = start;
 		score = recursion;
 
 		var garbage = false;
-		for (; end < stream.Length; end++)
+		while (span.Length > 0)
 		{
-			if (garbage)
+			for (var s = 0; s < span.Length; s++)
 			{
-				if (stream[end] == '>')
-					garbage = false;
+				if (garbage)
+				{
+					if (span[s] == '>')
+						garbage = false;
 
-				else if (stream[end] == '!')
-					end++;
-				else
-					garbageCount++;
+					else if (span[s] == '!')
+						s++;
+					else
+						garbageCount++;
+				}
+				else if (span[s] == '{')
+				{
+					span = ParseStream(span[(s + 1)..], out int recScore, out int recGarbageCount, recursion + 1);
+					garbageCount += recGarbageCount;
+					score += recScore;
+					break;
+				}
+				else if (span[s] == '}')
+					return span[(s + 1)..];
+
+				else if (span[s] == '<')
+					garbage = true;
 			}
-			else if (stream[end] == '{')
-			{
-				ParseStream(stream, end + 1, out end, out int recScore, out int recGarbageCount, recursion + 1);
-
-				garbageCount += recGarbageCount;
-				score += recScore;
-			}
-
-			else if (stream[end] == '}')
-				return;
-
-			else if (stream[end] == '<')
-				garbage = true;
 		}
+
+		return [];
 	}
 }
