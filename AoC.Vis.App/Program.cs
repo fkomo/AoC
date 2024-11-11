@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Ujeby.AoC.App._2017_14;
 using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
@@ -50,6 +51,7 @@ namespace Ujeby.AoC.Vis.App
 								new AoCRunnable[]
 								{
 									new SpiralMemory(windowSize),
+									new DiskDefragmentation(windowSize),
 								}
 							},
 							//{

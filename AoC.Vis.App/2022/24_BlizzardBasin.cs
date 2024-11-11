@@ -12,25 +12,25 @@ namespace Ujeby.AoC.Vis.App
 {
 	internal class BlizzardBasin : AoCRunnable
 	{
-		private v2i _mapSize;
-		private Blizzard[] _blizzards = null;
-		private byte[,] _map = null;
-		private long _time = 0;
+		v2i _mapSize;
+		Blizzard[] _blizzards = null;
+		byte[,] _map = null;
+		long _time = 0;
 
-		private v3i[] _elves;
+		v3i[] _elves;
 
-		private const int _frameStep = 16;
+		const int _frameStep = 16;
 
-		private v2i _end;
-		private v2i _start;
-		private v2i _destination;
+		v2i _end;
+		v2i _start;
+		v2i _destination;
 
-		private Stopwatch _sw = Stopwatch.StartNew();
+		Stopwatch _sw = Stopwatch.StartNew();
 
-		private int[,] _mapUsage;
+		int[,] _mapUsage;
 
-		private static v4f _wallColor = new(.8);
-		private static readonly Dictionary<char, v4f> _blizzColors = new()
+		static v4f _wallColor = new(.8);
+		static readonly Dictionary<char, v4f> _blizzColors = new()
 		{
 			{ '>', new(.5, .7) },
 			{ 'v', new(.4, .7) },
@@ -56,7 +56,7 @@ namespace Ujeby.AoC.Vis.App
 			_start = new(1, 0);
 			_end = new(_mapSize.X - 2, _mapSize.Y - 1);
 			
-			_elves = new[] { new v3i(_start, 0) };
+			_elves = [new v3i(_start, 0)];
 			_destination = _end;
 
 			_map = Ujeby.AoC.App._2022_24.BlizzardBasin.GetMapInTime(0, _blizzards, _mapSize);
@@ -121,7 +121,7 @@ namespace Ujeby.AoC.Vis.App
 			Progress();
 		}
 
-		private void Progress()
+		void Progress()
 		{
 			if (_elves.Length != 1 || _elves[0].ToV2i() != _destination)
 			{
