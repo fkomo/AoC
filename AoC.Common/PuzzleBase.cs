@@ -32,8 +32,7 @@ namespace Ujeby.AoC.Common
 
 		protected abstract (string Part1, string Part2) SolvePuzzle(string[] input);
 
-		public int Solve(string inputStorage, 
-			string inputSuffix = null)
+		public int Solve(string inputStorage, string inputSuffix = null)
 		{
 			var result = 0;
 

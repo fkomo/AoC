@@ -56,8 +56,7 @@ namespace Ujeby.AoC.Common
 			}
 		}
 
-		public static void Run(int year, string inputStorage, string inputSuffix, bool skipSolved,
-			params IPuzzle[] puzzlesToSolve)
+		public static void Run(int year, string inputStorage, string inputSuffix, bool skipSolved, params IPuzzle[] puzzlesToSolve)
 		{
 			Log.Line();
 			Log.ChristmasPattern($"┌──[ ", indent: 2);

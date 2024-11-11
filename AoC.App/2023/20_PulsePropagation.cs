@@ -6,6 +6,48 @@ namespace Ujeby.AoC.App._2023_20;
 [AoCPuzzle(Year = 2023, Day = 20, Answer1 = "825896364", Answer2 = null, Skip = false)]
 public class PulsePropagation : PuzzleBase
 {
+	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
+	{
+		// part1
+		var modules = CreateModules(input);
+
+		var pulses = new v2i(0);
+		var pulseQueue = new Queue<Pulse>();
+		for (var i = 0; i < 1000; i++)
+		{
+			pulseQueue.Enqueue(new Pulse("button", _broadcaster, false));
+			while (pulseQueue.Count > 0)
+			{
+				var pulse = pulseQueue.Dequeue();
+#if DEBUG
+				//Debug.Line(pulse.ToString());
+#endif
+				if (pulse.High)
+					pulses[_high]++;
+				else
+					pulses[_low]++;
+
+				// output fix
+				if (!modules.ContainsKey(pulse.To))
+					continue;
+
+				var newImp = modules[pulse.To].Process(modules, pulse.High, pulse.From);
+				foreach (var ii in newImp)
+					pulseQueue.Enqueue(ii);
+			}
+		}
+		Debug.Line($"pulses: {pulses}");
+		var answer1 = pulses.Area();
+
+		// part2
+		modules = CreateModules(input);
+
+		long? answer2 = null;
+		// TODO 2023/20 p2
+
+		return (answer1.ToString(), answer2?.ToString());
+	}
+
 	const string _broadcaster = "broadcaster";
 	const int _low = 0;
 	const int _high = 1;
@@ -108,48 +150,6 @@ public class PulsePropagation : PuzzleBase
 			State = pulse;
 			return Output.Select(x => new Pulse(Name, x, State)).ToArray();
 		}
-	}
-
-	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
-	{
-		// part1
-		var modules = CreateModules(input);
-
-		var pulses = new v2i(0);
-		var pulseQueue = new Queue<Pulse>();
-		for (var i = 0; i < 1000; i++)
-		{
-			pulseQueue.Enqueue(new Pulse("button", _broadcaster, false));
-			while (pulseQueue.Count > 0)
-			{
-				var pulse = pulseQueue.Dequeue();
-#if DEBUG
-				//Debug.Line(pulse.ToString());
-#endif
-				if (pulse.High)
-					pulses[_high]++;
-				else
-					pulses[_low]++;
-
-				// output fix
-				if (!modules.ContainsKey(pulse.To))
-					continue;
-
-				var newImp = modules[pulse.To].Process(modules, pulse.High, pulse.From);
-				foreach (var ii in newImp)
-					pulseQueue.Enqueue(ii);
-			}
-		}
-		Debug.Line($"pulses: {pulses}");
-		var answer1 = pulses.Area();
-
-		// part2
-		modules = CreateModules(input);
-
-		long? answer2 = null;
-		// TODO 2023/20 p2
-
-		return (answer1.ToString(), answer2?.ToString());
 	}
 
 	public static Dictionary<string, Module> CreateModules(string[] input)

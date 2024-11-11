@@ -1,7 +1,5 @@
-using System.Linq;
-using System.Text;
 using Ujeby.AoC.Common;
-using Ujeby.Grid;
+using Ujeby.Grid.CharMapExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_18;
@@ -56,15 +54,15 @@ public class LavaductLagoon : PuzzleBase
 		// first/last row
 		for (var x = 0; x < gridSize.X; x++)
 		{
-			CharMap.FloodFillNonRec(grid, new v2i(x, 0), 'O');
-			CharMap.FloodFillNonRec(grid, new v2i(x, gridSize.Y - 1), 'O');
+			grid.FloodFillNonRec(new v2i(x, 0), 'O', v2i.PlusMinusOne);
+			grid.FloodFillNonRec(new v2i(x, gridSize.Y - 1), 'O', v2i.PlusMinusOne);
 		}
 
 		// first/last column
 		for (var y = 0; y < gridSize.Y; y++)
 		{
-			CharMap.FloodFillNonRec(grid, new v2i(0, y), 'O');
-			CharMap.FloodFillNonRec(grid, new v2i(gridSize.X - 1, y), 'O');
+			grid.FloodFillNonRec(new v2i(0, y), 'O', v2i.PlusMinusOne);
+			grid.FloodFillNonRec(new v2i(gridSize.X - 1, y), 'O', v2i.PlusMinusOne);
 		}
 		DebugPrintLagoon(grid);
 

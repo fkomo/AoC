@@ -10,7 +10,6 @@ public class KnotHash : PuzzleBase
 	{
 		// part1
 		var elements = SparseHash(
-			Enumerable.Range(0, 256).Select(x => (byte)x).ToArray(), 
 			input[0].ToNumArray().Select(x => (byte)x).ToArray(),
 			rounds: 1);
 		
@@ -18,13 +17,23 @@ public class KnotHash : PuzzleBase
 
 		// part2
 		var sparseHash = SparseHash(
-			Enumerable.Range(0, 256).Select(x => (byte)x).ToArray(),
 			input[0].Select(x => (byte)x).Concat(new byte[] { 17, 31, 73, 47, 23 }).ToArray(),
 			rounds: 64);
 
 		var answer2 = string.Concat(DenseHash(sparseHash).Select(x => x.ToString("x2")));
 
 		return (answer1.ToString(), answer2.ToString());
+	}
+
+	public static string Compute(string input)
+	{
+		var sparse = SparseHash(input.Select(x => (byte)x).Concat(new byte[] { 17, 31, 73, 47, 23 }).ToArray(), rounds: 64);
+		
+		var dense = DenseHash(sparse);
+
+		var hash = string.Concat(dense.Select(x => x.ToString("x2")));
+
+		return hash;
 	}
 
 	static byte[] DenseHash(byte[] elements)
@@ -36,8 +45,10 @@ public class KnotHash : PuzzleBase
 		return result;
 	}
 
-	static byte[] SparseHash(byte[] elements, byte[] lengths, int rounds = 1)
+	static byte[] SparseHash(byte[] lengths, int rounds = 1)
 	{
+		var elements = Enumerable.Range(0, 256).Select(x => (byte)x).ToArray();
+
 		var skip = 0;
 		var position = 0;
 

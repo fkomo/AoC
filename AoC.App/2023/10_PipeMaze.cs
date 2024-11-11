@@ -1,10 +1,10 @@
 ﻿using Ujeby.AoC.Common;
-using Ujeby.Grid;
+using Ujeby.Grid.CharMapExtensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2023_10;
 
-[AoCPuzzle(Year = 2023, Day = 10, Answer1 = "7102", Answer2 = "363", Skip = false)]
+[AoCPuzzle(Year = 2023, Day = 10, Answer1 = "7102", Answer2 = "363", Skip = true)]
 public class PipeMaze : PuzzleBase
 {
 	readonly static string _inOutTiles = "12";
@@ -91,7 +91,7 @@ public class PipeMaze : PuzzleBase
 
 				var left = nextStep.Sides.Contains(s);
 
-				CharMap.FloodFill(map, dest, left ? _inOutTiles[0] : _inOutTiles[1]);
+				map.FloodFill(dest, left ? _inOutTiles[0] : _inOutTiles[1], v2i.PlusMinusOne);
 			}
 		}
 	}

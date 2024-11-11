@@ -8,8 +8,7 @@
 
 		public static readonly string OutputFile = Path.Combine(Environment.CurrentDirectory, $"AoC.Output.{DateTime.Now:yyyyMMdd_HHmmssfff}.txt");
 
-		public static void Line(
-			string lineText = null, int? indent = null, ConsoleColor textColor = ConsoleColor.White)
+		public static void Line(string lineText = null, int? indent = null, ConsoleColor textColor = ConsoleColor.White)
 		{
 			if (lineText != null)
 				PrintIndent(indent);
@@ -22,8 +21,7 @@
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static void Text(string text,
-			int? indent = null, ConsoleColor textColor = ConsoleColor.White)
+		public static void Text(string text, int? indent = null, ConsoleColor textColor = ConsoleColor.White)
 		{
 			PrintIndent(indent);
 
@@ -35,8 +33,8 @@
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		private static readonly (ConsoleColor Color, char Char)[] _christmasColors = new (ConsoleColor, char)[]
-		{
+		static readonly (ConsoleColor Color, char Char)[] _christmasColors =
+		[
 			//(ConsoleColor.DarkRed, '='),
 			(ConsoleColor.Red, '+'),
 			(ConsoleColor.DarkGreen, '*'),
@@ -48,10 +46,9 @@
 			(ConsoleColor.DarkYellow, '&'),
 			(ConsoleColor.Yellow, '$'),
 			(ConsoleColor.Yellow, '@'),
-		};
+		];
 
-		public static void PrintIndent(
-			int? indent = null)
+		public static void PrintIndent( int? indent = null)
 		{
 			indent ??= Indent;
 
@@ -61,7 +58,7 @@
 			AddTextToFile(text);
 		}
 
-		private static readonly (ConsoleColor Color, char Char)[] _christmasPattern = new (ConsoleColor, char)[]
+		static readonly (ConsoleColor Color, char Char)[] _christmasPattern = new (ConsoleColor, char)[]
 		{
 			(ConsoleColor.DarkGreen, '*'),
 			(ConsoleColor.DarkGreen, '#'),
@@ -92,8 +89,7 @@
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static void ChristmasText(string text,
-			int? indent = null)
+		public static void ChristmasText(string text, int? indent = null)
 		{
 			PrintIndent(indent);
 
@@ -128,9 +124,9 @@
 			Console.WriteLine();
 		}
 
-		private static object _fileLock = new();
+		static object _fileLock = new();
 
-		private static void AddTextToFile(string text)
+		static void AddTextToFile(string text)
 		{
 			lock (_fileLock)
 			{
@@ -138,7 +134,7 @@
 			}
 		}
 
-		private static void AddLinesToFile(params string[] lines)
+		static void AddLinesToFile(params string[] lines)
 		{
 			lock (_fileLock)
 			{
