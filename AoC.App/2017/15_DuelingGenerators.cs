@@ -10,36 +10,56 @@ public class DuelingGenerators : PuzzleBase
 	{
 		var mod = 2147483647L;
 		long[] factors = [16807, 48271];
+		var start = input.Select(x => x.ToNumArray()[0]).ToArray();
 
 		// part1
 		var answer1 = 0;
-		var gen = input.Select(x => x.ToNumArray()[0]).ToArray();
-		for (var i = 0; i < 40_000_000; i++)
+		var sampleCount = 40_000_000;
+		var generated = new UInt16[][] { new UInt16[sampleCount], new UInt16[sampleCount] };
+
+		Parallel.For(0, 2, (g) =>
 		{
-			gen[0] = (gen[0] * factors[0]) % mod;
-			gen[1] = (gen[1] * factors[1]) % mod;
-			if ((gen[0] & 0x000000000000ffff) == (gen[1] & 0x000000000000ffff))
+			var last = start[g];
+			var gen = generated[g];
+			var factor = factors[g];
+
+			for (var i = 0; i < sampleCount; i++)
+			{
+				last = (last * factor) % mod;
+				gen[i] = (UInt16)(last & 0x000000000000ffff);
+			}
+		});
+		for (var i = 0; i < sampleCount; i++)
+			if (generated[0][i] == generated[1][i])
 				answer1++;
-		}
 
 		// part2
 		var answer2 = 0;
 		long[] muls = [4, 8];
-		gen = input.Select(x => x.ToNumArray()[0]).ToArray();
-		for (var i = 0; i < 5_000_000; i++)
+		sampleCount = 5_000_000;
+		generated = [new UInt16[sampleCount], new UInt16[sampleCount]];
+		
+		Parallel.For(0, 2, (g) =>
 		{
-			for (var g = 0; g < gen.Length; g++)
+			var mul = muls[g];
+			var last = start[g];
+			var gen = generated[g];
+			var factor = factors[g];
+
+			for (var i = 0; i < sampleCount; i++)
 			{
 				do
 				{
-					gen[g] = (gen[g] * factors[g]) % mod;
+					last = (last * factor) % mod;
 				}
-				while (gen[g] % muls[g] != 0);
-			}
+				while (last % mul != 0);
 
-			if ((gen[0] & 0x000000000000ffff) == (gen[1] & 0x000000000000ffff))
+				gen[i] = (UInt16)(last & 0x000000000000ffff);
+			}
+		});
+		for (var i = 0; i < sampleCount; i++)
+			if (generated[0][i] == generated[1][i])
 				answer2++;
-		}
 
 		return (answer1.ToString(), answer2.ToString());
 	}
