@@ -21,6 +21,7 @@ public class FractalArt : PuzzleBase
 		var answer1 = patternAfter5.Sum(x => x.Count(xx => xx == '#'));
 
 		// part2
+		// TODO 2017/21 OPTIMIZE p2 (4s)
 		var patternAfter18 = IteratePattern(patternAfter5, rules, 18 - 5);
 		var answer2 = patternAfter18.Sum(x => x.Count(xx => xx == '#'));
 
