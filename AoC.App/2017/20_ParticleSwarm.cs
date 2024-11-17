@@ -10,7 +10,6 @@ public class ParticleSwarm : PuzzleBase
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
 		var particles = GetParticles(input);
-		//Debug.Line($"{particles.Length} particles");
 
 		// part1
 		// min manh. length of acceleration, and then min manh. length of initial velocity

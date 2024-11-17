@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{D522
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1A1D95FC-8A0E-4052-B973-DA104FE48EAF}"
 	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
 		preset.txt = preset.txt
 	EndProjectSection
 EndProject

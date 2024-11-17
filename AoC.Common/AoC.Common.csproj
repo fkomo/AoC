@@ -11,13 +11,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ujeby" Version="8.0.7" />
+		<!--<PackageReference Include="Ujeby" Version="8.*" />-->
 	</ItemGroup>
 
-	<!--<ItemGroup>
+	<ItemGroup>
 		<Reference Include="Ujeby">
 			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
-	</ItemGroup>-->
+	</ItemGroup>
 
 </Project>

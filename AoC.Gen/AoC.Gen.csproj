@@ -18,14 +18,14 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
-		<PackageReference Include="Ujeby" Version="8.0.7" />
+		<!--<PackageReference Include="Ujeby" Version="8.*" />-->
 	</ItemGroup>
 
-	<!--<ItemGroup>
+	<ItemGroup>
 		<Reference Include="Ujeby">
 			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
 		</Reference>
-	</ItemGroup>-->
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Remove=".session" />

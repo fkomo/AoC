@@ -29,7 +29,7 @@ namespace Ujeby.AoC.Vis.App
 			_particles = Ujeby.AoC.App._2017_20.ParticleSwarm.GetParticles(input);
 
 			_min = _particles.Select(x => long.MaxValue).ToArray();
-			_pt = _particles.Select(x => x.p0.ManhLength()).ToArray();
+			_pt = _particles.Select(x => x.Pos.ManhLength()).ToArray();
 		}
 
 		protected override void Update()
@@ -39,7 +39,7 @@ namespace Ujeby.AoC.Vis.App
 			{
 				var p = _particles[i];
 
-				_pt[i] = (p.p0 + p.v0 * _t + p.a * (_t * (_t + 1) / 2)).ManhLength();
+				_pt[i] = (p.Pos + p.Vel * _t + p.Acc * (_t * (_t + 1) / 2)).ManhLength();
 				_min[i] = System.Math.Min(_pt[i], _min[i]);
 			}
 		}
