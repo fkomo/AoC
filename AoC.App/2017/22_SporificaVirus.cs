@@ -18,7 +18,7 @@ public class SporificaVirus : PuzzleBase
 		var bursts = 10_000;
 		for (; bursts-- > 0; current += dir)
 		{
-			dir = dir.Rotate90();
+			dir = dir.RotateCCW();
 			if (!infected.Remove(current))
 			{
 				dir = dir.Inv();
@@ -45,10 +45,10 @@ public class SporificaVirus : PuzzleBase
 			}
 
 			if (state == NodeState.Clean)
-				dir = dir.Rotate90().Inv();
+				dir = dir.RotateCCW().Inv();
 
 			else if (state == NodeState.Infected)
-				dir = dir.Rotate90();
+				dir = dir.RotateCCW();
 
 			else if (state == NodeState.Flagged)
 				dir = dir.Inv();
