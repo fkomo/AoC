@@ -8,7 +8,7 @@ namespace Ujeby.AoC.App._2023_10;
 public class PipeMaze : PuzzleBase
 {
 	readonly static string _inOutTiles = "12";
-	readonly static v2i[] _cornersAndSides = v2i.Corners.Concat(v2i.UpDownLeftRight).ToArray();
+	readonly static v2i[] _cornersAndSides = [.. v2i.Corners, .. v2i.UpDownLeftRight];
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
@@ -91,7 +91,7 @@ public class PipeMaze : PuzzleBase
 
 				var left = nextStep.Sides.Contains(s);
 
-				map.FloodFill(dest, left ? _inOutTiles[0] : _inOutTiles[1], v2i.PlusMinusOne);
+				map.FloodFill(dest, left ? _inOutTiles[0] : _inOutTiles[1], v2i.PlusMinusOne, '.');
 			}
 		}
 	}

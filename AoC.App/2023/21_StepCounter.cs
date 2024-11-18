@@ -36,7 +36,7 @@ public class StepCounter : PuzzleBase
 		var answer1 = plots1.Count;
 
 		// part2
-		long? answer2 = null;
+		string answer2 = null;
 
 		// TODO 2023/21 p2
 		//plots0 = new HashSet<v2i>() { start };
@@ -48,7 +48,7 @@ public class StepCounter : PuzzleBase
 		//	plots0 = tmpPlots;
 		//}
 
-		return (answer1.ToString(), answer2.ToString());
+		return (answer1.ToString(), answer2?.ToString());
 	}
 
 	public static v2i GetStart(string[] input)

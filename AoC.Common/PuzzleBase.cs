@@ -65,10 +65,13 @@ namespace Ujeby.AoC.Common
 				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 0);
 
 				// title
-				Log.ChristmasText(Title, indent: 1);
-
 				if (Solution.Part1 == null && Solution.Part2 == null)
+				{
+					Log.ChristmasTextDisabled(Title, indent: 1);
 					return 0;
+				}
+
+				Log.ChristmasText(Title, indent: 1);
 
 				// elapsed
 				var elapsedText = Skip ? "skip!" : $"{DurationToStringSimple(Time.Value)}";

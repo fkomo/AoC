@@ -33,24 +33,26 @@ namespace Ujeby.AoC.App._2020_19
 			//Debug.Line();
 
 			// part2
-			allRules.Remove(8);
-			allRules.Add(8, new Rule(Child: new long[][]
-			{
-				new long[] { 42 },
-				new long[] { 42, 8 }
-			}));
+			// TODO 2020/19 p2
+			string answer2 = null;
+			//allRules.Remove(8);
+			//allRules.Add(8, new Rule(Child: new long[][]
+			//{
+			//	new long[] { 42 },
+			//	new long[] { 42, 8 }
+			//}));
 
-			allRules.Remove(11);
-			allRules.Add(11, new Rule(Child: new long[][]
-			{
-				new long[] { 42, 31 },
-				new long[] { 42, 11, 31 }
-			}));
+			//allRules.Remove(11);
+			//allRules.Add(11, new Rule(Child: new long[][]
+			//{
+			//	new long[] { 42, 31 },
+			//	new long[] { 42, 11, 31 }
+			//}));
 
-			Debug.Line();
-			var answer2 = msgs.Count(x => Match(allRules, x).Result);
+			//Debug.Line();
+			//var answer2 = msgs.Count(x => Match(allRules, x).Result);
 
-			return (answer1.ToString(), answer2.ToString());
+			return (answer1.ToString(), answer2?.ToString());
 		}
 
 		static Dictionary<long, HashSet<string>> _cache = new();
