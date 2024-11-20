@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 	  <None Remove="appsettings.year.json" />
+	  <None Remove="appsettings.years.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,6 +32,9 @@
 	<ItemGroup>
 		<Content Include="..\preset.txt" Link="preset.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.years.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="appsettings.year.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
