@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2018_04;
 
-[AoCPuzzle(Year = 2018, Day = 04, Answer1 = "118599", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 04, Answer1 = "118599", Answer2 = "33949", Skip = false)]
 public class ReposeRecord : PuzzleBase
 {
 	const string _timestampFormat = "yyyy-MM-dd HH:mm";
@@ -11,16 +11,42 @@ public class ReposeRecord : PuzzleBase
 
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
+		var guards = ProcessSleepLog(input);
+
+		// part1
+		var guardWithMostSleep = int.Parse(guards.OrderByDescending(x => x.Value.Sum(xx => (xx[_to] - xx[_from]).Minutes)).First().Key[1..]);
+		var answer1 = guardWithMostSleep * MostSleptMinute(guards[$"#{guardWithMostSleep}"], out _);
+
+		// part2
+		string mostFreqGuard = null;
+		var mostFreqMin = -1;
+		var mostFreqCnt = int.MinValue;
+		foreach (var guard in guards)
+		{
+			var min = MostSleptMinute(guard.Value, out int cnt);
+			if (cnt > mostFreqCnt)
+			{
+				mostFreqCnt = cnt;
+				mostFreqMin = min;
+				mostFreqGuard = guard.Key;
+			}
+		}
+
+		var answer2 = mostFreqMin * int.Parse(mostFreqGuard[1..]);
+
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	static Dictionary<string, List<DateTime[]>> ProcessSleepLog(string[] input)
+	{
 		var log = input
 			.ToDictionary(
 				x => DateTime.ParseExact(x[..$"[{_timestampFormat}]".Length], $"[{_timestampFormat}]", null),
 				x => x.Split(' ')[3])
 			.OrderBy(x => x.Key);
 
-		// part1
 		string currentGuard = null;
 		DateTime from = DateTime.MinValue, to = DateTime.MinValue;
-
 		var guards = new Dictionary<string, List<DateTime[]>>();
 		foreach (var entry in log)
 		{
@@ -44,10 +70,13 @@ public class ReposeRecord : PuzzleBase
 			}
 		}
 
-		var guardWithMostSleep = int.Parse(guards.OrderByDescending(x => x.Value.Sum(xx => (xx[_to] - xx[_from]).Minutes)).First().Key[1..]);
+		return guards;
+	}
 
+	static int MostSleptMinute(List<DateTime[]> sleeps, out int count)
+	{
 		var minDict = new Dictionary<int, int>();
-		foreach (var sleep in guards[$"#{guardWithMostSleep}"])
+		foreach (var sleep in sleeps)
 			for (var m = sleep[_from].Minute; m < sleep[_to].Minute; m++)
 			{
 				if (!minDict.ContainsKey(m))
@@ -55,11 +84,10 @@ public class ReposeRecord : PuzzleBase
 
 				minDict[m]++;
 			}
-		var answer1 = guardWithMostSleep * minDict.MaxBy(x => x.Value).Key;
 
-		// part2
-		string answer2 = null;
+		var max = minDict.MaxBy(x => x.Value);
 
-		return (answer1.ToString(), answer2?.ToString());
+		count = max.Value;
+		return max.Key;
 	}
 }
