@@ -32,7 +32,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 		string _underCursor;
 
 		v2i _selectionStart;
-		AABox2i _selection;
+		aab2i _selection;
 
 		public Dictionary<string, GraphNode> Data { get; private set; }
 
@@ -82,7 +82,7 @@ namespace Ujeby.AoC.Vis.App.Ui
 			}
 			else if (_selecting)
 			{
-				_selection = new AABox2i(new v2i[] { _selectionStart, mousePosition });
+				_selection = new aab2i(new v2i[] { _selectionStart, mousePosition });
 				Console.WriteLine($"{_selection}");
 
 				_selected = Data

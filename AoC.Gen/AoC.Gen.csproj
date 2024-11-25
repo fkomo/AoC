@@ -23,7 +23,7 @@
 
 	<ItemGroup>
 		<Reference Include="Ujeby">
-			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
+			<HintPath>..\..\Ujeby\publish\Ujeby.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 

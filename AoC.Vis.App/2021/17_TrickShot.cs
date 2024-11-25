@@ -11,7 +11,7 @@ namespace Ujeby.AoC.Vis.App
     internal class TrickShot : AoCRunnable
 	{
 		private v2i[] _path = null;
-		private AABox2i _target;
+		private aab2i _target;
 		private bool _hit = false;
 		private v2i _dir;
 

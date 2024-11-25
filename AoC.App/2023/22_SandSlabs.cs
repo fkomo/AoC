@@ -11,7 +11,7 @@ public class SandSlabs : PuzzleBase
 	{
 		var bricks = input
 			.Select(x => x.ToNumArray())
-			.Select(x => new AABox3i(new v3i[] { new v3i(x.Take(3).ToArray()), new v3i(x.Skip(3).ToArray()) }))
+			.Select(x => new aab3i(new v3i[] { new v3i(x.Take(3).ToArray()), new v3i(x.Skip(3).ToArray()) }))
 			.ToArray();
 		Debug.Line($"{bricks.Length} bricks");
 
@@ -37,7 +37,7 @@ public class SandSlabs : PuzzleBase
 			// there are some bricks above but not directly
 			bottomStack[s.Max.Z + 1].All(bs => !XYIntersection(s, bs)) ||
 			// there are some bricks directly above, but also there are other bricks supporting them
-			bottomStack[s.Max.Z + 1].All(bs => topStack[s.Max.Z].Except(new AABox3i[] { s }).Any(ts => XYIntersection(bs, ts))));
+			bottomStack[s.Max.Z + 1].All(bs => topStack[s.Max.Z].Except(new aab3i[] { s }).Any(ts => XYIntersection(bs, ts))));
 
 		// part2
 		var answer2 = bricks.Sum(s => DroppedBricks(bricks.Where(x => x != s).ToArray(), groundSize));
@@ -45,13 +45,13 @@ public class SandSlabs : PuzzleBase
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	static int DroppedBricks(AABox3i[] bricks, v2i groundSize)
+	static int DroppedBricks(aab3i[] bricks, v2i groundSize)
 	{
 		DropBricks(bricks, groundSize, out int dropped);
 		return dropped;
 	}
 
-	static AABox3i[] DropBricks(AABox3i[] bricks, v2i groundSize, out int dropped)
+	static aab3i[] DropBricks(aab3i[] bricks, v2i groundSize, out int dropped)
 	{
 		dropped = 0;
 
@@ -83,6 +83,6 @@ public class SandSlabs : PuzzleBase
 		return bricks;
 	}
 
-	static bool XYIntersection(AABox3i aab1, AABox3i aab2)
+	static bool XYIntersection(aab3i aab1, aab3i aab2)
 		=> !(aab1.Max.X < aab2.Min.X || aab1.Min.X > aab2.Max.X || aab1.Max.Y < aab2.Min.Y || aab1.Min.Y > aab2.Max.Y);
 }

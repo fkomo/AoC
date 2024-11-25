@@ -18,9 +18,9 @@ public class NeverTellMeTheOdds : PuzzleBase
 		Debug.Line($"{hailstones.Length} hailstones");
 
 #if DEBUG
-		var collisionArea = new AABox2i(new v2i(7), new v2i(27));
+		var collisionArea = new aab2i(new v2i(7), new v2i(27));
 #else
-		var collisionArea = new AABox2i(new v2i(200000000000000), new v2i(400000000000000));
+		var collisionArea = new aab2i(new v2i(200000000000000), new v2i(400000000000000));
 #endif
 
 		// normalize velocities to directions
@@ -99,7 +99,7 @@ public class NeverTellMeTheOdds : PuzzleBase
 			long.Parse(model.Eval(rpz).ToString());
 	}
 
-	static bool IntersectsIn(v3i p1, v2f d1, v3i p2, v2f d2, AABox2i collisionArea)
+	static bool IntersectsIn(v3i p1, v2f d1, v3i p2, v2f d2, aab2i collisionArea)
 	{
 		var u = (p1.Y * d2.X + d2.Y * p2.X - p2.Y * d2.X - d2.Y * p1.X) / (d1.X * d2.Y - d1.Y * d2.X);
 		var v = (p1.X + d1.X * u - p2.X) / d2.X;

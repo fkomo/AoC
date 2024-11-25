@@ -11,7 +11,7 @@ public class NoMatterHowYouSliceIt : PuzzleBase
 	{
 		var rects = input
 			.Select(x => x.ToNumArray())
-			.Select(x => new AABox2i(new(x[1], x[2]), new(x[1] + x[3] - 1, x[2] + x[4] - 1)))
+			.Select(x => new aab2i(new(x[1], x[2]), new(x[1] + x[3] - 1, x[2] + x[4] - 1)))
 			.ToArray();
 
 		// part1
@@ -19,10 +19,10 @@ public class NoMatterHowYouSliceIt : PuzzleBase
 		for (var r1 = 0; r1 < rects.Length; r1++)
 			for (var r2 = 0; r2 < r1; r2++)
 			{
-				if (!rects[r1].Overlaps(rects[r2], out AABox2i r1r2))
+				if (!rects[r1].Overlaps(rects[r2], out aab2i r1r2))
 					continue;
 
-				foreach (var p in r1r2.Points())
+				foreach (var p in r1r2.EnumPoints())
 					overlaps.Add(p);
 			}
 		var answer1 = overlaps.Count;
