@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2018_05;
 
-[AoCPuzzle(Year = 2018, Day = 05, Answer1 = "9116", Answer2 = "6890", Skip = true)]
+[AoCPuzzle(Year = 2018, Day = 05, Answer1 = "9116", Answer2 = "6890", Skip = false)]
 public class AlchemicalReduction : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -10,10 +10,10 @@ public class AlchemicalReduction : PuzzleBase
 		var polymer = input.Single().ToCharArray();
 
 		// part1
-		var answer1 = React([..polymer]);
+		var answer1 = React(polymer);
 
 		// part2
-		// TODO 2018/05 OPTIMIZE p2 (6s)
+		polymer = polymer.Where(x => x != 0).ToArray();
 		var answer2 = Enumerable.Range('a', 'z' - 'a')
 			.Min(x => React(polymer.Where(xx => char.ToLower(xx) != (char)x).ToArray()));
 
