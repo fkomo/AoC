@@ -1,5 +1,5 @@
 using Ujeby.AoC.Common;
-using Ujeby.Tools.StringExtensions;
+using Ujeby.Extensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2017_13;

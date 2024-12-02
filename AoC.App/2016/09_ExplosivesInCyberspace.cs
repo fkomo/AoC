@@ -1,6 +1,6 @@
 using System.Text;
 using Ujeby.AoC.Common;
-using Ujeby.Tools.StringExtensions;
+using Ujeby.Extensions;
 
 namespace Ujeby.AoC.App._2016_09;
 

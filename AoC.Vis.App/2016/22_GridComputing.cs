@@ -4,7 +4,7 @@ using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
-using Ujeby.Tools.StringExtensions;
+using Ujeby.Extensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
