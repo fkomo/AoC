@@ -85,7 +85,7 @@ namespace Ujeby.AoC.Gen
 			}
 		}
 
-		private const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
+		const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
 
 		private async static Task GeneratePuzzleCodeTemplate(string codePath, int year, int day)
 		{
@@ -140,7 +140,7 @@ namespace Ujeby.AoC.Gen
 			}
 		}
 
-		private static void DownloadMissingInput(string inputStorage, int year)
+		static void DownloadMissingInput(string inputStorage, int year)
 		{
 			try
 			{
@@ -163,7 +163,7 @@ namespace Ujeby.AoC.Gen
 			}
 		}
 
-		private async static Task<bool> DownloadInput(string inputStorage, int year, int day)
+		async static Task<bool> DownloadInput(string inputStorage, int year, int day)
 		{
 			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
 				return false;
@@ -177,8 +177,7 @@ namespace Ujeby.AoC.Gen
 			{
 				var inputUrl = $"{AoCHttpClient.BaseUrl}/{year}/day/{day}/input";
 
-				Log.Text($"{inputUrl}",
-					textColor: ConsoleColor.Yellow);
+				Log.Text($"{inputUrl}", textColor: ConsoleColor.Yellow);
 
 				var response = await AoCHttpClient.GetAsync(inputUrl);
 				if (response.IsSuccessStatusCode)
