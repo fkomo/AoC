@@ -8,10 +8,13 @@ public class CeresSearch : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
+		var extraLine = new string(Enumerable.Repeat('.', input.Length + 2).ToArray());
+		string[] inputExtra = [extraLine, .. input.Select(x => "." + x + ".").ToArray(), extraLine];
+
 		// part1
-		var answer1 = new aab2i(v2i.Zero, new v2i(input.Length - 1))
+		var answer1 = new aab2i(new v2i(1), new v2i(extraLine.Length - 2))
 			.EnumPoints()
-			.Sum(input.XMASCountAt);
+			.Sum(inputExtra.XMASCountAt);
 
 		// part2
 		var answer2 = new aab2i(new v2i(1, 1), new v2i(input.Length - 2))
@@ -26,35 +29,17 @@ static class Extensions
 {
 	public static int XMASCountAt(this string[] s, v2i p)
 	{
-		var count = 0;
-		if (s[p.Y][(int)p.X] != 'X')
-			return count;
-
-		var pattern = "MAS";
-
-		bool CheckMAS(v2i p, v2i dir)
+		bool CheckMAS(v2i pX, v2i dMAS)
 		{
+			var pattern = "MAS";
 			for (var i = 1; i <= pattern.Length; i++)
-				if (s[p.Y + dir.Y * i][(int)(p.X + dir.X * i)] != pattern[i - 1])
+				if (s[pX.Y + dMAS.Y * i][(int)(pX.X + dMAS.X * i)] != pattern[i - 1])
 					return false;
 
 			return true;
 		}
 
-		var x = (int)p.X;
-		var y = (int)p.Y;
-		var row = s[y];
-
-		count += ((x + pattern.Length) < row.Length && CheckMAS(p, new v2i(1, 0))) ? 1 : 0;
-		count += ((x - pattern.Length) >= 0 && CheckMAS(p, new v2i(-1, 0))) ? 1 : 0;
-		count += ((y + pattern.Length) < s.Length && CheckMAS(p, new v2i(0, 1))) ? 1 : 0;
-		count += ((y - pattern.Length) >= 0 && CheckMAS(p, new v2i(0, -1))) ? 1 : 0;
-		count += (x + pattern.Length < row.Length && y + pattern.Length < s.Length && CheckMAS(p, new v2i(1, 1))) ? 1 : 0;
-		count += (x - pattern.Length >= 0 && y - pattern.Length >= 0 && CheckMAS(p, new v2i(-1, -1))) ? 1 : 0;
-		count += (x + pattern.Length < row.Length && y - pattern.Length >= 0 && CheckMAS(p, new v2i(1, -1))) ? 1 : 0;
-		count += (x - pattern.Length >= 0 && y + pattern.Length < s.Length && CheckMAS(p, new v2i(-1, 1))) ? 1 : 0;
-
-		return count;
+		return (s[p.Y][(int)p.X] != 'X') ? 0 : v2i.PlusMinusOne.Count(x => CheckMAS(p, x));
 	}
 
 	public static bool X_MASAt(this string[] s, v2i p)
