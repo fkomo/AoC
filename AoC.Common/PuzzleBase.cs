@@ -49,6 +49,8 @@ namespace Ujeby.AoC.Common
 				{
 					Solution = SolvePuzzle(input);
 					Time = sw.Elapsed.TotalMilliseconds;
+					
+					System.Diagnostics.Debug.Print($"{Year}-{Day:d2}: {Time}ms");
 				}
 				else
 					Solution = Answer;

@@ -1,65 +1,73 @@
 using Ujeby.AoC.Common;
 using Ujeby.Vectors;
+using Ujeby.Grid.CharMapExtensions;
 
 namespace Ujeby.AoC.App._2024_06;
 
-[AoCPuzzle(Year = 2024, Day = 06, Answer1 = "5331", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2024, Day = 06, Answer1 = "5331", Answer2 = "1812", Skip = false)]
 public class GuardGallivant : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
 		var map = input.Select(x => x.ToCharArray()).ToArray();
 		
-		map.IndexOf('^', out v2i guard);
-		map[guard.Y][(int)guard.X] = '.'; 
+		map.Find('^', out v2i start);
+		map[start.Y][(int)start.X] = '.'; 
 
 		// part1
-		var gDir = v2i.Down;
-		var hs = new HashSet<v2i>();
+		var dir = v2i.Down;
+		var pos = start;
+		var visited = new HashSet<v2i>();
 		while (true)
 		{
-			hs.Add(guard);
+			visited.Add(pos);
 
-			var next = guard + gDir;
-			if (next.X < 0 || next.Y < 0 || next.Y == map.Length || next.X == map[next.Y].Length)
+			var nextPos = pos + dir;
+			if (nextPos.X < 0 || nextPos.Y < 0 || nextPos.Y == map.Length || nextPos.X == map[nextPos.Y].Length)
 				break;
 
-			var m = map[next.Y][(int)next.X];
+			var m = map[nextPos.Y][(int)nextPos.X];
 			if (m == '.')
-				guard = next;
+				pos = nextPos;
 
 			else if (m == '#')
-				gDir = gDir.RotateCCW();
+				dir = dir.RotateCCW();
 		}
-
-		var answer1 = hs.Count;
+		var answer1 = visited.Count;
 
 		// part2
-		string answer2 = null;
+		// TODO 2024/06 OPTIMIZE p2 (1s)
+		var answer2 = 0L;
+		var possibleObastacles = visited.Skip(1).ToArray();
+		Parallel.ForEach(possibleObastacles, (o) =>
+		{
+			if (map.IsLoop(start, v2i.Down, o))
+				answer2++;
+		});
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
 	}
 }
 
 static class Extensions
 {
-	internal static bool IndexOf(this char[][] map, char c, out v2i result)
+	internal static bool IsLoop(this char[][] map, v2i pos, v2i dir, v2i obstacle)
 	{
-		result = v2i.Zero;
+		var hs = new HashSet<(v2i Pos, v2i Dir)>();
+		while (hs.Add((pos, dir)))
+		{
+			var next = pos + dir;
+			if (next.X < 0 || next.Y < 0 || next.Y == map.Length || next.X == map[next.Y].Length)
+				return false;
 
-		var y = 0;
-		for (; y < map.Length; y++)
-			if (map[y].Contains(c))
-				break;
+			var m = map[next.Y][(int)next.X];
+			if (m == '#' || next == obstacle)
+				dir = dir.RotateCCW();
 
-		if (y == map.Length)
-			return false;
+			else if (m == '.')
+				pos = next;
+		}
 
-		var x = Array.IndexOf(map[y], c);
-		if (x == -1)
-			return false;
-
-		result = new v2i(x, y);
 		return true;
 	}
 }
