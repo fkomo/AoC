@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Ujeby.AoC.Common;
 using Ujeby.Vectors;
 
@@ -11,22 +10,19 @@ public class ResonantCollinearity : PuzzleBase
 	{
 		var city = new aab2i(v2i.Zero, new v2i(input.Length - 1));
 
-		var raw = new List<(char, v2i)>();
-		for (var y = 0; y < input.Length; y++)
-			for (var x = 0; x < input.Length; x++)
-				if (input[y][x] != '.')
-					raw.Add((input[y][x], new v2i(x, y)));
-
-		var antenaPairs = raw
-			.GroupBy(x => x.Item1)
+		var antennaPairs = city
+			.EnumPoints()
+			.Where(x => input[x.Y][(int)x.X] != '.')
+			.Select(x => (Name:input[x.Y][(int)x.X], Position:x))
+			.GroupBy(x => x.Name)
 			.Where(x => x.Count() > 1)
-			.Select(x => x.Select(xx => xx.Item2).ToArray())
+			.Select(x => x.Select(xx => xx.Position).ToArray())
 			.EnumPairs()
 			.ToArray();
 
 		// part1
 		var antinodesInCity = new HashSet<v2i>();
-		foreach (var ap in antenaPairs)
+		foreach (var ap in antennaPairs)
 		{
 			var antinode = ap[1] + ap[1] - ap[0];
 			if (city.Contains(antinode))
@@ -35,7 +31,7 @@ public class ResonantCollinearity : PuzzleBase
 		var answer1 = antinodesInCity.Count;
 
 		// part2
-		foreach (var ap in antenaPairs)
+		foreach (var ap in antennaPairs)
 		{
 			var dist = ap[1] - ap[0];
 
