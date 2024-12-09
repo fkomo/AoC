@@ -11,92 +11,90 @@ public class DiskFragmenter : PuzzleBase
 		var diskMap = input.Single().Select(x => (byte)(x - '0')).ToArray();
 
 		// part1
-		var idBlocks = new List<long>();
+		var blockIds = new List<long>();
 		for (var i = 0; i < diskMap.Length; i++)
 		{
 			if (diskMap[i] == 0)
 				continue;
 
-			idBlocks.AddRange(Enumerable.Repeat((i % 2 == 0) ? (long)i / 2 : _empty, diskMap[i]));
+			blockIds.AddRange(Enumerable.Repeat((i % 2 == 0) ? (long)i / 2 : _emptyId, diskMap[i]));
 		}
 
-		var compactLength = idBlocks.Count;
-		var empty = idBlocks.IndexOf(_empty);
-		for (var f = idBlocks.Count - 1; f >= 0; f--)
+		var compactLength = blockIds.Count;
+		var empty = blockIds.IndexOf(_emptyId);
+		for (var i = blockIds.Count - 1; i >= 0; i--)
 		{
 			compactLength--;
 
-			if (idBlocks[f] == _empty)
+			if (blockIds[i] == _emptyId)
 				continue;
 
 			// swap empty block space with file block
-			(idBlocks[empty], idBlocks[f]) = (idBlocks[f], idBlocks[empty]);
+			(blockIds[empty], blockIds[i]) = (blockIds[i], blockIds[empty]);
 
-			empty = idBlocks.IndexOf(_empty, empty);
-			if (empty >= f)
+			empty = blockIds.IndexOf(_emptyId, empty);
+			if (empty >= i)
 				break;
 		}
 
-		var answer1 = Checksum(idBlocks.Take(compactLength));
+		var answer1 = Checksum(blockIds.Take(compactLength));
 
 		// part2
 		var position = 0L;
 		var blocks = new List<v3i>();
+		var emptyBlocks = new List<v2i>();
 		for (var i = 0; i < diskMap.Length; position += diskMap[i], i++)
 		{
-			if (diskMap[i] > 0)
-				blocks.Add(new v3i(position, diskMap[i], i % 2 == 0 ? i / 2 : _empty));
+			if (diskMap[i] == 0)
+				continue;
+
+			if (i % 2 == 0)
+				blocks.Add(new v3i(position, diskMap[i], i / 2));
+			else
+				emptyBlocks.Add(new v2i(position, diskMap[i]));
 		}
 
 		for (var i = blocks.Count - 1; i >= 0; i--)
 		{
 			var block = blocks[i];
-			if (block[_id] == _empty)
-				continue;
 
-			var e = FindFirstEmptyBlock(blocks, block[_size], i);
+			var e = IndexOfFirstEmpty(emptyBlocks, block[_size], block[_pos]);
 			if (e == -1)
 				continue;
 
 			// add empty block in place of old file
-			blocks.Add(new v3i(block[_pos], block[_size], _empty));
+			emptyBlocks.Add(new v2i(block[_pos], block[_size]));
 			// move old file block to empty space
-			blocks[i] += new v3i(blocks[e][_pos] - block[_pos], 0, 0);
+			blocks[i] += new v3i(emptyBlocks[e][_pos] - block[_pos], 0, 0);
 			// cut from old empty block
-			blocks[e] += new v3i(block[_size], - block[_size], 0);
+			emptyBlocks[e] += new v2i(block[_size], - block[_size]);
 		}
 
-		var compact = new List<long>();
-		var compactBlocks = blocks.OrderBy(x => x[_pos]).ToArray();
-		foreach (var block in compactBlocks)
-		{
-			var id = block[_id] == _empty ? 0 : block[_id];
-			compact.AddRange(Enumerable.Repeat(id, (int)block[_size]));
-		}
+		var compact = blocks
+			.Concat(emptyBlocks.Select(x => new v3i(x, 0)))
+			.OrderBy(x => x[_pos])
+			.SelectMany(x => Enumerable.Repeat(x[_id], (int)x[_size]))
+			.ToArray();
 
 		var answer2 = Checksum(compact);
 
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	const int _empty = -1;
+	const int _emptyId = -1;
 	const int _pos = 0;
 	const int _size = 1;
 	const int _id = 2;
 
-	static int FindFirstEmptyBlock(List<v3i> blocks, long size, int maxIndex)
+	static int IndexOfFirstEmpty(List<v2i> emptyBlocks, long size, long fileBlockPosition)
 	{
-		for (var e = 0; e < maxIndex; e++)
+		for (var e = 0; e < emptyBlocks.Count; e++)
 		{
-			if (blocks[e][_id] != _empty)
-				continue;
-
-			var emptyBlock = blocks[e];
-
+			var emptyBlock = emptyBlocks[e];
 			if (emptyBlock[_size] < size)
 				continue;
 
-			return e;
+			return emptyBlock[_pos] < fileBlockPosition ? e : -1;
 		}
 
 		return -1;
