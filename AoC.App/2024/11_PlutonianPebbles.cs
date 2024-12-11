@@ -3,56 +3,57 @@ using Ujeby.Extensions;
 
 namespace Ujeby.AoC.App._2024_11;
 
-[AoCPuzzle(Year = 2024, Day = 11, Answer1 = "186203", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2024, Day = 11, Answer1 = "186203", Answer2 = "221291560078593", Skip = false)]
 public class PlutonianPebbles : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var stones = input.Single().ToNumArray();
+		var stones = input.Single().ToNumArray().ToDictionary(x => x, x => 1L);
 
 		// part1
-		// TODO 2024/11 p1 OPTIMIZE (1min)
 		for (var i = 0; i < 25; i++)
-		{
-			Ujeby.Tools.Timer.Start("p1");
-			
 			stones = stones.Blink();
-			
-			Debug.Line($"{i}:" + Ujeby.Tools.Timer.Stop("p1").ToString());
-		}
-
-		var answer1 = stones.Length;
+		var answer1 = stones.Sum(x => x.Value);
 
 		// part2
-		string answer2 = null;
+		for (var i = 25; i < 75; i++)
+			stones = stones.Blink();
+		var answer2 = stones.Sum(x => x.Value);
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
 	}
 }
 
 static class Extensions
 {
-	public static long[] Blink(this long[] stones)
+	public static Dictionary<long, long> Blink(this Dictionary<long, long> stones)
 	{
-		for (var s = stones.Length - 1; s >= 0; s--)
+		var stonesAfter = new Dictionary<long, long>();
+
+		void AddStoneAfter(long newStone, long count)
 		{
-			if (stones[s] == 0)
-				stones[s] = 1;
-
-			else if (stones[s].ToString().Length % 2 == 0)
-			{
-				var str = stones[s].ToString();
-
-				var s1 = long.Parse(str[..(str.Length / 2)]);
-				var s2 = long.Parse(str[(str.Length / 2)..]);
-
-				stones[s] = s1;
-				stones = stones.Take(s + 1).Concat([s2]).Concat(stones.Skip(s + 1)).ToArray();
-			}
-			else
-				stones[s] *= 2024;
+			if (!stonesAfter.TryAdd(newStone, count))
+				stonesAfter[newStone] += count;
 		}
 
-		return stones;
+		foreach (var stone in stones.Keys)
+		{
+			var stoneCount = stones[stone];
+
+			if (stone == 0)
+				AddStoneAfter(1, stoneCount);
+
+			else if (stone.ToString().Length % 2 == 0)
+			{
+				var stoneStr = stone.ToString();
+
+				AddStoneAfter(long.Parse(stoneStr[..(stoneStr.Length / 2)]), stoneCount);
+				AddStoneAfter(long.Parse(stoneStr[(stoneStr.Length / 2)..]), stoneCount);
+			}
+			else
+				AddStoneAfter(stone * 2024, stoneCount);
+		}
+
+		return stonesAfter;
 	}
 }
