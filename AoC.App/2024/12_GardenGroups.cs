@@ -11,16 +11,16 @@ public class GardenGroups : PuzzleBase
 	{
 		var map = input.Select(x => x.ToCharArray()).ToArray();
 
-		var mapSize = new aab2i(v2i.Zero, new v2i(map.Length - 1));
+		var mapArea = new aab2i(v2i.Zero, new v2i(map.Length - 1));
 
 		var plots = new List<Plot>();
-		foreach (var p in mapSize.EnumPoints())
+		foreach (var p in mapArea.EnumPoints())
 		{
 			if (!char.IsLetter(map[p.Y][p.X]))
 				continue;
 
 			// garden plot
-			map = CreateGardenPlot(map, p, mapSize, out Plot plot);
+			map = CreateGardenPlot(map, p, mapArea, out Plot plot);
 			plots.Add(plot);
 		}
 
@@ -28,11 +28,12 @@ public class GardenGroups : PuzzleBase
 		var answer1 = plots.Sum(x => x.Plants.Length * x.Perimeter);
 
 		// part2
+		map = input.Select(x => x.ToCharArray()).ToArray();
+
 		var plotSides = plots.ToDictionary(x => x, x => CountOutterSides(x.Plants));
 
-		// add inner sides
-		map = input.Select(x => x.ToCharArray()).ToArray();
-		foreach (var plot in plots)
+		// add inner sides to plots that can contain inner plots
+		foreach (var plot in plots.Where(x => x.Plants.Length >= 8))
 		{
 			var plotArea = aab2i.FromPointArray(plot.Plants);
 			var plotMap = map.TakeSub(plotArea);
@@ -42,10 +43,13 @@ public class GardenGroups : PuzzleBase
 				plotMap.FloodFillNonRec(b - plotArea.Min, _outside, v2i.PlusMinusOne, plot.PlantName);
 
 			// check if plot area contains any inner plots
+			Plot innerPlot = null;
 			var usedInnerPlots = new HashSet<Plot>();
 			foreach (var p in plotArea.EnumPoints().Where(x => map[x.Y][x.X] != plot.PlantName && plotMap[x.Y - plotArea.Min.Y][x.X - plotArea.Min.X] != _outside))
 			{
-				var innerPlot = plots.Single(x => x.Plants.Contains(p));
+				if (innerPlot == null || !innerPlot.Plants.Contains(p))
+					innerPlot = plots.Single(x => x.Plants.Contains(p));
+
 				if (!usedInnerPlots.Add(innerPlot))
 					continue;
 
