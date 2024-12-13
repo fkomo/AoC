@@ -50,14 +50,14 @@ namespace Ujeby.AoC.Vis.App.Ui
 			var spacing = new v2i(0, 4);
 			var scale = new v2i(2);
 
-			var perLine = 5;
+			var perLine = 4;
 			var gridSize = new v2i(WindowSize.X / (perLine + 1), WindowSize.Y / ((_items.Keys.Count / perLine) + 2));
 
 			var iy = 0;
 			for (var ix = 0; ix < _items.Keys.Count; ix++)
 			{
 				var sectionTitleText = _items.Keys.ElementAt(ix);
-				var sectionCenter = new v2i((ix % perLine) + 1, iy + 1) * gridSize;
+				var sectionCenter = new v2i((ix % perLine) + 1, (ix / perLine) + 1) * gridSize;
 
 				var items = _items[sectionTitleText].Select(i => new Text(i.Name.SplitCase())).ToArray();
 				var itemsSize = Sdl2Wrapper.CurrentFont.GetTextSize(spacing, scale, items);
@@ -90,9 +90,6 @@ namespace Ujeby.AoC.Vis.App.Ui
 
 				// items
 				Sdl2Wrapper.DrawText(sectionCenter - itemsSize / 2, spacing, scale, items);
-
-				if (ix > 0 && (ix % (perLine - 1)) == 0)
-					iy++;
 			}
 		}
 

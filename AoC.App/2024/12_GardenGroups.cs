@@ -35,7 +35,7 @@ public class GardenGroups : PuzzleBase
 		// add inner sides to plots that can contain inner plots
 		foreach (var plot in plots.Where(x => x.Plants.Length >= 8))
 		{
-			var plotArea = aab2i.FromPointArray(plot.Plants);
+			var plotArea = aab2i.FromPoints(plot.Plants);
 			var plotMap = map.TakeSub(plotArea);
 
 			// fill everything outside of plot

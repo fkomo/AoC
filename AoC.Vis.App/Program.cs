@@ -54,10 +54,13 @@ namespace Ujeby.AoC.Vis.App
 									new ParticleSwarm(windowSize),
 								}
 							},
-							//{
-							//	"2018",
-							//	Array.Empty<AoCRunnable>()
-							//},
+							{
+								"2018",
+								new AoCRunnable[]
+								{
+									new NoMatterHowYouSliceIt(windowSize),
+								}
+							},
 							//{
 							//	"2019",
 							//	Array.Empty<AoCRunnable>()
@@ -99,6 +102,13 @@ namespace Ujeby.AoC.Vis.App
 									new ALongWalk(windowSize),
 								}
 							},
+							{
+								"2024",
+								new AoCRunnable[]
+								{
+									new GardenGroups(windowSize),
+								}
+							}
 						}
 					);
 					menu.Run();
