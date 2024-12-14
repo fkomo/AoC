@@ -107,6 +107,7 @@ namespace Ujeby.AoC.Vis.App
 								new AoCRunnable[]
 								{
 									new GardenGroups(windowSize),
+									new RestroomRedoubt(windowSize),
 								}
 							}
 						}
