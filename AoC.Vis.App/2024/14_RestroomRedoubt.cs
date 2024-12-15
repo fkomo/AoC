@@ -19,8 +19,6 @@ namespace Ujeby.AoC.Vis.App
 		v4f[] _colors;
 		v2i _mid;
 
-		long _dists;
-
 		const int _frameStep = 1;
 		readonly Stopwatch _sw = Stopwatch.StartNew();
 
@@ -80,8 +78,7 @@ namespace Ujeby.AoC.Vis.App
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
 
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
-				new Text($"{nameof(_second)}: {_second}"),
-				new Text($"{nameof(_dists)}: {_dists}")
+				new Text($"{nameof(_second)}: {_second}")
 				);
 
 			base.Render();
