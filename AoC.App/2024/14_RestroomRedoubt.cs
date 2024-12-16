@@ -39,19 +39,32 @@ public class RestroomRedoubt : PuzzleBase
 
 		// part2
 		var second = 0;
-		var somethingFound = false;
 
-		// checks if robots are positioned in horizontal line
-		var lineLength = 16;
-		var line = Enumerable.Range(1, lineLength).Select(x => new v2i(x, 0)).ToArray();
-		while (!somethingFound)
+		// check if robots form a border
+		// if there is at least 2 horizontal and 2 vertical lines they probably form a border with tree image inside
+		// also not checking for "straight" lines, just check if enough robots are at given tim in single row / column
+		var borderLength = 30;
+		var rows = new Dictionary<long, int>();
+		var cols = new Dictionary<long, int>();
+		while (cols.Count(x => x.Value >= borderLength) < 2 || rows.Count(x => x.Value >= borderLength) < 2)
 		{
-			second += 10; // advance in time by magic constant :)
-			
-			var robotsAt = RobotsAt(robots, space, second).ToArray();
+			second++;
+			rows.Clear();
+			cols.Clear();
 
-			if (robotsAt.Any(r => line.All(l => robotsAt.Contains(r + l))))
-				break;
+			foreach (var robot in robots)
+			{
+				var pos = (((robot.Pos + robot.Vel * second) % space) + space) % space;
+
+				if (!rows.ContainsKey(pos.Y))
+					rows[pos.Y] = 0;
+
+				if (!cols.ContainsKey(pos.X))
+					cols[pos.X] = 0;
+
+				rows[pos.Y]++;
+				cols[pos.X]++;
+			}
 		}
 		var answer2 = second;
 
