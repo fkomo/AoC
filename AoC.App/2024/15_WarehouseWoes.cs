@@ -85,43 +85,58 @@ public class WarehouseWoes : PuzzleBase
 	{
 		map.Find('@', out v2i pos);
 
-		//foreach (var step in steps)
-		//{
-		//	var pos2 = pos + step;
-		//	var at = map.At(pos2);
+		foreach (var step in steps)
+		{
+			PrintMap(map);
 
-		//	if (at == '#')
-		//		continue;
+			var pos2 = pos + step;
+			var at = map.At(pos2);
 
-		//	else if (at == '.')
-		//	{
-		//		map[pos.Y][pos.X] = '.';
-		//		map[pos2.Y][pos2.X] = '@';
-		//		pos += step;
-		//	}
-		//	else // []
-		//	{
-		//		var push = 0;
-		//		for (var i = 1; map.At(pos2 + step * i) != '#'; i++)
-		//		{
-		//			if (map.At(pos2 + step * i) == '.')
-		//			{
-		//				push = i;
-		//				break;
-		//			}
-		//		}
+			if (at == '#')
+				continue;
 
-		//		if (push == 0)
-		//			continue;
+			else if (at == '.')
+			{
+				map[pos.Y][pos.X] = '.';
+				map[pos2.Y][pos2.X] = '@';
+				pos = pos2;
+			}
+			else // []
+			{
+				if (step.Y == 0)
+				{
+					var push = 0;
+					for (var i = 2; map.At(pos2 + step * i) != '#'; i++)
+					{
+						if (map.At(pos2 + step * i) == '.')
+						{
+							push = i;
+							break;
+						}
+					}
 
-		//		map[pos.Y][pos.X] = '.';
-		//		map[pos2.Y][pos2.X] = '@';
-		//		for (var i = 1; i <= push; i++)
-		//			map[pos2.Y + push * step.Y][pos2.X + push * step.X] = 'O';
+					if (push == 0)
+						continue;
 
-		//		pos += step;
-		//	}
-		//}
+					var to = pos.X + step.X * push;
+					var from = pos2.X;
+					if (from > to)
+						(from, to) = (to, from);
+
+					var toPush = map[pos2.Y].Skip((int)from).Take(push).ToArray();
+					for (var i = 0; i < toPush.Length; i++)
+						map[pos2.Y][from + i] = toPush[i];
+
+					map[pos.Y][pos.X] = '.';
+					map[pos2.Y][pos2.X] = '@';
+					pos = pos2;
+				}
+				else
+				{
+					// TODO 
+				}
+			}
+		}
 
 		return map;
 	}
