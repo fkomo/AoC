@@ -108,6 +108,7 @@ namespace Ujeby.AoC.Vis.App
 								{
 									new GardenGroups(windowSize),
 									new RestroomRedoubt(windowSize),
+									new ReindeerMaze(windowSize),
 								}
 							}
 						}
