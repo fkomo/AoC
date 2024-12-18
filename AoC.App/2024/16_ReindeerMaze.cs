@@ -12,9 +12,7 @@ public class ReindeerMaze : PuzzleBase
 		var map = input.Select(x => x.ToArray()).ToArray();
 
 		// part1
-		var shortestPath = ShortestPath(map);
-
-		var answer1 = 0;
+		var answer1 = ShortestPath(map).Score();
 
 		// part2
 		string answer2 = null;
@@ -28,27 +26,47 @@ public class ReindeerMaze : PuzzleBase
 		map.Find('E', out v2i end);
 
 		var nodes = new v2i[] { start, end }.Concat(map.EnumAll('.')).ToArray();
+		var nodeIds = Enumerable.Range(0, nodes.Length).ToArray();
 
-		//long Weight(int n1, int n2)
-		//{
-		//	return 1;
-		//}
-
-		//int[] Neighbours(int node) => 
-		//	v2i.UpDownLeftRight
-		//		.Select(x => Array.IndexOf(nodes, nodes[node] + x))
-		//		.Where(x => x != -1)
-		//		.ToArray();
-
-		//return Ujeby.Alg.Graph.DijkstraShortestPath(0, 1, Enumerable.Range(0, nodes.Length).ToArray(), Neighbours, Weight)
-		//	.Select(x => nodes[x])
-		//	.ToArray();
-
-		bool Connection(v2i n1, v2i n2)
+		long Weight(int n1, int n2)
 		{
-			return map.Get(n1) != '#' &&  map.Get(n2) != '#';
+			return 1;
 		}
 
-		return Ujeby.Alg.Graph.BreadthFirstSearch(start, end, map.ToAAB2i().Size, Connection);
+		var neighbours = nodeIds.ToDictionary(
+			x => x,
+			x => v2i.UpDownLeftRight
+				.Select(xx => Array.IndexOf(nodes, nodes[x] + xx))
+				.Where(xx => xx != -1)
+				.ToArray());
+
+		int[] Neighbours(int node) => neighbours[node];
+
+		return Ujeby.Alg.Graph.DijkstraShortestPath(0, 1, nodeIds, Neighbours, Weight)
+			.Select(x => nodes[x])
+			.ToArray();
+
+		//return Ujeby.Alg.Graph.BreadthFirstSearch(0, 1, Neighbours)
+		//	.Select(x => nodes[x])
+		//	.ToArray();
+	}
+}
+
+public static class Extensions
+{
+	public static long Score(this v2i[] path)
+	{
+		var score = path.Length;
+
+		var dir = v2i.Right;
+		for (var i = 1; i < path.Length; i++)
+		{
+			if (path[i] - path[i - 1] != dir)
+				score += 1000;
+
+			dir = path[i] - path[i - 1];
+		}
+
+		return score;
 	}
 }
