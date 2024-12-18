@@ -6,14 +6,13 @@ using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Grid.CharMapExtensions;
 using Ujeby.Vectors;
-using Ujeby.AoC.App._2024_16;
 
 namespace Ujeby.AoC.Vis.App
 {
 	internal class ReindeerMaze : AoCRunnable
 	{
 		char[][] _map;
-		v2i[] _path;
+		v2i[] _path = [];
 		long _score;
 
 		public override string Name => $"#16 {nameof(ReindeerMaze)}";
@@ -29,9 +28,9 @@ namespace Ujeby.AoC.Vis.App
 			//var input = InputProvider.Read(AppSettings.InputDirectory, 2024, 16);
 
 			_map = input.Select(x => x.ToArray()).ToArray();
-			_path = AoC.App._2024_16.ReindeerMaze.ShortestPath(_map);
 
-			_score = _path.Score();
+			//_path = AoC.App._2024_16.ReindeerMaze.ShortestPath(_map);
+			//_score = _path.Score();
 		}
 
 		protected override void Update()
