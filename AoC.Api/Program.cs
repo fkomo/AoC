@@ -82,7 +82,7 @@ namespace Ujeby.AoC.Api
 				if (puzzle == null)
 					return Results.NotFound();
 
-				var result = puzzle.Solve(config["aoc:input"]);
+				puzzle.Solve(config["aoc:input"]);
 
 				return Results.Ok(new PuzzleResult(CreateMeta(puzzle), puzzle.Solution.Part1, puzzle.Solution.Part2, puzzle.Time));
 			});

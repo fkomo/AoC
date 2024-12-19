@@ -13,7 +13,7 @@ namespace Ujeby.AoC.Vis.App
 	{
 		char[][] _map;
 		v2i[] _path = [];
-		long _score;
+		//long _score;
 
 		public override string Name => $"#16 {nameof(ReindeerMaze)}";
 
@@ -55,8 +55,8 @@ namespace Ujeby.AoC.Vis.App
 
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"{nameof(_map)}: {_map.ToAAB2i()}"),
-				new Text($"{nameof(_path.Length)}: {_path.Length}"),
-				new Text($"{nameof(_score)}: {_score}")
+				new Text($"{nameof(_path.Length)}: {_path.Length}")
+				//new Text($"{nameof(_score)}: {_score}")
 				);
 
 			base.Render();

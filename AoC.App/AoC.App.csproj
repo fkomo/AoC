@@ -12,8 +12,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="appsettings.year.json" />
-	  <None Remove="appsettings.years.json" />
+	  <None Remove="appsettings.2024.json" />
+	  <None Remove="appsettings.custom.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,19 +33,19 @@
 		<Content Include="..\preset.txt" Link="preset.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.years.json">
+		<Content Include="appsettings.2024.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.year.json">
+		<Content Include="appsettings.custom.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.nexts.json">
+		<Content Include="appsettings.unsolveds.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.complete.json">
+		<Content Include="appsettings.all.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.next.json">
+		<Content Include="appsettings.unsolved.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="appsettings.json">

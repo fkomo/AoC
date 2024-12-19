@@ -7,9 +7,8 @@ namespace Ujeby.AoC.App
 	{
 		public const string ConfigSection = "AoC";
 
-		public int[] Years { get; set; }
+		public string[] Puzzles { get; set; }
 
-		public bool? SkipSolved { get; set; } = true;
 		public bool IgnoreSkip { get; set; } = false;
 
 		public string Input { get; set; }
@@ -28,13 +27,7 @@ namespace Ujeby.AoC.App
 			var settings = new Settings();
 			config.Bind(Settings.ConfigSection, settings);
 
-			if (settings.Years == null || settings.Years.Length < 1)
-			{
-				Console.Write($"{Environment.NewLine}  Year [2015, .., {DateTime.Now.Year}] ? ");
-				settings.Years = [int.Parse(Console.ReadLine())];
-			}
-			else
-				Console.WriteLine($"{Environment.NewLine}  Years: {string.Join(", ", settings.Years)}");
+			Console.WriteLine($"{Environment.NewLine}  Puzzles: {string.Join(", ", settings.Puzzles.Select(x=> $"{x}"))}");
 
 			if (settings.InputSuffix == null)
 			{
@@ -50,19 +43,11 @@ namespace Ujeby.AoC.App
 			if (!string.IsNullOrEmpty(settings.InputSuffix))
 				settings.InputSuffix = "." + settings.InputSuffix;
 
-			if (!settings.SkipSolved.HasValue)
-			{
-				Console.Write($"  Skip solved [y/n(default)] puzzles ? ");
-				settings.SkipSolved = Console.ReadLine() == "y";
-			}
-			else
-				Console.WriteLine($"  Skip solved puzzles: {settings.SkipSolved}"); 
-			
 			Log.Line();
 
 			// run all puzzles in solution
-			AdventOfCode.RunAll(settings.Years, 
-				inputStorage: settings.Input, ignoreSkip: settings.IgnoreSkip, skipSolved: settings.SkipSolved.Value, inputSuffix: settings.InputSuffix);
+			AdventOfCode.RunAll(settings.Puzzles, 
+				inputStorage: settings.Input, ignoreSkip: settings.IgnoreSkip, inputSuffix: settings.InputSuffix);
 		}
 
 		public static void Init()

@@ -53,7 +53,6 @@ namespace Ujeby.AoC.Vis.App.Ui
 			var perLine = 4;
 			var gridSize = new v2i(WindowSize.X / (perLine + 1), WindowSize.Y / ((_items.Keys.Count / perLine) + 2));
 
-			var iy = 0;
 			for (var ix = 0; ix < _items.Keys.Count; ix++)
 			{
 				var sectionTitleText = _items.Keys.ElementAt(ix);

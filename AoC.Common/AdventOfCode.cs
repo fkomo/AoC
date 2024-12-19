@@ -21,13 +21,18 @@ namespace Ujeby.AoC.Common
 			return string.IsNullOrEmpty(preset) ? "appsettings.json" : $"appsettings.{preset}.json";
 		}
 
-		public static void RunAll(int[] years,
-			string inputStorage = null, string inputSuffix = null, bool ignoreSkip = false, bool skipSolved = false)
+		public static void RunAll(string[] puzzles,
+			string inputStorage = null, string inputSuffix = null, bool ignoreSkip = false)
 		{
 			if (string.IsNullOrEmpty(inputStorage))
 				inputStorage = Environment.CurrentDirectory;
 
 			Log.Line($"Using input storage '{inputStorage}'");
+
+			var puzzleFilters = puzzles.Select(x => x.Split(':')).ToArray();
+
+			static bool EqualOrWild(string left, string right) => 
+				left == "*" || left == right || left.Split(',').Select(x => x.Trim()).Contains(right);
 
 			foreach (var aocYear in AppDomain.CurrentDomain.GetAssemblies()
 				.Where(a => a.FullName.StartsWith("Ujeby.AoC."))
@@ -36,27 +41,31 @@ namespace Ujeby.AoC.Common
 				.OrderBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Day)
 				.GroupBy(p => p.GetCustomAttribute<AoCPuzzleAttribute>().Year))
 			{
-				if (years?.Any() == true && !years.Contains(aocYear.Key))
+				if (!puzzleFilters.Any(x => EqualOrWild(x[0], aocYear.Key.ToString())))
 					continue;
 
-				Run(aocYear.Key,
-					inputStorage,
-					inputSuffix,
-					skipSolved,
-					aocYear.Select(p =>
+				var filteredPuzzles = aocYear
+					.Select(x =>
 					{
-						var puzzle = (IPuzzle)Activator.CreateInstance(p);
-
+						var puzzle = (IPuzzle)Activator.CreateInstance(x);
 						if (ignoreSkip)
 							puzzle.Skip = false;
 
 						return puzzle;
 					})
-					.ToArray());
+					.Where(x => puzzleFilters.Any(pf => 
+						EqualOrWild(pf[0], x.Year.ToString()) && 
+						(EqualOrWild(pf[1], x.Day.ToString()) || (pf[1] == "?" && (x.Answer.Part1 == null || x.Answer.Part2 == null)))))
+					.ToArray();
+
+				if (filteredPuzzles.Length == 0)
+					continue;
+
+				Run(aocYear.Key, inputStorage, inputSuffix, filteredPuzzles);
 			}
 		}
 
-		public static void Run(int year, string inputStorage, string inputSuffix, bool skipSolved, params IPuzzle[] puzzlesToSolve)
+		public static void Run(int year, string inputStorage, string inputSuffix, params IPuzzle[] puzzlesToSolve)
 		{
 			Log.Line();
 			Log.ChristmasPattern($"┌──[ ", indent: 2);
@@ -69,17 +78,7 @@ namespace Ujeby.AoC.Common
 			var stars = 0;
 			try
 			{
-				for (var i = 0; i < puzzlesToSolve.Length; i++)
-				{
-					var puzzle = puzzlesToSolve[i];
-
-					if (skipSolved 
-						&& puzzle.Answer.Part1 != null
-						&& puzzle.Answer.Part2 != null)
-							continue;
-
-					stars += puzzle.Solve(inputStorage, inputSuffix);
-				}
+				stars = puzzlesToSolve.Sum(x => x.Solve(inputStorage, inputSuffix));
 			}
 			catch (Exception ex)
 			{
