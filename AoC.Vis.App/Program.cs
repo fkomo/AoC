@@ -110,6 +110,7 @@ namespace Ujeby.AoC.Vis.App
 									new RestroomRedoubt(windowSize),
 									new ReindeerMaze(windowSize),
 									new RAMRun(windowSize),
+									new RaceCondition(windowSize),
 								}
 							}
 						}
