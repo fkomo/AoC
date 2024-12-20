@@ -12,8 +12,11 @@ namespace Ujeby.AoC.Vis.App
 	internal class ReindeerMaze : AoCRunnable
 	{
 		char[][] _map;
-		v2i[] _path = [];
-		//long _score;
+		Dictionary<v2i, int> _visited = [];
+		int _score;
+
+		bool _showBest = false;
+		v2i[] _bestPlaces = [];
 
 		public override string Name => $"#16 {nameof(ReindeerMaze)}";
 
@@ -24,13 +27,19 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			var input = InputProvider.Read(AppSettings.InputDirectory, 2024, 16, suffix: ".sample");
-			//var input = InputProvider.Read(AppSettings.InputDirectory, 2024, 16);
+			//var input = InputProvider.Read(AppSettings.InputDirectory, 2024, 16, suffix: ".sample");
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2024, 16);
 
 			_map = input.Select(x => x.ToArray()).ToArray();
 
-			//_path = AoC.App._2024_16.ReindeerMaze.ShortestPath(_map);
-			//_score = _path.Score();
+			_map.Find('S', out v2i start);
+			_map.Find('E', out v2i end);
+			var nodes = new v2i[] { start, end }.Concat(_map.EnumAll('.')).ToArray();
+
+			_visited = Ujeby.AoC.App._2024_16.ReindeerMaze.CustomBreadthFirstSearch(nodes, start);
+			_score = _visited[end];
+
+			_bestPlaces = Ujeby.AoC.App._2024_16.ReindeerMaze.PickBestPlaces(_visited, start, end);
 		}
 
 		protected override void Update()
@@ -41,25 +50,39 @@ namespace Ujeby.AoC.Vis.App
 		{
 			Grid.Draw();
 
-			foreach (var p in _map.ToAAB2i().EnumPoints())
-			{
-				var color = new v4f(.5);
-				if (_map.Get(p) == '#')
-					Grid.DrawCell(p, fill: color);
-			}
+			var color = new v4f(.5);
+			foreach (var p in _map.ToAAB2i().EnumPoints().Where(x => _map.Get(x) == '#'))
+				Grid.DrawCell(p, fill: color);
 
-			for (var i = 0; i < _path.Length; i++)
-				Grid.DrawCell(_path[i], fill: HeatMap.GetColorForValue(i, _path.Length, alpha: .5));
+			if (_showBest)
+			{
+				color = new v4f(0, .8, 0, .5);
+				foreach (var b in _bestPlaces)
+					Grid.DrawCell(b, fill: color);
+			}
+			else
+			{
+				foreach (var v in _visited.Where(x => x.Value <= _score))
+					Grid.DrawCell(v.Key, fill: HeatMap.GetColorForValue(v.Value, _score + 1, alpha: .5));
+			}
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
 
+			_visited.TryGetValue(Grid.MousePositionDiscrete, out int nodeScore);
+
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"{nameof(_map)}: {_map.ToAAB2i()}"),
-				new Text($"{nameof(_path.Length)}: {_path.Length}")
-				//new Text($"{nameof(_score)}: {_score}")
+				new Text($"{nameof(_score)}: {_score}"),
+				new Text($"{nameof(nodeScore)}: {nodeScore}"),
+				new Text($"{nameof(_bestPlaces)}: {_bestPlaces.Length}")
 				);
 
 			base.Render();
+		}
+
+		protected override void LeftMouseUp()
+		{
+			_showBest = !_showBest;
 		}
 
 		protected override void Destroy()
