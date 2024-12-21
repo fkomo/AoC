@@ -18,8 +18,10 @@ public class RaceCondition : PuzzleBase
 
 		// part2
 		metaMap = MetaMap(map, out path);
-		var answer2 = All20Cheats(metaMap, path, minSavedTime: 50).Length;
+		var answer2 = All20Cheats(metaMap, path, minSavedTime: 50);
 		// 2388319 too high
+		// 1199127 too high
+		// 1062908 too high
 
 		return (answer1.ToString(), answer2.ToString());
 	}
@@ -87,12 +89,12 @@ public class RaceCondition : PuzzleBase
 		return [.. cheats];
 	}
 
-	public static v2i[] All20Cheats(int[][] metaMap, v2i[] path, int minSavedTime = 100)
+	public static int All20Cheats(int[][] metaMap, v2i[] path, int minSavedTime = 100)
 	{
 		var mapArea = metaMap.ToAAB2i();
 		var offsets20 = new aab2i(new v2i(-20), new v2i(20)).EnumPoints().Where(x => x.ManhLength() <= 20).Except([v2i.Zero]).ToArray();
 
-		var cheats = new List<v2i>();
+		var cheats = new HashSet<(int, int)>();
 
 		var shortcuts = new Dictionary<int, int>();
 
@@ -100,30 +102,25 @@ public class RaceCondition : PuzzleBase
 		{
 			foreach (var cheat in offsets20)
 			{
-				var wall = path[i] + cheat;
-				if (!mapArea.Contains(wall) || metaMap.Get(wall) >= 0)
+				var outOfWall = path[i] + cheat;
+				if (!mapArea.Contains(outOfWall))
 					continue;
 
-				metaMap.Set(wall, _usedWall);
-
-				foreach (var outOfWall in v2i.UpDownLeftRight.Where(x => mapArea.Contains(wall + x)))
+				var shortcut = metaMap.Get(outOfWall);
+				if (shortcut > i)
 				{
-					var shortcut = metaMap.Get(wall + outOfWall);
-					if (shortcut > i)
-					{
-						var saved = shortcut - i - (int)cheat.ManhLength();
+					var saved = shortcut - i - (int)cheat.ManhLength();
 
-						shortcuts.TryAdd(saved, 0);
-						shortcuts[saved]++;
+					shortcuts.TryAdd(saved, 0);
+					shortcuts[saved]++;
 
-						if (saved >= minSavedTime)
-							cheats.Add(wall);
-					}
+					if (saved >= minSavedTime)
+						cheats.Add((i, shortcut));
 				}
 			}
 		}
 
-		return [.. cheats];
+		return cheats.Count;
 	}
 
 	const int _wall = -1;
