@@ -1,6 +1,6 @@
 using Ujeby.AoC.Common;
 using Ujeby.Vectors;
-using Ujeby.Grid.CharMapExtensions;
+using Ujeby.Extensions;
 
 namespace Ujeby.AoC.App._2017_14;
 

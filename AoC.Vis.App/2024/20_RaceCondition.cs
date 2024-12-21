@@ -4,7 +4,7 @@ using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
-using Ujeby.Grid.CharMapExtensions;
+using Ujeby.Extensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
@@ -13,14 +13,11 @@ namespace Ujeby.AoC.Vis.App
 	{
 		char[][] _map;
 
-		v2i _start;
-		v2i _end;
-
-		v2i[] _walls = [];
-		v2i[] _path = [];
-		v2i[] _cheats = [];
 		bool _showPath;
-		private int _pathToDraw;
+		int _pathToDraw;
+		v2i[] _path = [];
+
+		v2i[] _cheats = [];
 
 		public override string Name => $"#20 {nameof(RaceCondition)}";
 
@@ -35,12 +32,10 @@ namespace Ujeby.AoC.Vis.App
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2024, 20);
 
 			_map = input.Select(x => x.ToArray()).ToArray();
-			_map.Find('S', out _start);
-			_map.Find('E', out _end);
 
-			_walls = _map.EnumAll('#').ToArray();
-			_path = AoC.App._2024_20.RaceCondition.GetPath(new v2i[] { _start, _end }.Concat(_map.EnumAll('.')).ToArray(), _start, _end);
-			_cheats = AoC.App._2024_20.RaceCondition.AllCheats(_path, _walls, 100);
+			var metaMap = AoC.App._2024_20.RaceCondition.MetaMap(_map, out _path);
+
+			_cheats = AoC.App._2024_20.RaceCondition.All2Cheats(metaMap, _path, minSavedTime: 100);
 		}
 
 		protected override void Update()
@@ -54,12 +49,12 @@ namespace Ujeby.AoC.Vis.App
 			Grid.Draw();
 
 			var color = new v4f(.2, .2, .2, .8);
-			foreach (var b in _walls)
-				Grid.DrawCell(b, fill: color);
+			foreach (var p in _map.EnumAll('#'))
+				Grid.DrawCell(p, fill: color);
 
 			color = new v4f(.5, .5, .5, .8);
-			foreach (var b in _cheats)
-				Grid.DrawCell(b, fill: color);
+			foreach (v2i p in _cheats)
+				Grid.DrawCell(p, fill: color);
 
 			if (_showPath)
 			{
