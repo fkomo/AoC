@@ -50,12 +50,12 @@ public class RaceCondition : PuzzleBase
 		return meta;
 	}
 
+	const int _wall = -1;
+	const int _usedWall = -2;
+
 	public static v2i[] All2Cheats(int[][] metaMap, v2i[] path, int minSavedTime = 100)
 	{
 		var cheats = new List<v2i>();
-
-		//var shortcuts = new Dictionary<int, int>();
-
 		var mapArea = metaMap.ToAAB2i();
 
 		for (var i = 0; i < path.Length - 1; i++)
@@ -76,10 +76,6 @@ public class RaceCondition : PuzzleBase
 				if (shortcut > i)
 				{
 					var saved = shortcut - i - 2;
-
-					//shortcuts.TryAdd(saved, 0);
-					//shortcuts[saved]++;
-
 					if (saved >= minSavedTime)
 						cheats.Add(wall);
 				}
@@ -98,31 +94,28 @@ public class RaceCondition : PuzzleBase
 
 		var shortcuts = new Dictionary<int, int>();
 
-		for (var i = 0; i < path.Length - 1; i++)
+		for (var p1 = 0; p1 < path.Length - 1; p1++)
 		{
-			foreach (var cheat in offsets20)
+			foreach (var offset in offsets20)
 			{
-				var outOfWall = path[i] + cheat;
-				if (!mapArea.Contains(outOfWall))
+				var path2 = path[p1] + offset;
+				if (!mapArea.Contains(path2))
 					continue;
 
-				var shortcut = metaMap.Get(outOfWall);
-				if (shortcut > i)
+				var p2 = metaMap.Get(path2);
+				if (p2 > p1)
 				{
-					var saved = shortcut - i - (int)cheat.ManhLength();
+					var saved = p2 - p1 - (int)offset.ManhLength();
 
 					shortcuts.TryAdd(saved, 0);
 					shortcuts[saved]++;
 
 					if (saved >= minSavedTime)
-						cheats.Add((i, shortcut));
+						cheats.Add((p1, p2));
 				}
 			}
 		}
 
 		return cheats.Count;
 	}
-
-	const int _wall = -1;
-	const int _usedWall = -2;
 }
