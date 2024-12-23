@@ -14,7 +14,7 @@ public class MonkeyMarket : PuzzleBase
 		var answer1 = inits.Sum(x => x.GetNthSecret());
 
 		// part2
-		// TODO OPTIMIZE 2024/22 p2 (2s)
+		// TODO 024/22 OPTIMIZE p2 (2s)
 		var trends = new Dictionary<int[], List<int>>(new IntArrayComparer());
 		foreach (var init in inits)
 			trends.ProcessPriceChanges(init);

@@ -44,9 +44,11 @@ public class KeypadConundrum : PuzzleBase
 
 			return GetComplexity(x, seq);
 		});
+		// TODO 2024/21 p1
 		// 208196 too high
 
 		// part2
+		// TODO 2024/21 p2
 		string answer2 = null;
 
 		return (answer1.ToString(), answer2?.ToString());

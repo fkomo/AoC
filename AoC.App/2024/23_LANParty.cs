@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2024_23;
 
-[AoCPuzzle(Year = 2024, Day = 23, Answer1 = "1184", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2024, Day = 23, Answer1 = "1184", Answer2 = "hf,hz,lb,lm,ls,my,ps,qu,ra,uc,vi,xz,yv", Skip = true)]
 public class LANParty : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -10,12 +10,56 @@ public class LANParty : PuzzleBase
 		var network = CreateNetwork(input);
 
 		// part1
-		var answer1 = FindSubnetsOf3(network).Count(x => x.StartsWith('t') || x.Contains(",t"));
+		var subnetsOf3 = FindSubnetsOf3(network);
+		var answer1 = subnetsOf3.Count(x => x.StartsWith('t') || x.Contains(",t"));
 
 		// part2
-		string answer2 = null;
+		// TODO 2024/23 OPTIMIZE p2 (4s)
+		var answer2 = FindBiggestSubnet(network);
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	static string FindBiggestSubnet(Dictionary<string, List<string>> network)
+	{
+		var result = string.Empty;
+
+		foreach (var pc in network.Keys)
+		{
+			var subnetSize = network[pc].Count;
+
+			while (subnetSize >= 3)
+			{
+				foreach (var subnet in Alg.Combinatorics.Combinations(network[pc], subnetSize)
+					.Where(x => ValidateSubnet(network, x.ToArray())))
+				{
+					var password = string.Join(",", subnet.Concat([pc]).OrderBy(x => x));
+					if (subnetSize + 1 == network[pc].Count) // subnet can't be bigger than this
+						return password;
+
+					if (password.Length > result.Length)
+						result = password;
+				}
+
+				subnetSize--;
+			}
+		}
+
+		return result;
+	}
+
+	static bool ValidateSubnet(Dictionary<string, List<string>> network, string[] subnet)
+	{
+		foreach (var pc2 in subnet)
+		{
+			var subnetExceptPc2 = subnet.Except([pc2]).ToArray();
+			var pc2NeighboursInSubnet = network[pc2].Intersect(subnetExceptPc2).ToArray();
+		
+			if (subnetExceptPc2.Any(x => !pc2NeighboursInSubnet.Contains(x)))
+				return false;
+		}
+
+		return true;
 	}
 
 	static string[] FindSubnetsOf3(Dictionary<string, List<string>> network)

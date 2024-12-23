@@ -15,6 +15,7 @@ public class ChronospatialComputer : PuzzleBase
 		var answer1 = GetOutput(new v3i(input[0].ToNumArray()[0], input[1].ToNumArray()[0], input[2].ToNumArray()[0]), program);
 
 		// part2
+		// TODO 2024/17 p2
 		string answer2 = null;
 
 		return (answer1.ToString(), answer2?.ToString());

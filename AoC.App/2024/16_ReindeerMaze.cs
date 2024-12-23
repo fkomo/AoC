@@ -14,12 +14,12 @@ public class ReindeerMaze : PuzzleBase
 		map.Find('E', out v2i end);
 
 		// part1
-		// TODO OPTIMIZE 2024/16 p1 (2s)
+		// TODO 2024/16 OPTIMIZE p1 (2s)
 		var visited = CustomBreadthFirstSearch(new v2i[] { start, end }.Concat(map.EnumAll('.')).ToArray(), start);
 		var answer1 = visited[end];
 
 		// part2
-		// TODO OPTIMIZE 2024/16 p2 (20s)
+		// TODO 2024/16 OPTIMIZE p2 (20s)
 		var answer2 = PickBestPlaces(visited, start, end).Length;
 
 		return (answer1.ToString(), answer2.ToString());

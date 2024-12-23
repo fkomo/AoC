@@ -19,6 +19,7 @@ public class RaceCondition : PuzzleBase
 		// part2
 		metaMap = MetaMap(map, out path);
 		var answer2 = All20Cheats(metaMap, path, minSavedTime: 50);
+		// TODO 2024/20 p2
 		// 2388319 too high
 		// 1199127 too high
 		// 1062908 too high
