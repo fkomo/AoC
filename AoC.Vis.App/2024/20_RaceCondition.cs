@@ -19,12 +19,9 @@ namespace Ujeby.AoC.Vis.App
 		int _pathToDraw;
 		v2i[] _path = [];
 
-		HashSet<v2i> _cheats = [];
+		readonly HashSet<v2i> _cheats = [];
 
 		v2i[] _offsets = [];
-
-		int _step = 16;
-		Stopwatch _sw = Stopwatch.StartNew();
 
 		public override string Name => $"#20 {nameof(RaceCondition)}";
 
@@ -51,7 +48,6 @@ namespace Ujeby.AoC.Vis.App
 			if (_progressPath)
 			{
 				_pathToDraw = (_pathToDraw + 1) % _path.Length;
-				_sw.Restart();
 
 				foreach (v2i p in _offsets)
 				{
