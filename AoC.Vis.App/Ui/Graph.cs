@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Security.Cryptography;
-using Ujeby.Graphics;
-using Ujeby.Graphics.Entities;
+﻿using Ujeby.Graphics;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Vectors;
 
@@ -26,69 +23,68 @@ namespace Ujeby.AoC.Vis.App.Ui
 	{
 		public int PickZone { get; set; } = 5;
 
-		string[] _selected = null;
+		string[] _selected = [];
 		bool _moving = false;
 		bool _selecting = false;
 		string _underCursor;
+
+		v2i _movingStart;
 
 		v2i _selectionStart;
 		aab2i _selection;
 
 		public Dictionary<string, GraphNode> Data { get; private set; }
 
-		string UnderCursor(WorkspaceGrid grid, v2i mousePosition)
-			=> Data.Keys.FirstOrDefault(x => (grid.ToWindow(Data[x].Meta.Position) - mousePosition).ManhLength() < PickZone);
+		string UnderCursor(v2i mousePosition)
+			=> Data.Keys.FirstOrDefault(x => (Data[x].Meta.Position - mousePosition).ManhLength() < PickZone);
 
 		public void LeftMouseDown(WorkspaceGrid grid, v2i mousePosition)
 		{
-			if (_selected?.Any() == true && !_moving)
+			if (!_selecting && !_moving && _selected.Length > 0 && _underCursor != null && _selected.Contains(_underCursor))
 			{
-				if (_underCursor != null && _selected.Contains(_underCursor))
-				{
-					_moving = true;
-					return;
-				}
+				_moving = true;
+				_movingStart = grid.MousePositionDiscrete;
 			}
-						
-			if (!_selecting)
+
+			if (!_selecting && !_moving)
 			{
 				_selecting = true;
-				_selectionStart = mousePosition;
+				_selectionStart = grid.MousePositionDiscrete;
 			}
 		}
 
 		public void LeftMouseUp(WorkspaceGrid grid, v2i mousePosition)
 		{
-			if (_moving)
-			{
-				_moving = false;
-			}
-
-			if (_selecting)
-			{
-				_selecting = false;
-			}
+			_moving = false;
+			_selecting = false;
 		}
 
 		public void Update(WorkspaceGrid grid, v2i mousePosition)
 		{
 			var p = grid.MousePositionDiscrete;
-			_underCursor = UnderCursor(grid, mousePosition);
+			_underCursor = UnderCursor(p);
 
 			if (_moving)
 			{
 				foreach (var s in _selected)
-					Data[s].Meta.Position = p;
+					Data[s].Meta.Position += p - _movingStart;
+
+				_movingStart = p;
 			}
 			else if (_selecting)
 			{
-				_selection = new aab2i(new v2i[] { _selectionStart, mousePosition });
+				_selection = new aab2i([_selectionStart, grid.MousePositionDiscrete]);
 				Console.WriteLine($"{_selection}");
 
 				_selected = Data
-					.Where(x => _selection.Contains(grid.ToWindow(x.Value.Meta.Position)))
+					.Where(x => _selection.Contains(x.Value.Meta.Position))
 					.Select(x => x.Key)
 					.ToArray();
+			}
+			else
+			{
+				if (_selected.Length == 0 && _underCursor != null)
+					_selected = [_underCursor];
 			}
 			//else
 			//{
@@ -125,14 +121,16 @@ namespace Ujeby.AoC.Vis.App.Ui
 			foreach (var node in Data.Values)
 				grid.DrawCell(node.Meta.Position, Colors.White, Colors.LightGray);
 
-			if (_selected?.Any() == true)
+			if (_selected.Length > 0)
 			{
 				foreach (var s in _selected)
 				{
 					var p = Data[s].Meta.Position;
 					var fill = Colors.Yellow;
 					fill.W = .5;
-					grid.DrawRect((int)p.X - PickZone, (int)p.Y - PickZone, PickZone * 2 + 1, PickZone * 2 + 1, Colors.Red, fill);
+
+					DrawManhLength(grid, p, PickZone, fill);
+					//grid.DrawRect((int)p.X - PickZone, (int)p.Y - PickZone, PickZone * 2 + 1, PickZone * 2 + 1, Colors.Red, fill);
 				}
 
 				if (uiTopLeft.HasValue)
@@ -149,7 +147,8 @@ namespace Ujeby.AoC.Vis.App.Ui
 				var p = Data[_underCursor].Meta.Position;
 				var fill = Colors.Red;
 				fill.W = .5;
-				grid.DrawRect((int)p.X - PickZone, (int)p.Y - PickZone, PickZone * 2 + 1, PickZone * 2 + 1, Colors.Red, fill);
+				DrawManhLength(grid, p, PickZone, fill);
+				//grid.DrawRect((int)p.X - PickZone, (int)p.Y - PickZone, PickZone * 2 + 1, PickZone * 2 + 1, Colors.Red, fill);
 			}
 
 			if (_selecting)
@@ -158,9 +157,13 @@ namespace Ujeby.AoC.Vis.App.Ui
 				c1.W = .5;
 				var c2 = Colors.Blue;
 				c2.W = .5;
-				Sdl2Wrapper.DrawRect(_selection.Min, _selection.Max, border: c1, fill: c2);
+
+				grid.DrawRect(_selection.Min, _selection.Size, border: c1, fill: c2);
 			}
 		}
+
+		static void DrawManhLength(WorkspaceGrid grid, v2i center, int length, v4f fill) => 
+			grid.DrawCells(new aab2i(new v2i(-length), new v2i(length)).EnumPoints().Where(x => x.ManhLength() < length).Select(x => x + center), fill: fill);
 
 		public void GraphLayout_Random(v2i from, v2i to)
 		{

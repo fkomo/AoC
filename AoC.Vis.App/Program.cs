@@ -111,6 +111,7 @@ namespace Ujeby.AoC.Vis.App
 									new ReindeerMaze(windowSize),
 									new RAMRun(windowSize),
 									new RaceCondition(windowSize),
+									new LANParty(windowSize),
 								}
 							}
 						}
