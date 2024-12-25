@@ -12,22 +12,21 @@ public class KeypadConundrum : PuzzleBase
 		var codes = input.Select(x => x.ToArray()).ToArray();
 
 		// part1
-		var answer1 = codes.Sum(x =>
-		{
-			var seq = GetMinSequence(x);
-
-			Debug.Line($"{new string(x)}: [{seq.Length}] {new string(seq)}");
-
-			return GetComplexity(x, seq);
-		});
 		// TODO 2024/21 p1
+		string answer1 = null;
+		//var answer1 = codes.Sum(x =>
+		//{
+		//	var seq = GetMinSequence(x);
+		//	Debug.Line($"{new string(x)}: [{seq.Length}] {new string(seq)}");
+		//	return GetComplexity(x, seq);
+		//});
 		// 208196 too high
 
 		// part2
 		// TODO 2024/21 p2
 		string answer2 = null;
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1?.ToString(), answer2?.ToString());
 	}
 
 	static readonly Dictionary<string, char[]> _cache = [];
