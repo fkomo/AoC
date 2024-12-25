@@ -14,6 +14,8 @@ public class CrossedWires : PuzzleBase
 		var inputs = inputSplit[0].ToDictionary(x => x[..3], x => x[^1] == '1');
 		var gates = inputSplit[1].ToDictionary(x => x[^3..], x => x.Split(' ')[..3]);
 
+		Debug.Line($"{gates.Count} gates");
+
 		// part1
 		var zBuilder = new StringBuilder();
 		foreach (var z in gates.Keys.Where(x => x[0] == 'z').OrderByDescending(x => x))
@@ -22,9 +24,12 @@ public class CrossedWires : PuzzleBase
 		var answer1 = Ujeby.Math.BaseToDec(zBuilder.ToString());
 
 		// part2
-		string answer2 = null;
+		// TODO 2024/24 p2
 
-		return (answer1.ToString(), answer2?.ToString());
+		string[] swappedOutputWires = [];
+		var answer2 = string.Join(',', swappedOutputWires.OrderBy(x => x));
+
+		return (answer1.ToString(), answer2.ToString());
 	}
 
 	static bool GetGateOutput(string gate, Dictionary<string, bool> inputs, Dictionary<string, string[]> gates)
