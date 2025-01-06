@@ -19,9 +19,11 @@ namespace Ujeby.AoC.Vis.App
 		int _pathToDraw;
 		v2i[] _path = [];
 
-		readonly HashSet<v2i> _cheats = [];
+		HashSet<(v2i, v2i)> _cheats = [];
 
 		v2i[] _offsets = [];
+
+		long _clickCount = 0;
 
 		public override string Name => $"#20 {nameof(RaceCondition)}";
 
@@ -40,22 +42,23 @@ namespace Ujeby.AoC.Vis.App
 			_metaMap = AoC.App._2024_20.RaceCondition.MetaMap(_map, out _path);
 
 			//_cheats = AoC.App._2024_20.RaceCondition.All2Cheats(_metaMap, _path, minSavedTime: 100);
-			_offsets = new aab2i(new v2i(-20), new v2i(20)).EnumPoints().Where(x => x.ManhLength() <= 20).Except([v2i.Zero]).ToArray();
+			_cheats = AoC.App._2024_20.RaceCondition.AllCheats(_metaMap, _path, minSavedTime: 100);
+			//_offsets = new aab2i(new v2i(-20), new v2i(20)).EnumPoints().Where(x => x.ManhLength() <= 20).Except([v2i.Zero]).ToArray();
 		}
 
 		protected override void Update()
 		{
-			if (_progressPath)
-			{
-				_pathToDraw = (_pathToDraw + 1) % _path.Length;
+			//if (_progressPath)
+			//{
+			//	_pathToDraw = (_pathToDraw + 1) % _path.Length;
 
-				foreach (v2i p in _offsets)
-				{
-					var pp = _path[_pathToDraw] + p;
-					if (_metaMap.ToAAB2i().Contains(pp) && _metaMap.Get(pp) >= _pathToDraw)
-						_cheats.Add(pp);
-				}
-			}
+			//	foreach (v2i p in _offsets)
+			//	{
+			//		var pp = _path[_pathToDraw] + p;
+			//		if (_metaMap.ToAAB2i().Contains(pp) && _metaMap.Get(pp) >= _pathToDraw)
+			//			_cheats.Add(pp);
+			//	}
+			//}
 		}
 
 		protected override void Render()
@@ -66,12 +69,16 @@ namespace Ujeby.AoC.Vis.App
 			foreach (var p in _map.EnumAll('#'))
 				Grid.DrawCell(p, fill: color);
 
-			color = new v4f(.5, .5, .5, .8);
-			foreach (v2i p in _cheats)
-				Grid.DrawCell(p, fill: color);
+			var red = new v4f(.5, 0, 0, .2);
+			var green = new v4f(0, .5, 0, .2);
+			foreach (var p in _cheats.Take((int)((_frameCount % _cheats.Count) + 1)))
+			{
+				Grid.DrawCell(p.Item1, fill: green);
+				Grid.DrawCell(p.Item2, fill: red);
+			}
 
-			for (var i = 0; i < _pathToDraw; i++)
-				Grid.DrawCell(_path[i], fill: HeatMap.GetColorForValue(i, _pathToDraw + 1, alpha: .2));
+			//for (var i = 0; i < _pathToDraw; i++)
+			//	Grid.DrawCell(_path[i], fill: HeatMap.GetColorForValue(i, _pathToDraw + 1, alpha: .2));
 
 			//color = new v4f(0, .8, .0, .5);
 			//foreach (v2i p in _offsets)
@@ -80,10 +87,6 @@ namespace Ujeby.AoC.Vis.App
 			//	if (_metaMap.ToAAB2i().Contains(pp) && _metaMap.Get(pp) >= _pathToDraw)
 			//		Grid.DrawCell(pp, fill: color);
 			//}
-
-			color = new v4f(0, .8, .0, .5);
-			foreach (v2i p in _cheats)
-				Grid.DrawCell(p, fill: color);
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
 
@@ -98,7 +101,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseUp()
 		{
-			_progressPath = !_progressPath;
+			_clickCount++;
 		}
 
 		protected override void Destroy()
