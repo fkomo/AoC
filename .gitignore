@@ -371,3 +371,4 @@ AoC.Output.*.txt
 # aoc settings
 /AoC.App/appsettings.json
 /AoC.Gen/appsettings.json
+/AoC.Vis.App/appsettings.json
