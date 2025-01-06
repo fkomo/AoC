@@ -12,18 +12,20 @@ namespace Ujeby.AoC.Vis.App
 {
 	internal class RaceCondition : AoCRunnable
 	{
-		int[][] _metaMap;
 		char[][] _map;
+		v2i _start;
+		v2i _end;
 
-		bool _progressPath;
 		int _pathToDraw;
 		v2i[] _path = [];
+		int[][] _metaMap;
+		private int _maxCheat;
+		private v2i[] _offsets;
+		private (v2i, v2i)[] _allCheats;
+		Dictionary<v2i, v2i[]> _cheats = [];
 
-		HashSet<(v2i, v2i)> _cheats = [];
-
-		v2i[] _offsets = [];
-
-		long _clickCount = 0;
+		int _step = 64;
+		readonly Stopwatch _sw = new Stopwatch();
 
 		public override string Name => $"#20 {nameof(RaceCondition)}";
 
@@ -38,27 +40,34 @@ namespace Ujeby.AoC.Vis.App
 			var input = InputProvider.Read(AppSettings.InputDirectory, 2024, 20);
 
 			_map = input.Select(x => x.ToArray()).ToArray();
+			_map.Find('S', out _start);
+			_map.Find('E', out _end);
 
 			_metaMap = AoC.App._2024_20.RaceCondition.MetaMap(_map, out _path);
 
-			//_cheats = AoC.App._2024_20.RaceCondition.All2Cheats(_metaMap, _path, minSavedTime: 100);
-			_cheats = AoC.App._2024_20.RaceCondition.AllCheats(_metaMap, _path, minSavedTime: 100);
-			//_offsets = new aab2i(new v2i(-20), new v2i(20)).EnumPoints().Where(x => x.ManhLength() <= 20).Except([v2i.Zero]).ToArray();
+			_maxCheat = 19;
+			_offsets = new aab2i(new v2i(-_maxCheat), new v2i(_maxCheat))
+				.EnumPoints()
+				.Where(x => x.ManhLength() <= _maxCheat)
+				.Except([v2i.Zero])
+				.ToArray();
+
+			_allCheats = AoC.App._2024_20.RaceCondition.AllCheats(_metaMap, _path, _maxCheat, minSavedTime: 100);
+			_cheats = _allCheats
+				.GroupBy(x => x.Item1)
+				.ToDictionary(x => x.Key, x => x.Select(xx => xx.Item2).ToArray());
+
+			_sw.Start();
 		}
 
 		protected override void Update()
 		{
-			//if (_progressPath)
-			//{
-			//	_pathToDraw = (_pathToDraw + 1) % _path.Length;
+			if (_sw.ElapsedMilliseconds > _step)
+			{
+				_pathToDraw++;
 
-			//	foreach (v2i p in _offsets)
-			//	{
-			//		var pp = _path[_pathToDraw] + p;
-			//		if (_metaMap.ToAAB2i().Contains(pp) && _metaMap.Get(pp) >= _pathToDraw)
-			//			_cheats.Add(pp);
-			//	}
-			//}
+				_sw.Restart();
+			}
 		}
 
 		protected override void Render()
@@ -69,31 +78,32 @@ namespace Ujeby.AoC.Vis.App
 			foreach (var p in _map.EnumAll('#'))
 				Grid.DrawCell(p, fill: color);
 
-			var red = new v4f(.5, 0, 0, .2);
-			var green = new v4f(0, .5, 0, .2);
-			foreach (var p in _cheats.Take((int)((_frameCount % _cheats.Count) + 1)))
+			Grid.DrawCell(_start, fill: new v4f(0, .5, .5, .5));
+			Grid.DrawCell(_end, fill: new v4f(.5, .5, 0, .5));
+
+			var cheats = _cheats.Skip(System.Math.Min(_pathToDraw, _cheats.Count)).Take(1);
+			foreach (var p in cheats)
 			{
-				Grid.DrawCell(p.Item1, fill: green);
-				Grid.DrawCell(p.Item2, fill: red);
+				foreach (var to in p.Value)
+				{
+					Grid.DrawCell(p.Key, fill: new v4f(0, .5, 0, .5));
+					Grid.DrawCell(to, fill: new v4f(.5, 0, 0, .5));
+					Grid.DrawLine(p.Key, to, new v4f(.5, .5, .5, .5));
+				}
 			}
 
-			//for (var i = 0; i < _pathToDraw; i++)
-			//	Grid.DrawCell(_path[i], fill: HeatMap.GetColorForValue(i, _pathToDraw + 1, alpha: .2));
-
-			//color = new v4f(0, .8, .0, .5);
-			//foreach (v2i p in _offsets)
-			//{
-			//	var pp = _path[_pathToDraw] + p;
-			//	if (_metaMap.ToAAB2i().Contains(pp) && _metaMap.Get(pp) >= _pathToDraw)
-			//		Grid.DrawCell(pp, fill: color);
-			//}
+			for (var i = 0; i < _offsets.Length; i++)
+				Grid.DrawCell(_offsets[i] + cheats.First().Key, fill: new v4f(0, 0, .5, .5));
 
 			Grid.DrawMouseCursor(style: GridCursorStyles.SimpleFill);
+
+			var distance = _metaMap.ToAAB2i().Contains(Grid.MousePositionDiscrete) ? _metaMap.Get(Grid.MousePositionDiscrete) : int.MinValue;
 
 			Sdl2Wrapper.DrawText(new v2i(32, 32), null,
 				new Text($"{nameof(_map)}: {_map.ToAAB2i()}"),
 				new Text($"{nameof(_path)}: {_path.Length}"),
-				new Text($"{nameof(_cheats)}: {_cheats.Count}")
+				new Text($"{nameof(_allCheats)}: {_allCheats.Length}"),
+				new Text($"{nameof(distance)}: {distance}")
 				);
 
 			base.Render();
@@ -101,7 +111,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void LeftMouseUp()
 		{
-			_clickCount++;
+			_pathToDraw = 0;
 		}
 
 		protected override void Destroy()

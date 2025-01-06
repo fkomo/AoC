@@ -4,7 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2024_20;
 
-[AoCPuzzle(Year = 2024, Day = 20, Answer1 = "1351", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2024, Day = 20, Answer1 = "1351", Answer2 = "966130", Skip = false)]
 public class RaceCondition : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -14,17 +14,13 @@ public class RaceCondition : PuzzleBase
 
 		// part1
 		var metaMap = MetaMap(map, out v2i[] path);
-		//var answer1 = All2Cheats(metaMap, path).Length;
-		var answer1 = All2Cheats(metaMap, path, minSavedTime: 50).Length;
+		var answer1 = AllCheats(metaMap, path, 2, minSavedTime: 100).Length;
+
+		Debug.Line();
 
 		// part2
 		metaMap = MetaMap(map, out path);
-		var answer2 = AllCheats(metaMap, path, 1, minSavedTime: 64).Count;
-		//var answer2 = AllCheats(metaMap, path, 19, minSavedTime: 100).Count;
-		// 285 - sample
-		// TODO 2024/20 p2
-		// 1062908 too high
-		// 1048331 not right
+		var answer2 = AllCheats(metaMap, path, 20, minSavedTime: 100).Length;
 
 		return (answer1.ToString(), answer2.ToString());
 	}
@@ -54,77 +50,32 @@ public class RaceCondition : PuzzleBase
 	}
 
 	const int _wall = -1;
-	const int _usedWall = -2;
 
-	public static v2i[] All2Cheats(int[][] metaMap, v2i[] path, int minSavedTime = 100)
-	{
-		var cheats = new List<v2i>();
-		var mapArea = metaMap.ToAAB2i();
-
-		for (var i = 0; i < path.Length - 1; i++)
-		{
-			var dir = path[i + 1] - path[i];
-			foreach (var cheat in new v2i[] { dir.RotateCCW(), dir.RotateCW(), dir.Inv() })
-			{
-				var wall = path[i] + cheat;
-				if (metaMap.Get(wall) >= 0)
-					continue;
-
-				metaMap.Set(wall, _usedWall);
-
-				if (!mapArea.Contains(wall + cheat))
-					continue;
-
-				var shortcut = metaMap.Get(wall + cheat);
-				if (shortcut > i)
-				{
-					var saved = shortcut - i - 2;
-					if (saved >= minSavedTime)
-						cheats.Add(wall);
-				}
-			}
-		}
-
-		return [.. cheats];
-	}
-
-	public static HashSet<(v2i, v2i)> AllCheats(int[][] metaMap, v2i[] path, 
-		int maxCheat, int minSavedTime = 100)
+	public static (v2i, v2i)[] AllCheats(int[][] metaMap, v2i[] path, int maxCheat, int minSavedTime = 100)
 	{
 		var mapArea = metaMap.ToAAB2i();
 		var offsets = new aab2i(new v2i(-maxCheat), new v2i(maxCheat))
 			.EnumPoints()
-			.Where(x => x.ManhLength() <= maxCheat)
+			.Where(x => x.ManhLength() >= 2 && x.ManhLength() <= maxCheat)
 			.Except([v2i.Zero])
 			.ToArray();
 
-		var cheats = new HashSet<(v2i, v2i)>();
+		var cheats = new List<(v2i, v2i)>();
 
-		var shortcuts = new Dictionary<int, int>();
-
-		for (var p1 = 0; p1 < path.Length - 1; p1++)
+		for (var p1 = 0; p1 < path.Length - minSavedTime; p1++)
 		{
 			var path1 = path[p1];
-			foreach (var wall1 in v2i.UpDownLeftRight.Select(x => x + path1)
-				.Where(x => metaMap.Get(x) < 0))
+			foreach (var path2 in offsets.Select(x => path1 + x)
+				.Where(x => mapArea.Contains(x) && metaMap.Get(x) > p1))
 			{
-				foreach (var wall2 in offsets.Select(x => wall1 + x)
-					.Where(x => mapArea.Contains(x) && metaMap.Get(x) < 0))
-				{
-					foreach (var path2 in v2i.UpDownLeftRight.Select(x => wall2 + x)
-						.Where(x => mapArea.Contains(x) && metaMap.Get(x) == p1 + minSavedTime))
-					{
-						var saved = metaMap.Get(path2) - p1 - (int)v2i.ManhDistance(path1, path2);
+				var p2 = metaMap.Get(path2);
+				var saved = p2 - p1 - (int)v2i.ManhDistance(path1, path2);
 
-						shortcuts.TryAdd(saved, 0);
-						shortcuts[saved]++;
-
-						cheats.Add((path1, path2));
-					}
-				}
+				if (saved >= minSavedTime)
+					cheats.Add((path1, path2));
 			}
 		}
 
-		return cheats;
+		return [.. cheats];
 	}
 }
