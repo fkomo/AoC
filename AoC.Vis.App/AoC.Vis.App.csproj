@@ -2,33 +2,24 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<!--<Nullable>enable</Nullable>-->
-		<Configurations>Debug;Release;Debug.Sample</Configurations>
+		<Configurations>Debug;Release;Debug.Sample;Debug-offline;Release-offline</Configurations>
+		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="appsettings.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="appsettings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-		<!--<PackageReference Include="Ujeby" Version="*" />-->
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
 		<PackageReference Include="SDL2-CS.NetCore" Version="2.0.8" />
+		<!--<PackageReference Include="Ujeby" Version="8.*" />-->
 	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="Ujeby">
-			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
+			<HintPath>..\..\Ujeby\publish\Ujeby.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
@@ -44,6 +35,12 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Update="C:\Users\filip\.nuget\packages\ujeby\1.2.0\contentFiles\any\net6.0\Content\Fonts\font-5x7.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\preset.txt" Link="preset.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

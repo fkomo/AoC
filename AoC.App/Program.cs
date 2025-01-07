@@ -3,59 +3,55 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App
 {
-	class Program
+	internal class Settings
+	{
+		public const string ConfigSection = "AoC";
+
+		public string[] Puzzles { get; set; }
+
+		public bool IgnoreSkip { get; set; } = false;
+
+		public string Input { get; set; }
+		public string InputSuffix { get; set; }
+	}
+
+	public class Program
 	{
 		static void Main(string[] args)
 		{
 			var config = new ConfigurationBuilder()
-				.AddJsonFile($"appsettings.json")
+				.AddJsonFile("appsettings.json")
+				.AddJsonFile(AdventOfCode.GetSettingsFilename())
 				.Build();
 
-			_ = bool.TryParse(config["aoc:ignoreSkip"], out bool ignoreSkip);
+			var settings = new Settings();
+			config.Bind(Settings.ConfigSection, settings);
 
-			string year = null;
-			string inputSuffix = null;
-			bool? skipSolved = null;
+			Console.WriteLine($"{Environment.NewLine}  Puzzles: {string.Join(", ", settings.Puzzles.Select(x=> $"{x}"))}");
 
-			//year = "2020";
-			//inputSuffix = "s";
-			//skipSolved = true;
-
-			if (year == null)
+			if (settings.InputSuffix == null)
 			{
-				Console.Write($"{Environment.NewLine}  year [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023] ? ");
-				year = Console.ReadLine();
+				Console.Write($"  Puzzle input suffix [s(sample)] ? ");
+				settings.InputSuffix = Console.ReadLine();
 			}
+			else
+				Console.WriteLine($"  Puzzle input suffix: {settings.InputSuffix}");
 
-			if (inputSuffix == null)
-			{
-				Console.Write($"  puzzle input suffix [s(sample)] ? ");
-				inputSuffix = Console.ReadLine();
-			}
+			if (settings.InputSuffix == "s")
+				settings.InputSuffix = "sample";
 
-			if (inputSuffix == "s")
-				inputSuffix = "sample";
-			if (!string.IsNullOrEmpty(inputSuffix))
-				inputSuffix = "." + inputSuffix;
+			if (!string.IsNullOrEmpty(settings.InputSuffix))
+				settings.InputSuffix = "." + settings.InputSuffix;
 
-			if (!skipSolved.HasValue)
-			{
-				Console.Write($"  skip solved [y/n(default)] puzzles ? ");
-				skipSolved = Console.ReadLine() == "y";
-			}
-			
 			Log.Line();
 
-			var years = Array.Empty<int>();
-			if (!string.IsNullOrEmpty(year))
-				years = new int[] { int.Parse(year) };
-
 			// run all puzzles in solution
-			AdventOfCode.RunAll(years,
-				inputStorage: config["aoc:input"],
-				ignoreSkip: ignoreSkip,
-				skipSolved: skipSolved.Value,
-				inputSuffix: inputSuffix);
+			AdventOfCode.RunAll(settings.Puzzles, 
+				inputStorage: settings.Input, ignoreSkip: settings.IgnoreSkip, inputSuffix: settings.InputSuffix);
+		}
+
+		public static void Init()
+		{
 		}
 	}
 }

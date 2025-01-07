@@ -2,37 +2,59 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>Ujeby.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Ujeby.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<!--<Nullable>enable</Nullable>-->
-		<Configurations>Debug;Release</Configurations>
+		<Configurations>Debug;Release;Debug-offline;Release-offline</Configurations>
+		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-		<!--<PackageReference Include="Ujeby" Version="*" />-->
+	  <None Remove="appsettings.2024.json" />
+	  <None Remove="appsettings.custom.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Z3" Version="4.12.2" />
+		<!--<PackageReference Include="Ujeby" Version="8.*" />-->
 	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="Ujeby">
-			<HintPath>..\..\Ujeby\publish-dll\Ujeby.dll</HintPath>
+			<HintPath>..\..\Ujeby\publish\Ujeby.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove=".session" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<Content Include="..\preset.txt" Link="preset.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.2024.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.custom.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.unsolveds.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.all.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.unsolved.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
+		<ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
 	</ItemGroup>
 
 </Project>

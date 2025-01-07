@@ -40,10 +40,9 @@ namespace Ujeby.AoC.Vis.App
 			_poi = Ujeby.AoC.App._2016_24.AirDuctSpelunking.CreatePoi(_map, _mapSize);
 			_keys = _poi.Keys.ToArray();
 
-			Ujeby.AoC.App._2016_24.AirDuctSpelunking.CreatePaths(_poi, _map, _mapSize, 
-				out _path, out _dist);
+			Ujeby.AoC.App._2016_24.AirDuctSpelunking.CreatePaths(_poi, _map, _mapSize, out _path, out _dist);
 
-			_shortest = Ujeby.AoC.App._2016_24.AirDuctSpelunking.ShortestPath(_poi, _dist, new int[] { 0 });
+			_shortest = Ujeby.AoC.App._2016_24.AirDuctSpelunking.ShortestPath(_poi, _dist, [0]);
 		}
 
 		protected override void Update()

@@ -37,17 +37,17 @@ namespace Ujeby.AoC.App._2021_17
 			return (answer1?.ToString(), answer2?.ToString());
 		}
 
-		public static AABox2i CreateTarget(string[] input)
+		public static aab2i CreateTarget(string[] input)
 		{
 			var c = input[0].Substring("target area: ".Length).Replace("x=", string.Empty).Replace(" y=", string.Empty)
 				.Split(',').Select(p => p.Split("..").Select(n => int.Parse(n)).ToArray()).ToArray();
 
-			return new AABox2i(
+			return new aab2i(
 				new(System.Math.Min(c[0][0], c[0][1]), System.Math.Min(c[1][0], c[1][1])),
 				new(System.Math.Max(c[0][0], c[0][1]), System.Math.Max(c[1][0], c[1][1])));
 		}
 
-		public static bool SimThrow(v2i dir, AABox2i target, out v2i[] path)
+		public static bool SimThrow(v2i dir, aab2i target, out v2i[] path)
 		{
 			var result = false;
 

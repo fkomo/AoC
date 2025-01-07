@@ -5,31 +5,6 @@ namespace Ujeby.AoC.App._2016_11;
 [AoCPuzzle(Year = 2016, Day = 11, Answer1 = null, Answer2 = null, Skip = false)]
 public class RadioisotopeThermoelectricGenerators : PuzzleBase
 {
-	private enum ComponentyType : int
-	{
-		Generator = 0,
-		Microchip = 1
-	}
-
-	private int[] _elevatorMovements = new int[] { 1, -1 };
-
-	private struct Component
-	{
-		public string Name;
-		public ComponentyType Type;
-		public int Floor;
-
-		public Component(string name, ComponentyType type, int floor)
-		{
-			Name = name;
-			Type = type;
-			Floor = floor;
-		}
-
-		public override string ToString()
-			=> $"{Name}-{Type}-{Floor}";
-	}
-
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
 		var components = new Component[]
@@ -49,9 +24,34 @@ public class RadioisotopeThermoelectricGenerators : PuzzleBase
 		return (answer1?.ToString(), answer2?.ToString());
 	}
 
-	private static Dictionary<string, long> _cache = new();
+	enum ComponentyType : int
+	{
+		Generator = 0,
+		Microchip = 1
+	}
 
-	private long CountSteps(Component[] components, 
+	int[] _elevatorMovements = new int[] { 1, -1 };
+
+	struct Component
+	{
+		public string Name;
+		public ComponentyType Type;
+		public int Floor;
+
+		public Component(string name, ComponentyType type, int floor)
+		{
+			Name = name;
+			Type = type;
+			Floor = floor;
+		}
+
+		public override string ToString()
+			=> $"{Name}-{Type}-{Floor}";
+	}
+
+	static Dictionary<string, long> _cache = new();
+
+	long CountSteps(Component[] components, 
 		long minSteps = long.MaxValue, string prevCompHash = null, int elevator = 1, long steps = 0)
 	{
 		var hash = GetCompHash(components);
@@ -96,7 +96,7 @@ public class RadioisotopeThermoelectricGenerators : PuzzleBase
 		return minSteps;
 	}
 
-	private static void PrintFloors(Component[] components)
+	static void PrintFloors(Component[] components)
 	{
 		Debug.Line($"F4 {string.Join(" ", components.Where(c => c.Floor == 4).Select(c => c.ToString()[..^2]))}");
 		Debug.Line($"F3 {string.Join(" ", components.Where(c => c.Floor == 3).Select(c => c.ToString()[..^2]))}");
@@ -105,8 +105,7 @@ public class RadioisotopeThermoelectricGenerators : PuzzleBase
 		Debug.Line();
 	}
 
-	private long MoveElevator(Component[] components, string prevCompHash, int destFloor, long steps, long minSteps,
-		params int[] cIdToMove)
+	long MoveElevator(Component[] components, string prevCompHash, int destFloor, long steps, long minSteps, params int[] cIdToMove)
 	{
 		if (destFloor > 4 || destFloor < 1)
 			return minSteps;
@@ -122,6 +121,6 @@ public class RadioisotopeThermoelectricGenerators : PuzzleBase
 		return System.Math.Min(minSteps, CountSteps(tmp, minSteps, GetCompHash(components), destFloor, steps));
 	}
 
-	private static string GetCompHash(Component[] components)
+	static string GetCompHash(Component[] components)
 		=> string.Join(":", components.OrderBy(c => c.ToString()));
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics.Sdl;
@@ -10,8 +11,12 @@ namespace Ujeby.AoC.Vis.App
 	{
 		static void Main()
 		{
-			var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
-			AppSettings.InputDirectory = config["aoc:input"];
+			var config = new ConfigurationBuilder()
+				.AddJsonFile("appsettings.json")
+				.AddJsonFile(AdventOfCode.GetSettingsFilename())
+				.Build();
+			
+			AppSettings.InputDirectory = config["AoC:Input"];
 
 			try
 			{
@@ -45,20 +50,25 @@ namespace Ujeby.AoC.Vis.App
 								new AoCRunnable[]
 								{
 									new SpiralMemory(windowSize),
+									new DiskDefragmentation(windowSize),
+									new ParticleSwarm(windowSize),
 								}
 							},
 							{
 								"2018",
-								Array.Empty<AoCRunnable>()
+								new AoCRunnable[]
+								{
+									new NoMatterHowYouSliceIt(windowSize),
+								}
 							},
-							{
-								"2019",
-								Array.Empty<AoCRunnable>()
-							},
-							{
-								"2020",
-								Array.Empty<AoCRunnable>()
-							},
+							//{
+							//	"2019",
+							//	Array.Empty<AoCRunnable>()
+							//},
+							//{
+							//	"2020",
+							//	Array.Empty<AoCRunnable>()
+							//},
 							{
 								"2021",
 								new AoCRunnable[]
@@ -82,8 +92,28 @@ namespace Ujeby.AoC.Vis.App
 							},
 							{
 								"2023",
-								Array.Empty<AoCRunnable>()
+								new AoCRunnable[]
+								{
+									new HauntedWasteland(windowSize),
+									new LavaductLagoon(windowSize),
+									new Aplenty(windowSize),
+									new PulsePropagation(windowSize),
+									new StepCounter(windowSize),
+									new ALongWalk(windowSize),
+								}
 							},
+							{
+								"2024",
+								new AoCRunnable[]
+								{
+									new GardenGroups(windowSize),
+									new RestroomRedoubt(windowSize),
+									new ReindeerMaze(windowSize),
+									new RAMRun(windowSize),
+									new RaceCondition(windowSize),
+									new LANParty(windowSize),
+								}
+							}
 						}
 					);
 					menu.Run();

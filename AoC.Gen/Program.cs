@@ -1,40 +1,62 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Ujeby.AoC.Common;
-using Ujeby.Tools.ArrayExtensions;
-using Ujeby.Tools.StringExtensions;
+using Ujeby.Extensions;
 
 namespace Ujeby.AoC.Gen
 {
 	class Program
 	{
+		internal class Settings
+		{
+			public const string ConfigSection = "AoC";
+
+			/// <summary>
+			/// path to AoC.App directory
+			/// </summary>
+			public string Code { get; set; }
+
+			/// <summary>
+			/// path to AoC.Input directory
+			/// </summary>
+			public string Input { get; set; }
+
+			/// <summary>
+			/// path to .session file
+			/// </summary>
+			public string Session { get; set; }
+		}
+
 		static void Main(string[] args)
 		{
 			var config = new ConfigurationBuilder()
 				.AddJsonFile($"appsettings.json")
 				.Build();
 
+			var settings = new Settings();
+			config.Bind(Settings.ConfigSection, settings);
+
 			// set aoc session cookie
-			if (!string.IsNullOrEmpty(config["aoc:session"]) && File.Exists(config["aoc:session"]))
+			if (!string.IsNullOrEmpty(settings.Session) && File.Exists(settings.Session))
 			{
-				var session = File.ReadAllText(config["aoc:session"]);
+				var session = File.ReadAllText(settings.Session);
 				AoCHttpClient.SetSession(session);
 				Log.Line($"Session cookie: {session}");
 			}
 
 			// download input files
-			if (!string.IsNullOrEmpty(config["aoc:input"]))
+			if (!string.IsNullOrEmpty(settings.Input))
 			{
 				Log.Line("Downloading missing input ...");
 				for (var year = 2015; year <= DateTime.Now.Year; year++)
-					DownloadMissingInput(config["aoc:input"], year);
+					DownloadMissingInput(settings.Input, year);
 			}
 
 			// generate (empty) puzzle .cs classes
-			if (!string.IsNullOrEmpty(config["aoc:code"]))
+			if (!string.IsNullOrEmpty(settings.Code))
 			{
 				Log.Line("Generating puzzle code ...");
 				for (var year = 2015; year <= DateTime.Now.Year; year++)
-					GeneratePuzzleCode(config["aoc:code"], year);
+					GeneratePuzzleCode(settings.Code, year);
 			}
 
 			Log.Line("All set!");
@@ -63,7 +85,7 @@ namespace Ujeby.AoC.Gen
 			}
 		}
 
-		private const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
+		const string _puzzleFilenameTemplate = "DD_PUZZLETITLE.cs";
 
 		private async static Task GeneratePuzzleCodeTemplate(string codePath, int year, int day)
 		{
@@ -118,7 +140,7 @@ namespace Ujeby.AoC.Gen
 			}
 		}
 
-		private static void DownloadMissingInput(string inputStorage, int year)
+		static void DownloadMissingInput(string inputStorage, int year)
 		{
 			try
 			{
@@ -141,7 +163,7 @@ namespace Ujeby.AoC.Gen
 			}
 		}
 
-		private async static Task<bool> DownloadInput(string inputStorage, int year, int day)
+		async static Task<bool> DownloadInput(string inputStorage, int year, int day)
 		{
 			if (DateTime.Now.Year < year || (DateTime.Now.Year == year && (DateTime.Now.Month != 12 || DateTime.Now.Day < day)))
 				return false;
@@ -155,8 +177,7 @@ namespace Ujeby.AoC.Gen
 			{
 				var inputUrl = $"{AoCHttpClient.BaseUrl}/{year}/day/{day}/input";
 
-				Log.Text($"{inputUrl}",
-					textColor: ConsoleColor.Yellow);
+				Log.Text($"{inputUrl}", textColor: ConsoleColor.Yellow);
 
 				var response = await AoCHttpClient.GetAsync(inputUrl);
 				if (response.IsSuccessStatusCode)

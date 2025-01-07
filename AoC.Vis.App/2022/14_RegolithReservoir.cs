@@ -9,14 +9,14 @@ namespace Ujeby.AoC.Vis.App
 {
 	internal class RegolithReservoir : AoCRunnable
 	{
-		private byte[,] _map;
+		byte[,] _map;
 
-		private Random _rnd;
+		Random _rnd;
 
-		private long _sandCount;
-		private const int _sandPerFrame = 10;
+		long _sandCount;
+		const int _sandPerFrame = 10;
 
-		private List<v4f> _colors = new();
+		List<v4f> _colors = new();
 
 		public override string Name => $"#14 {nameof(RegolithReservoir)}";
 
@@ -43,7 +43,7 @@ namespace Ujeby.AoC.Vis.App
 			AddSand(new v2i(500, 0));
 		}
 
-		private void AddSand(v2i p)
+		void AddSand(v2i p)
 		{
 			p.Y = System.Math.Max(p.Y, 0);
 			if (p.X < 0 || p.Y < 0 || p.X >= _map.GetLength(1) || p.Y >= _map.GetLength(0))

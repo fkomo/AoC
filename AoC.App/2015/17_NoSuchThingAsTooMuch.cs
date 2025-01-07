@@ -16,6 +16,8 @@ namespace Ujeby.AoC.App._2015_17
 			// part1
 			var combinations = new Dictionary<string, int>();
 			var usedIdx = Enumerable.Repeat(-1, containers.Length).ToArray();
+
+			_cache.Clear();
 			FitEggnogRec(eggnogSize, containers, combinations, usedIdx);
 			var answer1 = combinations.Count;
 
@@ -28,7 +30,7 @@ namespace Ujeby.AoC.App._2015_17
 
 		private static readonly Dictionary<string, int> _cache = new();
 
-		private void FitEggnogRec(int eggnogSize, int[] containers, Dictionary<string, int> combinations, int[] buffer,
+		private static void FitEggnogRec(int eggnogSize, int[] containers, Dictionary<string, int> combinations, int[] buffer,
 			int bufferUsage = 0)
 		{
 			if (bufferUsage == containers.Length)

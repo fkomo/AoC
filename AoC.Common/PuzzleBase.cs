@@ -13,6 +13,10 @@ namespace Ujeby.AoC.Common
 			=> (Part1: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer1,
 				Part2: GetType().GetCustomAttribute<AoCPuzzleAttribute>().Answer2);
 
+		public (string Part1, string Part2) Solution { get; private set; }
+
+		public double? Time { get; private set; }
+
 		bool _skip;
 
 		public bool Skip
@@ -28,8 +32,7 @@ namespace Ujeby.AoC.Common
 
 		protected abstract (string Part1, string Part2) SolvePuzzle(string[] input);
 
-		public int Solve(string inputStorage, 
-			string inputSuffix = null)
+		public int Solve(string inputStorage, string inputSuffix = null)
 		{
 			var result = 0;
 
@@ -42,13 +45,15 @@ namespace Ujeby.AoC.Common
 
 				sw.Start();
 
-				(string Part1, string Part2) solution = default;
 				if (!Skip)
-					solution = SolvePuzzle(input);
+				{
+					Solution = SolvePuzzle(input);
+					Time = sw.Elapsed.TotalMilliseconds;
+					
+					System.Diagnostics.Debug.Print($"{Year}-{Day:d2}: {Time}ms");
+				}
 				else
-					solution = Answer;
-
-				var elapsed = sw.Elapsed.TotalMilliseconds;
+					Solution = Answer;
 
 				// day number
 				Log.ChristmasPattern("│", 2);
@@ -57,32 +62,35 @@ namespace Ujeby.AoC.Common
 
 				// stars
 				var stars =
-					((Answer.Part1 != null && Answer.Part1 == solution.Part1) ? "*" : " ") +
-					((Answer.Part2 != null && Answer.Part2 == solution.Part2) ? "*" : " ");
+					((Answer.Part1 != null && Answer.Part1 == Solution.Part1) ? "*" : " ") +
+					((Answer.Part2 != null && Answer.Part2 == Solution.Part2) ? "*" : " ");
 				Log.Text($"{stars}", textColor: GetStarsColor(stars), indent: 0);
 
 				// title
+				if (Solution.Part1 == null && Solution.Part2 == null)
+				{
+					Log.ChristmasTextDisabled(Title, indent: 1);
+					return 0;
+				}
+
 				Log.ChristmasText(Title, indent: 1);
 
-				if (solution.Part1 == null && solution.Part2 == null)
-					return 0;
-
 				// elapsed
-				var elapsedText = Skip ? "skip!" : $"{DurationToStringSimple(elapsed)}";
+				var elapsedText = Skip ? "skip!" : $"{DurationToStringSimple(Time.Value)}";
 				Log.Text($"{elapsedText,5}",
-					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(elapsed),
+					textColor: Skip ? ConsoleColor.DarkMagenta : GetElapsedColor(Time.Value),
 					indent: AdventOfCode.ConsoleWidth - title.Length - 55);
 
 				// answers
-				var answer1Text = solution.Part1?.ToString() ?? "?";
-				Log.Text($"{answer1Text}", textColor: GetAnswerColor(Answer.Part1, solution.Part1), indent: 1);
-				var answer2Text = solution.Part2?.ToString() ?? "?";
-				Log.Text($"{answer2Text}", textColor: GetAnswerColor(Answer.Part2, solution.Part2), indent: 1);
+				var answer1Text = Solution.Part1?.ToString() ?? "?";
+				Log.Text($"{answer1Text}", textColor: GetAnswerColor(Answer.Part1, Solution.Part1), indent: 1);
+				var answer2Text = Solution.Part2?.ToString() ?? "?";
+				Log.Text($"{answer2Text}", textColor: GetAnswerColor(Answer.Part2, Solution.Part2), indent: 1);
 
-				if (Answer.Part1 != null && Answer.Part1 == solution.Part1)
+				if (Answer.Part1 != null && Answer.Part1 == Solution.Part1)
 					result++;
 
-				if (Answer.Part2 != null && Answer.Part2 == solution.Part2)
+				if (Answer.Part2 != null && Answer.Part2 == Solution.Part2)
 					result++;
 			}
 			catch (Exception ex)
@@ -126,8 +134,7 @@ namespace Ujeby.AoC.Common
 		}
 
 		static ConsoleColor GetAnswerColor(string right, string calculated)
-			=> right != null && right != calculated ? ConsoleColor.Red :
-				(calculated == null ? ConsoleColor.DarkGray : ConsoleColor.DarkGray);
+			=> right != null && right != calculated ? ConsoleColor.Red : ConsoleColor.DarkGray;
 
 		/// <summary></summary>
 		/// <param name="duration">duration in ms</param>

@@ -11,18 +11,18 @@ namespace Ujeby.AoC.Vis.App
 {
 	internal class MonkeyMap : AoCRunnable
 	{
-		private char[][] _map;
+		char[][] _map;
 
-		private int _pathToDraw = 0;
-		private v3i[] _path;
+		int _pathToDraw = 0;
+		v3i[] _path;
 
-		private Stopwatch _stopwatch = Stopwatch.StartNew();
+		Stopwatch _stopwatch = Stopwatch.StartNew();
 
-		private int _userPathToDraw = 0;
-		private int _userPoints = 0;
-		private v3i _userStart = new();
-		private v3i _userEnd = new();
-		private v3i[] _userPath;
+		int _userPathToDraw = 0;
+		int _userPoints = 0;
+		v3i _userStart = new();
+		v3i _userEnd = new();
+		v3i[] _userPath;
 
 		public override string Name => $"#22 {nameof(MonkeyMap)}";
 

@@ -1,6 +1,4 @@
-﻿using Ujeby.AoC.Common;
-using Ujeby.AoC.Vis.App.Common;
-using Ujeby.AoC.Vis.App.Ui;
+﻿using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
