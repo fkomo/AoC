@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2018_07;
 
-[AoCPuzzle(Year = 2018, Day = 07, Answer1 = null, Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 07, Answer1 = "BFLNGIRUSJXEHKQPVTYOCZDWMA", Answer2 = null, Skip = false)]
 public class TheSumOfItsParts : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -11,22 +11,27 @@ public class TheSumOfItsParts : PuzzleBase
 			.Select(x => (Prereq: x["Step ".Length], Id: x["Step F must be finished before step ".Length]))
 			.ToArray();
 
-		var steps = relations
+		var stepsWithPrev = relations
 			.GroupBy(x => x.Id)
 			.ToDictionary(x => x.Key, x => x.Select(x => x.Prereq).ToArray());
 
-		var stepsWitNoPrereq = relations.Select(x => x.Prereq).Distinct().Where(x => !steps.ContainsKey(x));
-		foreach (var step in stepsWitNoPrereq)
-			steps.Add(step, []);
+		var usedSteps = new List<char>();
+		var unusedSteps = relations.SelectMany(x => new char[] { x.Id, x.Prereq }).Distinct().Order().ToList();
 
-		// TODO 2018/07
+		while (unusedSteps.Count > 0)
+		{
+			var next = unusedSteps.First(x => !stepsWithPrev.ContainsKey(x) || stepsWithPrev[x].All(xx => usedSteps.Contains(xx)));
+
+			unusedSteps.Remove(next);
+			usedSteps.Add(next);
+		}
 
 		// part1
-		string answer1 = null;
+		var answer1 = string.Join("", usedSteps);
 
 		// part2
 		string answer2 = null;
 
-		return (answer1?.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2?.ToString());
 	}
 }

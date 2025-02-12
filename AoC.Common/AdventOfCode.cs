@@ -55,7 +55,7 @@ namespace Ujeby.AoC.Common
 					})
 					.Where(x => puzzleFilters.Any(pf => 
 						EqualOrWild(pf[0], x.Year.ToString()) && 
-						(EqualOrWild(pf[1], x.Day.ToString()) || (pf[1] == "?" && (x.Answer.Part1 == null || x.Answer.Part2 == null)))))
+						(EqualOrWild(pf[1].TrimStart('0'), x.Day.ToString()) || (pf[1] == "?" && (x.Answer.Part1 == null || x.Answer.Part2 == null)))))
 					.ToArray();
 
 				if (filteredPuzzles.Length == 0)
