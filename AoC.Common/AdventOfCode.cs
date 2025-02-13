@@ -29,7 +29,7 @@ namespace Ujeby.AoC.Common
 
 			Log.Line($"Using input storage '{inputStorage}'");
 
-			var puzzleFilters = puzzles.Select(x => x.Split(':')).ToArray();
+			var puzzleFilters = puzzles.Select(x => x.Contains(':') ? x.Split(':') : [x, "*"]).ToArray();
 
 			static bool EqualOrWild(string left, string right) => 
 				left == "*" || left == right || left.Split(',').Select(x => x.Trim()).Contains(right);
