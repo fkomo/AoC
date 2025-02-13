@@ -3,28 +3,33 @@ using Ujeby.Extensions;
 
 namespace Ujeby.AoC.App._2018_08;
 
-record struct Node(int[] Childs, int[] Meta);
+using LicenseTree = Dictionary<int, LicenseTreeNode>;
 
-[AoCPuzzle(Year = 2018, Day = 08, Answer1 = "36027", Answer2 = null, Skip = false)]
+record struct LicenseTreeNode(int[] Childs, int[] Meta);
+
+[AoCPuzzle(Year = 2018, Day = 08, Answer1 = "36027", Answer2 = "23960", Skip = false)]
 public class MemoryManeuver : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var nums = input.Single().ToNumArray().Select(x => (int)x).ToArray();
+		var licenseFile = input.Single().ToNumArray().Select(x => (int)x).ToArray();
 
-		var licenseTree = new Dictionary<int, Node>();
-		ProcessNode(nums, 0, licenseTree);
+		var licenseTree = new LicenseTree();
+		licenseTree.ProcessNode(licenseFile, 0);
 
 		// part1
 		var answer1 = licenseTree.Sum(x => x.Value.Meta.Sum());
 
 		// part2
-		string answer2 = null;
+		var answer2 = licenseTree.GetNodeValue(0);
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
 	}
+}
 
-	static int ProcessNode(int[] licenseFile, int nodeId, Dictionary<int, Node> licenseTree)
+static class Extensions
+{
+	public static int ProcessNode(this LicenseTree licenseTree, int[] licenseFile, int nodeId)
 	{
 		var childs = new List<int>();
 
@@ -32,11 +37,25 @@ public class MemoryManeuver : PuzzleBase
 		for (var i = 0; i < licenseFile[nodeId]; i++)
 		{
 			childs.Add(next);
-			next = ProcessNode(licenseFile, next, licenseTree);
+			next = licenseTree.ProcessNode(licenseFile, next);
 		}
 
-		licenseTree.Add(nodeId, new Node([.. childs], licenseFile[next..(next + licenseFile[nodeId + 1])]));
+		licenseTree.Add(nodeId, new LicenseTreeNode([.. childs], licenseFile[next..(next + licenseFile[nodeId + 1])]));
 
 		return next + licenseFile[nodeId + 1];
+	}
+
+	public static long GetNodeValue(this LicenseTree tree, int nodeId)
+	{
+		if (!tree.TryGetValue(nodeId, out LicenseTreeNode node))
+			return 0;
+
+		if (node.Childs.Length == 0)
+			return node.Meta.Sum();
+
+		return node.Meta
+			.Where(x => x > 0 && x <= node.Childs.Length)
+			.Select(x => tree.GetNodeValue(node.Childs[x - 1]))
+			.Sum();
 	}
 }
