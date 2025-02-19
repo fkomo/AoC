@@ -59,6 +59,7 @@ namespace Ujeby.AoC.Vis.App
 								new AoCRunnable[]
 								{
 									new NoMatterHowYouSliceIt(windowSize),
+									new TheStarsAlign(windowSize),
 								}
 							},
 							//{
