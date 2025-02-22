@@ -15,7 +15,7 @@ public class SubterraneanSustainability : PuzzleBase
 		var answer1 = Grow([.. plants], rules, out _);
 
 		// part2
-		// 50000000000 ?
+		// 50 000 000 000 ?
 		string answer2 = null;
 
 		return (answer1.ToString(), answer2?.ToString());
