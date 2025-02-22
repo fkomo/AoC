@@ -3,7 +3,7 @@ using Ujeby.Extensions;
 
 namespace Ujeby.AoC.App._2018_09;
 
-[AoCPuzzle(Year = 2018, Day = 09, Answer1 = "398242", Answer2 = "3273842452", Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 09, Answer1 = "398242", Answer2 = "3273842452", Skip = true)]
 public class MarbleMania : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -14,6 +14,7 @@ public class MarbleMania : PuzzleBase
 		var answer1 = GetHighScore((int)gameParams[_playerCount], gameParams[_lastMarble]);
 
 		// part2
+		// TODO OPTIMIZE 2018/09 p2 (2s)
 		var answer2 = GetHighScore((int)gameParams[_playerCount], gameParams[_lastMarble] * 100);
 
 		return (answer1.ToString(), answer2.ToString());
