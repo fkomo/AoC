@@ -3,7 +3,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2018_12;
 
-[AoCPuzzle(Year = 2018, Day = 12, Answer1 = "2166", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 12, Answer1 = "2166", Answer2 = "2100000000061", Skip = false)]
 public class SubterraneanSustainability : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -12,18 +12,79 @@ public class SubterraneanSustainability : PuzzleBase
 		var rules = input.Skip(2).Select(x => new Rule(x[..5], x[^1] == '#')).ToArray();
 
 		// part1
-		var answer1 = Grow([.. plants], rules, out _);
+		var answer1 = Grow2([.. plants], rules);
 
 		// part2
-		// 50 000 000 000 ?
-		string answer2 = null;
+		var answer2 = Grow2([.. plants], rules, generations: 50_000);
 
-		return (answer1.ToString(), answer2?.ToString());
+		// 000000000
+		// 0000000000
+		// 640ms
+
+		return (answer1.ToString(), answer2.ToString());
 	}
 
-	static long Grow(char[] plants, Rule[] rules, out int left, long generations = 20)
+	static long Grow2(char[] plants, Rule[] rules, long generations = 20)
 	{
-		left = 0;
+		var grown = new HashSet<long>();
+		for (var i = 0; i < plants.Length; i++)
+			if (plants[i] == '#')
+				grown.Add(i);
+
+		var emptyToPlant = rules.Where(x => x.Grow && x.Pattern[2] == '.').ToArray();
+		var plantToPlant = rules.Where(x => x.Grow && x.Pattern[2] == '#').ToArray();
+
+		var possiblePlants = new int[] { -2, -1, 1, 2 };
+
+		for (var g = 0; g < generations; g++)
+		{
+			var grown2 = new List<long>();
+
+			foreach (var p in grown)
+			{
+				foreach (var r in plantToPlant)
+					if (MatchPattern(r.Pattern, grown, p))
+						grown2.Add(p);
+			}
+
+			var empty = new HashSet<long>();
+			foreach (var p in grown)
+			{
+				foreach (var pp in possiblePlants)
+					if (!grown.Contains(pp + p))
+						empty.Add(pp + p);
+			}
+
+			foreach (var p in empty)
+			{
+				foreach (var r in emptyToPlant)
+					if (MatchPattern(r.Pattern, grown, p))
+						grown2.Add(p);
+			}
+
+			grown = [.. grown2];
+		}
+
+		return grown.Sum();
+	}
+
+	static bool MatchPattern(string pattern, HashSet<long> grown, long p)
+	{
+		for (var i = 0; i < pattern.Length; i++)
+		{
+			if (pattern[i] == '#' && !grown.Contains(p - 2 + i))
+				return false;
+
+			if (pattern[i] == '.' && grown.Contains(p - 2 + i))
+				return false;
+		}
+
+		return true;
+	}
+
+	static long Grow(char[] plants, Rule[] rules, long generations = 20)
+	{
+		var left = 0;
 
 		var extPlants = Enumerable.Repeat('.', 5);
 		for (var g = 0; g < generations; g++)
@@ -58,7 +119,7 @@ public class SubterraneanSustainability : PuzzleBase
 			plants = plants[..(last + 1)];
 		}
 
-		//Debug.Line(string.Join("", plants));
+		Log.Line(string.Join("", plants));
 
 		var sum = 0L;
 		for (var i = 0; i < plants.Length; i++)
