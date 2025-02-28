@@ -6,26 +6,56 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2018_15;
 
-[AoCPuzzle(Year = 2018, Day = 15, Answer1 = "198744", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 15, Answer1 = "198744", Answer2 = "66510", Skip = false)]
 public class BeverageBandits : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
 		var map = input.Select(x => x.ToArray()).ToArray();
 
-		var elves = map.EnumAll('E').Select(x => new Elf { Pos = x }).ToArray();
-		var goblins = map.EnumAll('G').Select(x => new Goblin { Pos = x }).ToArray();
-		var units = elves.Cast<Unit>().Concat(goblins.Cast<Unit>()).ToList();
+		var elves = map.EnumAll('E').ToArray();
+		var goblins = map.EnumAll('G').ToArray();
 
-		foreach (var unitPos in units.Select(x => x.Pos))
+		foreach (var unitPos in elves.Concat(goblins))
 			map.Set(unitPos, '.');
 
-		Draw(map, units);
+		// part1
+		var units = CreateUnitsList(elves, goblins);
+		var rounds = Fight(map, units);
+		var answer1 = rounds * units.Sum(x => x.Hp);
 
+		// part2
+		var lifeTimeIf4GoblinsAttacking = 200 / (3 * 4);
+		var maxApNeededApToKill4Goblins = (4 * 200) / lifeTimeIf4GoblinsAttacking;
+
+		var answer2 = 0;
+		for (var ap = 4; ap < maxApNeededApToKill4Goblins; ap++)
+		{
+			units = CreateUnitsList(elves, goblins, elvesAp: ap);
+			rounds = Fight(map, units, endOnElfDeath: true);
+
+			// all elves survived
+			if (units.Count(x => x is Elf) == elves.Length)
+			{
+				answer2 = rounds * units.Sum(x => x.Hp);
+				break;
+			}
+		}
+
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	static List<Unit> CreateUnitsList(v2i[] elves, v2i[] goblins, int elvesAp = 3) =>
+		elves.Select(x => new Elf { Pos = x, Ap = elvesAp }).Cast<Unit>()
+			.Concat(goblins.Select(x => new Goblin { Pos = x }).Cast<Unit>())
+			.ToList();
+
+	static int Fight(char[][] map, List<Unit> units, bool endOnElfDeath = false)
+	{
 		var readOrdCmp = new ReadingOrderComparer();
 
-		// part1
 		var round = 0;
+
 		var combatEnds = false;
 		while (!combatEnds)
 		{
@@ -108,27 +138,19 @@ public class BeverageBandits : PuzzleBase
 				// target is dead
 				if (selectedTarget.Hp <= 0)
 				{
-					units.Remove(selectedTarget);
 					Debug.Line($"#{round}: {selectedTarget} died");
+					units.Remove(selectedTarget);
+
+					if (selectedTarget is Elf && endOnElfDeath)
+						return round;
 				}
 			}
 
 			if (!combatEnds)
-			{
 				round++;
-
-				Debug.Line();
-				Debug.Line($"After {round} round:");
-				Draw(map, units);
-			}
 		}
 
-		var answer1 = round * units.Sum(x => x.Hp);
-
-		// part2
-		string answer2 = null;
-
-		return (answer1.ToString(), answer2?.ToString());
+		return round;
 	}
 
 	static char[][] CloneMapWithUnits(char[][] map, IEnumerable<Unit> units)
@@ -138,30 +160,6 @@ public class BeverageBandits : PuzzleBase
 			mapWithUnits.Set(u.Pos, '#');
 
 		return mapWithUnits;
-	}
-
-	static void Draw(char[][] map, IEnumerable<Unit> units)
-	{
-#if DEBUG
-		for (var y = 0; y < map.Length; y++)
-		{
-			var sb = new StringBuilder();
-			for (var x = 0; x < map[y].Length; x++)
-			{
-				if (units.Where(x => x is Elf).Select(x => x.Pos).Contains(new v2i(x, y)))
-					sb.Append('E');
-
-				else if (units.Where(x => x is Goblin).Select(x => x.Pos).Contains(new v2i(x, y)))
-					sb.Append('G');
-
-				else
-					sb.Append(map[y][x]);
-			}
-			Debug.Line(sb.ToString());
-		}
-
-		Debug.Line();
-#endif
 	}
 }
 
