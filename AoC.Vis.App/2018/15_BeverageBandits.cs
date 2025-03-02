@@ -59,9 +59,7 @@ namespace Ujeby.AoC.Vis.App
 			foreach (var t in _map.ToAAB2i().EnumPoints())
 			{
 				if (_map.Get(t) != '.')
-				{
 					Grid.DrawCell(t, fill: new v4f(.5, .5, .5, rnd.NextDouble() * .2 + .4));
-				}
 			}
 
 			foreach (var u in _units)
