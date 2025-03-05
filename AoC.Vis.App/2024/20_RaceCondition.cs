@@ -58,6 +58,10 @@ namespace Ujeby.AoC.Vis.App
 				.ToDictionary(x => x.Key, x => x.Select(xx => xx.Item2).ToArray());
 
 			_sw.Start();
+
+			Grid.MinorSize = 6;
+			Grid.MoveCenter(new v2i(_map.Length / 2 * Grid.MinorSize));
+
 		}
 
 		protected override void Update()
@@ -72,7 +76,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			Grid.Draw();
+			Grid.Draw(showMinor: false);
 
 			var color = new v4f(.2, .2, .2, .8);
 			foreach (var p in _map.EnumAll('#'))

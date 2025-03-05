@@ -35,9 +35,10 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			Grid.MinorSize = 4;
-
 			Reset();
+
+			Grid.MinorSize = 6;
+			Grid.MoveCenter(new v2i(_map.Length / 2 * Grid.MinorSize));
 		}
 
 		protected override void Update()

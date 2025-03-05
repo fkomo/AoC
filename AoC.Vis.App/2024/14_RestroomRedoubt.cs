@@ -19,9 +19,6 @@ namespace Ujeby.AoC.Vis.App
 		v4f[] _colors;
 		v2i _mid;
 
-		const int _frameStep = 1;
-		readonly Stopwatch _sw = Stopwatch.StartNew();
-
 		public override string Name => $"#14 {nameof(RestroomRedoubt)}";
 
 		public RestroomRedoubt(v2i windowSize) : base(windowSize)

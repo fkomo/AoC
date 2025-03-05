@@ -30,8 +30,8 @@ namespace Ujeby.AoC.Vis.App
 		{
 			Reset();
 
-			Grid.MinorSize = 8;
-			Grid.MoveCenter(new v2i(_map[0].Length / 2 * Grid.MinorSize, 200));
+			Grid.MinorSize = 4;
+			Grid.MoveCenter(new v2i(_map[0].Length / 2 * Grid.MinorSize, 400));
 		}
 
 		protected override void Update()
@@ -53,7 +53,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			Grid.Draw(showMinor: false, showMajor: false);
+			Grid.Draw(showMinor: false, showMajor: false, showAxis: false);
 
 			foreach (var t in _map.ToAAB2i().EnumPoints())
 			{

@@ -29,6 +29,9 @@ namespace Ujeby.AoC.Vis.App
 
 			var plants = _mapArea.EnumPoints().Select(x => _map[x.Y][x.X]).Distinct().ToArray();
 			_colors = plants.ToDictionary(x => x, x => new v4f(v3f.FromRGB(Random.Shared.Next()), .5));
+
+			Grid.MinorSize = 6;
+			Grid.MoveCenter(new v2i(_map.Length / 2 * Grid.MinorSize));
 		}
 
 		protected override void Update()

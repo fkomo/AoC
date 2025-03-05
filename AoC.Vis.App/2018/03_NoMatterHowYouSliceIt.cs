@@ -5,6 +5,7 @@ using Ujeby.Extensions;
 using Ujeby.Graphics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
+using Ujeby.Tools;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.Vis.App
@@ -30,6 +31,12 @@ namespace Ujeby.AoC.Vis.App
 				.ToDictionary(x => x[0], x => new aab2i(new(x[1], x[2]), new(x[1] + x[3] - 1, x[2] + x[4] - 1)));
 
 			_colors = _claims.Keys.ToDictionary(x => x, x => new v4f(v3f.FromRGB(Random.Shared.Next()), .3));
+
+			var min = _claims.Min(x => x.Value.Min);
+			var max = _claims.Max(x => x.Value.Max);
+
+			Grid.MinorSize = 1;
+			Grid.MoveCenter(new v2i((max - min) / 2 * Grid.MinorSize));
 		}
 
 		protected override void Update()
@@ -38,7 +45,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Render()
 		{
-			Grid.Draw(showMinor: false);
+			Grid.Draw(showMinor: false, showMajor: false);
 
 			foreach (var claim in _claims)
 				Grid.DrawRect(claim.Value.Min, claim.Value.Size, fill: _colors[claim.Key]);

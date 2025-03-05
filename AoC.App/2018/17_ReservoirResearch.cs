@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using Ujeby.AoC.Common;
 using Ujeby.Extensions;
 using Ujeby.Vectors;
@@ -48,13 +47,13 @@ public class ReservoirResearch : PuzzleBase
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	static char[] _emptyOrFlow = { '\0', '|' };
-	static char[] _solidOrStill = { '#', '~' };
-
 	public static void ProcessSpring(char[][] map, Queue<v2i> springs, aab2i bounds)
 	{
 		if (springs.Count == 0)
 			return;
+
+		bool IsEmptyOrFlow(v2i t) => map.Get(t) == '\0' || map.Get(t) == '|';
+		bool IsSolidOrStill(v2i t) => map.Get(t) == '#' || map.Get(t) == '~';
 
 		var spring = springs.Dequeue();
 
@@ -65,7 +64,7 @@ public class ReservoirResearch : PuzzleBase
 		var flow = spring;
 		flow.Y++;
 
-		while (bounds.Contains(flow) && _emptyOrFlow.Contains(map.Get(flow)))
+		while (bounds.Contains(flow) && IsEmptyOrFlow(flow))
 		{
 			map.Set(flow, '|');
 			flow.Y++;
@@ -81,11 +80,11 @@ public class ReservoirResearch : PuzzleBase
 			flow.Y--;
 
 			var left = new v2i(flow.X - 1, flow.Y);
-			for (; _emptyOrFlow.Contains(map.Get(left)) && bounds.Contains(left + v2i.Up) && _solidOrStill.Contains(map.Get(left + v2i.Up)); left.X--)
+			for (; IsEmptyOrFlow(left) && bounds.Contains(left + v2i.Up) && IsSolidOrStill(left + v2i.Up); left.X--)
 				map.Set(left, '|');
 
 			var right = new v2i(flow.X + 1, flow.Y);
-			for (; _emptyOrFlow.Contains(map.Get(right)) && bounds.Contains(right + v2i.Up) && _solidOrStill.Contains(map.Get(right + v2i.Up)); right.X++)
+			for (; IsEmptyOrFlow(right) && bounds.Contains(right + v2i.Up) && IsSolidOrStill(right + v2i.Up); right.X++)
 				map.Set(right, '|');
 
 			// turn to still water
@@ -101,7 +100,7 @@ public class ReservoirResearch : PuzzleBase
 			}
 
 			// make new spring left
-			if (map.Get(left) == '\0' || map.Get(left) == '|')
+			if (IsEmptyOrFlow(left))
 			{
 				map.Set(left, '|');
 
@@ -110,7 +109,7 @@ public class ReservoirResearch : PuzzleBase
 			}
 
 			// make new spring right
-			if (map.Get(right) == '\0' || map.Get(right) == '|')
+			if (IsEmptyOrFlow(right))
 			{
 				map.Set(right, '|');
 

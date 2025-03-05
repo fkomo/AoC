@@ -30,20 +30,16 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Init()
 		{
-			//_input = InputProvider.Read(AppSettings.InputDirectory, 2024, 18, suffix: ".sample");
-			//_size = new v2i(7);
+			Reset();
 
-			_input = InputProvider.Read(AppSettings.InputDirectory, 2024, 18);
-			_size = new v2i(71);
-
-			_bytesToUse = 1;
-
-			UpdatePath();
+			Grid.MinorSize = 10;
+			Grid.MoveCenter(new v2i(_size / 2 * Grid.MinorSize));
 		}
 
 		protected override void Update()
 		{
-
+			_bytesToUse = (_bytesToUse + step) % _input.Length;
+			UpdatePath();
 		}
 
 		protected override void Render()
@@ -71,10 +67,22 @@ namespace Ujeby.AoC.Vis.App
 			base.Render();
 		}
 
+		void Reset()
+		{
+			//_input = InputProvider.Read(AppSettings.InputDirectory, 2024, 18, suffix: ".sample");
+			//_size = new v2i(7);
+
+			_input = InputProvider.Read(AppSettings.InputDirectory, 2024, 18);
+			_size = new v2i(71);
+
+			_bytesToUse = 1;
+
+			UpdatePath();
+		}
+
 		protected override void LeftMouseUp()
 		{
-			_bytesToUse = (_bytesToUse + step) % _input.Length;
-			UpdatePath();
+			Reset();
 		}
 
 		void UpdatePath()
