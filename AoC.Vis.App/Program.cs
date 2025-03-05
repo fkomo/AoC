@@ -62,6 +62,7 @@ namespace Ujeby.AoC.Vis.App
 									new TheStarsAlign(windowSize),
 									new MineCartMadness(windowSize),
 									new BeverageBandits(windowSize),
+									new ReservoirResearch(windowSize),
 								}
 							},
 							//{
