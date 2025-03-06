@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Ujeby.AoC.App._2018_15;
+﻿using Ujeby.AoC.App._2018_15;
 using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
@@ -20,14 +19,12 @@ namespace Ujeby.AoC.Vis.App
 		List<Unit> _units;
 		Dictionary<Unit, v4f> _colors;
 
-		const int _frameStep = 64;
-		readonly Stopwatch _sw = Stopwatch.StartNew();
-
 		public override string Name => $"#15 {nameof(BeverageBandits)}";
 
 		public BeverageBandits(v2i windowSize) : base(windowSize)
 		{
 			Sdl2Wrapper.ShowCursor(false);
+			_updateAfter = 64;
 		}
 
 		protected override void Init()
@@ -40,15 +37,13 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			if (!_combatEnded && _sw.ElapsedMilliseconds > _frameStep)
+			if (!_combatEnded)
 			{
 				if (!Ujeby.AoC.App._2018_15.BeverageBandits.Round(_units, _map))
 					_combatEnded = true;
 
 				else
 					_rounds++;
-
-				_sw.Restart();
 			}
 		}
 

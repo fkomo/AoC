@@ -23,14 +23,12 @@ namespace Ujeby.AoC.Vis.App
 		const int _maxPathLength = 64;
 		Dictionary<Cart, List<v2i>> _paths = [];
 
-		const int _frameStep = 2;
-		readonly Stopwatch _sw = Stopwatch.StartNew();
-
 		public override string Name => $"#13 {nameof(MineCartMadness)}";
 
 		public MineCartMadness(v2i windowSize) : base(windowSize)
 		{
 			Sdl2Wrapper.ShowCursor(false);
+			_updateAfter = 2;
 		}
 
 		protected override void Init()
@@ -46,24 +44,19 @@ namespace Ujeby.AoC.Vis.App
 			if (_carts.Length == 1)
 				return;
 
-			if (_sw.ElapsedMilliseconds > _frameStep)
+			_tick++;
+
+			foreach (var c in _carts)
 			{
-				_tick++;
-
-				foreach (var c in _carts)
-				{
-					_paths[c].Add(c.Pos);
-					if (_paths[c].Count > _maxPathLength)
-						_paths[c].RemoveAt(0);
-				}
-
-				var cartBefore = _carts.ToArray();
-				_carts = Ujeby.AoC.App._2018_13.MineCartMadness.MoveAndRemoveCollisionCarts(_carts, _map);
-
-				_collisions.AddRange(cartBefore.Except(_carts).Select(x => x.Pos));
-
-				_sw.Restart();
+				_paths[c].Add(c.Pos);
+				if (_paths[c].Count > _maxPathLength)
+					_paths[c].RemoveAt(0);
 			}
+
+			var cartBefore = _carts.ToArray();
+			_carts = Ujeby.AoC.App._2018_13.MineCartMadness.MoveAndRemoveCollisionCarts(_carts, _map);
+
+			_collisions.AddRange(cartBefore.Except(_carts).Select(x => x.Pos));
 		}
 
 		protected override void Render()
