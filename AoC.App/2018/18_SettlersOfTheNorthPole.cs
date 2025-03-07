@@ -1,10 +1,11 @@
+using System.Linq;
 using Ujeby.AoC.Common;
 using Ujeby.Extensions;
 using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2018_18;
 
-[AoCPuzzle(Year = 2018, Day = 18, Answer1 = "653184", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 18, Answer1 = "653184", Answer2 = "169106", Skip = false)]
 public class SettlersOfTheNorthPole : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -12,20 +13,10 @@ public class SettlersOfTheNorthPole : PuzzleBase
 		var map = CreateMap(input);
 
 		// part1
-		var answer1 = GetResourceValueAfter(map);
+		var answer1 = GetResourceValueAfter(map.Copy());
 
 		// part2
-		var answer2 = 0;
-		//var answer2 = GetResourceValueAfter(map, minutes: 1_000_000_000);
-		// too high 207320
-		// too high 186024
-
-		for (var m = 0; m < 1000; m++)
-		{
-			var raw = GetResourceValueAfter(map.Copy(), minutes: m, checkForPattern: false);
-			var pattern = GetResourceValueAfter(map.Copy(), minutes: m, checkForPattern: true);
-			Log.Line($"{m,5}: r={raw,8} vs p={pattern,8} {(raw==pattern ? "" : "!")}");
-		}
+		var answer2 = GetResourceValueAfter(map.Copy(), minutes: 1_000_000_000);
 
 		return (answer1.ToString(), answer2.ToString());
 	}
@@ -60,7 +51,7 @@ public class SettlersOfTheNorthPole : PuzzleBase
 		}
 	}
 
-	static int GetResourceValueAfter(char[][] map, long minutes = 10, bool checkForPattern = true)
+	static int GetResourceValueAfter(char[][] map, long minutes = 10)
 	{
 		var acres = new aab2i(new v2i(1), new v2i(map.Length - 2)).EnumPoints().ToArray();
 
@@ -70,22 +61,16 @@ public class SettlersOfTheNorthPole : PuzzleBase
 		for (var m = 0; m < minutes; m++)
 		{
 			WaitOneMinute(map, map2, acres);
+			var resourceValue = GetResourceValue(map);
 
-			if (checkForPattern)
+			var hash = Ujeby.Tools.Hashing.FormatHash(System.Security.Cryptography.SHA256.HashData([.. map.Flatten().Select(x => (byte)x)]));
+			if (!hashes.TryAdd(hash, (m, resourceValue)))
 			{
-				//Debug.Line($"after {m}: {resourceValue}");
-				var resourceValue = GetResourceValue(map);
+				var cycleStart = hashes[hash].Minute;
+				var cycleEnd = hashes.Last().Value.Minute;
 
-				var hash = Ujeby.Tools.Hashing.FormatHash(System.Security.Cryptography.SHA256.HashData([.. map.Flatten().Select(x => (byte)x)]));
-				if (!hashes.TryAdd(hash, (m, resourceValue)))
-				{
-					var cycleStart = hashes[hash].Minute;
-					var cycleEnd = hashes.Last().Value.Minute;
-
-					// hash at minute 604 == 548
-					var cycle = hashes.Values.OrderBy(x => x.Minute).Where(x => x.Minute >= cycleStart).ToArray();
-					return cycle[(minutes - cycleStart) % cycle.Length].ResourceValue;
-				}
+				// hash at minute 604 == 548
+				return hashes.Skip((int)(cycleStart + (minutes - cycleStart) % (cycleEnd - cycleStart + 1))).First().Value.ResourceValue;
 			}
 
 			(map, map2) = (map2, map);
