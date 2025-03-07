@@ -61,10 +61,9 @@ public class SettlersOfTheNorthPole : PuzzleBase
 		for (var m = 0; m < minutes; m++)
 		{
 			WaitOneMinute(map, map2, acres);
-			var resourceValue = GetResourceValue(map);
 
 			var hash = Ujeby.Tools.Hashing.FormatHash(System.Security.Cryptography.SHA256.HashData([.. map.Flatten().Select(x => (byte)x)]));
-			if (!hashes.TryAdd(hash, (m, resourceValue)))
+			if (!hashes.TryAdd(hash, (m, GetResourceValue(map))))
 			{
 				var cycleStart = hashes[hash].Minute;
 				var cycleEnd = hashes.Last().Value.Minute;
