@@ -3,7 +3,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2018_20;
 
-[AoCPuzzle(Year = 2018, Day = 20, Answer1 = "3879", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 20, Answer1 = "3879", Answer2 = "8464", Skip = false)]
 public class ARegularMap : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -17,9 +17,9 @@ public class ARegularMap : PuzzleBase
 		var answer1 = distance.Values.Max();
 
 		// part2
-		string answer2 = null;
+		var answer2 = distance.Count(x => x.Value >= 1000);
 
-		return (answer1.ToString(), answer2?.ToString());
+		return (answer1.ToString(), answer2.ToString());
 	}
 
 	static readonly Dictionary<char, (v2i doorsDir, v2i roomDir)> _dirs = new()

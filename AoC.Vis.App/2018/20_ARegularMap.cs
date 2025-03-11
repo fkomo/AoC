@@ -73,8 +73,8 @@ namespace Ujeby.AoC.Vis.App
 
 		private void LoadNext()
 		{
-			//var input = InputProvider.Read(AppSettings.InputDirectory, 2018, 20, ".sample");
-			var input = InputProvider.Read(AppSettings.InputDirectory, 2018, 20);
+			var input = InputProvider.Read(AppSettings.InputDirectory, 2018, 20, ".sample");
+			//var input = InputProvider.Read(AppSettings.InputDirectory, 2018, 20);
 
 			_currentRegex = (_currentRegex + 1) % input.Length;
 			_regex = input[_currentRegex];
