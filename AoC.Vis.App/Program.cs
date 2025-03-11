@@ -64,6 +64,7 @@ namespace Ujeby.AoC.Vis.App
 									new BeverageBandits(windowSize),
 									new ReservoirResearch(windowSize),
 									new SettlersOfTheNorthPole(windowSize),
+									new ARegularMap(windowSize),
 								}
 							},
 							//{
