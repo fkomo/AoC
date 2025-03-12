@@ -1,6 +1,7 @@
 using Ujeby.AoC.Common;
 using Ujeby.Extensions;
 using Ujeby.Vectors;
+using ErosionMap = System.Collections.Generic.Dictionary<Ujeby.Vectors.v2i, (long erosionLevel, int regionType)>;
 
 namespace Ujeby.AoC.App._2018_22;
 
@@ -14,30 +15,51 @@ public class ModeMaze : PuzzleBase
 		var area = new aab2i(v2i.Zero, target);
 
 		// part1
-		var erosionLevels = new long[target.Y + 1][];
-		for (var i = 0; i < erosionLevels.Length; i++)
-			erosionLevels[i] = new long[target.X + 1];
-
+		var erosionLevels = new ErosionMap();
 		foreach (var a in area.EnumPoints())
-			erosionLevels.Set(a, GetErosionLevelAt(a, target, depth, erosionLevels));
+			erosionLevels.GetOrAdd(a, target, depth);
+		//erosionLevels.GetOrAdd(target + v2i.Down, target, depth);
+		//erosionLevels.GetOrAdd(target + v2i.Left, target, depth);
 
-		var answer1 = erosionLevels.Sum(x => x.Sum(xx => (depth + xx) % 3));
+		var answer1 = erosionLevels.Sum(x => x.Value.regionType);
 
 		// part2
-		var map = CreateMap(erosionLevels, depth);
-
-		foreach (var line in map)
-			Debug.Line(new string(line));
-		Debug.Line();
+		//erosionLevels.Print();
 
 		string answer2 = null;
 
 		return (answer1.ToString(), answer2?.ToString());
 	}
+}
 
-	static long GetErosionLevelAt(v2i a, v2i target, long depth, long[][] erosionLevels)
+static class Extensions
+{
+	public static void Print(this ErosionMap erosionMap)
 	{
-		var geoIdx = 0L;
+#if DEBUG
+		static char GetRegionType(long t) => t switch
+		{
+			0 => '.',
+			1 => '=',
+			2 => '|',
+			_ => '\0',
+		};
+	
+		var area = aab2i.FromPoints(erosionMap.Keys);
+
+		foreach (var line in erosionMap.GroupBy(x => x.Key.Y).OrderBy(x => x.Key))
+			Debug.Line(string.Join("", line.OrderBy(x => x.Key.X).Select(x => GetRegionType(x.Value.regionType))));
+
+		Debug.Line();
+#endif
+	}
+
+	public static long GetOrAdd(this ErosionMap erosionMap, v2i a, v2i target, long depth)
+	{
+		if (erosionMap.TryGetValue(a, out (long erosionLevel, int regionType) value))
+			return value.erosionLevel;
+
+		long geoIdx;
 		if (a == v2i.Zero || a == target)
 			geoIdx = 0;
 		else if (a.Y == 0)
@@ -45,18 +67,25 @@ public class ModeMaze : PuzzleBase
 		else if (a.X == 0)
 			geoIdx = a.Y * 48271;
 		else
-			geoIdx = erosionLevels.Get(a + v2i.Left) * erosionLevels.Get(a + v2i.Down);
+		{
+			long left;
+			if (erosionMap.TryGetValue(a + v2i.Left, out (long erosionLevel, int regionType) leftValue))
+				left = leftValue.erosionLevel;
+			else
+				left = erosionMap.GetOrAdd(a + v2i.Left, target, depth);
 
-		return (geoIdx + depth) % 20183;
+			long up;
+			if (erosionMap.TryGetValue(a + v2i.Down, out (long erosionLevel, int regionType) upValue))
+				up = upValue.erosionLevel;
+			else
+				up = erosionMap.GetOrAdd(a + v2i.Down, target, depth);
+
+			geoIdx = left * up;
+		}
+
+		var erosionLevel = (geoIdx + depth) % 20183;
+		erosionMap.Add(a, (erosionLevel, (int)(depth + erosionLevel) % 3));
+
+		return erosionLevel;
 	}
-
-	static char GetRegionType(long t) => t switch
-	{
-		0 => '.',
-		1 => '=',
-		2 => '|',
-		_ => '\0',
-	};
-
-	static char[][] CreateMap(long[][] erosionLevels, long depth) => [.. erosionLevels.Select(x => x.Select(xx => GetRegionType((depth + xx) % 3)).ToArray())];
 }
