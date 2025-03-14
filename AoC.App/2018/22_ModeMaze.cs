@@ -24,7 +24,7 @@ public class ModeMaze : PuzzleBase
 		var answer1 = erosionMap.Sum(x => (int)x.Value.RegionType);
 
 		// part2
-		// TODO 2018/22 OPTIMIZE p2 ~6min
+		// TODO 2018/22 OPTIMIZE p2 ~22s
 		var answer2 = ShortestPath(erosionMap, mapArea.Add(v2i.Zero, new v2i(38, 0)), start, target, depth);
 
 		return (answer1.ToString(), answer2.ToString());
@@ -32,68 +32,64 @@ public class ModeMaze : PuzzleBase
 
 	static int ShortestPath(ErosionMap erosionMap, aab2i mapArea, v2i start, v2i target, long depth)
 	{
-		var bestToTargetSoFar = int.MaxValue;
+		var shortest = int.MaxValue;
 
-		var best = new Dictionary<(v2i, Tool), int>();
+		var visited = new Dictionary<(v2i, Tool), int>();
 		
-		var queue = new Queue<(v2i p, int timeTaken, Tool tool, HashSet<v2i> visited)>();
-		queue.Enqueue((start, 0, Tool.Torch, [v2i.Zero]));
+		var queue = new Queue<(v2i p, int timeTaken, Tool tool)>();
+		queue.Enqueue((start, 0, Tool.Torch));
 
 		while (queue.Count > 0)
 		{
-			var (p, timeTaken, tool, visited) = queue.Dequeue();
+			var (p, timeTaken, tool) = queue.Dequeue();
 
-			if (best.TryGetValue((p, tool), out int bestTime) && bestTime <= timeTaken)
+			if (timeTaken >= shortest)
 				continue;
-
-			if (timeTaken >= bestToTargetSoFar)
-				continue;
-
-			best[(p, tool)] = timeTaken;
 
 			if (p == target)
 			{
-				if (tool != Tool.Torch && (!best.TryGetValue((target, Tool.Torch), out bestTime) || bestTime >= timeTaken + 7))
-					best[(p, Tool.Torch)] = timeTaken + 7;
-
-				bestToTargetSoFar = best[(p, Tool.Torch)];
+				shortest = timeTaken;
 				continue;
 			}
 
+			if (visited.TryGetValue((p, tool), out int bestTime) && bestTime <= timeTaken)
+				continue;
+
+			visited[(p, tool)] = timeTaken;
+
 			erosionMap.Get(p, target, depth, out _, out Region pRegion);
-			foreach (var tool2 in _toolNeeded[pRegion])
+			foreach (var tool2 in _tools[pRegion])
 			{
 				var timeTaken2 = (tool2 == tool) ? timeTaken + 1 : timeTaken + 8;
 
-				foreach (var d in v2i.UpDownLeftRight)
+				foreach (var p2 in v2i.UpDownLeftRight.Select(x => x + p))
 				{
-					var p2 = p + d;
-					if (!mapArea.Contains(p2) || visited.Contains(p2))
+					if (p2 == target && tool2 != Tool.Torch)
+						continue;
+
+					if (!mapArea.Contains(p2) || (visited.TryGetValue((p2, tool2), out int shortestAtVisited) && shortestAtVisited <= timeTaken2))
 						continue;
 
 					erosionMap.Get(p2, target, depth, out _, out Region p2Region);
-					if (!_regionsAllowed[tool2].Contains(p2Region))
+					if (!_regions[tool2].Contains(p2Region))
 						continue;
 
-					var hs2 = visited.ToHashSet();
-					hs2.Add(p2);
-
-					queue.Enqueue((p2, timeTaken2, tool2, hs2));
+					queue.Enqueue((p2, timeTaken2, tool2));
 				}
 			}
 		}
 
-		return best[(target, Tool.Torch)];
+		return shortest;
 	}
 
-	readonly static Dictionary<Region, Tool[]> _toolNeeded = new()
+	readonly static Dictionary<Region, Tool[]> _tools = new()
 	{
 		{ Region.Rocky, [Tool.Torch, Tool.ClimbingGear] },
 		{ Region.Wet, [Tool.ClimbingGear, Tool.Neither] },
 		{ Region.Narrow, [Tool.Torch, Tool.Neither] }
 	};
 
-	readonly static Dictionary<Tool, Region[]> _regionsAllowed = new()
+	readonly static Dictionary<Tool, Region[]> _regions = new()
 	{
 		{ Tool.Torch, [Region.Rocky, Region.Narrow] },
 		{ Tool.ClimbingGear, [Region.Rocky, Region.Wet] },
