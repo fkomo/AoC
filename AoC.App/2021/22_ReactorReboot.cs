@@ -10,7 +10,7 @@ namespace Ujeby.AoC.App._2021_22
 	{
 		internal record struct Cuboid(bool State, aab3i AABox)
 		{
-			public long Size() => State ? (AABox.Size + 1).Volume() : -(AABox.Size + 1).Volume();
+			public long Size() => State ? AABox.Size.Volume() : -AABox.Size.Volume();
 			public override string ToString() => $"{(State ? "+" : "")}{Size()} {AABox}";
 		}
 
@@ -31,7 +31,7 @@ namespace Ujeby.AoC.App._2021_22
 				})
 				.Where(c => c.AABox != aab3i.Empty)
 				.ToArray();
-			long? answer1 = RebootFinite(target.Size + 1, cuboids50);
+			long? answer1 = RebootFinite(target.Size, cuboids50);
 
 			// part2
 			var cuboids = input.Select(line =>
