@@ -4,17 +4,44 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2018_24;
 
-[AoCPuzzle(Year = 2018, Day = 24, Answer1 = "21070", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2018, Day = 24, Answer1 = "21070", Answer2 = "7500", Skip = true)]
 public class ImmuneSystemSimulator20XX : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var split = input.Split(string.Empty);
-		var groups = split[0].Skip(1).Select(x => new Group(x, ArmyEnum.ImmuneSystem))
-			.Concat(split[1].Skip(1).Select(x => new Group(x, ArmyEnum.Infection)))
-			.ToArray();
-
 		// part1
+		Fight(CreateArmies(input), out _, out long answer1);
+
+		// part2
+		// TODO 2018/24 OPTIMIZE p2 (1s)
+		var boost = 0L;
+		long unitsLeft;
+		while (!Fight(CreateArmies(input, immuneSystemBoost: boost++), out ArmyEnum winner, out unitsLeft) || winner != ArmyEnum.ImmuneSystem)
+		{ 
+		}
+		
+		var answer2 = unitsLeft;
+
+		return (answer1.ToString(), answer2.ToString());
+	}
+
+	static Group[] CreateArmies(string[] input, long immuneSystemBoost = 0)
+	{
+		var split = input.Split(string.Empty);
+		return
+		[
+			.. split[0].Skip(1).Select(x => new Group(x, ArmyEnum.ImmuneSystem, dmgBoost: immuneSystemBoost)),
+			.. split[1].Skip(1).Select(x => new Group(x, ArmyEnum.Infection)),
+		];
+	}
+
+	static bool Fight(Group[] groups, out ArmyEnum winner, out long unitsLeft)
+	{
+		winner = ArmyEnum.Unspecified;
+		unitsLeft = -1;
+
+		var armyUnits = groups.GroupBy(x => x.Army).ToDictionary(x => x.Key, x => x.Sum(xx => xx.Units[_cnt]));
+		
 		while (groups.GroupBy(x => x.Army).All(x => x.Any(xx => !xx.NoUnits))) // while both armies alive
 		{
 			var fights = new List<(Group att, Group def)>();
@@ -48,24 +75,26 @@ public class ImmuneSystemSimulator20XX : PuzzleBase
 
 				defender.Units[_cnt] = System.Math.Max(defender.Units[_cnt] - attacker.ExpectedDmg(defender) / defender.Units[_hp], 0);
 			}
+
+			// update army count + check for tie (no change in unit count)
+			var noChange = true;
+			foreach (var army in armyUnits)
+			{
+				var currentCnt = groups.Where(x => x.Army == army.Key).Sum(x => x.Units[_cnt]);
+				if (currentCnt != army.Value)
+					noChange = false;
+
+				armyUnits[army.Key] = currentCnt;
+			}
+
+			if (noChange)
+				return false;
 		}
 
-		PrintGroups(groups);
+		winner = armyUnits.First(x => x.Value > 0).Key;
+		unitsLeft = armyUnits.Sum(x => x.Value);
 
-		var answer1 = groups.Sum(x => x.Units[_cnt]);
-
-		// part2
-		string answer2 = null;
-
-		return (answer1.ToString(), answer2?.ToString());
-	}
-
-	static void PrintGroups(Group[] groups)
-	{
-#if DEBUG
-		foreach (var grp in groups)
-			Debug.Line(grp.ToString());
-#endif
+		return true;
 	}
 
 	class Group
@@ -78,7 +107,7 @@ public class ImmuneSystemSimulator20XX : PuzzleBase
 
 		public bool NoUnits => Units[_cnt] == 0;
 
-		public Group(string line, ArmyEnum army)
+		public Group(string line, ArmyEnum army, long dmgBoost = 0)
 		{
 			var bracket = line.Contains('(') ? line.Split(['(', ')'], StringSplitOptions.RemoveEmptyEntries)[1].Split("; ") : null;
 
@@ -89,7 +118,10 @@ public class ImmuneSystemSimulator20XX : PuzzleBase
 				?.Replace("weak to ", string.Empty).Split(' ').Select(x => x.Trim(',')).ToArray() ?? [];
 
 			Army = army;
+
 			Units = new v4i(line.ToNumArray());
+			Units[_dmg] += dmgBoost;
+
 			DmgType = line.Split(' ').Reverse().Skip(4).First();
 		}
 
@@ -119,6 +151,7 @@ public class ImmuneSystemSimulator20XX : PuzzleBase
 
 	public enum ArmyEnum
 	{
+		Unspecified = 0,
 		ImmuneSystem,
 		Infection
 	}

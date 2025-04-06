@@ -32,16 +32,8 @@ public class ALongWalk : PuzzleBase
 		return (answer1.ToString(), answer2.ToString());
 	}
 
-	// TODO 2023/23 add cache
-	readonly static Dictionary<string, long> _cache = new();
-
-	static long LongestHike(Dictionary<v2i, Dictionary<v2i, long>> p2p, v2i[] path, v2i end,
-		long pathSteps = 0)
+	static long LongestHike(Dictionary<v2i, Dictionary<v2i, long>> p2p, v2i[] path, v2i end, long pathSteps = 0)
 	{
-		//var cacheKey = (id, maskIdx, dmgGrpIdx);
-		//if (_cache.ContainsKey(cacheKey))
-		//	return _cache[cacheKey];
-
 		if (path.Last() == end)
 			return pathSteps;
 
@@ -55,8 +47,6 @@ public class ALongWalk : PuzzleBase
 			if (steps > maxSteps)
 				maxSteps = steps;
 		}
-
-		//_cache.Add(cacheKey, maxSteps);
 
 		return maxSteps;
 	}
@@ -143,8 +133,7 @@ public class ALongWalk : PuzzleBase
 		return poi.ToArray();
 	}
 
-	public static long LongestHike(string[] map,
-		List<v2i[]> allPaths = null)
+	public static long LongestHike(string[] map, List<v2i[]> allPaths = null)
 	{
 		var start = new v2i(1, 0);
 		var end = new v2i(map.Length - 2, map.Length - 1);

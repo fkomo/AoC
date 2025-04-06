@@ -14,7 +14,7 @@ public class MarbleMania : PuzzleBase
 		var answer1 = GetHighScore((int)gameParams[_playerCount], gameParams[_lastMarble]);
 
 		// part2
-		// TODO OPTIMIZE 2018/09 p2 (2s)
+		// TODO 2018/09 OPTIMIZE p2 (2s)
 		var answer2 = GetHighScore((int)gameParams[_playerCount], gameParams[_lastMarble] * 100);
 
 		return (answer1.ToString(), answer2.ToString());
