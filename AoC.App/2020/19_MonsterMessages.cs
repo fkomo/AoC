@@ -57,8 +57,7 @@ namespace Ujeby.AoC.App._2020_19
 
 		static Dictionary<long, HashSet<string>> _cache = new();
 
-		private static (bool Result, int Offset) Match(Dictionary<long, Rule> rules, string msg,
-			int index = 0, long ruleId = 0, int recursion = 0)
+		static (bool Result, int Offset) Match(Dictionary<long, Rule> rules, string msg, int index = 0, long ruleId = 0, int recursion = 0)
 		{
 			if (recursion > msg.Length)
 				return (false, 0);
