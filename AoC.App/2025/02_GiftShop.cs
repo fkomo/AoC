@@ -4,48 +4,81 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2025_02;
 
-[AoCPuzzle(Year = 2025, Day = 02, Answer1 = "55916882972", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2025, Day = 02, Answer1 = "55916882972", Answer2 = "76169125915", Skip = false)]
 public class GiftShop : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var ranges = input[0]
+		var idRanges = input[0]
 			.Split(',')
-			.Select(x => new v2i(x.ToNumArray()))
+			.Select(x => new v2i([.. x.ToNumArray().Select(x => System.Math.Max(x, 11))])) // ignore single digit numbers and 10 (valid ids)
 			.ToArray();
 
 		// part1
-		long answer1 = 0L;
-		foreach (var range in ranges)
+		static bool IsInvalidSimple(string id)
 		{
-			for (var n = range.X; n <= range.Y; n++)
-			{
-				var nStr = n.ToString();
-				if (nStr.Length % 2 != 0)
-					continue;
+			if (id.Length % 2 != 0)
+				return false;
 
-				var digits = nStr.Select(x => x - '0').ToArray();
+			var half = id.Length / 2;
+			for (var i = 0; i < half; i++)
+				if (id[i] != id[half + i])
+					return false;
 
-				static bool IsInvalid(int[] digits)
-				{
-					for (var i = 0; i < digits.Length / 2; i++)
-						if (digits[i] != digits[digits.Length / 2 + i])
-							return false;
+			return true;
+		}
 
-					return true;
-				}
-
-				if (!IsInvalid(digits))
-					continue;
-
-				Debug.Line(n.ToString());
-				answer1 += n;
-			}
+		var answer1 = 0L;
+		for (var r = 0; r < idRanges.Length; r++)
+		{
+			var range = idRanges[r];
+			for (var id = range.X; id <= range.Y; id++)
+				if (IsInvalidSimple(id.ToString()))
+					answer1 += id;
 		}
 
 		// part2
-		string answer2 = null;
+		static bool IsInvalidMultiPattern(string id)
+		{
+			if (IsInvalidSimple(id)) 
+				return true;
 
-		return (answer1.ToString(), answer2?.ToString());
+			// pattern len = 1
+			if (id.All(x => x == id[0]))
+				return true;
+
+			var maxRepeatLen = id.Length / 2 - 1;
+
+			// pattern len = 2-maxRepeatLen
+			for (var patternLen = maxRepeatLen; patternLen > 1; patternLen--)
+			{
+				if (id.Length % patternLen != 0)
+					continue;
+
+				var invalid = true;
+				for (var p1 = 0; p1 < patternLen && invalid; p1++)
+					for (var p2 = patternLen + p1; p2 < id.Length && invalid; p2 += patternLen)
+						if (id[p1] != id[p2])
+							invalid = false;
+
+				if (invalid)
+					return true;
+			}
+
+			return false;
+		}
+
+		var answer2 = 0L;
+		for (var r = 0; r < idRanges.Length; r++)
+		{
+			var range = idRanges[r];
+			for (var id = range.X; id <= range.Y; id++)
+			{
+				if (IsInvalidMultiPattern(id.ToString()))
+					answer2 += id;
+			}
+		}
+
+		return (answer1.ToString(), answer2.ToString());
 	}
 }
