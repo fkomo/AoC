@@ -2,7 +2,7 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2025_03;
 
-[AoCPuzzle(Year = 2025, Day = 03, Answer1 = "17435", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2025, Day = 03, Answer1 = "17435", Answer2 = "172886048065379", Skip = false)]
 public class Lobby : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -14,38 +14,12 @@ public class Lobby : PuzzleBase
 			.ToArray();
 
 		// part1
-		var answer1 = banks.Sum(Get2BatteryJoltage);
+		var answer1 = banks.Sum(x => GetNBatteryJoltage(x));
 
 		// part2
-		long? answer2 = null; // banks.Sum(x => GetNBatteryJoltage(x, batteryCount: 12));
+		var answer2 = banks.Sum(x => GetNBatteryJoltage(x, batteryCount: 12));
 
-		return (answer1.ToString(), answer2?.ToString());
-	}
-
-	static int Get2BatteryJoltage(int[] bank)
-	{
-		var first = -1;
-		var second = -1;
-
-		for (var b = 0; b < bank.Length - 1; b++)
-		{
-			if (bank[b] > first)
-			{
-				first = bank[b];
-				second = -1;
-			}
-			else if (bank[b] > second)
-			{
-				second = bank[b];
-				if (second == 9)
-					return 99;
-			}
-		}
-
-		if (bank[^1] > second)
-			second = bank[^1];
-
-		return 10 * first + second;
+		return (answer1.ToString(), answer2.ToString());
 	}
 
 	static long GetNBatteryJoltage(int[] bank, int batteryCount = 2)
@@ -54,11 +28,13 @@ public class Lobby : PuzzleBase
 
 		for (var bankIdx = 0; bankIdx < bank.Length; bankIdx++)
 		{
-			for (var batteryIdx = 0; batteryIdx < batteryCount; batteryIdx++)
+			var batteriesLeft = bank.Length - bankIdx;
+			for (var batteryIdx = System.Math.Max(0, batteryCount - batteriesLeft); batteryIdx < batteryCount; batteryIdx++)
 			{
 				if (bank[bankIdx] > batteries[batteryIdx])
 				{
 					batteries[batteryIdx] = bank[bankIdx];
+
 					for (var i = batteryIdx + 1; i < batteries.Length; i++)
 						batteries[i] = -1;
 
