@@ -32,8 +32,6 @@ public class TrashCompactor : PuzzleBase
 
 		var answer2 = 0L;
 		var numBuffer = new List<long>();
-
-		
 		for (var i = input[0].Length - 1; i >= 0; i--)
 		{
 			var digitsBuffer = new StringBuilder();
@@ -43,13 +41,14 @@ public class TrashCompactor : PuzzleBase
 			if (int.TryParse(digitsBuffer.ToString(), out int num))
 				numBuffer.Add(num);
 
-			if (input[^1][i] == ' ')
+			var op = input[^1][i];
+			if (op == ' ')
 				continue;
 
-			if (input[^1][i] == '*')
+			if (op == '*')
 				answer2 += numBuffer.Aggregate((a, b) => a * b);
 
-			else if (input[^1][i] == '+')
+			else if (op == '+')
 				answer2 += numBuffer.Sum();
 
 			numBuffer.Clear();
