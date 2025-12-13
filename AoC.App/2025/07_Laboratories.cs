@@ -48,10 +48,4 @@ public class Laboratories : PuzzleBase
 
 		return (answer1.ToString(), answer2?.ToString());
 	}
-
-	static void PrintMap(char[][] map)
-	{
-		for (var y = 0; y < map.Length; y++)
-			Debug.Line(new string(map[y]));
-	}
 }
