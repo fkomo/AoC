@@ -7,21 +7,30 @@ public class Factory : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var machines = input
-			.Select(x => x.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-			.Select(x => (
-                Final: Math.BaseToDec(x[0].Trim('[', ']'), baseString: ".#"),
-                Transitions: x[1..^1].Select(xx => AsXorPattern([.. xx.Trim(')', '(').Split(',').Select(xxx => int.Parse(xxx))], x[0].Length - 2)).ToArray(),
-				Joltage: x[^1].Trim('{', '}').Split(',').Select(xx => int.Parse(xx)).ToArray()))
-			.ToArray();
-
         // part1
-        var answer1 = machines.AsParallel().Sum(MinButtonPresses);
+        var answer1 = input
+            .Select(x => x.Split(' ', StringSplitOptions.RemoveEmptyEntries)[..^1])
+            .Select(x => (
+                Diagram: Math.BaseToDec(x[0].Trim('[', ']'), baseString: ".#"),
+                Buttons: x[1..].Select(xx => AsXorPattern([.. xx.Trim(')', '(').Split(',').Select(xxx => int.Parse(xxx))], x[0].Length - 2)).ToArray()))
+            .AsParallel()
+            .Sum(FewestButtonPressesToDiagram);
 
-		// part2
-		string answer2 = null;
+        // part2
+        var machines = input
+            .Select(x => x.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1..])
+            .Select(x => (
+                Buttons: x[..^1].Select(xx => xx.Trim(')', '(').Split(',').Select(xxx => int.Parse(xxx)).ToArray()).ToList(),
+                Joltage: x[^1].Trim('{', '}').Split(',').Select(xx => int.Parse(xx)).ToArray()))
+            .ToArray();
 
-		return (answer1.ToString(), answer2?.ToString());
+        Debug.Line($"{machines.Length} machines with {machines.Sum(x => x.Buttons.Count)} buttons");
+
+
+
+        var answer2 = 0L;
+
+		return (answer1.ToString(), answer2.ToString());
 	}
 
     static long AsXorPattern(int[] bits, int patternLength)
@@ -33,7 +42,7 @@ public class Factory : PuzzleBase
 		return pattern;
     }
 
-    static long MinButtonPresses((long Final, long[] Transitions, int[] Joltage) machine)
+    static long FewestButtonPressesToDiagram((long Diagram, long[] Buttons) machine)
     {
 		var queue = new Queue<HashSet<long>>();
 		queue.Enqueue([0L]);
@@ -49,11 +58,11 @@ public class Factory : PuzzleBase
 
             var lastStep = currentPath.Last();
 
-            foreach (var transition in machine.Transitions)
+            foreach (var transition in machine.Buttons)
 			{
 				var nextStep = lastStep ^ transition;
 
-                if (nextStep == machine.Final)
+                if (nextStep == machine.Diagram)
                 {
                     minSteps = System.Math.Min(minSteps, currentPath.Count);
                     continue;
