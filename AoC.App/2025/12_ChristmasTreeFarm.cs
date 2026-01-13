@@ -49,7 +49,7 @@ public class ChristmasTreeFarm : PuzzleBase
         }
 
         // part2
-        string answer2 = "*";
+        var answer2 = "*";
 
         return (answer1.ToString(), answer2.ToString());
     }

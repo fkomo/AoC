@@ -23,9 +23,9 @@ public class Reactor : PuzzleBase
 
 		// svr|...|fft|...|dac|...|out paths
 		//var answer2 = devices.AllPaths("svr", "fft", "dac").Count;
-		var answer2 = 0;
+		long? answer2 = null;
 
-        return (answer1.ToString(), answer2.ToString());
+        return (answer1.ToString(), answer2?.ToString());
 	}
 }
 
