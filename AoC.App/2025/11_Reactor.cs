@@ -2,85 +2,110 @@ using Ujeby.AoC.Common;
 
 namespace Ujeby.AoC.App._2025_11;
 
-[AoCPuzzle(Year = 2025, Day = 11, Answer1 = "668", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2025, Day = 11, Answer1 = "668", Answer2 = "294310962265680", Skip = false)]
 public class Reactor : PuzzleBase
 {
-	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
-	{
-		var devices = input.ToDictionary(x => x[..3], x => x[5..].Split(' '));
+    protected override (string Part1, string Part2) SolvePuzzle(string[] input)
+    {
+        var devices = input.ToDictionary(x => x[..3], x => x[5..].Split(' '));
 
-		// part1
-		var answer1 = devices.AllPaths("you", "out").Count;
+        // part1
+        var answer1 = devices.AllPaths("you", "out");
 
-		// part2
-		//var svr_dac = devices.AllPaths("svr", "dac"); // too long
-		//var dac_fft = devices.AllPaths("dac", "fft"); // 0
-		//var fft_out = devices.AllPaths("fft", "out"); // too long
-		//var svr_fft = devices.AllPaths("svr", "fft"); // too long
-		//var fft_dac = devices.AllPaths("fft", "dac"); // too long
+        // part2
+        long svr_fft = 0;
+        long fft_dac = 0;
+        long dac_out = 0;
 
-		//var dac_out = devices.AllPaths("dac", "out"); // 25644
+        Parallel.Invoke(
+            () => svr_fft = devices
+                .CleanDeadEndNodesExcept("svr", "fft")
+                .AllPaths("svr", "fft"),
 
-		// svr|...|fft|...|dac|...|out paths
-		//var answer2 = devices.AllPaths("svr", "fft", "dac").Count;
-		long? answer2 = null;
+            () => fft_dac = devices
+                .CleanDeadEndNodesExcept("fft", "dac")
+                .AllPaths("fft", "dac"),
 
-        return (answer1.ToString(), answer2?.ToString());
-	}
+            () => dac_out = devices
+                .AllPaths("dac", "out")
+        );
+
+        // svr|...|fft|...|dac|...|out
+        var answer2 = svr_fft * fft_dac * dac_out;
+
+        return (answer1.ToString(), answer2.ToString());
+    }
 }
 
 static class Extensions
 {
-	public static HashSet<string[]> AllPaths(this Dictionary<string, string[]> devices, params string[] nodes)
-	{
-		var paths = new HashSet<string[]>();
+    /// <summary>
+    /// remove dead end nodes that are not needed
+    /// </summary>
+    /// <param name="devices"></param>
+    /// <param name="except"></param>
+    /// <returns></returns>
+    public static Dictionary<string, string[]> CleanDeadEndNodesExcept(this Dictionary<string, string[]> devices, params string[] except)
+    {
+        while (true)
+        {
+            var deadEnds = devices
+                .SelectMany(x => x.Value)
+                .Distinct()
+                .Where(x => !devices.ContainsKey(x))
+                .Except(except)
+                .ToArray();
 
-		//var queue = new Queue<List<string>>();
-		var stack = new Stack<List<string>>();
+            if (deadEnds.Length == 0)
+                break;
 
-		//queue.Enqueue([nodes[0]]);
-		stack.Push([nodes[0]]);
+            devices = devices
+                .ToDictionary(x => x.Key, x => x.Value.Except(deadEnds).ToArray())
+                .Where(x => x.Value.Length > 0)
+                .ToDictionary();
+        }
 
-		//while (queue.Count > 0)
-		while (stack.Count > 0)
-		{
-			var path = stack.Pop();
-			//var path = queue.Dequeue();
+        return devices;
+    }
 
-			while (true)
-			{
-				var last = path.Last();
+    public static long AllPaths(this Dictionary<string, string[]> devices, string from, string to)
+    {
+        var paths = 0L;
 
-				if (path.Count > 1 && nodes.Length > 2 && path.Contains(nodes[2]) && !path.Contains(nodes[1]))
-					break;
-	
-				if (last == nodes[^1])
-				{
-					if (nodes.Any(x => !path.Contains(x)))
-						break;
+        var stack = new Stack<List<string>>();
+        stack.Push([from]);
 
-					paths.Add([.. path]);
-					break;
-				}
+        while (stack.Count > 0)
+        {
+            var path = stack.Pop();
 
-				// maybe not needed check
-				if (!devices.ContainsKey(last))
-					break;
+            while (true)
+            {
+                var last = path.Last();
+                if (last == to)
+                {
+                    paths++;
+                    break;
+                }
 
-				if (devices[last].Length == 1 && !path.Contains(devices[last][0]))
-				{
-					path.Add(devices[last][0]);
-					continue;
-				}
+                if (!devices.ContainsKey(last))
+                    break;
 
-				foreach (var next in devices[last].Where(x => !path.Contains(x)))
-					//queue.Enqueue([.. path, next]);
-					stack.Push([.. path, next]);
+                var next = devices[last];
 
-				break;
-			}
-		}
+                if (next.Length == 1 && !path.Contains(next[0]))
+                {
+                    path.Add(next[0]);
+                    continue;
+                }
 
-		return paths;
-	}
+                foreach (var nextNode in next.Where(x => !path.Contains(x)))
+                    stack.Push([.. path, nextNode]);
+
+                break;
+            }
+        }
+
+        return paths;
+    }
 }
