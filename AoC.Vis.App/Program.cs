@@ -119,8 +119,14 @@ namespace Ujeby.AoC.Vis.App
 									new RaceCondition(windowSize),
 									new LANParty(windowSize),
 								}
-							}
-						}
+							},
+                            {
+                                "2025",
+                                new AoCRunnable[]
+                                {
+                                    new MovieTheater(windowSize),
+                                }
+                            }                       }
 					);
 					menu.Run();
 
