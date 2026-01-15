@@ -4,7 +4,7 @@ using Ujeby.Vectors;
 
 namespace Ujeby.AoC.App._2025_07;
 
-[AoCPuzzle(Year = 2025, Day = 07, Answer1 = "1678", Answer2 = null, Skip = false)]
+[AoCPuzzle(Year = 2025, Day = 07, Answer1 = "1678", Answer2 = "357525737893560", Skip = false)]
 public class Laboratories : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
@@ -43,9 +43,22 @@ public class Laboratories : PuzzleBase
 
 		var answer1 = splitters.Count(x => map.Get(new v2i(x.X, x.Y - 1)) == '|');
 
-		// part2
-		string answer2 = null;
+        // part2
+        var beamCounter = Enumerable.Repeat(0L, map[0].Length).ToArray();
+		beamCounter[start.X] = 1;
 
-		return (answer1.ToString(), answer2?.ToString());
+        foreach (var splitter in splitters.OrderBy(x => x.Y))
+        {
+            if (beamCounter[splitter.X] == 0)
+                continue;
+
+            beamCounter[splitter.X - 1] += beamCounter[splitter.X];
+            beamCounter[splitter.X + 1] += beamCounter[splitter.X];
+            beamCounter[splitter.X] = 0;
+        }
+
+        var answer2 = beamCounter.Sum();
+
+		return (answer1.ToString(), answer2.ToString());
 	}
 }
