@@ -13,25 +13,19 @@ public class Reactor : PuzzleBase
         var answer1 = devices.AllPaths("you", "out");
 
         // part2
-        long svr_fft = 0;
-        long fft_dac = 0;
-        long dac_out = 0;
 
-        Parallel.Invoke(
-            () => svr_fft = devices
-                .CleanDeadEndNodesExcept("svr", "fft")
-                .AllPaths("svr", "fft"),
-
-            () => fft_dac = devices
-                .CleanDeadEndNodesExcept("fft", "dac")
-                .AllPaths("fft", "dac"),
-
-            () => dac_out = devices
-                .AllPaths("dac", "out")
-        );
-
-        // svr|...|fft|...|dac|...|out
-        var answer2 = svr_fft * fft_dac * dac_out;
+        // problem divided into 3 segments that are combined: svr|...|fft|...|dac|...|out
+        var answer2 = new string[][]
+            {
+                ["svr", "fft"],
+                ["fft", "dac"],
+                ["dac", "out"]
+            }
+            .Select(x => devices
+                .CleanDeadEndNodesExcept(x)
+                .AllPaths(x))
+            .AsParallel()
+            .Aggregate((a, b) => a * b);
 
         return (answer1.ToString(), answer2.ToString());
     }
@@ -68,9 +62,12 @@ static class Extensions
         return devices;
     }
 
-    public static long AllPaths(this Dictionary<string, string[]> devices, string from, string to)
+    public static long AllPaths(this Dictionary<string, string[]> devices, params string[] nodes)
     {
         var paths = 0L;
+
+        var from = nodes[0];
+        var to = nodes[^1]; 
 
         var stack = new Stack<List<string>>();
         stack.Push([from]);

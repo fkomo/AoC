@@ -9,8 +9,8 @@ public class PrintingDepartment : PuzzleBase
 {
 	protected override (string Part1, string Part2) SolvePuzzle(string[] input)
 	{
-		var map = input.Select(x => x.ToArray()).ToArray();
-		var allPapers = map.EnumAll('@').ToArray();
+		var map = ParseInput(input);
+        var allPapers = map.EnumAll('@').ToArray();
 
 		// part1
 		var answer1 = allPapers
@@ -48,4 +48,6 @@ public class PrintingDepartment : PuzzleBase
 
 		return (answer1.ToString(), answer2.ToString());
 	}
+
+	public static char[][] ParseInput(string[] input) => [.. input.Select(x => x.ToArray())];
 }
