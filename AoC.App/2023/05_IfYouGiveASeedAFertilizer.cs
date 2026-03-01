@@ -53,7 +53,7 @@ public class IfYouGiveASeedAFertilizer : PuzzleBase
 		foreach (var map in maps)
 		{
 			var range = map.SingleOrDefault(x => x[_src] <= mapped && mapped - x[_src] < x[_len]);
-			if (range == default)
+			if (range == default(v3i))
 				continue;
 
 			mapped = mapped - range[_src] + range[_dst];

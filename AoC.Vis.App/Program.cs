@@ -59,6 +59,12 @@ namespace Ujeby.AoC.Vis.App
 								new AoCRunnable[]
 								{
 									new NoMatterHowYouSliceIt(windowSize),
+									new TheStarsAlign(windowSize),
+									new MineCartMadness(windowSize),
+									new BeverageBandits(windowSize),
+									new ReservoirResearch(windowSize),
+									new SettlersOfTheNorthPole(windowSize),
+									new ARegularMap(windowSize),
 								}
 							},
 							//{
@@ -113,8 +119,14 @@ namespace Ujeby.AoC.Vis.App
 									new RaceCondition(windowSize),
 									new LANParty(windowSize),
 								}
-							}
-						}
+							},
+                            {
+                                "2025",
+                                new AoCRunnable[]
+                                {
+                                    new MovieTheater(windowSize),
+                                }
+                            }                       }
 					);
 					menu.Run();
 

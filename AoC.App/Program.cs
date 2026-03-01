@@ -37,9 +37,6 @@ namespace Ujeby.AoC.App
 			else
 				Console.WriteLine($"  Puzzle input suffix: {settings.InputSuffix}");
 
-			if (settings.InputSuffix == "s")
-				settings.InputSuffix = "sample";
-
 			if (!string.IsNullOrEmpty(settings.InputSuffix))
 				settings.InputSuffix = "." + settings.InputSuffix;
 

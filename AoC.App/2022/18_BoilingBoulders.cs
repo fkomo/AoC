@@ -45,7 +45,7 @@ namespace Ujeby.AoC.App._2022_18
 			}
 			long? answer2 = GetSurfaceArea(cubes, grid,
 				surface: 2);
-			// TODO 2022/18 p2 debug ends with stack overflow (ExpandSteam)
+			// NOTE p2 debug ends with stack overflow (ExpandSteam)
 
 			Debug.Line();
 

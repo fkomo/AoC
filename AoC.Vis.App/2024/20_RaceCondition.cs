@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Extensions;
@@ -24,14 +23,13 @@ namespace Ujeby.AoC.Vis.App
 		private (v2i, v2i)[] _allCheats;
 		Dictionary<v2i, v2i[]> _cheats = [];
 
-		int _step = 64;
-		readonly Stopwatch _sw = new Stopwatch();
-
 		public override string Name => $"#20 {nameof(RaceCondition)}";
 
 		public RaceCondition(v2i windowSize) : base(windowSize)
 		{
 			Sdl2Wrapper.ShowCursor(false);
+
+			_updateAfter = 64;
 		}
 
 		protected override void Init()
@@ -57,22 +55,18 @@ namespace Ujeby.AoC.Vis.App
 				.GroupBy(x => x.Item1)
 				.ToDictionary(x => x.Key, x => x.Select(xx => xx.Item2).ToArray());
 
-			_sw.Start();
+			Grid.MinorSize = 6;
+			Grid.MoveCenter(new v2i(_map.Length / 2 * Grid.MinorSize));
 		}
 
 		protected override void Update()
 		{
-			if (_sw.ElapsedMilliseconds > _step)
-			{
-				_pathToDraw++;
-
-				_sw.Restart();
-			}
+			_pathToDraw++;
 		}
 
 		protected override void Render()
 		{
-			Grid.Draw();
+			Grid.Draw(showMinor: false);
 
 			var color = new v4f(.2, .2, .2, .8);
 			foreach (var p in _map.EnumAll('#'))

@@ -9,6 +9,7 @@
 		<!--<Nullable>enable</Nullable>-->
 		<Configurations>Debug;Release;Debug.Sample;Debug-offline;Release-offline</Configurations>
 		<Platforms>AnyCPU;x64</Platforms>
+		<NoWarn>MSB3270</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

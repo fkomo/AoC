@@ -19,9 +19,6 @@ namespace Ujeby.AoC.Vis.App
 		int _currentPath = 0;
 		v2i[][] _allPaths;
 
-		readonly Stopwatch _sw = Stopwatch.StartNew();
-		const int _frameStep = 1;
-
 		readonly Dictionary<char, v4f> _colors = new()
 		{
 			{ '.', new v4f(0) },

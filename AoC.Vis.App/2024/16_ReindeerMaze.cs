@@ -40,6 +40,9 @@ namespace Ujeby.AoC.Vis.App
 			_score = _visited[end];
 
 			_bestPlaces = Ujeby.AoC.App._2024_16.ReindeerMaze.PickBestPlaces(_visited, start, end);
+
+			Grid.MinorSize = 6;
+			Grid.MoveCenter(new v2i(_map.Length / 2 * Grid.MinorSize));
 		}
 
 		protected override void Update()

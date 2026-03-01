@@ -9,11 +9,11 @@
 		<!--<Nullable>enable</Nullable>-->
 		<Configurations>Debug;Release;Debug-offline;Release-offline</Configurations>
 		<Platforms>AnyCPU;x64</Platforms>
+		<NoWarn>$(NoWarn);MSB3270</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="appsettings.2024.json" />
-	  <None Remove="appsettings.custom.json" />
+		<None Remove="appsettings.2024.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,11 +33,14 @@
 		<Content Include="..\preset.txt" Link="preset.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.2024.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<Content Include="appsettings.2018.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="appsettings.custom.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<Content Include="appsettings.2024.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="appsettings.next.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="appsettings.unsolveds.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -56,5 +59,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\AoC.Common\AoC.Common.csproj" />
 	</ItemGroup>
+
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties appsettings_1next_1json__JsonSchema="https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json" />
+		</VisualStudio>
+	</ProjectExtensions>
 
 </Project>

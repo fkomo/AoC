@@ -11,11 +11,11 @@ public class SandSlabs : PuzzleBase
 	{
 		var bricks = input
 			.Select(x => x.ToNumArray())
-			.Select(x => new aab3i(new v3i[] { new v3i(x.Take(3).ToArray()), new v3i(x.Skip(3).ToArray()) }))
+			.Select(x => new aab3i([new v3i([.. x.Take(3)]), new v3i([.. x.Skip(3)])]))
 			.ToArray();
 		Debug.Line($"{bricks.Length} bricks");
 
-		bricks = bricks.OrderBy(x => x.Min.Z).ToArray();
+		bricks = [.. bricks.OrderBy(x => x.Min.Z)];
 		var groundSize =
 			new v2i(bricks.Max(x => x.Max.X), bricks.Max(x => x.Max.Y)) -
 			new v2i(bricks.Min(x => x.Min.X), bricks.Min(x => x.Min.Y)) + new v2i(1);
@@ -37,10 +37,10 @@ public class SandSlabs : PuzzleBase
 			// there are some bricks above but not directly
 			bottomStack[s.Max.Z + 1].All(bs => !XYIntersection(s, bs)) ||
 			// there are some bricks directly above, but also there are other bricks supporting them
-			bottomStack[s.Max.Z + 1].All(bs => topStack[s.Max.Z].Except(new aab3i[] { s }).Any(ts => XYIntersection(bs, ts))));
+			bottomStack[s.Max.Z + 1].All(bs => topStack[s.Max.Z].Except([s]).Any(ts => XYIntersection(bs, ts))));
 
 		// part2
-		var answer2 = bricks.Sum(s => DroppedBricks(bricks.Where(x => x != s).ToArray(), groundSize));
+		var answer2 = bricks.Sum(s => DroppedBricks([.. bricks.Where(x => x != s)], groundSize));
 
 		return (answer1.ToString(), answer2.ToString());
 	}

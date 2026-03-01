@@ -71,7 +71,11 @@ namespace Ujeby.AoC.Gen
 				if (string.IsNullOrEmpty(codePath))
 					throw new Exception($"Path to source code ({nameof(codePath)}) not set!");
 
-				for (var day = 1; day <= 25; day++)
+				var days = 25;
+				if (year == 2025)
+					days = 12;
+
+				for (var day = 1; day <= days; day++)
 					GeneratePuzzleCodeTemplate(codePath, year, day)
 						.Wait();
 			}

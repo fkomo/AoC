@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Ujeby.AoC.Common;
+﻿using Ujeby.AoC.Common;
 using Ujeby.AoC.Vis.App.Common;
 using Ujeby.AoC.Vis.App.Ui;
 using Ujeby.Graphics;
@@ -19,13 +18,9 @@ namespace Ujeby.AoC.Vis.App
 
 		v3i[] _elves;
 
-		const int _frameStep = 16;
-
 		v2i _end;
 		v2i _start;
 		v2i _destination;
-
-		Stopwatch _sw = Stopwatch.StartNew();
 
 		int[,] _mapUsage;
 
@@ -42,6 +37,7 @@ namespace Ujeby.AoC.Vis.App
 
 		public BlizzardBasin(v2i windowSize) : base(windowSize)
 		{
+			_updateAfter = 16;
 		}
 
 		protected override void Init()
@@ -68,12 +64,7 @@ namespace Ujeby.AoC.Vis.App
 
 		protected override void Update()
 		{
-			if (_sw.ElapsedMilliseconds >= _frameStep)
-			{
-				Progress();
-
-				_sw.Restart();
-			}
+			Progress();
 		}
 
 		protected override void Render()
