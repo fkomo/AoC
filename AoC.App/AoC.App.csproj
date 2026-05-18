@@ -20,14 +20,14 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Z3" Version="4.12.2" />
-		<!--<PackageReference Include="Ujeby" Version="8.*" />-->
+		<!--<PackageReference Include="Ujeby.Core" Version="8.*" />-->
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="Ujeby">
-			<HintPath>..\..\Ujeby\publish\Ujeby.dll</HintPath>
+		<Reference Include="Ujeby.Core">
+			<HintPath>..\..\Ujeby\publish\Ujeby.Core.dll</HintPath>
 		</Reference>
-	</ItemGroup>
+	</ItemGroup>	
 
 	<ItemGroup>
 		<Content Include="..\preset.txt" Link="preset.txt">
