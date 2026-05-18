@@ -22,6 +22,9 @@
 		<Reference Include="Ujeby">
 			<HintPath>..\..\Ujeby\publish\Ujeby.dll</HintPath>
 		</Reference>
+		<Reference Include="Ujeby.Core">
+			<HintPath>..\..\Ujeby\publish\Ujeby.Core.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

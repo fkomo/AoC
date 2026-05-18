@@ -81,15 +81,11 @@ namespace Ujeby.AoC.Vis.App
             }
 
             // this is inefficient af, but ok for visualization
-
-            
-
             Grid.DrawCells(_bestRect.EnumPoints(), fill: blue);
             Grid.DrawCells(_bestRect.EnumBorderPoints(), fill: new v4f(0, 0, 1, 1));
 
             Grid.DrawCells(_currentRect.EnumPoints(), fill: _currentGood ? green : red);
             Grid.DrawCells(_currentRect.EnumBorderPoints(), fill: _currentGood ? green : red);
-
 
             Grid.DrawCells(_points, fill: red);
 
