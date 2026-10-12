@@ -1,0 +1,133 @@
+﻿using Ujeby.Extensions;
+
+namespace Ujeby.Vectors
+{
+#pragma warning disable IDE1006 // Naming Styles
+    public struct v4i
+#pragma warning restore IDE1006 // Naming Styles
+	{
+		public long X;
+		public long Y;
+		public long Z;
+		public long W;
+
+		public long this[int key]
+		{
+			get
+			{
+				return key switch
+				{
+					0 => X,
+					1 => Y,
+					2 => Z,
+					3 => W,
+					_ => throw new ArgumentOutOfRangeException(nameof(key), $"{nameof(key)}={key}"),
+				};
+			}
+			set
+			{
+				switch (key)
+				{
+					case 0: X = value; break;
+					case 1: Y = value; break;
+					case 2: Z = value; break;
+					case 3: W = value; break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(key), $"{nameof(key)}={key}");
+				}
+			}
+		}
+
+		public long this[long key]
+		{
+			get
+			{
+				return this[(int)key];
+			}
+			set
+			{
+				this[(int)key] = value;
+			}
+		}
+
+		public readonly static v4i Zero = new();
+
+		public v4i(long x, long y, long z, long w) : this()
+		{
+			X = x;
+			Y = y;
+			Z = z;
+			W = w;
+		}
+
+		public v4i(v4i v) : this(v.X, v.Y, v.Z, v.W)
+		{
+		}
+
+		public v4i(long value) : this(value, value, value, value)
+		{
+		}
+
+		public v4i(v3i xyz, long w) : this(xyz.X, xyz.Y, xyz.Z, w)
+		{
+		}
+
+		public v4i(v2i xy, long z, long w) : this(xy.X, xy.Y, z, w)
+		{
+		}
+
+		public v4i(long[] xyzw) : this(xyzw[0], xyzw[1], xyzw[2], xyzw[3])
+		{
+		}
+
+		public v4i(v2i xy, v2i zw) : this(xy[0], xy[1], zw[0], zw[1])
+		{
+		}
+
+		public override readonly string ToString() => $"[{X};{Y};{Z};{W}]";
+		public override readonly bool Equals(object obj) => obj is v4i v && this == v;
+		public override readonly int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode() ^ W.GetHashCode();
+
+		public static v4i operator +(v4i a, v4i b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z, a.W + b.W);
+		public static v4i operator -(v4i a, v4i b) => new(a.X - b.X, a.Y - b.Y, a.Z - b.Z, a.W - b.W);
+		public static v4i operator *(v4i a, v4i b) => new(a.X * b.X, a.Y * b.Y, a.Z * b.Z, a.W * b.W);
+		public static v4i operator *(v4i a, double k) => new((long)(a.X * k), (long)(a.Y * k), (long)(a.Z * k), (long)(a.W * k));
+		public static v4i operator /(v4i a, double k) => new((long)(a.X / k), (long)(a.Y / k), (long)(a.Z / k), (long)(a.W / k));
+		public static v4i operator /(v4i a, v4i b) => new(a.X / b.X, a.Y / b.Y, a.Z / b.Z, a.W / b.W);
+		public static v4i operator +(v4i a, v2i b) => new(a.X + b.X, a.Y + b.Y, a.Z, a.W);
+		public static v4i operator +(v4i a, v3i b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z, a.W);
+		public static v4i operator +(v4i a, long b) => new(a.X + b, a.Y + b, a.Z + b, a.W + b);
+		public static v4i operator -(v4i a, long b) => a + (-b);
+
+		public static bool operator ==(v4i a, v4i b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W;
+		public static bool operator !=(v4i a, v4i b) => !(a == b);
+
+		public static implicit operator v2f(v4i v) => new(v.X, v.Y);
+		public static implicit operator v2i(v4i v) => new(v.X, v.Y);
+		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
+
+		public static v4i Parse(string s) => new(s.ToNumArray());
+		public readonly v4i Abs() => new(System.Math.Abs(X), System.Math.Abs(Y), System.Math.Abs(Z), System.Math.Abs(W));
+		public readonly v2i ToV2i() => new(X, Y);
+		public readonly v3i ToV3i() => new(X, Y, Z);
+		public readonly long[] ToArray() => [X, Y, Z];
+		public readonly long Volume() => X * Y * Z * W;
+
+		/// <summary>Manhattan length</summary>
+		public readonly long ManhLength() => System.Math.Abs(X) + System.Math.Abs(Y) + System.Math.Abs(Z) + System.Math.Abs(W);
+
+		/// <summary>Manhattan distance</summary>
+		public static long ManhDistance(v4i a, v4i b) => System.Math.Abs(a.X - b.X) + System.Math.Abs(a.Y - b.Y) + System.Math.Abs(a.Z - b.Z) + System.Math.Abs(a.W - b.W);
+
+		public static v4i Min(v4i v1, v4i v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y), System.Math.Min(v1.Z, v2.Z), System.Math.Min(v1.W, v2.W));
+		public static v4i Max(v4i v1, v4i v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y), System.Math.Max(v1.Z, v2.Z), System.Math.Max(v1.W, v2.W));
+
+		public v4i Set(int index, long value)
+		{
+			this[index] = value;
+			return this;
+		}
+
+		public v4i Set(long index, long value) => Set((int)index, value);
+	}
+}

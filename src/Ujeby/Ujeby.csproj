@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>Ujeby</AssemblyName>
+		<RootNamespace>Ujeby</RootNamespace>
+		<Authors>fkomo</Authors>
+		<Company>Ujeby</Company>
+		<Version>10.0.0</Version>
+		<Configurations>Debug;Release;Benchmark</Configurations>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Content\Fonts\basic-5x7-aabb.png" />
+		<None Remove="Content\Fonts\basic-5x7.ase" />
+		<None Remove="Content\Fonts\basic-5x7.png" />
+		<None Remove="Content\Fonts\basic-7x11-aabb.png" />
+		<None Remove="Content\Fonts\basic-7x11-outline.png" />
+		<None Remove="Content\Fonts\basic-7x11.ase" />
+		<None Remove="Content\Fonts\basic-7x11.png" />
+		<None Remove="Content\Fonts\minimal-7x7-aabb.png" />
+		<None Remove="Content\Fonts\minimal-7x7-outline.png" />
+		<None Remove="Content\Fonts\minimal-7x7.ase" />
+		<None Remove="Content\Fonts\minimal-7x7.png" />
+		<None Remove="ffmpeg.config.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="ffmpeg.config.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Content\Fonts\basic-5x7-aabb.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Content\Fonts\basic-5x7.ase">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Content\Fonts\basic-5x7.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Content\Fonts\basic-7x11-aabb.png" />
+		<EmbeddedResource Include="Content\Fonts\basic-7x11-outline.png" />
+		<EmbeddedResource Include="Content\Fonts\basic-7x11.ase" />
+		<EmbeddedResource Include="Content\Fonts\basic-7x11.png" />
+		<EmbeddedResource Include="Content\Fonts\minimal-7x7-aabb.png" />
+		<EmbeddedResource Include="Content\Fonts\minimal-7x7-outline.png" />
+		<EmbeddedResource Include="Content\Fonts\minimal-7x7.ase" />
+		<EmbeddedResource Include="Content\Fonts\minimal-7x7.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FFMpegCore" Version="5.1.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+		<PackageReference Include="OpenTK" Version="4.8.2" />
+		<PackageReference Include="SDL2-CS.NetCore" Version="2.0.8" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Ujeby.Core\Ujeby.Core.csproj" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+		<Exec Command="copy ..\..\3rd\SDL2\*.dll $(OutDir)" />
+	</Target>
+
+</Project>
