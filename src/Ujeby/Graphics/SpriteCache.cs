@@ -207,7 +207,7 @@ namespace Ujeby.Graphics
 				}
 
 				imageData = new byte[resourceStream.Length];
-				resourceStream.Read(imageData, 0, imageData.Length);
+				resourceStream.ReadExactly(imageData, 0, imageData.Length);
 			}
 
 			var imageDataPtr = Marshal.AllocHGlobal(imageData.Length);

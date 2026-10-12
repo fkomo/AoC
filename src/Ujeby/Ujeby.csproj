@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>Ujeby</AssemblyName>
 		<RootNamespace>Ujeby</RootNamespace>
@@ -10,8 +9,6 @@
 		<Version>10.0.0</Version>
 		<Configurations>Debug;Release;Benchmark</Configurations>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -56,10 +53,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FFMpegCore" Version="5.1.0" />
-		<PackageReference Include="System.Drawing.Common" Version="8.0.10" />
-		<PackageReference Include="OpenTK" Version="4.8.2" />
-		<PackageReference Include="SDL2-CS.NetCore" Version="2.0.8" />
+		<PackageReference Include="FFMpegCore" />
+		<PackageReference Include="System.Drawing.Common" />
+		<PackageReference Include="OpenTK" />
+		<PackageReference Include="SDL2-CS.NetCore" />
 	</ItemGroup>
 
 	<ItemGroup>
