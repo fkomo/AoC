@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>Ujeby.Core</AssemblyName>
+		<RootNamespace>Ujeby</RootNamespace>
+		<Authors>fkomo</Authors>
+		<Company>Ujeby</Company>
+		<Version>10.0.0</Version>
+		<Configurations>Debug;Release;Benchmark</Configurations>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+</Project>

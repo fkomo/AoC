@@ -18,46 +18,55 @@ Advent of Code playground and solver suite in C#/.NET, including:
 - `AoC.Ui` - static HTML/JS UI consuming `AoC.Api`.
 - `AoC.Vis.App` - SDL-based visualizations for selected puzzle solutions.
 - `AoC.Gen` - scaffolding utility for input download and puzzle code generation.
+- `Ujeby.Core` - in-house core library (algorithms, vectors, extensions, tools) used by puzzle solutions.
+- `Ujeby` - in-house graphics/SDL library used by `AoC.Vis.App`.
 
 ## Tech Stack
 
-- .NET 8
+- .NET 10
 - ASP.NET Core Minimal API
 - SDL2 (`SDL2-CS.NetCore`) for visualization
 
 ## Prerequisites
 
-1. .NET SDK 8.0+
+1. .NET SDK 10.0+
 2. Windows (recommended for current local paths and scripts)
 3. Native SDL2 DLLs (already included under `3rd/SDL2` and copied post-build for `AoC.Vis.App`)
-4. Local external assemblies expected by this repo:
-	- `..\\..\\Ujeby\\publish\\Ujeby.Core.dll`
-	- `..\\..\\Ujeby\\publish\\Ujeby.dll` (for `AoC.Vis.App`)
-
-If these DLLs are missing, build/reference setup in the dependent Ujeby repository is required first.
 
 ## Solution Layout
 
 ```text
-AoC.sln
-AoC.App/        # puzzle implementations (grouped by year)
-AoC.Common/     # shared runtime
-AoC.Api/        # HTTP API + launch profile for UI
-AoC.Ui/         # static web dashboard
-AoC.Vis.App/    # SDL visual app
-AoC.Gen/        # code/input generator
-3rd/SDL2/       # native SDL2 binaries
-screen.png      # screenshot used in this README
+3rd/SDL2/                     # native SDL2 binaries
+screen.png                    # screenshot used in this README
+src/
+  AoC.sln
+  Directory.Build.props       # shared build settings (target framework, embedded PDBs)
+  Directory.Packages.props    # central NuGet package versions
+  nuget.config
+  preset.txt                  # active AoC.App config preset
+  AoC.App/                    # puzzle implementations (grouped by year)
+  AoC.Common/                 # shared runtime
+  AoC.Api/                    # HTTP API + launch profile for UI
+  AoC.Ui/                     # static web dashboard
+  AoC.Vis.App/                # SDL visual app
+  AoC.Gen/                    # code/input generator
+  Ujeby.Core/                 # in-house core library
+  Ujeby/                      # in-house graphics library
 ```
 
 ## Build
 
-From repository root:
+From `src/`:
 
 ```powershell
 dotnet restore AoC.sln
 dotnet build AoC.sln -c Debug
 ```
+
+Build conventions:
+
+- Target framework and `DebugType=embedded` (PDBs embedded in assemblies) are set once in `Directory.Build.props`.
+- Package versions are managed centrally ([CPM](https://learn.microsoft.com/nuget/consume-packages/central-package-management)) in `Directory.Packages.props`; `PackageReference` items in project files carry no `Version`.
 
 ## Run
 
@@ -141,17 +150,13 @@ Capabilities:
 - `appsettings.2018.json`
 - `appsettings.2024.json`
 
-Switch preset by editing `preset.txt` in repo root.
+Switch preset by editing `src/preset.txt`.
 
 ## Input Data
 
 Expected external input storage is configured under `AoC:Input` (for example `AoC.App/appsettings.json`).
 
 If no `AoC:Input` is set, app falls back to current working directory.
-
-## Utilities
-
-- `clear-log.cmd` removes local `AoC.Output.*.txt` files.
 
 ## Notes
 
